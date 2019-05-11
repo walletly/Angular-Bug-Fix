@@ -1,0 +1,57 @@
+.non-border {
+  border-bottom: 0 !important;
+}
+.active-sell {
+  border: 1px solid #2fc2eb !important;
+  background-color: rgba(32, 190, 234, 0.16) !important;
+  outline: 1px solid #2fc2eb;
+}
+table {
+  border-bottom: 3px solid #e1e0e7;
+}
+
+.row-input {
+  display: flex;
+  margin-bottom: 25px;
+  .lable {
+    width: 146px;
+    min-width: 146px;
+    padding-top: 10px;
+  }
+  .value {
+    width: 100%;
+    input {
+      width: 100%;
+      max-width: 331px;
+      &.small {
+        width: 159px;
+      }
+    }
+    textarea {
+      min-height: 74px;
+      max-width: 331px;
+      font-size: 12px;
+    }
+    nb-select {
+      width: 100%;
+      max-width: 331px;
+    }
+  }
+}
+.cust-button {
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: none;
+}
+nb-card-body {
+  overflow: visible !important;
+}
+nb-calendar {
+  position: absolute;
+  z-index: 11;
+  bottom: -40px;
+  left: 0;
+}
+nb-card {
+  min-height: calc(100% - 100px);
+}

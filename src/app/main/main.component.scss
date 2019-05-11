@@ -1,0 +1,69 @@
+.logo {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+}
+.menu-item {
+  padding: 10px 0;
+  min-height: 60px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  .icon {
+    min-width: 40px;
+    width: 40px;
+    margin-right: 10px;
+  }
+  &.add-page {
+    color: rgb(17, 202, 109);
+    font-size: 18px;
+    .icon {
+      height: 40px;
+      width: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 100px;
+      background: rgb(184, 239, 211);
+      border: 1px dashed;
+      font-size: 30px;
+    }
+  }
+}
+.side-wrap {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  height: 100%;
+}
+.bot {
+  margin: 0 -1.25rem 1rem;
+}
+.foot-menu-item {
+  padding: 10.8px 12px;
+  position: relative;
+  color: #ababab;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    color: #2a2a2a;
+    font-weight: 600;
+  }
+  .icon {
+    width: 20px;
+    min-width: 20px;
+    margin: 0 0.25rem 0;
+    text-align: center;
+    &.user-icon {
+      border-radius: 100px;
+      overflow: hidden;
+      img {
+        width: 100%;
+      }
+    }
+  }
+}

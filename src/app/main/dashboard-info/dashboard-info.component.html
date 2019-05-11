@@ -1,0 +1,106 @@
+<div class="df jc-b m-b-15">
+  <h1 class="m-t-0 m-b-0 fs-24 fw-600 m-r-22">
+    Dashboard
+  </h1>
+  <div class="select">
+    <nb-select size="small" placeholder="Select Range" [(selected)]="selectedItem">
+      <nb-option value="1">Option 1</nb-option>
+      <nb-option value="2">Option 2</nb-option>
+      <nb-option value="3">Option 3</nb-option>
+      <nb-option value="4">Option 4</nb-option>
+    </nb-select>
+  </div>
+</div>
+<nb-card>
+  <nb-card-body>
+    <div class="m-b-20 fs-18">
+      OFFERS INFORMATION
+    </div>
+    <div class="df wrap jc-b">
+      <div class="card-info">
+        <div class="label">
+          Total Offers Given
+        </div>
+        <div class="value">
+          61,042
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="label">
+          Total Accepted
+        </div>
+        <div class="value">
+          13,447
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="label">
+          Total Missing
+        </div>
+        <div class="value">
+          47,036
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="label">
+          Avg. Offer Conv.
+        </div>
+        <div class="value">
+          22%
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+<div class="row">
+  <div class="col-12 col-md-6">
+    <nb-card>
+      <nb-card-body>
+        <div class="m-b-20 fs-18">
+          CUSTOMERS BY WEEKDAY
+        </div>
+        <canvas id="myChart" width="400" height="100"></canvas>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-12 col-md-6">
+    <nb-card>
+      <nb-card-body>
+        <div class="m-b-20 fs-18">
+          SPENDING BY DAY OF THE WEEK
+        </div>
+        <canvas id="myChart2" width="400" height="100"></canvas>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-12 col-md-6">
+    <nb-card>
+      <nb-card-body>
+        <div class="m-b-20 fs-18">
+          CUSTOMERS BY MONTH
+        </div>
+        <canvas id="myChart3" width="400" height="100"></canvas>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-12 col-md-6">
+    <nb-card>
+      <nb-card-body>
+        <div class="m-b-20 fs-18">
+          SPENDING BY DAY OF THE MONTH
+        </div>
+        <canvas id="myChart4" width="400" height="100"></canvas>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-12 col-md-12">
+    <nb-card>
+      <nb-card-body>
+        <div class="m-b-20 fs-18">
+          COUPONS
+        </div>
+        <canvas id="myChart5" width="400" height="50"></canvas>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

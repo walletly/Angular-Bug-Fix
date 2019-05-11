@@ -1,0 +1,124 @@
+.main-wrap {
+  max-width: 789px;
+  margin: auto;
+  height: 100%;
+  justify-content: space-between;
+  display: flex;
+  flex-flow: column;
+  padding-bottom: 20px;
+}
+nb-card {
+  box-shadow: 0 0 16px rgba(87, 86, 90, 0.08) !important;
+  border-radius: 5px !important;
+  border: 1px solid #f4f3fa !important;
+}
+.input-wrapper {
+  &.step-1 {
+    max-width: 480px;
+    margin: auto;
+  }
+  &.step-2 {
+    max-width: 480px;
+    margin: auto;
+  }
+}
+.row-input {
+  display: flex;
+  margin-bottom: 35px;
+  .lable {
+    width: 146px;
+    min-width: 146px;
+    padding-top: 13px;
+  }
+  .value {
+    width: 100%;
+    .pos-r {
+      width: fit-content;
+    }
+    .brand {
+      width: 63px;
+      height: 63px;
+      min-width: 63px;
+      border-radius: 100px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 10px;
+      img {
+        width: 100%;
+      }
+    }
+    .close {
+      position: absolute;
+      right: -5px;
+      top: -5px;
+      width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      background: rgb(202, 203, 206);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(45deg);
+      cursor: pointer;
+      font-size: 20px;
+    }
+  }
+}
+input {
+  font-size: 12px;
+  max-width: 330px;
+}
+textarea {
+  min-height: 100px;
+  font-size: 12px;
+  max-width: 330px;
+  resize: none;
+}
+.cust-button {
+  width: 208px;
+  text-transform: unset !important;
+}
+.loader {
+  min-height: 254px;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+.platform {
+  border: 1px solid #dee3e5;
+  background-color: #ffffff;
+  .head {
+    padding: 37px 10px;
+    border-bottom: 1px solid #dee3e5;
+    .input-wrap {
+      max-width: 376px;
+      width: 100%;
+      input {
+        max-width: unset;
+      }
+      .input-icon {
+        cursor: pointer;
+        right: 7px;
+        top: calc(50% - 25.5px);
+        transition: all 0.3s;
+        &:active {
+          transform: scale(0.8);
+        }
+      }
+    }
+  }
+  .body {
+    padding: 50px 20px 20px 26px;
+  }
+}
+.video-wrap {
+  min-height: 221px;
+  video {
+    height: 100%;
+  }
+}
+.file-lable {
+  display: block;
+  width: fit-content;
+}

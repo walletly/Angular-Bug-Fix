@@ -1,0 +1,112 @@
+<nb-layout>
+  <nb-layout-column>
+    <div class="header">
+      <div class="logo c-p">
+        <img src="assets/svg-icon/logo-dark.svg" alt="">
+      </div>
+      <div (clickOutside)="userDrb = false" (click)="userDrb = true;" class="user c-p">
+        <div class="icon">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png" alt="">
+        </div>
+        <div>
+          User Name
+        </div>
+
+        <div *ngIf="userDrb" class="user-drb">
+          <div class="head">
+            <div>
+              My Account
+            </div>
+            <div class="df ai-c c-p">
+              <div class="icon">
+                <img src="assets/img/upload.png" alt="">
+              </div>
+              <div>
+                Logout
+              </div>
+            </div>
+          </div>
+          <div class="body">
+            <div class="df ai-c jc-c m-b-20">
+              <div class="user m-r-10">
+                <div class="icon m-0 w-80">
+                  <img [src]="photo"
+                    alt="">
+                </div>
+              </div>
+              <label class="fs-12 color-secondary c-p">
+                <input hidden type="file" (change)="uploadCover($event.target.files)" accept="image/*">
+                Change
+              </label>
+            </div>
+            <div class="m-b-5 fs-14 fw-400">
+              Name
+            </div>
+            <div class="m-b-20">
+              <input type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+            </div>
+            <div class="m-b-5 fs-14 fw-400">
+              Email <span class="color-warning"> (Not verified)</span>
+            </div>
+            <div class="m-b-20 input-email">
+              <input type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+              <button class="cust-button" nbButton status="success">
+                Save
+              </button>
+            </div>
+            <div class="fs-12 color-secondary">
+              Your email is not verified. <a class="color-link c-p">Send Verification Link</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="container-profile">
+      <div class="df jc-b m-b-15 ai-c">
+        <h1 class="m-t-0 m-b-0 fs-24 fw-600">
+          Pages
+        </h1>
+        <button class="cust-button" nbButton status="success">
+          + Add New Page
+        </button>
+      </div>
+      <nb-card>
+        <nb-card-body class="p-0">
+
+          <table [nbTreeGrid]="data" class="table-profile">
+            <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+            <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
+
+            <ng-container *ngFor="let column of defaultColumns" [nbTreeGridColumnDef]="column">
+              <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{column}}</th>
+              <td nbTreeGridCell *nbTreeGridCellDef="let row">
+                <div class="df ai-c">
+                  <span *ngIf="column === 'Date Created'">{{row.data[column].name}}</span>
+                  <div *ngIf="column === 'Name'" class="user">
+                    <div class="icon">
+                      <img [src]="row.data[column].icon" alt="">
+                    </div>
+                    <div class="fs-16 fw-400">
+                      {{row.data[column].name}}
+                    </div>
+                  </div>
+                  <span class="subs-chip" [ngClass]="{'pro': row.data[column].name === 'pro'}" *ngIf="column === 'Subscription'">
+                    {{row.data[column].name}}
+                  </span>
+                  <span class="status" *ngIf="column === 'Status'">
+                    <i class="icon nb-checkmark"></i>
+                    {{row.data[column].name}}
+                  </span>
+
+                </div>
+              </td>
+            </ng-container>
+
+          </table>
+
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </nb-layout-column>
+</nb-layout>

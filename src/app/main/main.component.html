@@ -1,0 +1,75 @@
+<nb-layout>
+    <nb-sidebar>
+        <div class="side-wrap">
+            <div class="top">
+                <div class="logo">
+                    <img src="assets/svg-icon/logo-dark.svg" alt="">
+                </div>
+                <nb-menu #menu [tag]="'mainMenu'" [items]="items" autoCollapse="true">
+                </nb-menu>
+                <div *ngIf="showSearchBox">
+                    <div class="pos-r">
+                        <input [(ngModel)]="searchBrandText" (ngModelChange)="searchBrand()" type="text" nbInput fullWidth class="search-input" fieldSize="medium" placeholder="Search">
+                        <i class="nb-search input-icon"></i>
+                    </div>
+                    <div *ngFor="let item of filteredBrands">
+                        <div (click)="changeBrand(item.brand_id)">
+                            <div class="menu-item">
+                                <div class="icon">
+                                    <img [src]="item.brand_logo" alt="">
+                                </div>
+                                {{item.brand_name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div [routerLink]="[ '/connect' ]" class="menu-item add-page">
+                        <div class="icon">
+                            <i class="nb-plus"></i>
+                        </div>
+                        Add New Page
+                    </div>
+                </div>
+            </div>
+            <div class="bot">
+                <div [routerLink]="[ '/profile' ]" class="foot-menu-item">
+                    <div class="icon user-icon">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png"
+                            alt="">
+                    </div>
+                    <div>
+                        My Account
+                    </div>
+                </div>
+                <div class="foot-menu-item m-b-20">
+                    <div class="icon">
+                        <img width="100%" src="assets/svg-icon/menu-icon-SVG/menu-help-icon.svg" alt="">
+                    </div>
+                    <div>
+                        Help
+                    </div>
+                </div>
+                <div class="p-l-12 p-r-12">
+                    <button (click)="goToUpgade()" class="cust-button" fullWidth nbButton status="info">
+                        Upgrade to Pro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nb-sidebar>
+
+    <nb-layout-header subheader fixed>
+        <!-- <a href="#" (click)="toggle()">toogle</a> -->
+        <h3 style="text-transform: capitalize;">
+            {{headerTitle}}
+        </h3>
+    </nb-layout-header>
+
+    <nb-layout-column class="p-t-80">
+        <router-outlet></router-outlet>
+    </nb-layout-column>
+
+    <nb-layout-footer fixed>
+        ®2019 Walletly Business, All rights reserved. Terms and Privacy
+    </nb-layout-footer>
+
+</nb-layout>

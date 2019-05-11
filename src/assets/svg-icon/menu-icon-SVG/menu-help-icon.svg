@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>menu-help-icon</title>
+    <desc>Created with Sketch.</desc>
+    <g id="menu-help-icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M6,23.1314829 L6,9 C6,7.8954305 6.8954305,7 8,7 L23,7 C24.1045695,7 25,7.8954305 25,9 L25,17 C25,19.209139 23.209139,21 21,21 L12,21 L7.5547002,23.9635332 C7.09517151,24.2698857 6.47430216,24.1457118 6.16794971,23.6861831 C6.05843803,23.5219156 6,23.3289079 6,23.1314829 Z" id="Path-9" stroke="#323232"></path>
+    </g>
+</svg>

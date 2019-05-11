@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>menu-campaign-active</title>
+    <desc>Created with Sketch.</desc>
+    <g id="menu-campaign-active" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Group-13" transform="translate(3.000000, 7.000000)" stroke="#20BEEA">
+            <polygon id="Stroke-1" points="19.1695803 0.214309346 19.1695803 18.8451411 16.7098338 16.4598421 0.0916225352 11.7538794 0.0916225352 7.37002897 16.6435521 2.66406636"></polygon>
+            <path d="M25.8834394,2.14824299 L22.0277493,5.88733645" id="Stroke-3"></path>
+            <path d="M21.7619268,9.43303832 L25.8168282,9.43303832" id="Stroke-5"></path>
+            <path d="M21.9614859,12.9786336 L25.8834577,16.7177271" id="Stroke-7"></path>
+            <path d="M16.6435704,2.6640486 L16.6435704,16.4598243" id="Stroke-10"></path>
+            <path d="M12.6070887,15.2227112 C11.8441169,16.5166645 10.3824408,17.364029 8.74059577,17.2999262 C6.39290563,17.2086551 4.56594789,15.2887673 4.66042676,13.0119636" id="Stroke-11"></path>
+        </g>
+    </g>
+</svg>

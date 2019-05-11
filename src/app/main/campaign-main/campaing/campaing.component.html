@@ -1,0 +1,64 @@
+<div class="df jc-b m-b-15">
+  <div class="df ai-c">
+    <h1 class="m-t-0 m-b-0 fs-24 fw-600 m-r-22">
+      Campaign
+    </h1>
+    <div class="pos-r">
+      <input [(ngModel)]="searchText" (ngModelChange)="filterCampaigns()" style="width: 235px;" placeholder="Search" class="small" type="text" nbInput fullWidth fieldSize="small">
+      <div class="input-icon">
+        <img src="assets/svg-icon/search-outline.svg" alt="">
+      </div>
+    </div>
+  </div>
+  <div>
+    <button [routerLink]="[ '/main/campaign-main/create-campaign' ]" class="cust-button" nbButton status="success">
+      + Add
+    </button>
+  </div>
+</div>
+<nb-card>
+  <nb-card-body class="p-0">
+    <table class="m-b-40" [nbTreeGrid]="filteredData" equalColumnsWidth>
+      <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+      <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
+
+      <ng-container *ngFor="let column of defaultColumns" [nbTreeGridColumnDef]="column">
+        <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{column}}</th>
+        <td (click)="selectedSell = row.data[column].name" [ngClass]="{'active-sell': selectedSell === row.data[column].name}"
+          nbTreeGridCell *nbTreeGridCellDef="let row">
+          <div class="df ai-c">
+            <span *ngIf="column !== 'Status' && column !== 'Action'">{{row.data[column].name}}</span>
+            <span *ngIf="column === 'Status'">
+              <span *ngIf="row.data[column].name === true" class="active">
+                <span class="circle"></span>
+                <span>Active</span>
+              </span>
+              <span *ngIf="row.data[column].name === false" class="expired">
+                <span class="circle"></span>
+                <span>Expired</span>
+              </span>
+            </span>
+            <div class="df jc-e full-width">
+              <span *ngIf="column === 'Action'">
+                <div class="pos-r text-right">
+                  <img (click)="showActions = row.data[column]" class="c-p" src="assets/svg-icon/shared.svg" alt="">
+                  <div *ngIf="showActions === row.data[column]" class="action-drb">
+                    <div (click)="showActions = null" class="item">
+                      <img src="assets/svg-icon/edit.svg" alt="">
+                      Edit
+                    </div>
+                    <div (click)="delete(row.data['Id'].name); showActions = null" class="item">
+                      <img src="assets/svg-icon/delete.svg" alt="">
+                      Delete
+                    </div>
+                  </div>
+                </div>
+              </span>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+    </table>
+  </nb-card-body>
+</nb-card>
+<div *ngIf="showActions" (click)="showActions = null" class="close-bg"></div>

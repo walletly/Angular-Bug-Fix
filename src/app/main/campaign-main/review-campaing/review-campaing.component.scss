@@ -1,0 +1,33 @@
+.p-40 {
+  padding: 40px;
+}
+.row-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 23px;
+  &:last-child {
+    margin-bottom: 70px;
+  }
+  .lable {
+    min-width: 164px;
+    width: 164px;
+    color: #afafb9;
+    font-size: 15px;
+    font-weight: 400;
+  }
+  .value {
+    color: #323232;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+}
+button[status="gray"] {
+  width: 92px;
+}
+button[status="success"] {
+  width: 135px;
+}
+nb-card {
+  min-height: calc(100% - 100px);
+}

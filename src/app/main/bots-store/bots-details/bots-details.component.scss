@@ -1,0 +1,28 @@
+.menu-wrap {
+  margin-right: 19px;
+  width: 222px;
+  min-width: 222px;
+  border-radius: 5px;
+  border: 1px solid #dee3e5;
+  border-top: none;
+  height: fit-content;
+}
+nb-card {
+  margin-bottom: 0;
+  width: 100%;
+  box-shadow: 0 0 16px rgba(87, 86, 90, 0.08) !important;
+  border-radius: 5px !important;
+  background-color: #ffffff;
+  nb-card-body {
+    padding: 34px;
+  }
+}
+.card-service {
+  min-height: 327px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #979797;
+  background-color: rgba(175, 175, 185, 0.26);
+  text-align: center;
+}

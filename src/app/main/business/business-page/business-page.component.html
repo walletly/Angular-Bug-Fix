@@ -1,0 +1,134 @@
+<div class="df jc-b m-b-15">
+  <h1 class="m-t-0 m-b-0 fs-24 fw-600">
+    Business
+  </h1>
+  <div *ngIf="data.length">
+    <button [routerLink]="[ '/main/business/create-business' ]" class="cust-button" nbButton status="success">
+      + Add User
+    </button>
+  </div>
+</div>
+<nb-card>
+  <nb-card-body>
+    <nb-tabset class="tabs-card">
+      <nb-tab tabTitle="Business Users">
+        <div class="check-all-wrap">
+          <div *ngIf="data.length" class="all">
+            <nb-checkbox [(ngModel)]="checkAll">All</nb-checkbox>
+          </div>
+          <div *ngIf="data.length" class="invite">
+            <img src="assets/img/mail-icon.png" alt="">
+            Invite All
+          </div>
+        </div>
+        <div class="box-container">
+
+          <table *ngIf="data.length" class="m-b-40" [nbTreeGrid]="data">
+            <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+            <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
+
+            <ng-container *ngFor="let column of defaultColumns" [nbTreeGridColumnDef]="column">
+              <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                <span *ngIf="column !== 'Check'">
+                  {{column}}
+                </span>
+              </th>
+              <td [ngClass]="{'check-row-bg': checkAll}" nbTreeGridCell *nbTreeGridCellDef="let row">
+                <span *ngIf="column === 'Permission'">
+                  <img class="m-r-8" *ngIf="row.data[column] === 'YES'" src="assets/svg-icon/permission-yes.svg" alt="">
+                  <img class="m-r-8" *ngIf="row.data[column] === 'NO'" src="assets/svg-icon/permission-no.svg" alt="">
+                </span>
+                <span *ngIf="column !== 'Invite'">{{row.data[column]}}</span>
+                <span *ngIf="column === 'Check'">
+                  <div *ngIf="checkAll" class="check-row m-auto">
+                    <img src="assets/img/success-white.png" alt="">
+                  </div>
+                </span>
+                <div *ngIf="column === 'Invite'">
+                  <div (click)="row.data[column] = 'active'" *ngIf="row.data[column] === 'invite'" class="chip-invite">
+                    <img src="assets/img/mail-icon.png" alt="">
+                    Invite
+                  </div>
+                  <div (click)="row.data[column] = 'pending'" *ngIf="row.data[column] === 'active'" class="chip-invite active">
+                    <img width="14px" src="assets/img/success-white.png" alt="">
+                    Active
+                  </div>
+                  <div (click)="row.data[column] = 'invite'" *ngIf="row.data[column] === 'pending'" class="chip-invite pending">
+                    Pending
+                  </div>
+                </div>
+                <div *ngIf="column === 'Action'" class="pos-r text-right">
+                  <img (click)="showActions = row.data" class="c-p" src="assets/svg-icon/shared.svg" alt="">
+                  <div *ngIf="showActions === row.data" class="action-drb">
+                    <div (click)="showActions = null" class="item">
+                      <img src="assets/svg-icon/edit.svg" alt="">
+                      Edit
+                    </div>
+                    <div (click)="showActions = null" class="item">
+                      <img src="assets/svg-icon/delete.svg" alt="">
+                      Delete
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+          </table>
+
+          <div *ngIf="!data.length" class="create-btn-wrap">
+            <div class="m-b-20">
+              No Users Added yet
+            </div>
+            <button [routerLink]="[ '/main/business/create-business' ]" class="cust-button" nbButton status="success">
+              + Add User
+            </button>
+          </div>
+        </div>
+      </nb-tab>
+      <nb-tab tabTitle="Email Template">
+
+        <div class="email-wrap">
+          <div class="input-wrap">
+            <div class="input-row">
+              <div class="lable">
+                Subject
+              </div>
+              <div class="value">
+                <input class="fs-15 fw-500" type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+              </div>
+            </div>
+            <div class="input-row">
+              <div class="lable">
+                Message
+              </div>
+              <div class="value">
+                <div class="mess-box">
+                  <div class="m-b-21">
+                    Hi, <br>
+                    {{'{FName}{LName}'}} <br>
+                    this a is dummy messsge to send busniesss for
+                    Secret code
+                  </div>
+                  <div class="code-wrap m-b-30">
+                    XXXXXX
+                  </div>
+                  <div>
+                    <div class="m-b-20">
+                      Have fun and enjoy the service!
+                    </div>
+                    Walletly <br>
+                    Business
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="banner">
+            <img src="assets/img/mobile.png" alt="">
+          </div>
+        </div>
+
+      </nb-tab>
+    </nb-tabset>
+  </nb-card-body>
+</nb-card>
+<div *ngIf="showActions" (click)="showActions = null" class="close-bg"></div>
