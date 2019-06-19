@@ -1150,3 +1150,10 @@ button[status="facebook"] {
 .nb-theme-default .nb-tree-grid-header-cell, .nb-theme-default .nb-tree-grid-cell, .nb-theme-default .nb-tree-grid-footer-cell{
   height: 62px;
 }
+.small-select{
+  button{
+    height: 44px;
+    padding-left: 8px !important;
+    width: 115px !important;
+  }
+}

@@ -6,7 +6,278 @@
 <nb-card>
   <nb-card-body>
     <nb-tabset class="tabs-card">
-      <nb-tab #pageSettingsTab tabTitle="Page Setting">
+      <nb-tab *ngIf="userAdmin" #packages tabTitle="Packages">
+        <div class="input-wrapper">
+          <form *ngIf="!showLoader" [formGroup]="myFormPackages">
+            <div class="row-input m-b-18">
+              <div class="lable packages">
+                Packages Name
+              </div>
+              <div class="value">
+                <div class="pos-r full-width">
+                  <input
+                    [ngClass]="{
+                      error:
+                        myFormPackages.controls['packagesName'].invalid &&
+                        !customValidationPackages
+                    }"
+                    formControlName="packagesName"
+                    class="color-link"
+                    type="text"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                  />
+                  <div
+                    *ngIf="
+                      myFormPackages.controls['packagesName'].invalid &&
+                      !customValidationPackages
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have at least 1 character)
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row-input m-b-18">
+              <div class="lable packages">
+                Number of Campaigns
+              </div>
+              <div class="value">
+                <div class="pos-r full-width">
+                  <input
+                    [ngClass]="{
+                      error:
+                        myFormPackages.controls['numberOfCampaigns'].invalid &&
+                        !customValidationPackages
+                    }"
+                    formControlName="numberOfCampaigns"
+                    class="color-link"
+                    type="text"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                  />
+                  <div
+                    *ngIf="
+                      myFormPackages.controls['numberOfCampaigns'].invalid &&
+                      !customValidationPackages
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have at least 1 character)
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row-input m-b-18">
+              <div class="lable packages">
+                Number of Coupons (per campaign)
+              </div>
+              <div class="value">
+                <div class="pos-r full-width">
+                  <input
+                    [ngClass]="{
+                      error:
+                        myFormPackages.controls['numberOfCoupons'].invalid &&
+                        !customValidationPackages
+                    }"
+                    formControlName="numberOfCoupons"
+                    class="color-link"
+                    type="text"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                  />
+                  <div
+                    *ngIf="
+                      myFormPackages.controls['numberOfCoupons'].invalid &&
+                      !customValidationPackages
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have at least 1 character)
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row-input m-b-18">
+              <div class="lable packages">
+                Pricing
+              </div>
+              <div class="value df">
+                <div class="pos-r full-width m-r-23">
+                  <input
+                    [ngClass]="{
+                      error:
+                        myFormPackages.controls['pricing'].invalid &&
+                        !customValidationPackages
+                    }"
+                    formControlName="pricing"
+                    class="color-link"
+                    type="text"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                  />
+                  <div
+                    *ngIf="
+                      myFormPackages.controls['pricing'].invalid &&
+                      !customValidationPackages
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have at least 1 character)
+                  </div>
+                </div>
+                <nb-select size="small" selected="1" class="small-select">
+                  <nb-option value="1">$</nb-option>
+                  <nb-option value="2">‎€</nb-option>
+                </nb-select>
+              </div>
+            </div>
+            <div class="row-input m-b-12">
+              <div class="lable packages">
+                Icon Image
+              </div>
+              <div class="value">
+                <div class="pos-r full-width">
+                  <input
+                    [ngClass]="{
+                      error:
+                        myFormPackages.controls['iconImage'].invalid &&
+                        !customValidationPackages
+                    }"
+                    formControlName="iconImage"
+                    class="color-link"
+                    type="text"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                  />
+                  <div
+                    *ngIf="
+                      myFormPackages.controls['iconImage'].invalid &&
+                      !customValidationPackages
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have at least 1 character)
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row-input ">
+              <div class="lable packages"></div>
+              <div class="value">
+                <button
+                  style="width: 145px"
+                  (click)="addPackages()"
+                  class="cust-button"
+                  nbButton
+                  status="success"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <table class="m-b-40 campaign-table" [nbTreeGrid]="dataTablePackages">
+          <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="defaultColumns"></tr>
+          <tr
+            nbTreeGridRow
+            *nbTreeGridRowDef="let row; columns: defaultColumns"
+          ></tr>
+
+          <ng-container
+            *ngFor="let column of defaultColumns"
+            [nbTreeGridColumnDef]="column"
+          >
+            <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{ column }}</th>
+            <td nbTreeGridCell *nbTreeGridCellDef="let row">
+              <div
+                class="ellipsis"
+                *ngIf="
+                  column !== 'Icon' &&
+                  column !== 'Status' &&
+                  column !== 'Action'
+                "
+              >
+                <span>
+                  {{ row.data[column] }}
+                </span>
+              </div>
+              <div *ngIf="column === 'Icon'">
+                <div
+                  class="icon-chip"
+                  [ngClass]="{
+                    basic: row.data[column].toLowerCase() === 'basic',
+                    pro: row.data[column].toLowerCase() === 'pro',
+                    unlimited: row.data[column].toLowerCase() === 'unlimited'
+                  }"
+                >
+                  {{ row.data[column] }}
+                </div>
+              </div>
+              <div *ngIf="column === 'Status'">
+                <div
+                  *ngIf="row.data[column] === 'Active'"
+                  class="icon-status active"
+                >
+                  <img
+                    class="m-r-3"
+                    width="17px"
+                    src="assets/img/success-white.png"
+                    alt=""
+                  />
+                  {{ row.data[column] }}
+                </div>
+                <div *ngIf="row.data[column] !== 'Active'" class="icon-status">
+                  {{ row.data[column] }}
+                </div>
+              </div>
+              <div *ngIf="column === 'Action'">
+                <div class="pos-r text-right">
+                  <img
+                    (click)="showShared(row.data, $event)"
+                    class="c-p"
+                    src="assets/svg-icon/shared.svg"
+                    alt=""
+                  />
+                  <div
+                    *ngIf="showActions === row.data"
+                    class="action-drb"
+                  >
+                    <div (click)="showActions = null" class="item">
+                      <img src="assets/svg-icon/view.svg" alt="" />
+                      View
+                    </div>
+                    <div (click)="showActions = null" class="item">
+                      <img src="assets/svg-icon/edit.svg" alt="" />
+                      Edit
+                    </div>
+                    <!-- (click)="
+                    delete(
+                      row.data['Id'].name,
+                      row.data['Brand_Id'].name,
+                      $event
+                    );
+                    showActions = null
+                  " -->
+                    <div class="item">
+                      <img src="assets/svg-icon/disable.svg" alt="" />
+                      Disabled
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+        </table>
+      </nb-tab>
+      <nb-tab *ngIf="!userAdmin" #pageSettingsTab tabTitle="Page Setting">
         <div *ngIf="showLoader" class="loader-table">
           <img width="70px" src="assets/img/Loader2x.gif" alt="" />
         </div>
@@ -344,7 +615,7 @@
           </div>
         </form>
       </nb-tab>
-      <nb-tab #apiSettingsTab tabTitle="API Settings">
+      <nb-tab *ngIf="!userAdmin" #apiSettingsTab tabTitle="API Settings">
         <div class="df ai-e">
           <div class="api-wrapper full-width p-t-35 pos-r">
             <div class="vertical-line"></div>
@@ -1032,12 +1303,17 @@
           </form>
         </div>
       </nb-tab>
-      <nb-tab #customDataTab tabTitle="Admins">
+      <nb-tab *ngIf="!userAdmin" #customDataTab tabTitle="Admins">
         <div class="heading-admins">
           <div class="lable">
             Walletly Team
           </div>
-          <button (click)="showModalMember = true" class="cust-button" nbButton status="success">
+          <button
+            (click)="showModalMember = true"
+            class="cust-button"
+            nbButton
+            status="success"
+          >
             + invite new member
           </button>
         </div>
@@ -1102,4 +1378,9 @@
   (closeEmit)="showBrandUploader = $event"
   [image]="fileImg"
 ></app-dialog-upload-image>
-<app-modal-member *ngIf="showModalMember" (closeModal)="showModalMember = false" [show]="showModalMember"></app-modal-member>
+<app-modal-member
+  *ngIf="showModalMember"
+  (closeModal)="showModalMember = false"
+  [show]="showModalMember"
+></app-modal-member>
+<div *ngIf="showActions" (click)="showActions = null" class="close-bg"></div>

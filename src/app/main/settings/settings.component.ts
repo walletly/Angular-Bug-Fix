@@ -13,6 +13,7 @@ import { UploadService } from 'src/app/shared/services/upload.service';
 export class SettingsComponent implements OnInit {
 
   @ViewChild('pageSettingsTab') pageSettingsTab;
+  @ViewChild('packages') packages;
   @ViewChild('apiSettingsTab') apiSettingsTab;
   @ViewChild('tabsetPaymantTab') tabsetPaymantTab;
   @ViewChild('customDataTab') customDataTab;
@@ -50,11 +51,56 @@ export class SettingsComponent implements OnInit {
 
   customValidation = true;
   customValidationPayment = true;
+  customValidationPackages = true;
+
+  showActions;
 
   myForm: FormGroup;
   myFormPayment: FormGroup;
+  myFormPackages: FormGroup;
   showLoader;
   showModalMember;
+  userAdmin;
+  fbId;
+  defaultColumns = ["Name", "Icon", "Number of Campaigns", "Number of Coupons", "Pricing", "Status", "Action"];
+
+
+  dataTablePackages = [
+    {
+      data: {
+        "Name": "Basic",
+        "Icon": "BASIC",
+        "Number of Campaigns": "8",
+        "Number of Coupons": "2,000",
+        "Pricing": "99$",
+        "Status": "Active",
+        "Action": ""
+      }
+    },
+    {
+      data: {
+        "Name": "Basic",
+        "Icon": "PRO",
+        "Number of Campaigns": "8",
+        "Number of Coupons": "2,000",
+        "Pricing": "99$",
+        "Status": "Active",
+        "Action": ""
+      }
+    },
+    {
+      data: {
+        "Name": "Basic",
+        "Icon": "UNLIMITED",
+        "Number of Campaigns": "8",
+        "Number of Coupons": "2,000",
+        "Pricing": "99$",
+        "Status": "Active",
+        "Action": ""
+      }
+    },
+  ];
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -73,6 +119,13 @@ export class SettingsComponent implements OnInit {
       phone: ["", [Validators.required]],
       email: ["", [Validators.required, Validators.email]],
       website: ["", [Validators.required]],
+    });
+    this.myFormPackages = formBuilder.group({
+      packagesName: ["", [Validators.required]],
+      numberOfCampaigns: ["", [Validators.required]],
+      numberOfCoupons: ["", [Validators.required]],
+      pricing: ["", [Validators.required]],
+      iconImage: ["", [Validators.required]]
     });
     this.myFormPayment = formBuilder.group({
       plan: ["", [Validators.required]],
@@ -96,17 +149,27 @@ export class SettingsComponent implements OnInit {
     this.showLoader = true;
     this.getBrandSettings();
     this.goPayment();
+    if (JSON.parse(localStorage.getItem('user'))['user_type'] === 3){
+      this.userAdmin = true;
+    } else {
+      this.userAdmin = false;
+    }
   }
 
   ngOnInit() {
 
   }
-
+  showShared(row, event) {
+    console.log(row);
+    event.stopPropagation();
+    this.showActions = row;
+  }
   goPayment() {
     this.mainService.goToPro.subscribe(() => {
       this.pageSettingsTab.active = false;
       this.apiSettingsTab.active = false;
       this.customDataTab.active = false;
+      this.packages.active = false;
 
       this.tabsetPaymantTab.active = true;
       this.showPaymentDetails = true;
@@ -143,6 +206,14 @@ export class SettingsComponent implements OnInit {
       });
     } else {
       this.customValidation = false;
+    }
+  }
+
+  addPackages(){
+    if (this.myFormPackages.invalid){
+      this.customValidationPackages = false;
+    } else {
+      this.customValidationPackages = true;
     }
   }
 
@@ -188,7 +259,7 @@ export class SettingsComponent implements OnInit {
     const formData = new FormData();
     formData.append('image', event, name);
 
-    this.uploadService.uploadPhoto(formData, folder).subscribe(result => {
+    this.uploadService.uploadPhoto(formData, this.fbId + '_' + folder).subscribe(result => {
       if (result['success']) {
         switch (fileType) {
           case 'logo':
@@ -235,8 +306,8 @@ export class SettingsComponent implements OnInit {
   }
 
   getBrand() {
-    const fbId = this.myForm.get('facebookPageID').value.split('/');
-    this.brand['facebook_page_id'] = fbId[fbId.length - 1];
+    this.fbId = this.myForm.get('facebookPageID').value.split('/');
+    this.brand['facebook_page_id'] = this.fbId[this.fbId.length - 1];
     this.brand['brand_name'] = this.myForm.get('brandName').value;
     this.brand['description'] = this.myForm.get('description').value;
     this.brand['email'] = this.myForm.get('email').value;
