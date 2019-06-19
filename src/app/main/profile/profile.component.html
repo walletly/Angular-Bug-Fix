@@ -1,16 +1,19 @@
 <nb-layout>
   <nb-layout-column>
     <div class="header">
-      <div class="logo c-p">
+      <div [routerLink]="[ '/main/dashboard' ]" class="logo c-p">
         <img src="assets/svg-icon/logo-dark.svg" alt="">
       </div>
-      <div (clickOutside)="userDrb = false" (click)="userDrb = true;" class="user c-p">
+      <div (clickOutside)="userDrb = false" (click)="userDrb = true" class="user c-p">
         <div class="icon">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png" alt="">
+          <img [src]="photo" alt="">
         </div>
         <div>
-          User Name
+          {{fullname}}
         </div>
+
+        <app-dialog-upload-image *ngIf="showLogoUploader" [uploadType]="uploadType" (uploadEmit)="newPhoto = $event; showLogoUploader = false; showDrb();"
+          (closeEmit)="showLogoUploader = $event; userDrb = true" [image]="fileImg"></app-dialog-upload-image>
 
         <div *ngIf="userDrb" class="user-drb">
           <div class="head">
@@ -21,7 +24,7 @@
               <div class="icon">
                 <img src="assets/img/upload.png" alt="">
               </div>
-              <div>
+              <div (click)="logout()">
                 Logout
               </div>
             </div>
@@ -30,12 +33,11 @@
             <div class="df ai-c jc-c m-b-20">
               <div class="user m-r-10">
                 <div class="icon m-0 w-80">
-                  <img [src]="photo"
-                    alt="">
+                  <img [src]="newPhoto" alt="">
                 </div>
               </div>
               <label class="fs-12 color-secondary c-p">
-                <input hidden type="file" (change)="uploadCover($event.target.files)" accept="image/*">
+                <input hidden type="file" (change)="uploadCover($event)" accept="image/*">
                 Change
               </label>
             </div>
@@ -43,14 +45,14 @@
               Name
             </div>
             <div class="m-b-20">
-              <input type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+              <input [(ngModel)]="newName" type="text" nbInput fullWidth fieldSize="medium" placeholder="">
             </div>
             <div class="m-b-5 fs-14 fw-400">
               Email <span class="color-warning"> (Not verified)</span>
             </div>
             <div class="m-b-20 input-email">
-              <input type="text" nbInput fullWidth fieldSize="medium" placeholder="">
-              <button class="cust-button" nbButton status="success">
+              <input [(ngModel)]="user.email" type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+              <button (click)="save()" class="cust-button" nbButton status="success">
                 Save
               </button>
             </div>
@@ -67,7 +69,7 @@
         <h1 class="m-t-0 m-b-0 fs-24 fw-600">
           Pages
         </h1>
-        <button class="cust-button" nbButton status="success">
+        <button [routerLink]="[ '/fb-connect' ]" class="cust-button" nbButton status="success">
           + Add New Page
         </button>
       </div>
@@ -87,7 +89,7 @@
                     <div class="icon">
                       <img [src]="row.data[column].icon" alt="">
                     </div>
-                    <div class="fs-16 fw-400">
+                    <div class="fs-16 fw-400 ellipsis">
                       {{row.data[column].name}}
                     </div>
                   </div>
@@ -104,6 +106,9 @@
             </ng-container>
 
           </table>
+          <div *ngIf="showLoader" class="loader-table">
+            <img width="70px" src="assets/img/Loader2x.gif" alt="">
+          </div>
 
         </nb-card-body>
       </nb-card>

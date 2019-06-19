@@ -5,138 +5,159 @@
 </div>
 <nb-card>
   <nb-card-body class="p-40 p-b-10">
-    <div class="df m-b-100">
+    <div *ngIf="showLoader" class="loader-table">
+      <img width="70px" src="assets/img/Loader2x.gif" alt="" />
+    </div>
+    <div *ngIf="!showLoader" class="df m-b-100">
       <div class="m-r-100">
-        <div *ngIf="data && !couponBack" class="coupon m-l-0">
-          <div class="head m-b-15">
-            <div class="df ai-c">
-              <div class="coupon-brand m-r-8">
-                <img [src]="data.brand_logo" alt="">
-              </div>
-              <div class="fs-18 fw-700">
-                {{data.brand_name}}
-              </div>
-            </div>
-            <div class="text-right">
-              <div class="fs-10 fw-400">
-                Days left
-              </div>
-              <div class="fs-15 fw-600">
-                30
-              </div>
-            </div>
-          </div>
-          <div class="m-b-16 df jc-c">
-            <img class="cover-image" [src]="data.brand_cover" alt="">
-          </div>
-          <div class="df jc-b color-white fw-11 fw-400 p-l-15 p-r-15">
-            <div>
-              CUSTOMER
-            </div>
-            <div>
-              DISCOUNT
-            </div>
-          </div>
-          <div class="df jc-b color-white fw-16 fw-600 m-b-50 p-l-15 p-r-15">
-            <div>
-              {{'{Dynamic}'}}
-            </div>
-            <div>
-              {{'{Dynamic}'}}
-            </div>
-          </div>
-          <div class="text-center">
-            <img width="133px" class="m-b-20" src="assets/img/QR_code.png" alt="">
-          </div>
-          <div class="combined">
-            <img src="assets/svg-icon/Combined_Shape.svg" alt="">
-          </div>
-        </div>
-        <div class="coupon-back" *ngIf="data && couponBack">
-          <div class="head">
-            <div class="text-right c-p color-link">
-              Done
-            </div>
-            <div class="df">
-              <div class="m-r-25 df ai-e">
-                <img src="assets/svg-icon/coupon-back-icon.svg" alt="">
-              </div>
-              <div>
-                <div class="color-dark fs-17 fw-700">
-                  Discount Coupon
+        <div *ngIf="data" class="flip-card" [ngClass]="{ active: couponBack }">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="coupon m-l-0">
+                <div class="head m-b-15">
+                  <div class="df ai-c">
+                    <div class="coupon-brand m-r-8">
+                      <img [src]="data.card_logo" alt="" />
+                    </div>
+                    <div class="fs-18 fw-700">
+                      {{ data.brand_name }}
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="fs-10 fw-400">
+                      Days left
+                    </div>
+                    <div class="fs-15 fw-600">
+                      30
+                    </div>
+                  </div>
                 </div>
-                <div class="color-secondary fs-11">
-                  Update 1 min ago
+                <div class="m-b-16 df jc-c">
+                  <img class="cover-image" [src]="data.card_cover" alt="" />
+                </div>
+                <div class="df jc-b color-white fw-11 fw-400 p-l-15 p-r-15">
+                  <div>
+                    CUSTOMER
+                  </div>
+                  <div>
+                    DISCOUNT
+                  </div>
+                </div>
+                <div
+                  class="df jc-b color-white fw-16 fw-600 m-b-50 p-l-15 p-r-15"
+                >
+                  <div>
+                    {{ "{Dynamic}" }}
+                  </div>
+                  <div>
+                    {{ dataCoupon.discount }}
+                  </div>
+                </div>
+                <div class="text-center">
+                  <img
+                    width="133px"
+                    class="m-b-20"
+                    src="assets/img/QR_code.png"
+                    alt=""
+                  />
+                </div>
+                <div class="combined">
+                  <img src="assets/svg-icon/Combined_Shape.svg" alt="" />
                 </div>
               </div>
             </div>
-          </div>
-          <div class="toggle-row">
-            <div class="lable">
-              Automatic Updates
-            </div>
-            <label class="switch">
-              <input type="checkbox" checked>
-              <span class="slider round"></span>
-            </label>
-          </div>
-          <div class="toggle-row">
-            <div class="lable">
-              Suggest on lock screen
-            </div>
-            <label class="switch">
-              <input type="checkbox" checked>
-              <span class="slider round"></span>
-            </label>
-          </div>
-          <div class="m-t-11 m-b-9 p-l-16 p-r-16 fs-13 color-secondary-2">
-            Show based on time or location.
-          </div>
-          <div class="p-l-16 p-r-3 bg-white">
-            <div class="info-row">
-              <div class="info-head">
-                📃Description
-              </div>
-              <div>
-                {{data.description}}
-              </div>
-            </div>
-            <div class="info-row">
-              <div class="info-head">
-                🔖More info
-              </div>
-              <div>
-                {{data.about}}
-              </div>
-            </div>
-            <div class="info-row">
-              <div class="info-head">
-                📍Location
-              </div>
-              <div>
-                <a class="color-link" href="">{{data.location_url}}</a>
-              </div>
-            </div>
-            <div class="info-row">
-              <div class="info-head">
-                📞 Phone
-              </div>
-              <div>
-                +{{data.phone}}
-              </div>
-            </div>
-            <div class="info-row">
-              <div class="info-head">
-                ✉Email
-              </div>
-              <div>
-                {{data.email}}
+            <div class="flip-card-back">
+              <div class="coupon-back">
+                <div class="head">
+                  <div class="text-right c-p color-link">
+                    Done
+                  </div>
+                  <div class="df">
+                    <div class="m-r-25 df ai-e">
+                      <img src="assets/svg-icon/coupon-back-icon.svg" alt="" />
+                    </div>
+                    <div>
+                      <div class="color-dark fs-17 fw-700">
+                        Discount Coupon
+                      </div>
+                      <div class="color-secondary fs-11">
+                        Update 1 min ago
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="toggle-row">
+                  <div class="lable">
+                    Automatic Updates
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" checked />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+                <div class="toggle-row">
+                  <div class="lable">
+                    Suggest on lock screen
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" checked />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+                <div class="m-t-11 m-b-9 p-l-16 p-r-16 fs-13 color-secondary-2">
+                  Show based on time or location.
+                </div>
+                <div class="p-l-16 p-r-3 bg-white">
+                  <div class="info-row">
+                    <div class="info-head">
+                      📃Description
+                    </div>
+                    <div>
+                      {{ data.description }}
+                    </div>
+                  </div>
+                  <div class="info-row">
+                    <div class="info-head">
+                      🔖More info
+                    </div>
+                    <div>
+                      {{ data.about }}
+                    </div>
+                  </div>
+                  <div class="info-row">
+                    <div class="info-head">
+                      📍Location
+                    </div>
+                    <div>
+                      <a class="color-link" href="">{{ data.location_url }}</a>
+                    </div>
+                  </div>
+                  <div class="info-row">
+                    <div class="info-head">
+                      📞 Phone
+                    </div>
+                    <div>+{{ data.phone }}</div>
+                  </div>
+                  <div class="info-row">
+                    <div class="info-head">
+                      ✉Email
+                    </div>
+                    <div>
+                      {{ data.email }}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="df jc-e">
-          <img (click)="couponBack = !couponBack" class="c-p" src="assets/img/card-back.png" alt="">
+
+        <div (click)="couponBack = !couponBack" class="df jc-e ai-e c-p m-t-35">
+          <div class="color-dark fs-16 fw-700">
+            Card <span *ngIf="!couponBack"> Back</span>
+            <span *ngIf="couponBack"> Front</span>
+          </div>
+          <img src="assets/img/back-arrow.png" alt="" />
         </div>
       </div>
       <div class="p-t-20">
@@ -153,7 +174,7 @@
             Campaign Name
           </div>
           <div class="value">
-            {{dataCoupon.name}}
+            {{ dataCoupon.name }}
           </div>
         </div>
         <div class="row-info">
@@ -161,7 +182,7 @@
             Description
           </div>
           <div class="value">
-            {{dataCoupon.desription}}
+            {{ dataCoupon.desription }}
           </div>
         </div>
         <div class="row-info">
@@ -169,7 +190,7 @@
             Walletly Card
           </div>
           <div class="value">
-            My First Campaign
+            {{ data?.template_name }}
           </div>
         </div>
         <div class="row-info">
@@ -177,7 +198,7 @@
             Discount
           </div>
           <div class="value">
-            {{dataCoupon.discount}}
+            {{ dataCoupon.discount }}
           </div>
         </div>
         <div class="row-info">
@@ -185,7 +206,7 @@
             Start Date
           </div>
           <div class="value">
-            {{dataCoupon.startDate}}
+            {{ dataCoupon.startDate }}
           </div>
         </div>
         <div class="row-info">
@@ -193,15 +214,26 @@
             End Date
           </div>
           <div class="value">
-            {{dataCoupon.endDate}}
+            {{ dataCoupon.endDate }}
           </div>
         </div>
         <div class="p-l-60 m-t-70">
-          <div class="message-error" style="text-align: left">{{messError}}</div>
-          <button [routerLink]="['/main/campaign-main/create-campaign']"  class="cust-button m-r-15" nbButton status="gray">
+          <button
+            (click)="edit()"
+            class="cust-button m-r-15"
+            nbButton
+            status="gray"
+          >
             Edit
           </button>
-          <button [disabled]="inProcces" (click)="create()" class="cust-button" nbButton status="success">
+          <button
+            [disabled]="inProcces"
+            (click)="create()"
+            class="cust-button"
+            nbButton
+            status="success"
+          >
+            <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
             Post
           </button>
         </div>

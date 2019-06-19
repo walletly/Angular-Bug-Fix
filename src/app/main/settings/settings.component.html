@@ -1,13 +1,16 @@
 <div class="df jc-b m-b-15">
   <h1 class="m-t-0 m-b-0 fs-24 fw-600">
-    Walletly Cards
+    Page Settings
   </h1>
 </div>
 <nb-card>
   <nb-card-body>
     <nb-tabset class="tabs-card">
       <nb-tab #pageSettingsTab tabTitle="Page Setting">
-        <form [formGroup]="myForm">
+        <div *ngIf="showLoader" class="loader-table">
+          <img width="70px" src="assets/img/Loader2x.gif" alt="" />
+        </div>
+        <form *ngIf="!showLoader" [formGroup]="myForm">
           <div class="input-wrapper">
             <div class="row-input">
               <div class="lable">
@@ -15,9 +18,30 @@
               </div>
               <div class="value">
                 <div class="pos-r full-width">
-                  <input [ngClass]="{'error': myForm.controls['facebookPageID'].invalid && !customValidation}"
-                    formControlName="facebookPageID" class="color-link" type="text" nbInput fullWidth fieldSize="medium"
-                    placeholder="">
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['facebookPageID'].invalid &&
+                        !customValidation
+                    }"
+                    formControlName="facebookPageID"
+                    class="color-link"
+                    type="text"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                    placeholder=""
+                    readonly
+                  />
+                  <div
+                    *ngIf="
+                      myForm.controls['facebookPageID'].invalid &&
+                      !customValidation
+                    "
+                    class="error-lable"
+                  >
+                    Field error (for example: "www.facebook.com/user")
+                  </div>
                 </div>
               </div>
             </div>
@@ -27,8 +51,27 @@
               </div>
               <div class="value">
                 <div class="pos-r full-width">
-                  <input [ngClass]="{'error': myForm.controls['brandName'].invalid && !customValidation}"
-                    formControlName="brandName" type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['brandName'].invalid &&
+                        !customValidation
+                    }"
+                    formControlName="brandName"
+                    type="text"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                    placeholder=""
+                  />
+                  <div
+                    *ngIf="
+                      myForm.controls['brandName'].invalid && !customValidation
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have at least 1 character)
+                  </div>
                 </div>
               </div>
             </div>
@@ -39,16 +82,27 @@
               <div class="value">
                 <div *ngIf="photoLogo" class="pos-r">
                   <div class="brand">
-                    <img [src]="photoLogo" alt="">
+                    <img [src]="photoLogo" alt="" />
                   </div>
                   <div (click)="deleteImg('photoLogo')" class="close">
                     <i class="nb-plus"></i>
                   </div>
                 </div>
                 <div *ngIf="!photoLogo">
-                  <label class="c-p file-lable" size="xsmall" nbButton hero status="info">
-                    <input formControlName="profileLogo" hidden type="file" (change)="uploadLogo($event.target.files)"
-                      accept="image/*">
+                  <label
+                    class="c-p file-lable"
+                    size="xsmall"
+                    nbButton
+                    hero
+                    status="info"
+                  >
+                    <input
+                      formControlName="profileLogo"
+                      hidden
+                      type="file"
+                      (change)="uploadLogo($event)"
+                      accept="image/*"
+                    />
                     Load image
                   </label>
                 </div>
@@ -67,16 +121,27 @@
               <div class="value">
                 <div *ngIf="photoCover" class="pos-r">
                   <div>
-                    <img width="100%" [src]="photoCover" alt="">
+                    <img width="100%" [src]="photoCover" alt="" />
                   </div>
                   <div (click)="deleteImg('photoCover')" class="close">
                     <i class="nb-plus"></i>
                   </div>
                 </div>
                 <div *ngIf="!photoCover">
-                  <label class="c-p file-lable" size="xsmall" nbButton hero status="info">
-                    <input formControlName="coverImage" hidden type="file" (change)="uploadCover($event.target.files)"
-                      accept="image/*">
+                  <label
+                    class="c-p file-lable"
+                    size="xsmall"
+                    nbButton
+                    hero
+                    status="info"
+                  >
+                    <input
+                      formControlName="coverImage"
+                      hidden
+                      type="file"
+                      (change)="uploadCover($event)"
+                      accept="image/*"
+                    />
                     Load image
                   </label>
                 </div>
@@ -94,8 +159,26 @@
               </div>
               <div class="value">
                 <div class="pos-r full-width">
-                  <textarea [ngClass]="{'error': myForm.controls['description'].invalid && !customValidation}"
-                    formControlName="description" nbInput fullWidth placeholder="Textarea"></textarea>
+                  <textarea
+                    [ngClass]="{
+                      error:
+                        myForm.controls['description'].invalid &&
+                        !customValidation
+                    }"
+                    formControlName="description"
+                    nbInput
+                    fullWidth
+                    placeholder="Textarea"
+                  ></textarea>
+                  <div
+                    *ngIf="
+                      myForm.controls['description'].invalid &&
+                      !customValidation
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have at least 1 character)
+                  </div>
                 </div>
               </div>
             </div>
@@ -105,8 +188,24 @@
               </div>
               <div class="value">
                 <div class="pos-r full-width">
-                  <textarea [ngClass]="{'error': myForm.controls['moreInfo'].invalid && !customValidation}"
-                    formControlName="moreInfo" nbInput fullWidth placeholder="Textarea"></textarea>
+                  <textarea
+                    [ngClass]="{
+                      error:
+                        myForm.controls['moreInfo'].invalid && !customValidation
+                    }"
+                    formControlName="moreInfo"
+                    nbInput
+                    fullWidth
+                    placeholder="Textarea"
+                  ></textarea>
+                  <div
+                    *ngIf="
+                      myForm.controls['moreInfo'].invalid && !customValidation
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have at least 1 character)
+                  </div>
                 </div>
               </div>
             </div>
@@ -116,9 +215,27 @@
               </div>
               <div class="value">
                 <div class="pos-r full-width">
-                  <input [ngClass]="{'error': myForm.controls['location'].invalid && !customValidation}"
-                    formControlName="location" class="color-link" type="text" nbInput fullWidth fieldSize="medium"
-                    placeholder="">
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['location'].invalid && !customValidation
+                    }"
+                    formControlName="location"
+                    class="color-link"
+                    type="text"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                    placeholder=""
+                  />
+                  <div
+                    *ngIf="
+                      myForm.controls['location'].invalid && !customValidation
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have location info)
+                  </div>
                 </div>
               </div>
             </div>
@@ -128,8 +245,27 @@
               </div>
               <div class="value">
                 <div class="pos-r full-width">
-                  <input [ngClass]="{'error': myForm.controls['phone'].invalid && !customValidation}" formControlName="phone"
-                    type="text" nbInput fullWidth fieldSize="medium" placeholder="" pattern="^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$">
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['phone'].invalid && !customValidation
+                    }"
+                    formControlName="phone"
+                    type="number"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                    placeholder=""
+                    pattern="^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$"
+                  />
+                  <div
+                    *ngIf="
+                      myForm.controls['phone'].invalid && !customValidation
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have at least 5 digits of phone number)
+                  </div>
                 </div>
               </div>
             </div>
@@ -139,8 +275,26 @@
               </div>
               <div class="value">
                 <div class="pos-r full-width">
-                  <input [ngClass]="{'error': myForm.controls['email'].invalid && !customValidation}" formControlName="email"
-                    type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['email'].invalid && !customValidation
+                    }"
+                    formControlName="email"
+                    type="text"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                    placeholder=""
+                  />
+                  <div
+                    *ngIf="
+                      myForm.controls['email'].invalid && !customValidation
+                    "
+                    class="error-lable"
+                  >
+                    Field error (for example: "user@mail.com")
+                  </div>
                 </div>
               </div>
             </div>
@@ -150,17 +304,39 @@
               </div>
               <div class="value">
                 <div class="pos-r full-width">
-                  <input [ngClass]="{'error': myForm.controls['website'].invalid && !customValidation}" formControlName="website"
-                    class="color-link" type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['website'].invalid && !customValidation
+                    }"
+                    formControlName="website"
+                    class="color-link"
+                    type="text"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                    placeholder=""
+                  />
+                  <div
+                    *ngIf="
+                      myForm.controls['website'].invalid && !customValidation
+                    "
+                    class="error-lable"
+                  >
+                    Field error (for example: "http://www.website.com")
+                  </div>
                 </div>
               </div>
             </div>
             <div class="row-input">
-              <div class="lable">
-
-              </div>
+              <div class="lable"></div>
               <div class="value">
-                <button (click)="update()" class="cust-button" nbButton status="success">
+                <button
+                  (click)="update()"
+                  class="cust-button"
+                  nbButton
+                  status="success"
+                >
                   Update
                 </button>
               </div>
@@ -169,49 +345,67 @@
         </form>
       </nb-tab>
       <nb-tab #apiSettingsTab tabTitle="API Settings">
-
         <div class="df ai-e">
           <div class="api-wrapper full-width p-t-35 pos-r">
             <div class="vertical-line"></div>
 
             <div class="tab-cust">
-              <div [ngClass]="{'color-secondary': false}" class="tab-lable df ai-c fs-18 fw-600 m-b-15">
+              <div
+                [ngClass]="{ 'color-secondary': false }"
+                class="tab-lable df ai-c fs-18 fw-600 m-b-15"
+              >
                 <div class="tab-icon m-r-10">
-                  <img src="assets/svg-icon/success-circle.svg" alt="">
+                  <img src="assets/svg-icon/success-circle.svg" alt="" />
                 </div>
                 Choose Platform
               </div>
               <div class="tab-body p-l-35 p-b-40">
                 <div style="max-width: 730px;" class="row">
                   <div class="col-md-3 col-lg-3 col-6">
-                    <div (click)="platform = 'bitmap'" [ngClass]="{'active': platform === 'bitmap'}" class="card-platform">
-                      <img src="assets/img/Bitmap-platfotm.png" alt="">
+                    <div
+                      (click)="platform = 'bitmap'"
+                      [ngClass]="{ active: platform === 'bitmap' }"
+                      class="card-platform"
+                    >
+                      <img src="assets/img/Bitmap-platfotm.png" alt="" />
                       <div *ngIf="platform === 'bitmap'" class="icon-active">
-                        <img src="assets/svg-icon/success-circle.svg" alt="">
+                        <img src="assets/svg-icon/success-circle.svg" alt="" />
                       </div>
                     </div>
                   </div>
                   <div class="col-md-3 col-lg-3 col-6">
-                    <div (click)="platform = '2'" [ngClass]="{'active': platform === '2'}" class="card-platform">
-                      <img src="assets/img/activeChat-logo.jpg" alt="">
+                    <div
+                      (click)="platform = '2'"
+                      [ngClass]="{ active: platform === '2' }"
+                      class="card-platform"
+                    >
+                      <img src="assets/img/activeChat-logo.jpg" alt="" />
                       <div *ngIf="platform === '2'" class="icon-active">
-                        <img src="assets/svg-icon/success-circle.svg" alt="">
+                        <img src="assets/svg-icon/success-circle.svg" alt="" />
                       </div>
                     </div>
                   </div>
                   <div class="col-md-3 col-lg-3 col-6">
-                    <div (click)="platform = '3'" [ngClass]="{'active': platform === '3'}" class="card-platform">
-                      <img src="assets/img/botsify-logo.jpg" alt="">
+                    <div
+                      (click)="platform = '3'"
+                      [ngClass]="{ active: platform === '3' }"
+                      class="card-platform"
+                    >
+                      <img src="assets/img/botsify-logo.jpg" alt="" />
                       <div *ngIf="platform === '3'" class="icon-active">
-                        <img src="assets/svg-icon/success-circle.svg" alt="">
+                        <img src="assets/svg-icon/success-circle.svg" alt="" />
                       </div>
                     </div>
                   </div>
                   <div class="col-md-3 col-lg-3 col-6">
-                    <div (click)="platform = '4'" [ngClass]="{'active': platform === '4'}" class="card-platform">
-                      <img src="assets/img/code.png" alt="">
+                    <div
+                      (click)="platform = '4'"
+                      [ngClass]="{ active: platform === '4' }"
+                      class="card-platform"
+                    >
+                      <img src="assets/img/code.png" alt="" />
                       <div *ngIf="platform === '4'" class="icon-active">
-                        <img src="assets/svg-icon/success-circle.svg" alt="">
+                        <img src="assets/svg-icon/success-circle.svg" alt="" />
                       </div>
                     </div>
                   </div>
@@ -220,26 +414,47 @@
             </div>
 
             <div class="tab-cust">
-              <div [ngClass]="{'color-secondary': true}" class="tab-lable df ai-c fs-18 fw-600 m-b-15">
+              <div
+                [ngClass]="{ 'color-secondary': true }"
+                class="tab-lable df ai-c fs-18 fw-600 m-b-15"
+              >
                 <div class="tab-icon m-r-10">
                   <!-- <img src="assets/svg-icon/success-circle.svg" alt=""> -->
                   <div class="icon">
                     2
                   </div>
                 </div>
-                Copy API Key
+                Copy Url
               </div>
 
               <div class="tab-body p-l-35 p-b-40">
                 <div class="api-wrap">
-                  <div class="fs-16 fw-600 m-r-12 api-lable">
-                    Walletly API KEY
+                  <div
+                    style="min-width: unset"
+                    class="fs-16 fw-600 m-r-12 api-lable"
+                  >
+                    URL
                   </div>
                   <div class="pos-r input-wrap">
-                    <input [(ngModel)]="api" class="color-dark fs-14 fw-500" type="text" nbInput fullWidth fieldSize="medium"
-                      placeholder="">
-                    <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard [cbContent]="api" [container]="container" nbTooltip="{{toolTipStatus}}" class="input-icon">
-                      <img src="assets/img/copy.png" alt="">
+                    <input
+                      [(ngModel)]="api"
+                      class="color-dark fs-14 fw-500"
+                      type="text"
+                      nbInput
+                      fullWidth
+                      fieldSize="medium"
+                      placeholder=""
+                    />
+                    <div
+                      (mouseover)="mouseMove()"
+                      (click)="copyApi()"
+                      ngxClipboard
+                      [cbContent]="api"
+                      [container]="container"
+                      nbTooltip="{{ toolTipStatus }}"
+                      class="input-icon"
+                    >
+                      <img src="assets/img/copy.png" alt="" />
                     </div>
                   </div>
                 </div>
@@ -247,22 +462,44 @@
             </div>
 
             <div class="tab-cust">
-              <div [ngClass]="{'color-secondary': true}" class="tab-lable df ai-c fs-18 fw-600 m-b-15">
+              <div
+                [ngClass]="{ 'color-secondary': true }"
+                class="tab-lable df ai-c fs-18 fw-600 m-b-15"
+              >
                 <div class="tab-icon m-r-10">
                   <!-- <img src="assets/svg-icon/success-circle.svg" alt=""> -->
                   <div class="icon">
                     3
                   </div>
                 </div>
-                Paste{{'{ManyChat}'}} API Key
+                Copy API Key
               </div>
               <div class="tab-body p-l-35 p-b-40">
                 <div class="api-wrap">
                   <div class="fs-16 fw-600 m-r-12 api-lable">
-                    API KEY
+                    Walletly API KEY
                   </div>
                   <div class="pos-r input-wrap">
-                    <input class="color-dark fs-14 fw-500" type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+                    <input
+                      [(ngModel)]="api"
+                      class="color-dark fs-14 fw-500"
+                      type="text"
+                      nbInput
+                      fullWidth
+                      fieldSize="medium"
+                      placeholder=""
+                    />
+                    <div
+                      (mouseover)="mouseMove()"
+                      (click)="copyApi()"
+                      ngxClipboard
+                      [cbContent]="api"
+                      [container]="container"
+                      nbTooltip="{{ toolTipStatus }}"
+                      class="input-icon"
+                    >
+                      <img src="assets/img/copy.png" alt="" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -275,10 +512,9 @@
                 </button>
               </div>
             </div>
-
           </div>
 
-          <div style="padding-bottom: 120px; min-width: 300px; margin-left: -30px;">
+          <div class="right-video-wrap">
             <div class="fs-24 color-dark fw-600 m-b-11">
               How to Add API key?
             </div>
@@ -291,12 +527,9 @@
               </div>
             </div>
           </div>
-
         </div>
-
       </nb-tab>
       <nb-tab #tabsetPaymantTab tabTitle="Payment">
-
         <div *ngIf="!showPaymentDetails" class="card-payment m-t-40 m-b-100">
           <div class="head">
             <div class="fs-18 fw-600">
@@ -307,7 +540,12 @@
             </div>
           </div>
           <div class="body">
-            <button (click)="showPaymentDetails = true" class="cust-button" nbButton status="info">
+            <button
+              (click)="showPaymentDetails = true"
+              class="cust-button"
+              nbButton
+              status="info"
+            >
               Upgrade to Pro
             </button>
           </div>
@@ -326,13 +564,30 @@
                       *Select Plan
                     </div>
                     <div class="value">
-                      <nb-select formControlName="plan" [ngClass]="{'error': myFormPayment.controls['plan'].invalid && !customValidationPayment}"
-                        size="small" placeholder="Select Plan">
+                      <nb-select
+                        formControlName="plan"
+                        [ngClass]="{
+                          error:
+                            myFormPayment.controls['plan'].invalid &&
+                            !customValidationPayment
+                        }"
+                        size="small"
+                        placeholder="Select Plan"
+                      >
                         <nb-option value="1">Basic ($ 99.99)</nb-option>
                         <nb-option value="2">Option 2</nb-option>
                         <nb-option value="3">Option 3</nb-option>
                         <nb-option value="4">Option 4</nb-option>
                       </nb-select>
+                      <div
+                        *ngIf="
+                          myFormPayment.controls['plan'].invalid &&
+                          !customValidationPayment
+                        "
+                        class="error-lable"
+                      >
+                        Field error (make your choice)
+                      </div>
                     </div>
                   </div>
                   <div class="row-payment-field">
@@ -340,9 +595,20 @@
                       *Payment Type
                     </div>
                     <div class="value">
-                      <nb-radio-group name="payment-type" formControlName="type" [ngClass]="{'error': myFormPayment.controls['type'].invalid && !customValidationPayment}"
-                        class="df squared">
-                        <nb-radio *ngFor="let option of paymentTypeOptions" [value]="option.value">
+                      <nb-radio-group
+                        name="payment-type"
+                        formControlName="type"
+                        [ngClass]="{
+                          error:
+                            myFormPayment.controls['type'].invalid &&
+                            !customValidationPayment
+                        }"
+                        class="df squared"
+                      >
+                        <nb-radio
+                          *ngFor="let option of paymentTypeOptions"
+                          [value]="option.value"
+                        >
                           {{ option.label }}
                         </nb-radio>
                       </nb-radio-group>
@@ -359,8 +625,29 @@
                       *Name
                     </div>
                     <div class="value">
-                      <input formControlName="yourName" [ngClass]="{'error': myFormPayment.controls['yourName'].invalid && !customValidationPayment}"
-                        placeholder="Name" class="small" type="text" nbInput fullWidth fieldSize="small">
+                      <input
+                        formControlName="yourName"
+                        [ngClass]="{
+                          error:
+                            myFormPayment.controls['yourName'].invalid &&
+                            !customValidationPayment
+                        }"
+                        placeholder="Name"
+                        class="small"
+                        type="text"
+                        nbInput
+                        fullWidth
+                        fieldSize="small"
+                      />
+                      <div
+                        *ngIf="
+                          myFormPayment.controls['yourName'].invalid &&
+                          !customValidationPayment
+                        "
+                        class="error-lable"
+                      >
+                        Field error (must have at least 1 character)
+                      </div>
                     </div>
                   </div>
                   <div class="row-payment-field">
@@ -368,8 +655,29 @@
                       *Email
                     </div>
                     <div class="value">
-                      <input formControlName="email" [ngClass]="{'error': myFormPayment.controls['email'].invalid && !customValidationPayment}"
-                        placeholder="Email" class="small" type="text" nbInput fullWidth fieldSize="small">
+                      <input
+                        formControlName="email"
+                        [ngClass]="{
+                          error:
+                            myFormPayment.controls['email'].invalid &&
+                            !customValidationPayment
+                        }"
+                        placeholder="Email"
+                        class="small"
+                        type="text"
+                        nbInput
+                        fullWidth
+                        fieldSize="small"
+                      />
+                      <div
+                        *ngIf="
+                          myFormPayment.controls['email'].invalid &&
+                          !customValidationPayment
+                        "
+                        class="error-lable"
+                      >
+                        Field error (for example: "user@mail.com")
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -383,8 +691,29 @@
                       *Address
                     </div>
                     <div class="value">
-                      <input formControlName="address" [ngClass]="{'error': myFormPayment.controls['address'].invalid && !customValidationPayment}"
-                        placeholder="Address" class="small" type="text" nbInput fullWidth fieldSize="small">
+                      <input
+                        formControlName="address"
+                        [ngClass]="{
+                          error:
+                            myFormPayment.controls['address'].invalid &&
+                            !customValidationPayment
+                        }"
+                        placeholder="Address"
+                        class="small"
+                        type="text"
+                        nbInput
+                        fullWidth
+                        fieldSize="small"
+                      />
+                      <div
+                        *ngIf="
+                          myFormPayment.controls['address'].invalid &&
+                          !customValidationPayment
+                        "
+                        class="error-lable"
+                      >
+                        Field error (enter your address")
+                      </div>
                     </div>
                   </div>
                   <div class="row-payment-field">
@@ -392,8 +721,29 @@
                       *City
                     </div>
                     <div class="value">
-                      <input formControlName="city" [ngClass]="{'error': myFormPayment.controls['city'].invalid && !customValidationPayment}"
-                        placeholder="City" class="small" type="text" nbInput fullWidth fieldSize="small">
+                      <input
+                        formControlName="city"
+                        [ngClass]="{
+                          error:
+                            myFormPayment.controls['city'].invalid &&
+                            !customValidationPayment
+                        }"
+                        placeholder="City"
+                        class="small"
+                        type="text"
+                        nbInput
+                        fullWidth
+                        fieldSize="small"
+                      />
+                      <div
+                        *ngIf="
+                          myFormPayment.controls['city'].invalid &&
+                          !customValidationPayment
+                        "
+                        class="error-lable"
+                      >
+                        Field error (enter your city")
+                      </div>
                     </div>
                   </div>
                   <div class="row-payment-field">
@@ -401,15 +751,57 @@
                       *State/Zip
                     </div>
                     <div class="value df ai-c">
-                      <nb-select formControlName="state" class="m-r-28 full-width" [ngClass]="{'error': myFormPayment.controls['state'].invalid && !customValidationPayment}"
-                        size="small" placeholder="-Select State-">
-                        <nb-option value="1">Option 1</nb-option>
-                        <nb-option value="2">Option 2</nb-option>
-                        <nb-option value="3">Option 3</nb-option>
-                        <nb-option value="4">Option 4</nb-option>
-                      </nb-select>
-                      <input formControlName="zip" [ngClass]="{'error': myFormPayment.controls['zip'].invalid && !customValidationPayment}"
-                        placeholder="Zip" class="small zip" type="text" nbInput fieldSize="small">
+                      <div>
+                        <nb-select
+                          formControlName="state"
+                          class="m-r-28 full-width"
+                          [ngClass]="{
+                            error:
+                              myFormPayment.controls['state'].invalid &&
+                              !customValidationPayment
+                          }"
+                          size="small"
+                          placeholder="-Select State-"
+                        >
+                          <nb-option value="1">Option 1</nb-option>
+                          <nb-option value="2">Option 2</nb-option>
+                          <nb-option value="3">Option 3</nb-option>
+                          <nb-option value="4">Option 4</nb-option>
+                        </nb-select>
+                        <div
+                          *ngIf="
+                            myFormPayment.controls['state'].invalid &&
+                            !customValidationPayment
+                          "
+                          class="error-lable"
+                        >
+                          Field error (make your choice)
+                        </div>
+                      </div>
+                      <div>
+                        <input
+                          formControlName="zip"
+                          [ngClass]="{
+                            error:
+                              myFormPayment.controls['zip'].invalid &&
+                              !customValidationPayment
+                          }"
+                          placeholder="Zip"
+                          class="small zip"
+                          type="text"
+                          nbInput
+                          fieldSize="small"
+                        />
+                        <div
+                          *ngIf="
+                            myFormPayment.controls['zip'].invalid &&
+                            !customValidationPayment
+                          "
+                          class="error-lable"
+                        >
+                          Field error (enter zip)
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="row-payment-field">
@@ -417,17 +809,33 @@
                       *Country
                     </div>
                     <div class="value">
-                      <nb-select formControlName="country" [ngClass]="{'error': myFormPayment.controls['country'].invalid && !customValidationPayment}"
-                        size="small" placeholder="-Select Country-">
+                      <nb-select
+                        formControlName="country"
+                        [ngClass]="{
+                          error:
+                            myFormPayment.controls['country'].invalid &&
+                            !customValidationPayment
+                        }"
+                        size="small"
+                        placeholder="-Select Country-"
+                      >
                         <nb-option value="1">Option 1</nb-option>
                         <nb-option value="2">Option 2</nb-option>
                         <nb-option value="3">Option 3</nb-option>
                         <nb-option value="4">Option 4</nb-option>
                       </nb-select>
+                      <div
+                        *ngIf="
+                          myFormPayment.controls['country'].invalid &&
+                          !customValidationPayment
+                        "
+                        class="error-lable"
+                      >
+                        Field error (make your choice)
+                      </div>
                     </div>
                   </div>
                 </div>
-
               </div>
               <div class="col-12 col-lg-6 m-b-10">
                 <div class="payment-block">
@@ -435,13 +843,21 @@
                     Payment Method
                   </div>
                   <div>
-                    <nb-radio-group name="payment-method" formControlName="paymentMethod" [ngClass]="{'error': myFormPayment.controls['paymentMethod'].invalid && !customValidationPayment}"
-                      class="df squared">
+                    <nb-radio-group
+                      name="payment-method"
+                      formControlName="paymentMethod"
+                      [ngClass]="{
+                        error:
+                          myFormPayment.controls['paymentMethod'].invalid &&
+                          !customValidationPayment
+                      }"
+                      class="df squared"
+                    >
                       <nb-radio value="value1">
-                        <img src="assets/img/paycard-1.png" alt="">
+                        <img src="assets/img/paycard-1.png" alt="" />
                       </nb-radio>
                       <nb-radio value="value2">
-                        <img src="assets/img/paypal.png" alt="">
+                        <img src="assets/img/paypal.png" alt="" />
                       </nb-radio>
                     </nb-radio-group>
                   </div>
@@ -452,10 +868,31 @@
                       *Name on Card
                     </div>
                     <div class="value pos-r">
-                      <input formControlName="nameOnCard" [ngClass]="{'error': myFormPayment.controls['nameOnCard'].invalid && !customValidationPayment}"
-                        placeholder="Name on Card" class="small" type="text" nbInput fullWidth fieldSize="small">
+                      <input
+                        formControlName="nameOnCard"
+                        [ngClass]="{
+                          error:
+                            myFormPayment.controls['nameOnCard'].invalid &&
+                            !customValidationPayment
+                        }"
+                        placeholder="Name on Card"
+                        class="small"
+                        type="text"
+                        nbInput
+                        fullWidth
+                        fieldSize="small"
+                      />
                       <div class="lock-icon">
-                        <img src="assets/img/lock.png" alt="">
+                        <img src="assets/img/lock.png" alt="" />
+                      </div>
+                      <div
+                        *ngIf="
+                          myFormPayment.controls['nameOnCard'].invalid &&
+                          !customValidationPayment
+                        "
+                        class="error-lable"
+                      >
+                        Field error (enter Name on Card)
                       </div>
                     </div>
                   </div>
@@ -464,10 +901,31 @@
                       *Card Number
                     </div>
                     <div class="value pos-r">
-                      <input formControlName="cardNumber" [ngClass]="{'error': myFormPayment.controls['cardNumber'].invalid && !customValidationPayment}"
-                        placeholder="Card Number" class="small" type="text" nbInput fullWidth fieldSize="small">
+                      <input
+                        formControlName="cardNumber"
+                        [ngClass]="{
+                          error:
+                            myFormPayment.controls['cardNumber'].invalid &&
+                            !customValidationPayment
+                        }"
+                        placeholder="Card Number"
+                        class="small"
+                        type="text"
+                        nbInput
+                        fullWidth
+                        fieldSize="small"
+                      />
                       <div class="lock-icon">
-                        <img src="assets/img/lock.png" alt="">
+                        <img src="assets/img/lock.png" alt="" />
+                      </div>
+                      <div
+                        *ngIf="
+                          myFormPayment.controls['nameOnCard'].invalid &&
+                          !customValidationPayment
+                        "
+                        class="error-lable"
+                      >
+                        Field error (enter Card Number)
                       </div>
                     </div>
                   </div>
@@ -477,55 +935,171 @@
                     </div>
                     <div class="value">
                       <div class="cvc-wrap df">
-                        <nb-select formControlName="expirationMounth" class="full-width m-r-8" [ngClass]="{'error': myFormPayment.controls['expirationMounth'].invalid && !customValidationPayment}"
-                          size="small" placeholder="">
+                        <nb-select
+                          formControlName="expirationMounth"
+                          class="full-width m-r-8"
+                          [ngClass]="{
+                            error:
+                              myFormPayment.controls['expirationMounth']
+                                .invalid && !customValidationPayment
+                          }"
+                          size="small"
+                          placeholder=""
+                        >
                           <nb-option value="1">12</nb-option>
                           <nb-option value="2">13</nb-option>
                           <nb-option value="3">14</nb-option>
                           <nb-option value="4">15</nb-option>
                         </nb-select>
-                        <nb-select formControlName="expirationYear" class="full-width m-r-8" [ngClass]="{'error': myFormPayment.controls['expirationYear'].invalid && !customValidationPayment}"
-                          size="small" placeholder="">
+                        <nb-select
+                          formControlName="expirationYear"
+                          class="full-width m-r-8"
+                          [ngClass]="{
+                            error:
+                              myFormPayment.controls['expirationYear']
+                                .invalid && !customValidationPayment
+                          }"
+                          size="small"
+                          placeholder=""
+                        >
                           <nb-option value="1">12</nb-option>
                           <nb-option value="2">13</nb-option>
                           <nb-option value="3">14</nb-option>
                           <nb-option value="4">15</nb-option>
                         </nb-select>
                         <div class="pos-r full-width">
-                          <input formControlName="cvc" [ngClass]="{'error': myFormPayment.controls['cvc'].invalid && !customValidationPayment}"
-                            placeholder="CVC" class="small" type="text" nbInput fullWidth fieldSize="small">
+                          <input
+                            formControlName="cvc"
+                            [ngClass]="{
+                              error:
+                                myFormPayment.controls['cvc'].invalid &&
+                                !customValidationPayment
+                            }"
+                            placeholder="CVC"
+                            class="small"
+                            type="text"
+                            nbInput
+                            fullWidth
+                            fieldSize="small"
+                          />
                           <div class="lock-icon">
-                            <img src="assets/img/lock.png" alt="">
+                            <img src="assets/img/lock.png" alt="" />
                           </div>
                         </div>
+                      </div>
+                      <div
+                        *ngIf="
+                          (myFormPayment.controls['expirationMounth'].invalid &&
+                            !customValidationPayment) ||
+                          (myFormPayment.controls['expirationYear'].invalid &&
+                            !customValidationPayment)
+                        "
+                        class="error-lable"
+                      >
+                        Field error (make your choice)
+                      </div>
+                      <div
+                        *ngIf="
+                          myFormPayment.controls['cvc'].invalid &&
+                          !customValidationPayment
+                        "
+                        class="error-lable"
+                      >
+                        Field error (enter CVC)
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div class="row-payment-field">
-                  <div class="lable">
-                  </div>
+                  <div class="lable"></div>
                   <div class="value">
                     <div class="total-pay m-b-9">
                       Total: $99.99
                     </div>
-                    <button (click)="submitPayment()" class="cust-button full-width" nbButton status="info">
+                    <button
+                      (click)="submitPayment()"
+                      class="cust-button full-width"
+                      nbButton
+                      status="info"
+                    >
                       Submit Payment
                     </button>
                   </div>
                 </div>
-
               </div>
             </div>
           </form>
         </div>
-
       </nb-tab>
-      <nb-tab #customDataTab tabTitle="Custom data">
-        <p>Custom data</p>
+      <nb-tab #customDataTab tabTitle="Admins">
+        <div class="heading-admins">
+          <div class="lable">
+            Walletly Team
+          </div>
+          <button (click)="showModalMember = true" class="cust-button" nbButton status="success">
+            + invite new member
+          </button>
+        </div>
+        <div class="admin-wrap">
+          <div class="head">
+            <div>
+              Name
+            </div>
+            <div>
+              Status
+            </div>
+          </div>
+          <div class="item">
+            <div class="user-wrap">
+              <div class="icon">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png"
+                  alt=""
+                />
+              </div>
+              <div>
+                Rashid Sharif
+              </div>
+            </div>
+            <div class="status">
+              Admin
+            </div>
+          </div>
+          <div class="item">
+            <div class="user-wrap">
+              <div class="icon">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png"
+                  alt=""
+                />
+              </div>
+              <div>
+                Rashid Sharif
+              </div>
+            </div>
+            <div class="status">
+              Admin
+            </div>
+          </div>
+        </div>
       </nb-tab>
     </nb-tabset>
-
   </nb-card-body>
 </nb-card>
+
+<app-dialog-upload-image
+  *ngIf="showLogoUploader"
+  [uploadType]="uploadType"
+  (uploadEmit)="uploadPhoto($event, 'logo'); showLogoUploader = false"
+  (closeEmit)="showLogoUploader = $event"
+  [image]="fileImg"
+></app-dialog-upload-image>
+<app-dialog-upload-image
+  *ngIf="showBrandUploader"
+  [uploadType]="uploadType"
+  (uploadEmit)="uploadPhoto($event, 'cover'); showBrandUploader = false"
+  (closeEmit)="showBrandUploader = $event"
+  [image]="fileImg"
+></app-dialog-upload-image>
+<app-modal-member *ngIf="showModalMember" (closeModal)="showModalMember = false" [show]="showModalMember"></app-modal-member>

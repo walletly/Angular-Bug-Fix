@@ -14,8 +14,11 @@
                             <div class="fs-15 m-b-5">
                                 Username
                             </div>
-                            <input [ngClass]="{'error': myForm.controls['name'].invalid && !customValidation}"
-                                type="text" formControlName="name" nbInput fullWidth fieldSize="medium" placeholder="">
+                            <input [ngClass]="{'error': myForm.controls['name'].invalid && !customValidation}" type="text"
+                                formControlName="name" nbInput fullWidth fieldSize="medium" placeholder="">
+                            <div *ngIf="myForm.controls['name'].invalid && !customValidation" class="error-lable">
+                                Field error (must have at least 1 character)
+                            </div>
                         </div>
                     </div>
                     <div class="inputs-row">
@@ -23,15 +26,15 @@
                             <div class="fs-15 m-b-5">
                                 Password
                             </div>
-                            <input [ngClass]="{'error': myForm.controls['password'].invalid && !customValidation}"
-                                type="password" formControlName="password" nbInput fullWidth fieldSize="medium"
-                                placeholder="">
+                            <input [ngClass]="{'error': myForm.controls['password'].invalid && !customValidation}" type="password"
+                                formControlName="password" nbInput fullWidth fieldSize="medium" placeholder="">
+                            <div *ngIf="myForm.controls['password'].invalid && !customValidation" class="error-lable">
+                                Field error (must have at least 6 characters)
+                            </div>
                         </div>
                     </div>
                 </form>
                 <div class="m-b-25">
-                    <div class="message-error">{{messError}}</div>
-
                     <button (click)="login()" class="cust-button fw-400 fs-14" fullWidth nbButton status="success">
                         Login
                     </button>
@@ -43,7 +46,8 @@
                     <span>or</span>
                 </div>
                 <div>
-                    <button (click)="signInWithFacebook()" class="cust-button fw-400 fs-14 df ai-c jc-c" fullWidth nbButton status="primary">
+                    <button (click)="signInWithFacebook()" class="cust-button fw-400 fs-14 df ai-c jc-c" fullWidth
+                        nbButton status="primary">
                         <img class="m-b-5" src="assets/svg-icon/fb.svg" alt=""> Connect with Facebook
                     </button>
                 </div>

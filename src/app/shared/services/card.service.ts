@@ -9,31 +9,57 @@ export class CardService {
 
   constructor(private http: HttpClient) { }
 
-  private httpHeaders = new HttpHeaders ({
-    'Content-Type': 'application/json'
-  });
-
   createCard(body) {
-    return this.http.post(SERVER_API_URL + 'card', body, { headers: this.httpHeaders});
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.post(SERVER_API_URL + 'card', body, { headers: httpHeaders});
   }
 
   deleteCard(cardId) {
-    return this.http.delete(SERVER_API_URL + 'card/' + cardId);
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.delete(SERVER_API_URL + 'card/' + cardId, { headers: httpHeaders});
   }
 
   getBrandsCards(brandId) {
-    return this.http.get(SERVER_API_URL + 'card/all/' + brandId);
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'card/all/' + brandId, { headers: httpHeaders});
   }
 
   getCardById(cardId) {
-    return this.http.get(SERVER_API_URL + 'card/' + cardId);
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'card/' + cardId, { headers: httpHeaders});
   }
 
   getCardByType(cardType: number, brandId: string) {
-    return this.http.get(SERVER_API_URL + `card/type/${cardType}/${brandId}`);
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + `card/type/${cardType}/${brandId}`, { headers: httpHeaders});
   }
 
   updateCard(cardId, body) {
-    return this.http.put(SERVER_API_URL + 'card/' + cardId, body);
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.put(SERVER_API_URL + 'card/' + cardId, body, { headers: httpHeaders});
   }
 }

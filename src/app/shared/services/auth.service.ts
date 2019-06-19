@@ -1,19 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SERVER_API_URL } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
+import { Router } from '@angular/router';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { BrandService } from './brand.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient, private firebaseAuth: AngularFireAuth) { }
-  // private httpHeaders = new HttpHeaders ({
-  //   'Content-Type': 'application/json'
-  // });
+  constructor(private http: HttpClient,
+    private firebaseAuth: AngularFireAuth,
+    private ngZone: NgZone,
+    public  router:  Router,
+    private afs: AngularFirestore,
+    private brandService: BrandService
+  ) { }
 
   user: Observable<any>;
 
@@ -22,20 +28,40 @@ export class AuthService {
   }
 
   updateUser(id, body) {
-    return this.http.put(SERVER_API_URL + 'auth/' + id, body);
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.put(SERVER_API_URL + 'auth/' + id, body, { headers: httpHeaders});
   }
 
   getUser(id) {
-    return this.http.get(SERVER_API_URL + 'auth/' + id);
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'auth/' + id, { headers: httpHeaders});
   }
 
   getFacebookInfo(fbId) {
-    return this.http.get(SERVER_API_URL + 'utils/page/' + fbId);
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'utils/page/' + fbId, { headers: httpHeaders});
   }
 
   signInWithFacebook() {
     return this.firebaseAuth.auth.signInWithPopup(
       new firebase.auth.FacebookAuthProvider()
     );
+  }
+
+  doFacebookLogin() {
+    const provider = new firebase.auth.FacebookAuthProvider();
+    provider.addScope('manage_pages');
+    // provider.addScope('publish_pages');
+    // provider.addScope('pages_show_list');
+    this.firebaseAuth.auth.signInWithRedirect(provider);
   }
 }

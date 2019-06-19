@@ -9,38 +9,49 @@ export class CompaignService {
 
   constructor(private http: HttpClient) { }
 
-  private httpHeaders = new HttpHeaders ({
-    'Content-Type': 'application/json'
-  });
-
-  deleteOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-    }),
-    body: {
-      id: 1,
-      name: 'test',
-    },
-  };
-
   createСampaign(body) {
-    return this.http.post(SERVER_API_URL + 'campaign', body, { headers: this.httpHeaders });
+    const httpHeadersWithCT = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.post(SERVER_API_URL + 'campaign', body, { headers: httpHeadersWithCT });
   }
 
   updateСampaign(id, body) {
-    return this.http.put(SERVER_API_URL + 'campaign/' + id, body, { headers: this.httpHeaders });
+    const httpHeadersWithCT = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.put(SERVER_API_URL + 'campaign/' + id, body, { headers: httpHeadersWithCT });
   }
 
   deleteСampaign(body) {
-    this.deleteOptions.body = body;
-    return this.http.delete(SERVER_API_URL + 'campaign', this.deleteOptions);
+    const deleteOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+        'x-auth-user': localStorage.getItem('userID')
+      }),
+      body: body
+    };
+    return this.http.delete(SERVER_API_URL + 'campaign', deleteOptions);
   }
 
   getСampaignById(id) {
-    return this.http.get(SERVER_API_URL + 'campaign/' + id);
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'campaign/' + id, { headers: httpHeaders });
   }
 
   getСampaignsBrands(id) {
-    return this.http.get(SERVER_API_URL + 'campaign/all/' + id);
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'campaign/all/' + id, { headers: httpHeaders });
   }
 }

@@ -16,6 +16,9 @@
               <input [(ngModel)]="chatBotQr.botRefURL" [ngClass]="{'error': myForm.controls['botRefURL'].invalid && !customValidation}"
                 formControlName="botRefURL" placeholder="m.me/2201211773478769" class="small" type="text" nbInput
                 fullWidth fieldSize="small">
+              <div *ngIf="myForm.controls['botRefURL'].invalid && !customValidation" class="error-lable">
+                Field error (must have at least 1 character)
+              </div>
             </div>
           </div>
           <div class="input-wrap">
@@ -44,6 +47,9 @@
                 <nb-option value="3">Option 3</nb-option>
                 <nb-option value="4">Option 4</nb-option>
               </nb-select>
+            </div>
+            <div *ngIf="myForm.controls['size'].invalid && !customValidation" class="error-lable">
+              Field error (make your choice)
             </div>
           </div>
         </form>

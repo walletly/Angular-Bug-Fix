@@ -1,0 +1,49 @@
+<nb-layout>
+  <nb-layout-column class="main-wrap">
+
+    <div>
+      <div class="m-b-50">
+        <img src="assets/svg-icon/logo-dark.svg" alt="">
+      </div>
+      <div>
+        <div class="text-center fw-600 fs-22 color-dark">
+          Connect Facebook Page
+        </div>
+        <div class="text-center color-secondary fs-11 fw-600 m-b-25">
+          Sign In with Facebook to create your first Campaing
+        </div>
+      </div>
+      <nb-card>
+        <nb-card-body>
+          <div class="text-center" style="padding: 70px;">
+            <button (click)="loginFB()" class="m-b-40" nbButton status="facebook">Sign In With Facebook</button>
+            <div>
+              <nb-checkbox [(ngModel)]="terms" status="success">
+                <span [ngStyle]="{'color': termsError && !terms ? 'red' : 'unset'}">
+                  I agree to Walletly
+                </span>
+              </nb-checkbox>
+              <span style="margin-left: -18px; position: relative; top: -2px;">
+                <a class="c-p m-r-5"> Terms of Service</a>
+              </span>
+              <div>
+                <span [ngStyle]="{'color': termsError && !terms ? 'red' : 'unset'}">
+                  and
+                </span>
+                <span>
+                  <a class="c-p m-l-5"> Privacy</a>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="showLoader" class="loader">
+            <img width="200px" src="assets/img/Loader2x.gif" alt="">
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="text-center fs-11 color-secondary">
+      ®2019 Walletly Business, All rights reserved. Terms and Privacy
+    </div>
+  </nb-layout-column>
+</nb-layout>

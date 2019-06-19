@@ -1,0 +1,20 @@
+<h3 *ngIf="!show && name">Welcome back, {{ name }}</h3>
+<h3 *ngIf="show" class="df ai-c">
+  <a
+    class="fs-11 fw-400 c-p m-r-3"
+    style="color: #afafb9; text-transform: capitalize"
+    [routerLink]="['/main/dashboard']"
+    [ngClass]="{ active: !breadcrumbs.length }"
+    >{{ brand }}
+  </a>
+  <a
+    class="fs-11 fw-400 c-p"
+    style="color: #afafb9; text-transform: capitalize"
+    *ngFor="let breadcrumb of breadcrumbs; let i = index"
+    [routerLink]="[breadcrumb.url, breadcrumb.params]"
+    [ngClass]="{ active: i === breadcrumbs.length - 1 }"
+  >
+    {{ breadcrumb.label }}
+    <span class="m-r-3" *ngIf="i !== breadcrumbs.length - 1"> > </span>
+  </a>
+</h3>

@@ -3,6 +3,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MainService } from 'src/app/shared/services/main.service';
 import { BrandService } from 'src/app/shared/services/brand.service';
+import { UploadService } from 'src/app/shared/services/upload.service';
 
 @Component({
   selector: 'app-settings',
@@ -24,6 +25,9 @@ export class SettingsComponent implements OnInit {
   brand;
   api;
 
+  logoName;
+  coverName;
+
   showPaymentDetails;
   toolTipStatus = 'Copy';
 
@@ -39,16 +43,24 @@ export class SettingsComponent implements OnInit {
   platform;
   container;
 
+  showLogoUploader = false;
+  showBrandUploader = false;
+  fileImg;
+  uploadType;
+
   customValidation = true;
   customValidationPayment = true;
 
   myForm: FormGroup;
   myFormPayment: FormGroup;
+  showLoader;
+  showModalMember;
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private mainService: MainService,
-    private brandService: BrandService
+    private brandService: BrandService,
+    private uploadService: UploadService
   ) {
     this.myForm = formBuilder.group({
       facebookPageID: ["www.facebook.com/", [Validators.required, Validators.pattern("((http|https):\/\/|)(www\.|)facebook\.com\/[a-zA-Z0-9.]{1,}")]],
@@ -60,7 +72,7 @@ export class SettingsComponent implements OnInit {
       location: ["", [Validators.required]],
       phone: ["", [Validators.required]],
       email: ["", [Validators.required, Validators.email]],
-      website: ["", [Validators.required, Validators.pattern("http(s?):\/\/[a-zA-Z0-9.]+[\/]*[a-zA-Z0-9.]*[\/]*")]],
+      website: ["", [Validators.required]],
     });
     this.myFormPayment = formBuilder.group({
       plan: ["", [Validators.required]],
@@ -80,17 +92,17 @@ export class SettingsComponent implements OnInit {
       cvc: ["", [Validators.required, Validators.pattern('[0-9]{3}')]],
     });
 
-    brandService.getBrandById(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
-      this.brand = data['brand'];
-      this.api = this.brand.apikey;
-      console.log(this.brand);
-      this.getData();
-    });
+    // this.mainService.showLoader.emit(true);
+    this.showLoader = true;
+    this.getBrandSettings();
+    this.goPayment();
   }
 
   ngOnInit() {
-    console.log(this.tabsetPaymantTab);
 
+  }
+
+  goPayment() {
     this.mainService.goToPro.subscribe(() => {
       this.pageSettingsTab.active = false;
       this.apiSettingsTab.active = false;
@@ -101,6 +113,22 @@ export class SettingsComponent implements OnInit {
     });
   }
 
+  getBrandSettings() {
+    this.brandService.getBrandById(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
+      this.brand = data['brand'];
+      this.api = this.brand.apikey;
+      console.log(this.brand);
+      this.getData();
+      // this.mainService.showLoader.emit(false);
+      this.showLoader = false;
+      this.goPayment();
+    }, err => {
+      // this.mainService.showLoader.emit(false);
+      this.showLoader = false;
+      this.goPayment();
+    });
+  }
+
   update() {
     if (this.myForm.valid) {
       this.customValidation = true;
@@ -108,6 +136,10 @@ export class SettingsComponent implements OnInit {
       console.log(this.brand);
       this.brandService.updateBrand(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'], this.brand).subscribe(result => {
         console.log(result);
+        this.brandService.getBrandById(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
+          localStorage.setItem('currentBrand', JSON.stringify(data['brand']));
+          this.mainService.showToastrSuccess.emit({text: 'Settings updated'});
+        });
       });
     } else {
       this.customValidation = false;
@@ -123,55 +155,53 @@ export class SettingsComponent implements OnInit {
   }
 
   uploadLogo(file: File) {
-    if (file[0].size / 1024 / 1024 <= 1) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        const img = document.createElement('img');
-        img.src = reader.result as string;
-        this.brandSizeValidation = true;
-
-        img.onload = () => {
-          if ((img.naturalWidth <= 110 && img.naturalHeight <= 110) && (img.naturalWidth >= 55 && img.naturalHeight >= 55)) {
-            this.photoLogo = reader.result as string;
-            this.dataCard.brandLogo = this.photoLogo;
-            this.brandSizeValidation = true;
-          } else {
-            this.brandSizeValidation = false;
-          }
-        };
-      };
-
-      reader.readAsDataURL(file[0]);
-    } else {
-      this.brandSizeValidation = false;
-    }
+    console.log(file);
+    this.logoName = file['srcElement'].files[0].name;
+    this.fileImg = file;
+    this.uploadType = 'logo';
+    this.showLogoUploader = true;
   }
 
   uploadCover(file: File) {
-    if (file[0].size / 1024 / 1024 <= 4) {
-      const reader = new FileReader();
+    this.coverName = file['srcElement'].files[0].name;
+    this.fileImg = file;
+    this.uploadType = 'brand';
+    this.showBrandUploader = true;
+  }
 
-      reader.onloadend = () => {
-        const img = document.createElement('img');
-        img.src = reader.result as string;
-
-        this.coverSizeValidation = true;
-        img.onload = () => {
-          if ((img.naturalWidth <= 750 && img.naturalHeight <= 294) && (img.naturalWidth >= 375 && img.naturalHeight >= 147)) {
-            this.photoCover = reader.result as string;
-            this.dataCard.coverImage = this.photoCover;
-            this.coverSizeValidation = true;
-          } else {
-            this.coverSizeValidation = false;
-          }
-        };
-      };
-
-      reader.readAsDataURL(file[0]);
-    } else {
-      this.coverSizeValidation = false;
+  uploadPhoto(event, fileType) {
+    let name;
+    let folder;
+    switch (fileType) {
+      case 'logo':
+        name = this.logoName;
+        folder = 'logo';
+        break;
+      case 'cover':
+        name = this.coverName;
+        folder = 'cover';
+        break;
+      default:
+        break;
     }
+
+    const formData = new FormData();
+    formData.append('image', event, name);
+
+    this.uploadService.uploadPhoto(formData, folder).subscribe(result => {
+      if (result['success']) {
+        switch (fileType) {
+          case 'logo':
+            this.photoLogo = result['data'].url;
+            break;
+          case 'cover':
+            this.photoCover = result['data'].url;
+            break;
+          default:
+            break;
+        }
+      }
+    });
   }
 
   deleteImg(name) {
@@ -190,8 +220,8 @@ export class SettingsComponent implements OnInit {
   getData() {
     // this.myForm.controls['coverImage'].setValue(this.brand['brand_cover']);
     // this.myForm.controls['profileLogo'].setValue(this.brand['brand_logo']);
-    // this.photoCover = this.brand['brand_cover'];
-    // this.photoLogo = this.brand['brand_logo'];
+    this.photoCover = this.brand['brand_cover'];
+    this.photoLogo = this.brand['brand_logo'];
     this.myForm.controls['facebookPageID'].setValue('www.facebook.com/' + this.brand['facebook_page_id']);
     this.myForm.controls['brandName'].setValue(this.brand['brand_name']);
     this.myForm.controls['description'].setValue(this.brand['description']);
@@ -200,6 +230,8 @@ export class SettingsComponent implements OnInit {
     this.myForm.controls['moreInfo'].setValue(this.brand['more_info']);
     this.myForm.controls['phone'].setValue(this.brand['phone']);
     this.myForm.controls['website'].setValue(this.brand['website']);
+    this.myForm.controls['facebookPageID'].disable();
+    this.myForm.controls['brandName'].disable();
   }
 
   getBrand() {
@@ -212,8 +244,8 @@ export class SettingsComponent implements OnInit {
     this.brand['more_info'] = this.myForm.get('moreInfo').value;
     this.brand['phone'] = this.myForm.get('phone').value;
     this.brand['website'] = this.myForm.get('website').value;
-    this.brand['brand_cover'] = this.myForm.get('coverImage').value;
-    this.brand['brand_logo'] = this.myForm.get('profileLogo').value;
+    this.brand['brand_cover'] = this.photoCover;
+    this.brand['brand_logo'] = this.photoLogo;
   }
 
   mouseMove() {

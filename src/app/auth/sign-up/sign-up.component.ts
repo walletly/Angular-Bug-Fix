@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   selector: 'app-sign-up',
@@ -16,7 +17,12 @@ export class SignUpComponent implements OnInit {
   marketing = false;
   messError;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authService: AuthService,
+    private firebaseAuth: AngularFireAuth
+    ) {
 
     this.myForm = formBuilder.group({
       firstname: ["", [Validators.required]],
@@ -27,6 +33,7 @@ export class SignUpComponent implements OnInit {
   }
 
   signUp() {
+    this.firebaseAuth.auth.signOut();
     if (this.myForm.valid && this.terms) {
       this.customValidation = true;
       const user = Object.assign({ marketing: this.marketing, }, this.myForm.value);
@@ -47,6 +54,8 @@ export class SignUpComponent implements OnInit {
   }
 
   signInWithFacebook() {
+    this.firebaseAuth.auth.signOut();
+
     this.authService.signInWithFacebook()
     .then((res) => {
       this.router.navigate(['/connect']);

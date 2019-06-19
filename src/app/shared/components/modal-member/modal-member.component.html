@@ -1,0 +1,57 @@
+<div *ngIf="show" class="bg"></div>
+<div *ngIf="show" class="dialog-outer">
+  <div class="dialog">
+    <div class="close" (click)="close()">
+      <img src="assets/img/close-dialog.png" alt="" />
+    </div>
+    <div class="head">
+      Invite New Member
+    </div>
+    <div class="body">
+      <button
+        *ngIf="!showLink"
+        (click)="showLink = true"
+        class="cust-button"
+        nbButton
+        status="success"
+      >
+        Generate A Link
+      </button>
+      <div class="width-530" *ngIf="showLink">
+        <div class="pos-r df input-wrap m-b-16">
+          <input
+            [(ngModel)]="api"
+            class="color-dark m-r-10 fs-14 fw-500"
+            type="text"
+            nbInput
+            fullWidth
+            fieldSize="medium"
+            placeholder=""
+          />
+          <div
+            (mouseover)="mouseMove()"
+            (click)="copyApi(); copied = true;"
+            ngxClipboard
+            [cbContent]="api"
+            [container]="container"
+            nbTooltip="{{ toolTipStatus }}"
+            class="df ai-c copy-wrap"
+            [ngClass]="{'active': copied}"
+          >
+            <img *ngIf="!copied" width="22px" class="m-r-3" src="assets/svg-icon/copy-blue.svg" alt="" />
+            <img *ngIf="copied" width="22px" class="m-r-3" src="assets/svg-icon/copy-green.svg" alt="" />
+            <span>Copy</span>
+          </div>
+        </div>
+        <div class="desc m-b-30">
+          Note that this link is valid for 24 hours and can be used only once.
+        </div>
+        <div class="df jc-c">
+          <button (click)="close()" style="width: 102px;" class="cust-button" nbButton status="success">
+            Got It
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

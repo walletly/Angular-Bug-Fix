@@ -1,0 +1,243 @@
+<div class="df jc-b m-b-15">
+  <div class="df">
+    <h1 class="m-t-0 m-b-0 fs-24 fw-600 m-r-22">
+      Campaign Details
+    </h1>
+  </div>
+</div>
+<nb-card>
+  <nb-card-body class="p-0">
+    <div *ngIf="!showLoader">
+      <!-- <nb-alert
+      *ngIf="showAletr"
+      (close)="closeAlert()"
+      class="m-b-24"
+      closable
+      status="danger"
+      style="margin-left: -40px; width: calc(100% + 40px);"
+    >
+      <div class="df ci-c"> -->
+      <!-- <div>
+          You has been expired!
+        </div> -->
+      <!-- <div class="m-r-10">
+          You've reached the limit of coupon (100/100). 
+        </div>
+        <div>
+          <button class="outline-white alert-btn">
+            Upggade to Basic
+          </button>
+        </div>
+      </div>
+    </nb-alert> -->
+      <div class="df m-b-20">
+        <div class="row-wrap">
+          <div class="row">
+            <div class="label">
+              Campaign Type
+            </div>
+            <div class="value">
+              {{campaignType}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="label">
+              Campaign Name
+            </div>
+            <div class="value">
+              {{campaign?.campaign_name}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="label">
+              Description
+            </div>
+            <div class="value">
+              {{campaign?.description}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="label">
+              Template
+            </div>
+            <div class="value">
+              {{campaign?.description}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="label">
+              Discount
+            </div>
+            <div class="value">
+              {{campaign?.campaign_value}}%
+            </div>
+          </div>
+          <div class="row">
+            <div class="df">
+              <div class="label">
+                Start Date
+              </div>
+              <div class="value">
+                {{campaign?.startDateFormatted}}
+              </div>
+            </div>
+            <div class="df">
+              <div class="label small">
+                End Date
+              </div>
+              <div class="value">
+                {{campaign?.endDateFormatted}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="df">
+              <div class="label">
+                Number of Coupons
+              </div>
+              <div class="value">
+                {{campaign?.coupons_created}}
+              </div>
+            </div>
+            <div class="df">
+              <div class="label small">
+                Set Limit
+              </div>
+              <div class="value">
+                {{campaign?.coupons_limit}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="coupon">
+          <div class="head m-b-15">
+            <div class="df ai-c">
+              <div class="coupon-brand m-r-8">
+                <img src="{{card?.card_logo}}" alt="" />
+              </div>
+              <div class="fs-18 fw-700">
+                {{card?.brand_name}}
+              </div>
+            </div>
+            <div *ngIf="card?.card_type === 1" class="text-right">
+              <div class="fs-10 fw-400">
+                Days left
+              </div>
+              <div class="fs-15 fw-600">
+                30
+              </div>
+            </div>
+            <div *ngIf="card?.card_type === 2" class="text-right">
+              <div class="fs-10 fw-400">
+                Point
+              </div>
+              <div class="fs-15 fw-600">
+                100
+              </div>
+            </div>
+            <div *ngIf="card?.card_type === 3" class="text-right">
+              <div class="fs-10 fw-400">
+                Stamp
+              </div>
+              <div class="fs-15 fw-600">
+                4
+              </div>
+            </div>
+          </div>
+          <div class="m-b-16 df jc-c">
+            <img class="cover-image" src="{{card?.card_cover}}" alt="" />
+          </div>
+          <div class="df jc-b color-white fw-11 fw-400 p-l-15 p-r-15">
+            <div>
+              CUSTOMER
+            </div>
+            <!-- <div *ngIf="dataCard.cardType === 'coupons'">
+            DISCOUNT
+          </div> -->
+          </div>
+          <div class="df jc-b color-white fw-16 fw-600 m-b-50 p-l-15 p-r-15">
+            <div>
+              {{ "{Dynamic}" }}
+            </div>
+            <!-- <div *ngIf="dataCard.cardType === 'coupons'">
+            {{ "{Dynamic}" }}
+          </div> -->
+          </div>
+          <div class="text-center">
+            <img width="133px" class="m-b-20" src="assets/img/QR_code.png" alt="" />
+          </div>
+          <div class="combined">
+            <img src="assets/svg-icon/Combined_Shape.svg" alt="" />
+          </div>
+        </div>
+      </div>
+
+      <div class="df m-b-30">
+        <div class="inputs-wrapper">
+          <div class="api-wrap">
+            <div class="fs-16 fw-600 m-r-12 api-lable">
+              URL
+            </div>
+            <div class="pos-r input-wrap">
+              <input [(ngModel)]="url" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                placeholder="" />
+              <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard [cbContent]="url" [container]="container"
+                nbTooltip="{{ toolTipStatus }}" class="input-icon">
+                <img src="assets/img/copy.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="api-wrap">
+            <div class="fs-16 fw-600 m-r-12 api-lable">
+              API KEY
+            </div>
+            <div class="pos-r input-wrap">
+              <input [(ngModel)]="campaign.brand_apiKey" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                placeholder="" />
+              <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard  [cbContent]="campaign.brand_apiKey" [container]="container"
+                nbTooltip="{{ toolTipStatus }}" class="input-icon">
+                <img src="assets/img/copy.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="api-wrap">
+            <div class="fs-16 fw-600 m-r-12 api-lable">
+              Campaign Key
+            </div>
+            <div class="pos-r input-wrap">
+              <input [(ngModel)]="campaign.campaign_code" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                placeholder="" />
+              <div (mouseover)="mouseMove()" (click)="copyApi()" readonly ngxClipboard [cbContent]="campaign.campaign_code" [container]="container"
+                nbTooltip="{{ toolTipStatus }}" class="input-icon">
+                <img src="assets/img/copy.png" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="video-wrappper">
+          <div class="video-wrap">
+            <video>
+              Browser not supported
+            </video>
+            <div class="play">
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-wrap">
+        <button [routerLink]="['/main/campaign-main/campaign']" class="back">BACK</button>
+        <button (click)="edit()" class="edit">Edit</button>
+        <button [disabled]="inProcces" (click)="delete()" class="delete" nbButton>
+          <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
+          Delete
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="showLoader" class="loader-table">
+      <img width="70px" src="assets/img/Loader2x.gif" alt="" />
+    </div>
+  </nb-card-body>
+</nb-card>

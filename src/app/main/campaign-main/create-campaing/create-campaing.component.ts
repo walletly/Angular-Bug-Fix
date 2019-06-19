@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { MainService } from 'src/app/shared/services/main.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CompaignService } from 'src/app/shared/services/compaign.service';
+import { CardService } from 'src/app/shared/services/card.service';
 
 @Component({
   selector: 'app-create-campaing',
@@ -15,26 +16,29 @@ export class CreateCampaingComponent implements OnInit {
   myForm: FormGroup;
   customValidation = true;
   campaign = {};
+  id;
+  numberOfCoupon;
+  cards = [];
 
-  constructor(
-    private mainService: MainService,
-    private formBuilder: FormBuilder,
-    private router: Router
-    ) {
-    this.myForm = formBuilder.group({
-      campaignName: ["", [Validators.required]],
-      description: ["", [Validators.required]],
-      template: ["", [Validators.required]],
-      discount: ["", [Validators.required]],
-      startDate: ["", [Validators.required]],
-      endDate: ["", [Validators.required]],
-    });
-  }
+  template;
+  selectedSell;
+  dateStart = new Date();
+  dateEnd = new Date();
+  dataCoupon;
+  showDatePickerEnd;
+  showDatePicker;
+  showLoader;
+  noTemplates = false;
+  limit = '';
 
   @ViewChild('select') select;
+  @ViewChild('selectNumber') selectNumber;
 
   defaultColumns = ['Coupons', 'Cards', 'Tickets'];
   allColumns = this.defaultColumns;
+  user;
+
+  public customPatterns = { '0': { pattern: new RegExp('\d{1,2}') } };
 
   data = [
     {
@@ -51,25 +55,130 @@ export class CreateCampaingComponent implements OnInit {
     },
   ];
 
-  template;
-  selectedSell;
-  dateStart = new Date();
-  dateEnd = new Date();
-  dataCoupon;
-  showDatePickerEnd;
-  showDatePicker;
+  constructor(
+    private mainService: MainService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private activeRout: ActivatedRoute,
+    private campaignService: CompaignService,
+    private cardService: CardService
+  ) {
+
+    this.user = JSON.parse(localStorage.getItem('user'));
+    this.myForm = formBuilder.group({
+      campaignName: ["", [Validators.required]],
+      description: ["", [Validators.required]],
+      template: ["", [Validators.required]],
+      discount: ["", [Validators.required]],
+      numberOfCoupon: ["", [Validators.required]],
+      setLimit: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
+      startDate: ["", [Validators.required]],
+      endDate: ["", [Validators.required]],
+    });
+
+    this.id = this.activeRout.snapshot.paramMap.get('id');
+
+    cardService.getBrandsCards(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
+      this.cards = data['data'];
+      console.log(this.cards);
+      console.log(this.dataCoupon);
+      if (!this.dataCoupon) {
+        this.dataCoupon = this.mainService.dataCoupon;
+        this.myForm.controls['template'].setValue(this.dataCoupon.card_id);
+        console.log(this.dataCoupon);
+        // need for all template
+        if (this.dataCoupon.campaign_type === '1') {
+          this.selectedSell = 'Coupon in %';
+        }
+      }
+    }, err => {
+      if (!this.dataCoupon) {
+        this.dataCoupon = this.mainService.dataCoupon;
+        this.noTemplates = true;
+        this.myForm.controls['template'].setValue(this.dataCoupon.card_id);
+        console.log(this.dataCoupon);
+        // need for all template
+        if (this.dataCoupon.campaign_type === '1') {
+          this.selectedSell = 'Coupon in %';
+        }
+      }
+    });
+
+    if (this.id && !this.mainService.dataCoupon.name) {
+      // this.mainService.showLoader.emit(true);
+      this.showLoader = true;
+      this.campaignService.getСampaignById(this.id).subscribe(result => {
+        console.log(result['data']);
+        if (result['success']) {
+          this.mainService.dataCoupon.name = result['data'].campaign_name;
+          this.mainService.dataCoupon.desription = result['data'].description;
+          this.mainService.dataCoupon.campaign_type = result['data'].campaign_type.toString();
+          this.mainService.dataCoupon.discount = result['data'].campaign_value;
+          this.mainService.dataCoupon.startDate = result['data'].startDateFormatted;
+          this.mainService.dataCoupon.endDate = result['data'].endDateFormatted;
+          this.mainService.dataCoupon.brand_id = result['data'].brand_id;
+          this.mainService.dataCoupon.card_id = result['data'].card_id;
+          this.dataCoupon = this.mainService.dataCoupon;
+          console.log(this.dataCoupon);
+          this.myForm.controls['template'].setValue(this.dataCoupon.card_id);
+
+          // need for all template
+          if (this.dataCoupon.campaign_type === '1') {
+            this.selectedSell = 'Coupon in %';
+          }
+        }
+        // this.mainService.showLoader.emit(false);
+        this.showLoader = false;
+      }, err => {
+        // this.mainService.showLoader.emit(false);
+        this.showLoader = false;
+      });
+    }
+  }
 
   ngOnInit() {
-    this.dataCoupon = this.mainService.dataCoupon;
+  }
+
+  onChange() {
+    console.log(this.numberOfCoupon);
+    // const userType = JSON.parse(localStorage.getItem('user')).account_type;
+    let validationRegex;
+
+    switch (this.numberOfCoupon) {
+      case 'Up to 100':
+        validationRegex = /^(100|([1-9]{1}[0-9]?))$/g;
+        break;
+      case '100-10k':
+        validationRegex = /^(10000|([1-9]{1}[0-9]{0,3}))$/g;
+        break;
+      default:
+        validationRegex = /^(100|([1-9]{1}[0-9]?))$/g;
+        break;
+    }
+
+    if (!validationRegex.exec(this.limit)) {
+      this.limit = '';
+    }
+  }
+
+  changeDiscount(event) {
+    this.dataCoupon.discount = event;
   }
 
   create() {
-    if (this.mainService.dataCoupon.template) {
-      this.myForm.controls['template'].setValue(this.mainService.dataCoupon.template);
+
+    if (!this.dataCoupon.brand_id) {
+      this.dataCoupon.brand_id = JSON.parse(localStorage.getItem('currentBrand'))['brand_id'];
     }
     if (this.myForm.valid) {
       this.mainService.dataCoupon = this.dataCoupon;
-      this.router.navigate(['/main/campaign-main/review-campaing']);
+      console.log(this.mainService.dataCoupon);
+
+      if (this.id) {
+        this.router.navigate(['/main/campaign-main/review-campaign/' + this.id]);
+      } else {
+        this.router.navigate(['/main/campaign-main/review-campaign']);
+      }
       // this.createCampaign();
       // this.campaignService.createСampaign(this.campaign).subscribe(result => {
       //   console.log(result);
@@ -82,17 +191,24 @@ export class CreateCampaingComponent implements OnInit {
   }
 
   dateEndChange(event) {
-    this.dataCoupon.endDate = moment(event).format('DD/MM/YYYY');
-    let compare = this.compare(this.dateStart, event);
+    this.dataCoupon.endDate = moment(event).format('YYYY-MM-DD');
+    const compare = this.compare(this.dateStart, event);
     if (compare === 1 || (compare === 0 && this.dateStart)) {
       this.dataCoupon.startDate = null;
     }
     console.log(this.compare(this.dateStart, event));
     this.showDatePickerEnd = false;
   }
+
+  numberOfCouponChange(e) {
+    console.log(this.selectNumber);
+    console.log(e);
+    this.numberOfCoupon = e;
+  }
+
   dateStartChange(event) {
-    this.dataCoupon.startDate = moment(event).format('DD/MM/YYYY');
-    let compare = this.compare(event, this.dateEnd);
+    this.dataCoupon.startDate = moment(event).format('YYYY-MM-DD');
+    const compare = this.compare(event, this.dateEnd);
     if (compare === 1 || compare === 0) {
       this.dataCoupon.endDate = null;
     }
@@ -101,15 +217,23 @@ export class CreateCampaingComponent implements OnInit {
   }
 
   compare(dateTimeA, dateTimeB) {
-    let momentA = moment(dateTimeA, "DD/MM/YYYY");
-    let momentB = moment(dateTimeB, "DD/MM/YYYY");
+    const momentA = moment(dateTimeA, 'YYYY-MM-DD');
+    const momentB = moment(dateTimeB, 'YYYY-MM-DD');
     if (momentA > momentB) return 1;
     else if (momentA < momentB) return -1;
     else return 0;
   }
 
+  selectType(typeName) {
+    if (typeName === 'Coupon in %') {
+      this.dataCoupon.campaign_type = '1';
+    }
+  }
+
   clear() {
-    this.select.reset();
+    if (!this.noTemplates) {
+      this.select.reset();
+    }
     this.dataCoupon = {
       name: '',
       desription: '',
@@ -118,15 +242,5 @@ export class CreateCampaingComponent implements OnInit {
       startDate: '',
       endDate: '',
     };
-  }
-
-  createCampaign() {
-    this.campaign['campaign_name'] = this.dataCoupon.name;
-    this.campaign['description'] = this.dataCoupon.desription;
-    this.campaign['campaign_type'] = 1;
-    // this.campaign['campaign_type'] this.dataCoupon.
-    this.campaign['campaign_value'] = this.dataCoupon.discount;
-    this.campaign['start_date'] = this.dataCoupon.startDate;
-    this.campaign['end_date'] = this.dataCoupon.endDate;
   }
 }

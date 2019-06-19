@@ -1,0 +1,62 @@
+<div *ngIf="show" class="bg"></div>
+<div *ngIf="show" class="dialog-outer">
+  <div class="dialog">
+    <div class="close" (click)="show = false">
+      <img src="assets/img/close-dialog.png" alt="">
+    </div>
+    <div class="fs-24 fw-600 m-b-5 text-center">
+      Upgrade to <span *ngIf="pro">Pro</span> <span *ngIf="!pro">Basic</span>
+    </div>
+    <div class="color-secondaru m-b-30 fs-13 text-center">
+      Lorem Ipsum is simply dummy text of the printing
+    </div>
+    <div class="row m-b-30">
+      <div class="col-6 text-center">
+        <img *ngIf="pro" src="assets/img/pro-baner.png" alt="">
+        <img *ngIf="!pro" src="assets/img/basic-baner.png" alt="">
+      </div>
+      <div class="col-6">
+        <div class="list">
+          <div class="list--item">
+            <div class="list--indecator" [ngClass]="{'basic': !pro}"></div>
+            <span>
+              Unlimite coupon
+            </span>
+          </div>
+          <div class="list--item">
+            <div class="list--indecator" [ngClass]="{'basic': !pro}"></div>
+            <span>
+              Unlimite Campaign
+            </span>
+          </div>
+          <div class="list--item">
+            <div class="list--indecator" [ngClass]="{'basic': !pro}"></div>
+            <span>
+              Unlimite Brand Create
+            </span>
+          </div>
+          <div class="list--item">
+            <div class="list--indecator" [ngClass]="{'basic': !pro}"></div>
+            <span>
+              Unlimite Brand Create
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="fs-18 fw-400">
+        For only <span class="fs-22 fw-600"> $199</span> mora a year
+        <div class="fs-14">
+          lipsun text about plan xyz
+        </div>
+      </div>
+      <button (click)="pro = !pro" class="cust-button confirm-btn" [ngClass]="{'basic': !pro}" fullWidth nbButton status="info">
+        <span class="m-r-7">
+          Confirm Upgrade
+        </span>
+        <img src="assets/img/arrow-right-white.png" alt="">
+      </button>
+    </div>
+  </div>
+</div>

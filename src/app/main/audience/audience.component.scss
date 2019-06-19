@@ -1,106 +1,120 @@
 .input-icon {
-  right: 8px;
-  top: calc(50% - 9.5px);
-  display: flex;
+    right: 8px;
+    top: calc(50% - 9.5px);
+    display: flex;
 }
+
 th {
-  color: #afafb9;
-  font-family: Poppins;
-  font-size: 16px;
-  font-weight: 400;
-  border-right: none !important;
-  border-left: none !important;
-  &:last-child {
-    width: 100px;
-    padding-left: 0;
-  }
-  &:nth-child(7) {
-    width: 100px;
-    padding-left: 0;
-  }
-  &:nth-child(6) {
-    width: 100px;
-    padding-left: 0;
-  }
-  &:nth-child(1) {
-    width: 110px;
-    padding-right: 0;
-  }
-  &:nth-child(2) {
-    width: 110px;
-    padding-right: 0;
-  }
-}
-td {
-  color: #323232;
-  font-family: Poppins;
-  font-size: 15px;
-  font-weight: 400;
-  border-right: none !important;
-  border-left: none !important;
-  overflow: visible;
-  &:last-child {
-    width: 100px;
-    padding-left: 0;
-  }
-  &:nth-child(7) {
-    width: 100px;
-    padding-left: 0;
-  }
-  &:nth-child(6) {
-    width: 100px;
-    padding-left: 0;
-  }
-  &:nth-child(1) {
-    width: 110px;
-    padding-right: 0;
-  }
-  &:nth-child(2) {
-    width: 110px;
-    padding-right: 0;
-  }
-}
-nb-card {
-  min-height: calc(100% - 100px);
-}
-.status {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 400;
-  &.used {
-    width: 79px;
-    height: 31px;
-    border: 2px solid #ffffff;
-    background-color: #11ca6d;
-    border-radius: 100px;
-  }
-  &.unused {
-    width: 79px;
-    height: 31px;
-    border: 2px solid #f4f3fa;
-    border-radius: 100px;
-    color: #323232;
-    font-size: 15px;
+    color: #afafb9;
+    font-family: Poppins;
+    // font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
-  }
-  &.expired {
-    color: #f1737e;
-    font-size: 15px;
-    font-weight: 500;
-  }
+    border-right: none !important;
+    border-left: none !important;
+    &:last-child {
+        width: 100px;
+        padding-left: 0;
+    }
+    &:nth-child(7) {
+        width: 100px;
+        padding-left: 0;
+    }
+    &:nth-child(6) {
+        width: 100px;
+        padding-left: 0;
+    }
+    &:nth-child(1) {
+        width: 110px;
+        padding-right: 0;
+    }
+    &:nth-child(2) {
+        width: 110px;
+        padding-right: 0;
+    }
 }
+
+td {
+    color: #323232;
+    font-family: Poppins;
+    // font-size: 15px;
+    font-size: 12px;
+    font-weight: 400;
+    border-right: none !important;
+    border-left: none !important;
+    overflow: visible;
+    &:last-child {
+        width: 100px;
+        padding-left: 0;
+    }
+    &:nth-child(7) {
+        width: 100px;
+        padding-left: 0;
+    }
+    &:nth-child(6) {
+        width: 100px;
+        padding-left: 0;
+    }
+    &:nth-child(1) {
+        width: 110px;
+        padding-right: 0;
+    }
+    &:nth-child(2) {
+        width: 110px;
+        padding-right: 0;
+    }
+}
+
+nb-card {
+    min-height: calc(100% - 100px);
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    // font-size: 16px;
+    font-size: 12px;
+    font-weight: 400;
+    &.used {
+        width: 79px;
+        height: 31px;
+        border: 2px solid #ffffff;
+        background-color: #11ca6d;
+        border-radius: 100px;
+    }
+    &.unused {
+        width: 79px;
+        height: 31px;
+        border: 2px solid #f4f3fa;
+        border-radius: 100px;
+        color: #323232;
+        // font-size: 15px;
+        font-size: 12px;
+        font-weight: 400;
+    }
+    &.expired {
+        color: #f1737e;
+        // font-size: 15px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+}
+
 .filtr-btn {
-  width: 40px;
-  height: 40px;
-  box-shadow: 0 2px 4px rgba(195, 195, 195, 0.15);
-  border-radius: 5px;
-  border: 1px solid #eff2f4;
-  background-color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 2px 4px rgba(195, 195, 195, 0.15);
+    border-radius: 5px;
+    border: 1px solid #eff2f4;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+table {
+    width: auto;
 }

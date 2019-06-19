@@ -5,8 +5,9 @@
 export const environment = {
   production: false
 };
-export const SERVER_API_URL = 'http://localhost:3000/api/v3/';
-export const SERVER_URL = 'http://localhost:3000/';
+export const SERVER_API_URL = 'https://dev3.walletly.ai/api/v3/';
+// export const SERVER_API_URL = 'http://localhost:3000/api/v3/';
+export const SERVER_URL = 'https://walletly-dev3.firebaseapp.com/';
 
 /*
  * For easier debugging in development mode, you can import the following file

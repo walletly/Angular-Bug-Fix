@@ -19,12 +19,18 @@
                 First Name
               </div>
               <input [ngClass]="{'error': myForm.controls['firstname'].invalid && !customValidation}" formControlName="firstname" type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+              <div *ngIf="myForm.controls['firstname'].invalid && !customValidation" class="error-lable">
+                Field error (must have at least 1 character)
+            </div>
             </div>
             <div class="input-wrap">
               <div class="fs-15 m-b-5">
                 Last Name
               </div>
               <input [ngClass]="{'error': myForm.controls['lastname'].invalid && !customValidation}" formControlName="lastname" type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+              <div *ngIf="myForm.controls['lastname'].invalid && !customValidation" class="error-lable">
+                Field error (must have at least 1 character)
+            </div>
             </div>
           </div>
           <div class="inputs-row">
@@ -33,6 +39,9 @@
                 Work Email
               </div>
               <input [ngClass]="{'error': myForm.controls['email'].invalid && !customValidation}" formControlName="email" type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+              <div *ngIf="myForm.controls['email'].invalid && !customValidation" class="error-lable">
+                Field error (for example: "user@mail.com")
+            </div>
             </div>
           </div>
           <div class="inputs-row">
@@ -41,6 +50,9 @@
                 Password
               </div>
               <input [ngClass]="{'error': myForm.controls['password'].invalid && !customValidation}" formControlName="password" type="password" nbInput fullWidth fieldSize="medium" placeholder="">
+              <div *ngIf="myForm.controls['password'].invalid && !customValidation" class="error-lable">
+                Field error (must have at least 6 character)
+            </div>
             </div>
           </div>
         </form>
@@ -67,7 +79,6 @@
           </nb-checkbox>
         </div>
         <div class="m-b-25">
-          <div class="message-error">{{messError}}</div>
           <button (click)="signUp()" class="cust-button fw-400 fs-14" fullWidth nbButton status="success">
             Sign up
           </button>

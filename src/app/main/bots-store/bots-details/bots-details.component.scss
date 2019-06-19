@@ -26,3 +26,27 @@ nb-card {
   background-color: rgba(175, 175, 185, 0.26);
   text-align: center;
 }
+.card-item {
+  border-radius: 5px;
+  border: 1px solid #dee3e5;
+  background-color: #ffffff;
+  padding: 42px 20px 20px 20px;
+  text-align: center;
+  height: 300px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  .icon {
+    margin-bottom: 20px;
+  }
+  .title {
+    color: #323232;
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  .desc {
+    color: #afafb9;
+    font-size: 14px;
+    font-weight: 400;
+  }
+}

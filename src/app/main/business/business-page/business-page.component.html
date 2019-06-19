@@ -10,13 +10,16 @@
 </div>
 <nb-card>
   <nb-card-body>
-    <nb-tabset class="tabs-card">
+    <div *ngIf="showLoader" class="loader-table">
+      <img width="70px" src="assets/img/Loader2x.gif" alt="">
+    </div>
+    <nb-tabset  *ngIf="!showLoader" class="tabs-card">
       <nb-tab tabTitle="Business Users">
         <div class="check-all-wrap">
           <div *ngIf="data.length" class="all">
             <nb-checkbox [(ngModel)]="checkAll">All</nb-checkbox>
           </div>
-          <div *ngIf="data.length" class="invite">
+          <div *ngIf="data.length" (click)="inviteAll()" class="invite">
             <img src="assets/img/mail-icon.png" alt="">
             Invite All
           </div>
@@ -34,37 +37,43 @@
                 </span>
               </th>
               <td [ngClass]="{'check-row-bg': checkAll}" nbTreeGridCell *nbTreeGridCellDef="let row">
-                <span *ngIf="column === 'Permission'">
-                  <img class="m-r-8" *ngIf="row.data[column] === 'YES'" src="assets/svg-icon/permission-yes.svg" alt="">
-                  <img class="m-r-8" *ngIf="row.data[column] === 'NO'" src="assets/svg-icon/permission-no.svg" alt="">
-                </span>
-                <span *ngIf="column !== 'Invite'">{{row.data[column]}}</span>
+
+                <div class="df ai-c">
+                  <span *ngIf="column === 'Permission'">
+                    <img class="m-r-8" *ngIf="row.data[column] === 'YES'" src="assets/svg-icon/permission-yes.svg" alt="">
+                    <img class="m-r-8" *ngIf="row.data[column] === 'NO'" src="assets/svg-icon/permission-no.svg" alt="">
+                  </span>
+                  <div *ngIf="column !== 'Invite'" class="ellipsis">
+                    <span>{{row.data[column]}}</span>
+                  </div>
+                </div>
                 <span *ngIf="column === 'Check'">
                   <div *ngIf="checkAll" class="check-row m-auto">
                     <img src="assets/img/success-white.png" alt="">
                   </div>
                 </span>
                 <div *ngIf="column === 'Invite'">
-                  <div (click)="row.data[column] = 'active'" *ngIf="row.data[column] === 'invite'" class="chip-invite">
+                  <div *ngIf="row.data[column] === 0" (click)="invite(row.data['Email Address'])" class="chip-invite">
                     <img src="assets/img/mail-icon.png" alt="">
                     Invite
                   </div>
-                  <div (click)="row.data[column] = 'pending'" *ngIf="row.data[column] === 'active'" class="chip-invite active">
+                  <div *ngIf="row.data[column] === 2" class="chip-invite active">
                     <img width="14px" src="assets/img/success-white.png" alt="">
                     Active
                   </div>
-                  <div (click)="row.data[column] = 'invite'" *ngIf="row.data[column] === 'pending'" class="chip-invite pending">
-                    Pending
+                  <div *ngIf="row.data[column] === 1" class="chip-invite pending">
+                <!--    Pending -->
+                Resend
                   </div>
                 </div>
                 <div *ngIf="column === 'Action'" class="pos-r text-right">
                   <img (click)="showActions = row.data" class="c-p" src="assets/svg-icon/shared.svg" alt="">
                   <div *ngIf="showActions === row.data" class="action-drb">
-                    <div (click)="showActions = null" class="item">
+                    <div (click)="edit(row.data.id)" class="item">
                       <img src="assets/svg-icon/edit.svg" alt="">
                       Edit
                     </div>
-                    <div (click)="showActions = null" class="item">
+                    <div (click)="delete(row.data.id)" class="item">
                       <img src="assets/svg-icon/delete.svg" alt="">
                       Delete
                     </div>
@@ -103,27 +112,33 @@
               <div class="value">
                 <div class="mess-box">
                   <div class="m-b-21">
-                    Hi, <br>
-                    {{'{FName}{LName}'}} <br>
-                    this a is dummy messsge to send busniesss for
-                    Secret code
+                    <div class="pos-r smart-textarea">
+                      <div class="text">
+                        {{topArea}}
+                      </div>
+                      <textarea [(ngModel)]="topArea" class="clear"></textarea>
+                    </div>
                   </div>
-                  <div class="code-wrap m-b-30">
-                    XXXXXX
+                  <div (click)="secret.focus()" class="code-wrap m-b-30">
+                    <span *ngFor="let item of secretNumbersArr">X</span>
+                    <span *ngIf="showBlink" class="blink"></span>
+                    <input style="opacity: 0; width: 0;" maxlength="7" (focus)="showBlink = true" (blur)="showBlink = false"
+                      #secret class="secret-input" type="text" [(ngModel)]="secretNumber" (ngModelChange)="secretNumberChanged()">
                   </div>
                   <div>
-                    <div class="m-b-20">
-                      Have fun and enjoy the service!
+                    <div class="pos-r smart-textarea">
+                      <div class="text">
+                        {{botArea}}
+                      </div>
+                      <textarea [(ngModel)]="botArea" class="clear"></textarea>
                     </div>
-                    Walletly <br>
-                    Business
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="banner">
-            <img src="assets/img/mobile.png" alt="">
+            <img src="assets/img/ipohe-baner.png" alt="">
           </div>
         </div>
 

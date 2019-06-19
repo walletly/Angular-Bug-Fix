@@ -4,14 +4,14 @@
       <img src="assets/svg-icon/logo-short-white.svg" alt="">
     </div>
     <nb-card class="auth-card m-b-40">
-        <nb-card-body *ngIf="resetConfirm">
-          <div class="fs-24 fw-500 m-b-10">
-            Password Reset Email Sent
-          </div>
-          <div class="fs-15 m-b-60 color-secondary">
-            You should receive instructions to reset your password shortly.
-          </div>
-        </nb-card-body>
+      <nb-card-body *ngIf="resetConfirm">
+        <div class="fs-24 fw-500 m-b-10">
+          Password Reset Email Sent
+        </div>
+        <div class="fs-15 m-b-60 color-secondary">
+          You should receive instructions to reset your password shortly.
+        </div>
+      </nb-card-body>
       <nb-card-body *ngIf="!resetConfirm">
         <div class="fs-24 fw-500 m-b-10">
           Forgot your password?
@@ -28,6 +28,9 @@
               </div>
               <input [ngClass]="{'error': myForm.controls['email'].invalid && !customValidation}" type="text"
                 formControlName="email" nbInput fullWidth fieldSize="medium" placeholder="">
+              <div *ngIf="myForm.controls['email'].invalid && !customValidation" class="error-lable">
+                Field error (for example: "user@mail.com")
+              </div>
             </div>
           </div>
         </form>

@@ -20,6 +20,7 @@
     font-size: 16px;
     font-weight: 500;
     letter-spacing: 0.2px;
+    word-break: break-all;
   }
 }
 button[status="gray"] {
@@ -30,4 +31,7 @@ button[status="success"] {
 }
 nb-card {
   min-height: calc(100% - 100px);
+}
+.coupon{
+  width: 100%;
 }

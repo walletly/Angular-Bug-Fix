@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from "@angular/router";
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { CardService } from 'src/app/shared/services/card.service';
+import { UploadService } from 'src/app/shared/services/upload.service';
 
 @Component({
   selector: 'app-create-coupons',
@@ -22,7 +23,7 @@ export class CreateCouponsComponent implements OnInit {
   photoCover;
   coverSizeValidation = true;
   brandSizeValidation = true;
-  
+
   myFormFront: FormGroup;
   myFormBack: FormGroup;
 
@@ -31,13 +32,22 @@ export class CreateCouponsComponent implements OnInit {
 
   messError;
   inProcces = false;
+  showLogoUploader = false;
+  showBrandUploader = false;
+  fileImg;
+  uploadType;
+  showLoader;
+
+  logoName;
+  coverName;
 
   constructor(
     private mainService: MainService,
     private formBuilder: FormBuilder,
     private route: Router,
     private activeRout: ActivatedRoute,
-    private cardService: CardService
+    private cardService: CardService,
+    private uploadService: UploadService
   ) {
     this.fieldValidation();
   }
@@ -60,13 +70,16 @@ export class CreateCouponsComponent implements OnInit {
       location: ["", [Validators.required]],
       phone: ["", [Validators.required]],
       email: ["", [Validators.required, Validators.email]],
-      website: ["", [Validators.required, Validators.pattern("http(s?):\/\/[a-zA-Z0-9.]+[\/]*[a-zA-Z0-9.]*[\/]*")]],
+      website: ["", [Validators.required, Validators.pattern("^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$")]],
       facebook: ["www.facebook.com/", [Validators.required, Validators.pattern("((http|https):\/\/|)(www\.|)facebook\.com\/[a-zA-Z0-9.]{1,}")]],
     });
 
   }
 
   ngOnInit() {
+    // this.mainService.showLoader.emit(true);
+    this.showLoader = true;
+
     if (this.mainService.cardType) {
       this.type = this.mainService.cardType;
       this.typeId = this.mainService.cardTypeId;
@@ -74,9 +87,9 @@ export class CreateCouponsComponent implements OnInit {
       this.type = 'coupons';
       this.typeId = 1;
     }
-    this.accordionFront.open();
 
-    this.id = this.activeRout.snapshot.paramMap.get("id");
+    this.id = this.activeRout.snapshot.paramMap.get('id');
+    console.log(this.id);
     if (this.id) {
       this.cardService.getCardById(this.id).subscribe(result => {
         console.log(result);
@@ -84,6 +97,23 @@ export class CreateCouponsComponent implements OnInit {
         this.createDataCard();
         this.photoLogo = this.dataCard.brandLogo;
         this.photoCover = this.dataCard.coverImage;
+        // this.mainService.showLoader.emit(false);
+        this.showLoader = false;
+        setTimeout(() => {
+          if (this.accordionFront) {
+            this.accordionFront.open();
+          }
+        }, 200);
+
+      }, err => {
+        // this.mainService.showLoader.emit(false);
+        this.showLoader = false;
+        setTimeout(() => {
+          if (this.accordionFront) {
+            this.accordionFront.open();
+          }
+        }, 200);
+
       });
     } else {
 
@@ -103,7 +133,9 @@ export class CreateCouponsComponent implements OnInit {
         id: ''
       };
       if (localStorage.getItem('currentBrand')) {
-        let currentBrand = JSON.parse(localStorage.getItem('currentBrand'));
+        const currentBrand = JSON.parse(localStorage.getItem('currentBrand'));
+        console.log(currentBrand);
+
         this.dataCard = {
           templateName: '',
           brandName: currentBrand.brand_name,
@@ -122,6 +154,13 @@ export class CreateCouponsComponent implements OnInit {
         this.photoLogo = this.dataCard.brandLogo;
         this.photoCover = this.dataCard.coverImage;
       }
+      // this.mainService.showLoader.emit(false);
+      this.showLoader = false;
+      setTimeout(() => {
+        if (this.accordionFront) {
+          this.accordionFront.open();
+        }
+      }, 200);
     }
   }
 
@@ -153,7 +192,7 @@ export class CreateCouponsComponent implements OnInit {
           key !== 'website' &&
           key !== 'facebook'
         ) {
-          this.dataCard[key] = "";
+          this.dataCard[key] = '';
         }
       } else {
         console.log(flag);
@@ -165,7 +204,7 @@ export class CreateCouponsComponent implements OnInit {
           key !== 'brandLogo' &&
           key !== 'coverImage'
         ) {
-          this.dataCard[key] = "";
+          this.dataCard[key] = '';
         }
       }
     }
@@ -174,8 +213,10 @@ export class CreateCouponsComponent implements OnInit {
   create() {
     console.log(this.dataCard);
     this.inProcces = true;
-    if (this.photoLogo && this.photoCover) {
+    if (this.dataCard.brandLogo) {
       this.myFormFront.controls['brandLogo'].setErrors(null);
+    }
+    if (this.dataCard.coverImage) {
       this.myFormFront.controls['coverImage'].setErrors(null);
     }
     if (this.myFormFront.valid && this.myFormBack.valid) {
@@ -185,16 +226,17 @@ export class CreateCouponsComponent implements OnInit {
       this.cardService.createCard(this.card).subscribe(result => {
         console.log(result);
         if (result['success']) {
+          this.mainService.showToastrSuccess.emit({text: 'Tempalte created'});
           this.route.navigate(['/main/templates/walletly-cards']);
           this.inProcces = false;
         }
       }, err => {
-        this.messError = err.error.error;
+        this.messError = 'Error at creation';
+        this.inProcces = false;
       });
     } else {
       this.customValidationFront = false;
       this.customValidationBack = false;
-      this.messError = 'Validation Error';
       this.inProcces = false;
 
       if (this.myFormFront.valid && this.myFormBack.invalid) {
@@ -216,8 +258,12 @@ export class CreateCouponsComponent implements OnInit {
   update() {
     this.inProcces = true;
     console.log(this.id);
-    this.myFormFront.controls['brandLogo'].setErrors(null);
-    this.myFormFront.controls['coverImage'].setErrors(null);
+    if (this.dataCard.brandLogo) {
+      this.myFormFront.controls['brandLogo'].setErrors(null);
+    }
+    if (this.dataCard.coverImage) {
+      this.myFormFront.controls['coverImage'].setErrors(null);
+    }
 
     if (this.myFormFront.valid && this.myFormBack.valid) {
       this.customValidationFront = true;
@@ -227,9 +273,13 @@ export class CreateCouponsComponent implements OnInit {
       this.cardService.updateCard(this.id, this.card).subscribe(result => {
         console.log(result);
         if (result['success']) {
+          this.mainService.showToastrSuccess.emit({text: 'Tempalte updated'});
           this.route.navigate(['/main/templates/walletly-cards']);
           this.inProcces = false;
         }
+      }, err => {
+        this.messError = 'Error at update';
+        this.inProcces = false;
       });
     } else {
       if (this.myFormFront.valid && this.myFormBack.invalid) {
@@ -252,55 +302,55 @@ export class CreateCouponsComponent implements OnInit {
   }
 
   uploadLogo(file: File) {
-    if (file[0].size / 1024 / 1024 <= 1) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        const img = document.createElement('img');
-        img.src = reader.result as string;
-        this.brandSizeValidation = true;
-
-        img.onload = () => {
-          if ((img.naturalWidth <= 110 && img.naturalHeight <= 110) && (img.naturalWidth >= 55 && img.naturalHeight >= 55)) {
-            this.photoLogo = reader.result as string;
-            this.dataCard.brandLogo = this.photoLogo;
-            this.brandSizeValidation = true;
-          } else {
-            this.brandSizeValidation = false;
-          }
-        };
-      };
-
-      reader.readAsDataURL(file[0]);
-    } else {
-      this.brandSizeValidation = false;
-    }
+    console.log(file);
+    this.logoName = file['srcElement'].files[0].name;
+    this.fileImg = file;
+    this.uploadType = 'logo';
+    this.showLogoUploader = true;
   }
 
   uploadCover(file: File) {
-    if (file[0].size / 1024 / 1024 <= 4) {
-      const reader = new FileReader();
+    this.coverName = file['srcElement'].files[0].name;
+    this.fileImg = file;
+    this.uploadType = 'brand';
+    this.showBrandUploader = true;
+  }
 
-      reader.onloadend = () => {
-        const img = document.createElement('img');
-        img.src = reader.result as string;
-        this.coverSizeValidation = true;
-
-        img.onload = () => {
-          if ((img.naturalWidth <= 750 && img.naturalHeight <= 294) && (img.naturalWidth >= 375 && img.naturalHeight >= 147)) {
-            this.photoCover = reader.result as string;
-            this.dataCard.coverImage = this.photoCover;
-            this.coverSizeValidation = true;
-          } else {
-            this.coverSizeValidation = false;
-          }
-        };
-      };
-
-      reader.readAsDataURL(file[0]);
-    } else {
-      this.coverSizeValidation = false;
+  uploadPhoto(event, fileType) {
+    let name;
+    let folder;
+    switch (fileType) {
+      case 'logo':
+        name = this.logoName;
+        folder = 'logo';
+        break;
+      case 'cover':
+        name = this.coverName;
+        folder = 'cover';
+        break;
+      default:
+        break;
     }
+
+    const formData = new FormData();
+    formData.append('image', event, name);
+
+    this.uploadService.uploadPhoto(formData, folder).subscribe(result => {
+      if (result['success']) {
+        switch (fileType) {
+          case 'logo':
+            this.photoLogo = result['data'].url;
+            this.dataCard.brandLogo = result['data'].url;
+            break;
+          case 'cover':
+            this.photoCover = result['data'].url;
+            this.dataCard.coverImage = result['data'].url;
+            break;
+          default:
+            break;
+        }
+      }
+    });
   }
 
   deleteImg(name) {
@@ -320,8 +370,8 @@ export class CreateCouponsComponent implements OnInit {
     this.card = {
       template_name: this.dataCard.templateName,
       brand_name: this.dataCard.brandName,
-      brand_logo: this.dataCard.brandLogo,
-      brand_cover: this.dataCard.coverImage,
+      card_logo: this.dataCard.brandLogo,
+      card_cover: this.dataCard.coverImage,
       description: this.dataCard.description,
       about: this.dataCard.moreInfo,
       location_url: this.dataCard.location,
@@ -333,14 +383,15 @@ export class CreateCouponsComponent implements OnInit {
       brand_id: JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
       user_id: localStorage.getItem('userID')
     };
+    console.log(this.card);
   }
 
   createDataCard() {
     this.dataCard = {
       templateName: this.card.template_name,
       brandName: this.card.brand_name,
-      brandLogo: this.card.brand_logo,
-      coverImage: this.card.brand_cover,
+      brandLogo: this.card.card_logo,
+      coverImage: this.card.card_cover,
       description: this.card.description,
       moreInfo: this.card.about,
       location: this.card.location_url,
@@ -351,5 +402,7 @@ export class CreateCouponsComponent implements OnInit {
       facebook: this.card.facebook_page_url,
       id: this.card.brand_id
     };
+    console.log(this.dataCard);
+
   }
 }

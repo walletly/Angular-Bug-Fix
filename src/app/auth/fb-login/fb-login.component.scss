@@ -1,0 +1,29 @@
+.main-wrap {
+  max-width: 789px;
+  margin: auto;
+  height: 100%;
+  justify-content: space-between;
+  display: flex;
+  flex-flow: column;
+  padding-bottom: 20px;
+}
+nb-card {
+  box-shadow: 0 0 16px rgba(87, 86, 90, 0.08) !important;
+  border-radius: 5px !important;
+  border: 1px solid #f4f3fa !important;
+}
+a {
+    color: rgb(93, 207, 239);
+}
+.loader{
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  z-index: 1111111;
+}

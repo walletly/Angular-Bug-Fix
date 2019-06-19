@@ -2,7 +2,7 @@
     <nb-sidebar>
         <div class="side-wrap">
             <div class="top">
-                <div class="logo">
+                <div class="logo c-p" (click)="refreshPage()">
                     <img src="assets/svg-icon/logo-dark.svg" alt="">
                 </div>
                 <nb-menu #menu [tag]="'mainMenu'" [items]="items" autoCollapse="true">
@@ -16,13 +16,13 @@
                         <div (click)="changeBrand(item.brand_id)">
                             <div class="menu-item">
                                 <div class="icon">
-                                    <img [src]="item.brand_logo" alt="">
+                                    <img width="100%" [src]="item.brand_logo" alt="">
                                 </div>
                                 {{item.brand_name}}
                             </div>
                         </div>
                     </div>
-                    <div [routerLink]="[ '/connect' ]" class="menu-item add-page">
+                    <div [routerLink]="[ '/fb-connect' ]" class="menu-item add-page">
                         <div class="icon">
                             <i class="nb-plus"></i>
                         </div>
@@ -33,7 +33,7 @@
             <div class="bot">
                 <div [routerLink]="[ '/profile' ]" class="foot-menu-item">
                     <div class="icon user-icon">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png"
+                        <img [src]="avatar"
                             alt="">
                     </div>
                     <div>
@@ -59,9 +59,10 @@
 
     <nb-layout-header subheader fixed>
         <!-- <a href="#" (click)="toggle()">toogle</a> -->
-        <h3 style="text-transform: capitalize;">
-            {{headerTitle}}
-        </h3>
+        <!-- <h3 style="text-transform: capitalize;" [ngClass]="{'fs-11 fw-400': brandName}">
+           <span style="color: #afafb9;">{{brandName}}</span> {{headerTitle}}
+        </h3> -->
+        <app-breadcrumb [name]="username.firstName"></app-breadcrumb>
     </nb-layout-header>
 
     <nb-layout-column class="p-t-80">
@@ -73,3 +74,8 @@
     </nb-layout-footer>
 
 </nb-layout>
+<div *ngIf="showLoader" class="loader">
+    <img width="200px" src="assets/img/Loader2x.gif" alt="">
+</div>
+<app-toastr></app-toastr>
+<app-toastr-success></app-toastr-success>

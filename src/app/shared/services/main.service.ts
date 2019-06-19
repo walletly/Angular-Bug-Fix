@@ -7,25 +7,30 @@ export class MainService {
 
   cardType;
   cardTypeId;
+  changeBrandBool = false;
 
   goToPro = new EventEmitter;
+
+  showLoader = new EventEmitter;
+  showToastr = new EventEmitter;
+  showToastrSuccess = new EventEmitter;
 
   couponsData = [];
   businessData = [];
   dataCoupon = {
     name: '',
     desription: '',
-    template: '',
+    card_id: '', // template
     discount: '',
     startDate: '',
     endDate: '',
-    card_id: '',
-    brand_id: ''
+    brand_id: '',
+    campaign_type: ''
   };
 
   addBusiness(item) {
     this.businessData.push(item);
   }
 
-  constructor() { }
+  constructor() {}
 }

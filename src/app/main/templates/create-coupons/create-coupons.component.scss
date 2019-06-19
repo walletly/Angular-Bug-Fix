@@ -55,3 +55,20 @@ textarea {
 nb-card {
   min-height: calc(100% - 100px);
 }
+.info-row {
+  word-break: break-all;
+}
+.loader-table {
+  height: calc(100vh - 274px);
+}
+.coupon{
+  width: calc(100% - 2px);
+  margin-right: 1px;
+}
+.flip-card-front{
+  transition: opacity .3s;
+}
+.smart-hidden{
+  opacity: 0;
+  pointer-events: none;
+}

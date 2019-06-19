@@ -3,7 +3,7 @@
 @import "mixins/breakpoints";
 @import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700");
 @import url("https://fonts.googleapis.com/css?family=Lato:400,700,900");
-
+@import "overturned.scss";
 /* You can add global styles to this file, and also import other style files */
 body {
   color: #323232;
@@ -166,8 +166,8 @@ a {
     bottom: 16px;
   }
   .cover-image {
-    max-width: 100% !important;
-    max-height: 120px;
+    width: 100% !important;
+    max-height: 126px;
   }
   .head {
     display: flex;
@@ -181,8 +181,6 @@ a {
       height: 45px;
       overflow: hidden;
       border-radius: 100px;
-      background: white;
-      padding: 1px;
       img {
         width: 100%;
       }
@@ -192,8 +190,11 @@ a {
 .coupon-back {
   width: 320px;
   border: 1px solid #e0e0e0;
-  border-bottom: 1px solid #f7f7f8;
   background-color: #efeff4;
+  min-height: 467px;
+  height: 468px;
+  margin-left: auto;
+  overflow: auto;
   .head {
     background-color: #f6f6f7;
     padding: 3px 7px 0 20px;
@@ -253,6 +254,8 @@ button[status="primary"] {
   font-size: 20px !important;
   min-width: 20px;
   width: unset !important;
+  overflow: hidden;
+  border-radius: 100px;
 }
 .nb-theme-default nb-menu .menu-items > .menu-item {
   border-bottom: none !important;
@@ -264,6 +267,10 @@ button[status="primary"] {
   font-size: 14px !important;
   font-weight: 400 !important;
   color: #afafb9;
+}
+.nb-theme-default nb-menu .menu-item a span {
+  word-break: break-all;
+  width: calc(100% - 75px);
 }
 .nb-theme-default nb-sidebar .scrollable {
   border-right: 1px solid #ebeef2;
@@ -358,7 +365,8 @@ nb-menu > ul > li:first-child > a {
   padding: 11px 17px !important;
 }
 nb-accordion > nb-accordion-item.expanded > nb-accordion-item-header {
-  color: rgb(90, 172, 218);
+  color: white;
+  background: #00c1eb;
 }
 
 // toggle button
@@ -540,6 +548,32 @@ nb-stepper.horinzotal {
       background-image: url("assets/svg-icon/menu-icon-SVG/menu-dashboard-active.svg");
     }
   }
+  &.pages {
+    background-image: url("assets/svg-icon/menu-icon-SVG/menu-pages.svg");
+    background-size: 100% 100%;
+    margin-right: 10px;
+    min-width: 24px !important;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 73%;
+    background-position: 4px 3px;
+    &.active {
+      background-image: url("assets/svg-icon/menu-icon-SVG/menu-pages-active.svg");
+    }
+  }
+  &.marketers {
+    background-image: url("assets/svg-icon/menu-icon-SVG/menu-marketers.svg");
+    background-size: 100% 100%;
+    margin-right: 10px;
+    min-width: 24px !important;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 73%;
+    background-position: 5px 3px;
+    &.active {
+      background-image: url("assets/svg-icon/menu-icon-SVG/menu-marketers-active.svg");
+    }
+  }
   &.campaign {
     background-image: url("assets/svg-icon/menu-icon-SVG/menu-campaign-icon.svg");
     background-size: 100% 100%;
@@ -675,7 +709,7 @@ nb-select button {
   border-bottom: 1px solid #dce1e3 !important;
 }
 .nb-theme-default nb-card.select.primary nb-option:hover {
-  background-color: #ffffff !important;
+  background-color: #00000012 !important;
   color: #323232 !important;
 }
 .nb-theme-default nb-card.select.primary nb-option.selected {
@@ -895,6 +929,12 @@ nb-card {
         &.templates {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-templates-active.svg");
         }
+        &.pages {
+          background-image: url("assets/svg-icon/menu-icon-SVG/menu-pages-active.svg");
+        }
+        &.marketers {
+          background-image: url("assets/svg-icon/menu-icon-SVG/menu-marketers-active.svg");
+        }
         &.dashboard {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-dashboard-active.svg");
         }
@@ -926,6 +966,12 @@ nb-card {
         &.templates {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-templates-active.svg");
         }
+        &.pages {
+          background-image: url("assets/svg-icon/menu-icon-SVG/menu-pages-active.svg");
+        }
+        &.marketers {
+          background-image: url("assets/svg-icon/menu-icon-SVG/menu-marketers-active.svg");
+        }
         &.dashboard {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-dashboard-active.svg");
         }
@@ -952,6 +998,19 @@ nb-card {
   }
 }
 .table-profile {
+  tbody {
+    tr {
+      cursor: pointer;
+      transition: all 0.3s;
+      &:hover {
+        td {
+          background-color: #f4fdf8;
+        }
+      }
+    }
+  }
+}
+.campaign-table {
   tbody {
     tr {
       cursor: pointer;
@@ -1006,7 +1065,7 @@ nb-radio-group.squared {
   label {
     align-items: center;
   }
-  .radio-description{
+  .radio-description {
     display: flex;
   }
   .radio-indicator {
@@ -1034,6 +1093,24 @@ nb-radio-group.squared {
   border-radius: 5px !important;
   background-color: #20beea !important;
 }
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  justify-self: stretch;
+  white-space: nowrap;
+}
+.loader-table {
+  width: 100%;
+  height: calc(100vh - 374px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+button[status="facebook"] {
+  background: rgb(66, 103, 178) !important;
+  font-weight: 400 !important;
+  text-transform: capitalize;
+}
 @media not all and (min-resolution: 0.001dpcm) {
   @supports (-webkit-appearance: none) {
     .nb-theme-default nb-accordion nb-accordion-item-header i {
@@ -1047,5 +1124,29 @@ nb-radio-group.squared {
 .message-error {
   color: red;
   text-align: center;
-  margin-bottom: 20px
+  margin-bottom: 20px;
+}
+.error-lable {
+  margin-top: 10px;
+  color: red;
+  margin-bottom: 5px;
+  font-size: 11px;
+}
+.filtre-icon-wrap {
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 2px 4px rgba(195, 195, 195, 0.15);
+  border-radius: 5px;
+  border: 1px solid #eff2f4;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  img{
+    width: 24px;
+  }
+}
+.nb-theme-default .nb-tree-grid-header-cell, .nb-theme-default .nb-tree-grid-cell, .nb-theme-default .nb-tree-grid-footer-cell{
+  height: 62px;
 }

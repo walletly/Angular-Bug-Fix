@@ -32,24 +32,40 @@ import { SettingsComponent } from './main/settings/settings.component';
 import { DashboardInfoComponent } from './main/dashboard-info/dashboard-info.component';
 import { CampaignMainComponent } from './main/campaign-main/campaign-main.component';
 import { ProfileComponent } from './main/profile/profile.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { DialogUploadImageComponent } from './shared/components/dialog-upload-image/dialog-upload-image.component';
 import { AudienceComponent } from './main/audience/audience.component';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthService } from './shared/services/auth.service';
-import { AuthGuard} from './shared/services/guard/auth.guard';
+import { AuthGuard } from './shared/services/guard/auth.guard';
 import { ForgetPassComponent } from './auth/forget-pass/forget-pass.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { DialogUpgradeComponent } from './shared/components/dialog-upgrade/dialog-upgrade.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { FbConnectComponent } from './auth/fb-connect/fb-connect.component';
+import { FbLoginComponent } from './auth/fb-login/fb-login.component';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { ToastrComponent } from './shared/components/toastr/toastr.component';
+import { CampaignDetailsComponent } from './main/campaign-main/campaign-details/campaign-details.component';
+import { NgxMaskModule } from 'ngx-mask';
+import { ToastrSuccessComponent } from './shared/components/toastr-success/toastr-success.component';
+import { BreadcrumbModule } from 'angular-crumbs';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { ModalMemberComponent } from './shared/components/modal-member/modal-member.component';
+import { PagesComponent } from './main/pages/pages.component';
+import { MarketersComponent } from './main/marketers/marketers.component';
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyC04TYllR0_M31tvfnPE2vKPcABKVBo-XU",
-  authDomain: "walletly-brands.firebaseapp.com",
-  databaseURL: "https://walletly-brands.firebaseio.com",
-  projectId: "walletly-brands",
-  storageBucket: "walletly-brands.appspot.com",
-  messagingSenderId: "995578197270",
-  appId: "1:995578197270:web:52fc6c6c3506cef5"
+    apiKey: "AIzaSyB_f_r3DPfN5tZ6x0olJaGCjSogT9rWapM",
+    authDomain: "walletly-dev3.firebaseapp.com",
+    databaseURL: "https://walletly-dev3.firebaseio.com",
+    projectId: "walletly-dev3",
+    storageBucket: "walletly-dev3.appspot.com",
+    messagingSenderId: "1044334423585",
+    appId: "1:1044334423585:web:a2ed86cb0ba66c34"
+
 };
 
 @NgModule({
@@ -83,7 +99,17 @@ export const firebaseConfig = {
     DialogUploadImageComponent,
     AudienceComponent,
     ForgetPassComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    DialogUpgradeComponent,
+    FbLoginComponent,
+    FbConnectComponent,
+    ToastrComponent,
+    CampaignDetailsComponent,
+    ToastrSuccessComponent,
+    BreadcrumbComponent,
+    ModalMemberComponent,
+    PagesComponent,
+    MarketersComponent
   ],
   imports: [
     BrowserModule,
@@ -112,11 +138,16 @@ export const firebaseConfig = {
     ReactiveFormsModule,
     HttpClientModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    ImageCropperModule,
+    AngularFireDatabaseModule,
+    NgxMaskModule.forRoot(),
+    BreadcrumbModule
   ],
   providers: [
     AuthService,
-    AuthGuard
+    AuthGuard,
+    AngularFirestore
   ],
   bootstrap: [AppComponent]
 })

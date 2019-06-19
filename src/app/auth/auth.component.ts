@@ -12,7 +12,7 @@ export class AuthComponent implements OnInit {
 
   ngOnInit() {
     if (this.router.url === '/auth'){
-      this.router.navigate(['/auth/login'])
+      this.router.navigate(['/auth/login']);
     }
   }
 

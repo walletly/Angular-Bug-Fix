@@ -1,0 +1,137 @@
+.row-wrap {
+  border: 1px solid #ebeef2;
+  width: 100%;
+  .row {
+    display: flex;
+    padding: 23px;
+    flex-wrap: nowrap;
+    border-bottom: 1px solid #ebeef2;
+    box-sizing: border-box;
+    width: 100%;
+    margin: auto;
+    padding-left: 30px;
+    &:last-child {
+      border-bottom: none;
+    }
+    .df {
+      width: calc(50% - 20px);
+      &:first-child {
+        width: calc(50% + 20px);
+      }
+    }
+    .label {
+      min-width: 164px;
+      width: 164px;
+      color: #afafb9;
+      font-size: 15px;
+      font-weight: 400;
+      &.small {
+        min-width: 120px;
+        width: 120px;
+      }
+    }
+    .value {
+      color: #323232;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      word-break: break-all;
+    }
+  }
+}
+nb-card-body {
+  padding: 20px 15px 30px 60px !important;
+}
+.coupon {
+  min-width: 321px;
+  margin-left: 45px;
+  margin-right: 35px;
+}
+.inputs-wrapper {
+  border: 1px solid #dce1e3;
+  padding: 50px;
+  padding-left: 30px;
+  width: 100%;
+}
+.input-wrapper {
+  padding-top: 40px;
+  padding-left: 10px;
+}
+.api-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  .input-wrap {
+    width: 100%;
+    input {
+      padding-right: 35px;
+    }
+  }
+  .api-lable {
+    min-width: 140px;
+  }
+}
+.input-icon {
+  cursor: pointer;
+  right: 7px;
+  top: calc(50% - 25.5px);
+  transition: all 0.3s;
+  &:active {
+    transform: scale(0.8);
+  }
+}
+.video-wrap {
+  height: 100%;
+}
+.video-wrappper {
+  min-width: 382px;
+  margin-left: 20px;
+}
+.button-wrap {
+  button {
+    border: none;
+    border-radius: 0;
+    outline: none;
+    margin-right: 20px;
+    height: 45px;
+    min-width: 100px;
+    color: white;
+    &.back {
+      background: rgb(211, 215, 217);
+    }
+    &.edit {
+      background: rgb(91, 91, 91);
+      min-width: 130px;
+    }
+    &.delete {
+      background: rgb(241, 115, 126);
+      min-width: 130px;
+    }
+  }
+}
+nb-alert {
+  border: 1px solid rgba(0, 0, 0, 0.61) !important;
+  background: rgb(245, 158, 165) !important;
+}
+button {
+  &.outline-white {
+    background: none;
+    border: 1px solid;
+    color: white;
+    padding: 8px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  &.alert-btn {
+    margin-top: -8px;
+    margin-bottom: -8px;
+  }
+}
+
+.loader-table {
+  height: calc(100vh - 271px);
+}

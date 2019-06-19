@@ -1,0 +1,17 @@
+<div class="wrap">
+  <div
+    *ngFor="let toaster of data; let i = index"
+    class="toastr-item"
+    [@enterAnimation]
+  >
+    <div class="close-icon" (click)="close(i)">
+      <i class="nb-close"></i>
+    </div>
+    <div class="icon">
+      <img src="assets/svg-icon/check-circle.svg" alt="" />
+    </div>
+    <div class="body">
+      {{ toaster.text }}
+    </div>
+  </div>
+</div>

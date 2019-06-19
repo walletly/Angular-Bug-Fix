@@ -1,0 +1,24 @@
+<div class="wrap">
+  <div *ngFor="let toaster of data; let i = index" class="toastr-item" [@enterAnimation]>
+    <div class="close-icon"(click)="close(i)">
+      <i class="nb-close"></i>
+    </div>
+    <div class="icon">
+      <img src="assets/svg-icon/attention.svg" alt="">
+    </div>
+    <div class="body">
+      <div class="p-r-20 m-b-30">
+        You have reached the limit of campaign ({{toaster.currentCountCompany}}). Upgrading to Basic lets activate
+        ({{toaster.futureCountCompany}})
+      </div>
+      <div>
+        <button *ngIf="toaster.type === 'basic'" (click)="goToUpgade(i)" class="cust-button basic" fullWidth nbButton status="info">
+          Upgrade to Basic
+        </button>
+        <button *ngIf="toaster.type === 'pro'" (click)="goToUpgade(i)" class="cust-button" fullWidth nbButton status="info">
+          Upgrade to Pro
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { UploadService } from 'src/app/shared/services/upload.service';
 import { BrandService } from 'src/app/shared/services/brand.service';
 import { CardService } from 'src/app/shared/services/card.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { MainService } from 'src/app/shared/services/main.service';
 
 @Component({
   selector: 'app-connect-page',
@@ -34,6 +35,11 @@ export class ConnectPageComponent implements OnInit {
   myFormStep2: FormGroup;
   myFormStep3: FormGroup;
 
+  showLogoUploader = false;
+  showBrandUploader = false;
+  fileImg;
+  uploadType;
+
   fbResponse;
   brand = {
     user_admin_id: '',
@@ -59,7 +65,8 @@ export class ConnectPageComponent implements OnInit {
     private uploadService: UploadService,
     private brandService: BrandService,
     private cardService: CardService,
-    private authService: AuthService
+    private authService: AuthService,
+    private mainService: MainService
   ) {
 
     this.myFormStep1 = formBuilder.group({
@@ -91,6 +98,7 @@ export class ConnectPageComponent implements OnInit {
     if (this.myFormStep1.valid) {
       this.loader = true;
       const fbId = this.myFormStep1.get('facebookPageID').value.split('/');
+      this.loader = true;
       this.authService.getFacebookInfo(fbId[fbId.length - 1]).subscribe(data => {
         console.log(data);
         if (data['success']) {
@@ -106,6 +114,7 @@ export class ConnectPageComponent implements OnInit {
         } else {
           this.loader = false;
         }
+        this.loader = false;
       });
       this.loader = false;
       // setTimeout(() => {
@@ -144,61 +153,67 @@ export class ConnectPageComponent implements OnInit {
   }
 
   uploadLogo(file: File) {
-    if (file[0].size / 1024 / 1024 <= 1) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const img = document.createElement('img');
-        img.src = reader.result as string;
-        this.brandSizeValidation = true;
+    // if (file[0].size / 1024 / 1024 <= 1) {
+    //   const reader = new FileReader();
+    //   reader.onloadend = () => {
+    //     const img = document.createElement('img');
+    //     img.src = reader.result as string;
+    //     this.brandSizeValidation = true;
 
-        img.onload = () => {
-          if ((img.naturalWidth <= 110 && img.naturalHeight <= 110) && (img.naturalWidth >= 55 && img.naturalHeight >= 55)) {
-            // const load = new FormData();
-            // load.append('image', file[0]);
-            // this.uploadService.uploadPhoto(load).subscribe(result => {
-            //   console.log(result);
-            //   if (result['success']) {
-            //     this.photoLogo = result['data']['url'];
-            //   } else {
-            //     this.brandSizeValidation = false;
-            //   }
-            // });
-            this.photoLogo = reader.result as string;
-            this.brandSizeValidation = true;
-          } else {
-            this.brandSizeValidation = false;
-          }
-        };
-      };
-      reader.readAsDataURL(file[0]);
-    } else {
-      this.brandSizeValidation = false;
-    }
+    //     img.onload = () => {
+    //       if ((img.naturalWidth <= 110 && img.naturalHeight <= 110) && (img.naturalWidth >= 55 && img.naturalHeight >= 55)) {
+    //         // const load = new FormData();
+    //         // load.append('image', file[0]);
+    //         // this.uploadService.uploadPhoto(load).subscribe(result => {
+    //         //   console.log(result);
+    //         //   if (result['success']) {
+    //         //     this.photoLogo = result['data']['url'];
+    //         //   } else {
+    //         //     this.brandSizeValidation = false;
+    //         //   }
+    //         // });
+    //         this.photoLogo = reader.result as string;
+    //         this.brandSizeValidation = true;
+    //       } else {
+    //         this.brandSizeValidation = false;
+    //       }
+    //     };
+    //   };
+    //   reader.readAsDataURL(file[0]);
+    // } else {
+    //   this.brandSizeValidation = false;
+    // }
+    this.fileImg = file;
+    this.uploadType = 'logo';
+    this.showLogoUploader = true;
   }
 
   uploadCover(file: File) {
-    if (file[0].size / 1024 / 1024 <= 4) {
-      const reader = new FileReader();
+    // if (file[0].size / 1024 / 1024 <= 4) {
+    //   const reader = new FileReader();
 
-      reader.onloadend = () => {
-        const img = document.createElement('img');
-        img.src = reader.result as string;
-        this.coverSizeValidation = true;
+    //   reader.onloadend = () => {
+    //     const img = document.createElement('img');
+    //     img.src = reader.result as string;
+    //     this.coverSizeValidation = true;
 
-        img.onload = () => {
-          if ((img.naturalWidth <= 750 && img.naturalHeight <= 294) && (img.naturalWidth >= 375 && img.naturalHeight >= 147)) {
-            this.photoCover = reader.result as string;
-            this.coverSizeValidation = true;
-          } else {
-            this.coverSizeValidation = false;
-          }
-        };
-      };
+    //     img.onload = () => {
+    //       if ((img.naturalWidth <= 750 && img.naturalHeight <= 294) && (img.naturalWidth >= 375 && img.naturalHeight >= 147)) {
+    //         this.photoCover = reader.result as string;
+    //         this.coverSizeValidation = true;
+    //       } else {
+    //         this.coverSizeValidation = false;
+    //       }
+    //     };
+    //   };
 
-      reader.readAsDataURL(file[0]);
-    } else {
-      this.coverSizeValidation = false;
-    }
+    //   reader.readAsDataURL(file[0]);
+    // } else {
+    //   this.coverSizeValidation = false;
+    // }
+    this.fileImg = file;
+    this.uploadType = 'brand';
+    this.showBrandUploader = true;
   }
 
   setForm2() {
@@ -209,11 +224,7 @@ export class ConnectPageComponent implements OnInit {
     this.myFormStep2.controls['phone'].setValue(this.fbResponse.phone);
     const webSite = this.fbResponse.website.split(' ')[0];
     this.myFormStep2.controls['website'].setValue(webSite);
-    if (this.fbResponse.location && this.fbResponse.location['latitude'] && this.fbResponse.location['longitude']) {
-      this.myFormStep2.controls['location'].setValue(this.fbResponse.location['latitude'] + ',' + this.fbResponse.location['longitude']);
-    } else {
-      this.myFormStep2.controls['location'].setValue('');
-    }
+    this.myFormStep2.controls['location'].setValue(this.getLocation());
   }
 
   createBrand() {
@@ -236,22 +247,22 @@ export class ConnectPageComponent implements OnInit {
     this.brand.website = this.myFormStep2.get('website').value;
     console.log(this.brand);
 
-    this.brandService.createBrand(this.brand).subscribe(result => {
-      console.log(result);
-      if (result['success']) {
-        this.api = result['apiKey'];
-        this.authService.updateUser(this.brand.user_admin_id, this.brand['brand_id']).subscribe(res => {
-          if (result['success']) {
-            localStorage.setItem('currentBrand', JSON.stringify(this.brand));
-            this.stepper.next();
-          }
-        }, err => {
-          this.messError = err.error.error;
-        });
-      }
-    }, err => {
-      this.messError = err.error.error;
-    });
+    // this.brandService.createBrand(this.brand).subscribe(result => {
+    //   console.log(result);
+    //   if (result['success']) {
+    //     this.api = result['apiKey'];
+    //     this.authService.updateUser(this.brand.user_admin_id, {activeBrand: this.brand['brand_id']}).subscribe(res => {
+    //       if (result['success']) {
+    //         localStorage.setItem('currentBrand', JSON.stringify(this.brand));
+    //         this.stepper.next();
+    //       }
+    //     }, err => {
+    //       this.messError = err.error.error;
+    //     });
+    //   }
+    // }, err => {
+    //   this.messError = err.error.error;
+    // });
   }
 
   deleteImg(name) {
@@ -271,5 +282,32 @@ export class ConnectPageComponent implements OnInit {
 
   copyApi() {
     this.toolTipStatus = 'Copied';
+  }
+
+  getLocation() {
+    let location = '';
+    if (this.fbResponse.location) {
+      if (this.fbResponse.location['state']) {
+        location = this.fbResponse.location['state'];
+      }
+      if (this.fbResponse.location['city']) {
+        if (location) {
+          location += ', ' + this.fbResponse.location['city'];
+        } else {
+          location += this.fbResponse.location['city'];
+        }
+      }
+      if (this.fbResponse.location['country']) {
+        if (location) {
+          location += ', ' + this.fbResponse.location['country'];
+        } else {
+          location += this.fbResponse.location['country'];
+        }
+      }
+
+      return location;
+    } else {
+      return '';
+    }
   }
 }

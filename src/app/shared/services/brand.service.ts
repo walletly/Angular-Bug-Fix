@@ -9,23 +9,65 @@ export class BrandService {
 
   constructor(private http: HttpClient) { }
 
-  private httpHeaders = new HttpHeaders ({
-    'Content-Type': 'application/json'
-  });
+  // createBrand(body) {
+  //   const httpHeaders = new HttpHeaders ({
+  //     'Content-Type': 'application/json',
+  //     'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+  //     'x-auth-user': localStorage.getItem('userID')
+  //   });
+  //   return this.http.post(SERVER_API_URL + 'brand', body, { headers: httpHeaders});
+  // }
 
-  createBrand(body) {
-    return this.http.post(SERVER_API_URL + 'brand', body, { headers: this.httpHeaders});
+  connectBrand(body) {
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.post(SERVER_API_URL + 'brand/connect', body, { headers: httpHeaders});
   }
 
   updateBrand(id, body) {
-    return this.http.put(SERVER_API_URL + 'brand/' + id, body, { headers: this.httpHeaders});
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.put(SERVER_API_URL + 'brand/' + id, body, { headers: httpHeaders});
   }
 
   getBrandById(id) {
-    return this.http.get(SERVER_API_URL + 'brand/' + id);
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'brand/' + id, { headers: httpHeaders});
   }
 
   getUsersBrands(id) {
-    return this.http.get(SERVER_API_URL + 'brand/user/' + id);
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'brand/user/' + id, { headers: httpHeaders});
+  }
+
+  assoisiateBrand(body) {
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.post(SERVER_API_URL + 'brand/associate', body, { headers: httpHeaders});
+  }
+
+  getBrandAudience(brand_id) {
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'coupon/audience/' + brand_id, { headers: httpHeaders});
   }
 }

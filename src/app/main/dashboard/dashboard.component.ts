@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MainService } from 'src/app/shared/services/main.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private mainService: MainService) {
+    if (mainService.changeBrandBool) {
+      window.location.reload();
+    }
+  }
 
   ngOnInit() {
   }

@@ -1,22 +1,22 @@
 <div class="df jc-b m-b-15">
-  <div class="df ai-c">
+  <div class="df">
     <h1 class="m-t-0 m-b-0 fs-24 fw-600 m-r-22">
       Audience
     </h1>
-    <div class="pos-r m-r-9">
+    <div class="pos-r m-r-9" style="top: -5px;">
       <input style="width: 235px;" placeholder="Search" class="small" type="text" nbInput fullWidth fieldSize="small">
       <div class="input-icon">
         <img src="assets/svg-icon/search-outline.svg" alt="">
       </div>
     </div>
-    <div class="filtr-btn">
+    <div class="filtr-btn pos-r" style="top: -5px">
       <img src="assets/img/filtre.png" alt="">
     </div>
   </div>
 </div>
 <nb-card>
   <nb-card-body class="p-0">
-    <table class="m-b-40" [nbTreeGrid]="data">
+    <table class="m-b-40 full-width" [nbTreeGrid]="data">
       <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
       <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
 
@@ -24,15 +24,17 @@
         <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{column}}</th>
         <td (click)="selectedSell = row.data[column].name" [ngClass]="{'active-sell': selectedSell === row.data[column].name}"
           nbTreeGridCell *nbTreeGridCellDef="let row">
+          <div class="ellipsis" *ngIf="column !== 'Status'">
+            <span>{{row.data[column].name}}</span>
+          </div>
           <div class="df ai-c">
             <span *ngIf="column === 'Type'">
               <img class="m-r-8" [src]="row.data[column].icon" alt="">
             </span>
-            <span *ngIf="column !== 'Status'">{{row.data[column].name}}</span>
           </div>
           <div *ngIf="column === 'Status'">
             <span class="status" [ngClass]="{'used': row.data[column].name === 'Used', 'unused': row.data[column].name === 'Unused', 'expired': row.data[column].name === 'Expired'}">
-              <img class="m-r-3" width="14px" *ngIf="row.data[column].name === 'Used'" src="assets/img/success-white.png" alt="">
+              <img class="m-r-3" width="12px" *ngIf="row.data[column].name === 'Used'" src="assets/img/success-white.png" alt="">
               {{row.data[column].name}}
             </span>
           </div>

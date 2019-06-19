@@ -9,12 +9,12 @@ export class UploadService {
 
   constructor(private http: HttpClient) { }
 
-  private httpHeaders = new HttpHeaders ({
-    'Content-Type': 'application/x-www-form-urlencoded'
-  });
-
-  uploadPhoto(file: FormData) {
-    return this.http.post(SERVER_API_URL + 'utils/image', file, { headers: this.httpHeaders});
+  uploadPhoto(file: FormData, folder) {
+    const httpHeaders = new HttpHeaders ({
+      'x-amz-meta-fieldname': 'image',
+      'brand-folder': folder
+    });
+    return this.http.post(SERVER_API_URL + 'utils/image', file, { headers: httpHeaders});
   }
 
 }

@@ -1,0 +1,47 @@
+<div class="df m-b-15">
+  <h1 class="m-t-0 m-b-0 fs-24 m-r-80 fw-600">
+    Pages
+  </h1>
+  <div class="pos-r m-r-17" style="top: -5px;">
+    <input
+      style="width: 235px;"
+      placeholder="Search"
+      class="small"
+      type="text"
+      nbInput
+      fullWidtha
+      fieldSize="small"
+    />
+    <div class="input-icon">
+      <img src="assets/svg-icon/search-outline.svg" alt="" />
+    </div>
+  </div>
+  <div class="filtre-icon-wrap pos-r" style="top: -5px;">
+    <img src="assets/img/filtr.png" alt="" />
+  </div>
+</div>
+<nb-card>
+  <nb-card-body class="p-0">
+    <table class="m-b-40 campaign-table" [nbTreeGrid]="data">
+      <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="defaultColumns"></tr>
+      <tr
+        nbTreeGridRow
+        *nbTreeGridRowDef="let row; columns: defaultColumns"
+      ></tr>
+
+      <ng-container
+        *ngFor="let column of defaultColumns"
+        [nbTreeGridColumnDef]="column"
+      >
+        <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{ column }}</th>
+        <td nbTreeGridCell *nbTreeGridCellDef="let row">
+          <div class="ellipsis">
+            <span>
+              {{ row.data[column] }}
+            </span>
+          </div>
+        </td>
+      </ng-container>
+    </table>
+  </nb-card-body>
+</nb-card>

@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   customValidation = true;
   myForm: FormGroup;
   messError;
+  isLogin;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private firebaseAuth: AngularFireAuth,
     private authService: AuthService, private brandService: BrandService) {
@@ -22,12 +23,22 @@ export class LoginComponent implements OnInit {
       name: ["", [Validators.required]],
       password: ["", [Validators.required, Validators.minLength(6)]]
     });
+
+    this.firebaseAuth.authState.subscribe(data => {
+      if (data && !this.isLogin) {
+        this.router.navigate(['/main/dashboard']);
+      }
+    });
+
   }
 
   ngOnInit() {
   }
 
   login() {
+    this.firebaseAuth.auth.signOut();
+    this.isLogin = true;
+
     if (this.myForm.valid) {
       this.customValidation = true;
       const email = this.myForm.get('name').value;
@@ -38,13 +49,15 @@ export class LoginComponent implements OnInit {
       .signInWithEmailAndPassword(email, password)
       .then(value => {
         console.log(value.user.uid);
+        console.log(value.user['ra']);
         localStorage.setItem('userID', value.user.uid);
+        localStorage.setItem('usertoken', value.user['ra']);
         this.authService.getUser(value.user.uid).subscribe(result => {
-          console.log(result);
           localStorage.setItem('user', JSON.stringify(result['data']));
           if (result['data']['activeBrand']) {
             this.brandService.getBrandById(result['data']['activeBrand']).subscribe(brand => {
               localStorage.setItem('currentBrand', JSON.stringify(brand['brand']));
+
               this.router.navigate(['/main/dashboard']);
             });
           } else {
@@ -62,11 +75,15 @@ export class LoginComponent implements OnInit {
   }
 
   signInWithFacebook() {
-    this.authService.signInWithFacebook()
-    .then((res) => {
-      console.log(res);
-      this.router.navigate(['/connect']);
-    })
-    .catch((err) => this.messError = err.message);
+    this.authService.doFacebookLogin();
+    // this.firebaseAuth.auth.signOut();
+
+    // this.authService.signInWithFacebook()
+    // .then((res) => {
+    //   console.log(res);
+    //   this.router.navigate(['/connect']);
+    // })
+    // .catch((err) => this.messError = err.message);
   }
+
 }

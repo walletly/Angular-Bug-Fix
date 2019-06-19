@@ -1,0 +1,449 @@
+<nb-layout>
+  <nb-layout-column class="main-wrap">
+
+    <div>
+      <div class="m-b-50 c-p">
+        <img (click)="redirectToDashboard()" src="assets/svg-icon/logo-dark.svg" alt="">
+      </div>
+      <div *ngIf="stepper.selectedIndex === 0">
+        <div class="text-center fw-600 fs-22 color-dark">
+          Connect Facebook Page
+        </div>
+        <div class="text-center color-secondary fs-11 fw-600 m-b-25">
+          Add a page Link to create Campaign
+        </div>
+      </div>
+      <div *ngIf="stepper.selectedIndex === 1">
+        <div class="text-center fw-600 fs-22 color-dark">
+          Almost there
+        </div>
+        <div class="text-center color-secondary fs-11 fw-600 m-b-25">
+          Now review your page data
+        </div>
+      </div>
+      <div *ngIf="stepper.selectedIndex === 2">
+        <div class="text-center fw-600 fs-22 color-dark">
+          Done
+        </div>
+        <div class="text-center color-secondary fs-11 fw-600 m-b-25">
+          Choose platform & get API Key
+        </div>
+      </div>
+      <nb-card>
+        <nb-card-body>
+          <nb-stepper #stepper class="horinzotal" orientation="horizontal">
+            <nb-step [label]="labelOne" [stepControl]="myFormStep1">
+              <ng-template #labelOne>Connect page</ng-template>
+              <form [formGroup]="myFormStep1">
+                <input type="hidden" formControlName="fakeData" nbInput>
+              </form>
+              <div class="page-list">
+                <div class="body">
+                  <div class="body-scroll">
+                    <div *ngIf="showLoader" class="loader-table">
+                      <img width="70px" src="assets/img/Loader2x.gif" alt="">
+                    </div>
+                    <div *ngFor="let item of brands" class="page-item">
+                      <div class="df ai-c">
+                        <div *ngIf="item?.picture?.data?.url" class="brand-icon m-r-40">
+                          <img src="{{item?.picture?.data?.url}}" alt="">
+                        </div>
+                        <div *ngIf="item?.brand_logo" class="brand-icon m-r-40">
+                          <img src="{{item?.brand_logo}}" alt="">
+                        </div>
+                        <div *ngIf="item?.name" class="fs-18 fw-500">
+                          {{item?.name}}
+                        </div>
+                        <div *ngIf="item?.brand_name" class="fs-18 fw-500">
+                          {{item?.brand_name}}
+                        </div>
+                      </div>
+                      <div>
+                        <div *ngIf="checkUsersBrand(item.id)">
+                          <span (click)="redirectToDashboard(item.id)" class="status c-p">
+                            <i class="icon nb-checkmark"></i>
+                            Connected
+                          </span>
+                        </div>
+                        <div *ngIf="!checkUsersBrand(item.id)">
+                          <span (click)="goStep2(item.id)" class="status connect c-p">
+                            Connect
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div class="page-item">
+                      <div class="df ai-c">
+                        <div class="brand-icon m-r-40">
+                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaVxaTAsqvMDEjz9JUpag6DjekHsFffeg3_fDEQNbm2VQpzYEy"
+                            alt="">
+                        </div>
+                        <div class="fs-18 fw-500">
+                          Little Merimad
+                        </div>
+                      </div>
+                      <div>
+                        <span class="status connect c-p">
+                          Connect
+                        </span>
+                      </div>
+                    </div> -->
+                  </div>
+                </div>
+                <div class="footer">
+                  <div (click)="signOut()" class="c-p fw-500 fs-16 color-secondary">
+                    Sign out
+                  </div>
+                  <div>
+                    <button (click)="goStep2Empty()" class="primary-outline">
+                      Create Facebook Page
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="loader" class="loader fw-600 ai-c color-dark fs-12 text-center">
+                <img width="70px" src="assets/img/Loader2x.gif" alt="">
+                <div>
+                  Data Loading...
+                </div>
+              </div>
+
+            </nb-step>
+            <nb-step [label]="labelTwo" [stepControl]="myFormStep2">
+              <ng-template #labelTwo>Review your Data</ng-template>
+
+              <form [formGroup]="myFormStep2">
+                <div class="input-wrapper step-2">
+                  <div class="row-input">
+                    <div class="lable">
+                      Facebook Page ID
+                    </div>
+                    <div class="value">
+                      <div class="pos-r full-width">
+                        <input
+                          [ngClass]="{'error': myFormStep2.controls['facebookPageID'].invalid && !customValidationStep2}"
+                          formControlName="facebookPageID" class="color-link" type="text" nbInput fullWidth
+                          fieldSize="medium" placeholder="" readonly>
+                        <div *ngIf="myFormStep2.controls['facebookPageID'].invalid && !customValidationStep2"
+                          class="error-lable">
+                          Field error (for example: "www.facebook.com/user")
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row-input">
+                    <div class="lable">
+                      Brand Name
+                    </div>
+                    <div class="value">
+                      <div class="pos-r full-width">
+                        <input
+                          [ngClass]="{'error': myFormStep2.controls['brandName'].invalid && !customValidationStep2}"
+                          formControlName="brandName" type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+                        <div *ngIf="myFormStep2.controls['brandName'].invalid && !customValidationStep2"
+                          class="error-lable">
+                          Field error (must have at least 1 character)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row-input">
+                    <div class="lable">
+                      Profile logo
+                    </div>
+                    <div class="value">
+                      <div *ngIf="photoLogo" class="pos-r">
+                        <div class="brand">
+                          <img [src]="photoLogo" alt="">
+                        </div>
+                        <div (click)="deleteImg('photoLogo')" class="close">
+                          <i class="nb-plus"></i>
+                        </div>
+                      </div>
+                      <div *ngIf="!photoLogo">
+                        <label
+                          [ngClass]="{'error': (myFormStep2.controls['profileLogo'].invalid && !customValidationStep2) || !brandSizeValidation}"
+                          class="c-p file-lable" size="xsmall" nbButton hero status="info">
+                          <input formControlName="profileLogo" hidden type="file" (change)="uploadLogo($event)"
+                            accept="image/*">
+                          Load image
+                        </label>
+                      </div>
+                      <div class="color-danger m-t-15" *ngIf="!brandSizeValidation">
+                        Wrong image size
+                      </div>
+                      <div class="color-danger m-t-15"
+                        *ngIf="myFormStep2.controls['profileLogo'].invalid && !customValidationStep2">
+                        Upload image
+                      </div>
+                      <div class="color-secondary fs-10 m-t-15">
+                        The best image size in pixels: 63x63. File size limit: 1MB
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row-input">
+                    <div class="lable">
+                      Cover Image
+                    </div>
+                    <div class="value">
+                      <div *ngIf="photoCover" class="pos-r">
+                        <div>
+                          <img width="100%" [src]="photoCover" alt="">
+                        </div>
+                        <div (click)="deleteImg('photoCover')" class="close">
+                          <i class="nb-plus"></i>
+                        </div>
+                      </div>
+                      <div *ngIf="!photoCover">
+                        <label
+                          [ngClass]="{'error': (myFormStep2.controls['coverImage'].invalid && !customValidationStep2) || !coverSizeValidation}"
+                          class="c-p file-lable" size="xsmall" nbButton hero status="info">
+                          <input formControlName="coverImage" hidden type="file" (change)="uploadCover($event)"
+                            accept="image/*">
+                          Load image
+                        </label>
+                      </div>
+                      <div class="color-danger m-t-15" *ngIf="!coverSizeValidation">
+                        Wrong image size
+                      </div>
+                      <div class="color-danger m-t-15"
+                        *ngIf="myFormStep2.controls['coverImage'].invalid && !customValidationStep2">
+                        Upload image
+                      </div>
+                      <div class="color-secondary fs-10 m-t-7">
+                        The best image size in pixels: 750x288. File size limit: 4MB
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row-input">
+                    <div class="lable">
+                      Description
+                    </div>
+                    <div class="value">
+                      <div class="pos-r full-width">
+                        <textarea
+                          [ngClass]="{'error': myFormStep2.controls['description'].invalid && !customValidationStep2}"
+                          formControlName="description" nbInput fullWidth placeholder="Textarea"></textarea>
+                        <div *ngIf="myFormStep2.controls['description'].invalid && !customValidationStep2"
+                          class="error-lable">
+                          Field error (must have at least 1 character)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row-input">
+                    <div class="lable">
+                      More Info
+                    </div>
+                    <div class="value">
+                      <div class="pos-r full-width">
+                        <textarea
+                          [ngClass]="{'error': myFormStep2.controls['moreInfo'].invalid && !customValidationStep2}"
+                          formControlName="moreInfo" nbInput fullWidth placeholder="Textarea"></textarea>
+                        <div *ngIf="myFormStep2.controls['moreInfo'].invalid && !customValidationStep2"
+                          class="error-lable">
+                          Field error (must have at least 1 character)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row-input">
+                    <div class="lable">
+                      Location
+                    </div>
+                    <div class="value">
+                      <div class="pos-r full-width">
+                        <input [ngClass]="{'error': myFormStep2.controls['location'].invalid && !customValidationStep2}"
+                          formControlName="location" class="color-link" type="text" nbInput fullWidth fieldSize="medium"
+                          placeholder="">
+                        <div *ngIf="myFormStep2.controls['location'].invalid && !customValidationStep2"
+                          class="error-lable">
+                          Field error (must have location info)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row-input">
+                    <div class="lable">
+                      Phone
+                    </div>
+                    <div class="value">
+                      <div class="pos-r full-width">
+                        <input [ngClass]="{'error': myFormStep2.controls['phone'].invalid && !customValidationStep2}"
+                          formControlName="phone" type="number" nbInput fullWidth fieldSize="medium" placeholder=""
+                          pattern="^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$">
+                        <div *ngIf="myFormStep2.controls['phone'].invalid && !customValidationStep2"
+                          class="error-lable">
+                          Field error (must have at least 5 digits of phone number)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row-input">
+                    <div class="lable">
+                      Email
+                    </div>
+                    <div class="value">
+                      <div class="pos-r full-width">
+                        <input [ngClass]="{'error': myFormStep2.controls['email'].invalid && !customValidationStep2}"
+                          formControlName="email" type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+                        <div *ngIf="myFormStep2.controls['email'].invalid && !customValidationStep2"
+                          class="error-lable">
+                          Field error (for example: "user@mail.com")
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row-input">
+                    <div class="lable">
+                      Website
+                    </div>
+                    <div class="value">
+                      <div class="pos-r full-width">
+                        <input [ngClass]="{'error': myFormStep2.controls['website'].invalid && !customValidationStep2}"
+                          formControlName="website" class="color-link" type="text" nbInput fullWidth fieldSize="medium"
+                          placeholder="">
+                        <div *ngIf="myFormStep2.controls['website'].invalid && !customValidationStep2"
+                          class="error-lable">
+                          Field error (for example: "http://www.website.com")
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row-input">
+                    <div class="lable">
+
+                    </div>
+                    <div class="value">
+                      <button [disabled]="inProcces" (click)="goStep3()" class="cust-button" nbButton status="success">
+                        <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
+
+                        Connect
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+            </nb-step>
+            <nb-step [label]="labelThird" [stepControl]="myFormStep3">
+              <ng-template #labelThird>Platform</ng-template>
+
+              <div class="m-b-12 m-t-45 fs-18 fw-500">
+                What platform is your product?
+              </div>
+              <div class="row m-b-30">
+                <div class="col-md-3 col-lg-3 col-6">
+                  <div (click)="platform = 'bitmap'" [ngClass]="{'active': platform === 'bitmap'}"
+                    class="card-platform">
+                    <img src="assets/img/Bitmap-platfotm.png" alt="">
+                    <div *ngIf="platform === 'bitmap'" class="icon-active">
+                      <img src="assets/svg-icon/success-circle.svg" alt="">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-lg-3 col-6">
+                  <div (click)="platform = '2'" [ngClass]="{'active': platform === '2'}" class="card-platform">
+                    <img src="assets/img/activeChat-logo.jpg" alt="">
+                    <div *ngIf="platform === '2'" class="icon-active">
+                      <img src="assets/svg-icon/success-circle.svg" alt="">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-lg-3 col-6">
+                  <div (click)="platform = '3'" [ngClass]="{'active': platform === '3'}" class="card-platform">
+                    <img src="assets/img/botsify-logo.jpg" alt="">
+                    <div *ngIf="platform === '3'" class="icon-active">
+                      <img src="assets/svg-icon/success-circle.svg" alt="">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-lg-3 col-6">
+                  <div (click)="platform = '4'" [ngClass]="{'active': platform === '4'}" class="card-platform">
+                    <img src="assets/img/code.png" alt="">
+                    <div *ngIf="platform === '4'" class="icon-active">
+                      <img src="assets/svg-icon/success-circle.svg" alt="">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="platform === 'bitmap'">
+                <div class="platform m-b-30">
+                  <div class="head">
+
+                    <form [formGroup]="myFormStep3">
+                      <div class="df ai-c jc-c">
+                        <div class="fs-15 fw-600 m-r-12">
+                          API KEY
+                        </div>
+                        <div class="pos-r input-wrap">
+                          <input [ngClass]="{'error': myFormStep3.controls['apiKey'].invalid && !customValidationStep3}"
+                            formControlName="apiKey" [(ngModel)]="api" class="color-dark fs-14 fw-500" type="text"
+                            nbInput fullWidth fieldSize="medium" placeholder="" class="p-r-32">
+                          <div *ngIf="myFormStep3.controls['apiKey'].invalid && !customValidationStep3"
+                            class="error-lable">
+                            Field error (for example: "http://www.website.com")
+                          </div>
+                          <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard [cbContent]="api"
+                            [container]="container" nbTooltip="{{toolTipStatus}}" class="input-icon">
+                            <img src="assets/img/copy.png" alt="">
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+
+                  </div>
+                  <div class="body">
+                    <div class="row">
+                      <div class="col-md-12 col-lg-6 col col-12">
+                        <div class="fs-24 color-dark fw-600 m-b-11 m-t-28">
+                          How to Add API key?
+                        </div>
+                        <div class="fs-17 fw-600">
+                          1. copy api key <br>
+                          2. paste it in selected platfrom <br>
+                          3. paste it in selected platfrom
+                        </div>
+                      </div>
+                      <div class="col-md-12 col-lg-6 col col-12">
+                        <div class="video-wrap">
+                          <video>
+                            Browser not supported
+                          </video>
+                          <div class="play">
+                            <span></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="df jc-c">
+                  <button (click)="goDashboard()" class="cust-button" nbButton status="success">
+                    Go to Dashboard
+                  </button>
+                </div>
+              </div>
+
+            </nb-step>
+          </nb-stepper>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="text-center fs-11 color-secondary">
+      ®2019 Walletly Business, All rights reserved. Terms and Privacy
+    </div>
+  </nb-layout-column>
+</nb-layout>
+
+<!-- <app-dialog-upload-image *ngIf="showLogoUploader" [uploadType]="uploadType" (uploadEmit)="photoLogo = $event; showLogoUploader = false"
+  (closeEmit)="showLogoUploader = $event" [image]="fileImg"></app-dialog-upload-image> -->
+<app-dialog-upload-image *ngIf="showLogoUploader" [uploadType]="uploadType"
+  (uploadEmit)="uploadPhoto($event, 'logo'); showLogoUploader = false" (closeEmit)="showLogoUploader = $event"
+  [image]="fileImg"></app-dialog-upload-image>
+<app-dialog-upload-image *ngIf="showBrandUploader" [uploadType]="uploadType"
+  (uploadEmit)="uploadPhoto($event, 'cover'); showBrandUploader = false" (closeEmit)="showBrandUploader = $event"
+  [image]="fileImg"></app-dialog-upload-image>
