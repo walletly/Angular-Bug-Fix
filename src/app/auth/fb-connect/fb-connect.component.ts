@@ -34,6 +34,8 @@ export class FbConnectComponent implements OnInit {
   customValidationStep2 = true;
   customValidationStep3 = true;
 
+  categories = ["category1", "category2", "category3", "category4"];
+
   myFormStep1: FormGroup;
   myFormStep2: FormGroup;
   myFormStep3: FormGroup;
@@ -93,8 +95,9 @@ export class FbConnectComponent implements OnInit {
       coverImage: ["", [Validators.required]],
       description: ["", [Validators.required]],
       moreInfo: ["", [Validators.required]],
+      category: ["", [Validators.required]],
       location: ["", [Validators.required]],
-      phone: ["", [Validators.required]],
+      phone: ["", [Validators.required, Validators.pattern("^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$")]],
       email: ["", [Validators.required, Validators.email]],
       website: ["", [Validators.required]],
     });

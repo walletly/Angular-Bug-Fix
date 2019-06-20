@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-pages",
@@ -8,7 +9,13 @@ import { Component, OnInit } from "@angular/core";
 export class PagesComponent implements OnInit {
   defaultColumns = ["Page Name", "Copoun Issue", "Copoun Redeem", "Type", "Industry", "Created Date", "Country"];
   source;
-  constructor() {}
+  constructor(
+    private router: Router
+  ) {
+    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 3){
+      router.navigate(['/main/dashboard']);
+    } 
+  }
 
   data = [
     {

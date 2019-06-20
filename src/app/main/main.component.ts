@@ -32,16 +32,6 @@ export class MainComponent implements OnInit {
           pathMatch: "prefix"
         },
         {
-          icon: "icon-menu pages",
-          title: "Pages",
-          link: ["pages"]
-        },
-        {
-          icon: "icon-menu marketers",
-          title: "Marketers",
-          link: ["marketers"]
-        },
-        {
           icon: "icon-menu templates",
           title: "Templates",
           link: ["templates/walletly-cards"]
@@ -101,6 +91,10 @@ export class MainComponent implements OnInit {
     private brandService: BrandService,
     private authService: AuthService
   ) {
+    if (JSON.parse(localStorage.getItem('user'))['user_type'] === 3){
+      this.items[0].children.splice(1, 0, { icon: "icon-menu pages", title: "Pages", link: ["pages"] })
+      this.items[0].children.splice(2, 0, { icon: "icon-menu marketers", title: "Marketers", link: ["marketers"] })
+    } 
     this.user = JSON.parse(localStorage.getItem("user"));
     this.username = {
       firstName: this.user["firstname"],

@@ -363,6 +363,11 @@ td {
     border-radius: 100px;
   }
 }
+.custome-input-field{
+  max-width: 292px;
+  overflow: hidden;
+  height: 44px;;
+}
 @media screen and (min-width: 1400px) {
   .right-video-wrap {
     width: 100%;

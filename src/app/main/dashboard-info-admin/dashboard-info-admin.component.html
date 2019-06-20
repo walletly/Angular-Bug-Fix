@@ -1,0 +1,270 @@
+<nb-card>
+  <nb-card-body>
+    <div class="m-b-20 fs-18">
+      INFORMATION
+    </div>
+    <div class="df wrap jc-b">
+      <div class="card-info">
+        <div class="label">
+          Total Cards Issue
+        </div>
+        <div class="value">
+          <div class="m-r-11">
+            610
+          </div>
+          <img src="assets/svg-icon/double-arrow-success.svg" alt="" />
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="label">
+          Total Pages
+        </div>
+        <div class="value">
+          <div class="m-r-11">
+            130
+          </div>
+          <img src="assets/svg-icon/double-arrow-success.svg" alt="" />
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="label">
+          Number of Marketers
+        </div>
+        <div class="value">
+          <div class="m-r-11">
+            470
+          </div>
+          <img src="assets/svg-icon/double-arrow-down.svg" alt="" />
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="label">
+          Audience
+        </div>
+        <div class="value">
+          <div class="m-r-11">
+            453
+          </div>
+          <img src="assets/svg-icon/double-arrow-success.svg" alt="" />
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<nb-card>
+  <nb-card-body>
+    <div class="m-b-20 fs-18">
+      ACCOUNT TYPES
+    </div>
+    <div class="df wrap jc-b">
+      <div class="card-info">
+        <div class="label">
+          Basic
+        </div>
+        <div class="value">
+          <div class="m-r-11">
+            1332
+          </div>
+          <img src="assets/svg-icon/double-arrow-success.svg" alt="" />
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="label">
+          Pro
+        </div>
+        <div class="value">
+          <div class="m-r-11">
+            453
+          </div>
+          <img src="assets/svg-icon/double-arrow-down.svg" alt="" />
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="label">
+          Unlimited
+        </div>
+        <div class="value">
+          <div class="m-r-11">
+            232
+          </div>
+          <img src="assets/svg-icon/double-arrow-down.svg" alt="" />
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="label">
+          Audience
+        </div>
+        <div class="value">
+          <div class="m-r-11">
+            453
+          </div>
+          <img src="assets/svg-icon/double-arrow-success.svg" alt="" />
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<div class="row">
+  <div class="col-12 col-md-6">
+    <nb-card>
+      <nb-card-body>
+        <div class="df jc-b ai-c m-b-20 ">
+          <div style="text-transform: uppercase" class="fs-18">
+            Account Signed
+          </div>
+          <div (clickOutside)="showAccountSignedDate = false" class="pos-r">
+            <input
+              class="small"
+              (focus)="showAccountSignedDate = true"
+              [(ngModel)]="accountSignedDate"
+              type="text"
+              nbInput
+              fullWidth
+              fieldSize="small"
+              placeholder=""
+            />
+            <div class="icon-calendar">
+              <img src="assets/svg-icon/calendar-blue.svg" alt="" />
+            </div>
+            <nb-calendar-range
+              *ngIf="showAccountSignedDate"
+              (rangeChange)="accountSignedDateChange()"
+              [(range)]="range"
+            >
+            </nb-calendar-range>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-12 col-md-6">
+    <nb-card>
+      <nb-card-body>
+        <div class="df jc-b ai-c m-b-20 ">
+          <div style="text-transform: uppercase" class="fs-18">
+            pages by industries
+          </div>
+          <div (clickOutside)="showPagesByIndustriesDate = false" class="pos-r">
+            <input
+              class="small"
+              (focus)="showPagesByIndustriesDate = true"
+              [(ngModel)]="pagesByIndustriesDate"
+              type="text"
+              nbInput
+              fullWidth
+              fieldSize="small"
+              placeholder=""
+            />
+            <div class="icon-calendar">
+              <img src="assets/svg-icon/calendar-blue.svg" alt="" />
+            </div>
+            <nb-calendar-range
+              *ngIf="showPagesByIndustriesDate"
+              (rangeChange)="pagesByIndustriesDateChange()"
+              [(range)]="range"
+            >
+            </nb-calendar-range>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-12 col-md-6">
+    <nb-card>
+      <nb-card-body>
+        <div class="df jc-b ai-c m-b-20 ">
+          <div style="text-transform: uppercase" class="fs-18">
+            Marketer by week
+          </div>
+          <div (clickOutside)="showPagesByWeekDate = false" class="pos-r">
+            <input
+              class="small"
+              (focus)="showPagesByWeekDate = true"
+              [(ngModel)]="pagesByWeekDate"
+              type="text"
+              nbInput
+              fullWidth
+              fieldSize="small"
+              placeholder=""
+            />
+            <div class="icon-calendar">
+              <img src="assets/svg-icon/calendar-blue.svg" alt="" />
+            </div>
+            <nb-calendar-range
+              *ngIf="showPagesByWeekDate"
+              (rangeChange)="pagesByWeekDateChange()"
+              [(range)]="range"
+            >
+            </nb-calendar-range>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-12 col-md-6">
+    <nb-card>
+      <nb-card-body>
+        <div class="df jc-b ai-c m-b-20 ">
+          <div style="text-transform: uppercase" class="fs-18">
+            Pages by week
+          </div>
+          <div (clickOutside)="showMarketerByWeekDate = false" class="pos-r">
+            <input
+              class="small"
+              (focus)="showMarketerByWeekDate = true"
+              [(ngModel)]="marketerByWeekDate"
+              type="text"
+              nbInput
+              fullWidth
+              fieldSize="small"
+              placeholder=""
+            />
+            <div class="icon-calendar">
+              <img src="assets/svg-icon/calendar-blue.svg" alt="" />
+            </div>
+            <nb-calendar-range
+              *ngIf="showMarketerByWeekDate"
+              (rangeChange)="marketerByWeekDateChange()"
+              [(range)]="range"
+            >
+            </nb-calendar-range>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-12 col-md-12">
+    <nb-card>
+      <nb-card-body>
+        <div class="df jc-b ai-c m-b-20 ">
+          <div style="text-transform: uppercase" class="fs-18">
+            Growth
+          </div>
+          <div (clickOutside)="showGrowthDate = false" class="pos-r">
+            <input
+              class="small"
+              (focus)="showGrowthDate = true"
+              [(ngModel)]="growthDate"
+              type="text"
+              nbInput
+              fullWidth
+              fieldSize="small"
+              placeholder=""
+            />
+            <div class="icon-calendar">
+              <img src="assets/svg-icon/calendar-blue.svg" alt="" />
+            </div>
+            <nb-calendar-range
+              *ngIf="showGrowthDate"
+              (rangeChange)="growthDateChange()"
+              [(range)]="range"
+            >
+            </nb-calendar-range>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

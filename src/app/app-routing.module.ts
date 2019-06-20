@@ -32,6 +32,9 @@ import { FbLoginComponent } from "./auth/fb-login/fb-login.component";
 import { CampaignDetailsComponent } from "./main/campaign-main/campaign-details/campaign-details.component";
 import { PagesComponent } from './main/pages/pages.component';
 import { MarketersComponent } from './main/marketers/marketers.component';
+import { CampaignTemplatesComponent } from './main/campaign-main/campaign-templates/campaign-templates.component';
+import { CampaignTypeComponent } from './main/campaign-main/campaign-type/campaign-type.component';
+import { DashboardInfoAdminComponent } from './main/dashboard-info-admin/dashboard-info-admin.component';
 
 const routes: Routes = [
   {
@@ -49,6 +52,12 @@ const routes: Routes = [
       {
         path: "dashboard-info",
         component: DashboardInfoComponent,
+        canActivate: [AuthGuard],
+        data: { breadcrumb: "hiddenBreadcrumb" }
+      },
+      {
+        path: "dashboard-info-admin",
+        component: DashboardInfoAdminComponent,
         canActivate: [AuthGuard],
         data: { breadcrumb: "hiddenBreadcrumb" }
       },
@@ -104,6 +113,18 @@ const routes: Routes = [
             canActivate: [AuthGuard]
           }
         ]
+      },
+      {
+        path: "campaign-templates",
+        component: CampaignTemplatesComponent,
+        canActivate: [AuthGuard],
+        data: { breadcrumb: "templates" }
+      },
+      {
+        path: "campaign-type",
+        component: CampaignTypeComponent,
+        canActivate: [AuthGuard],
+        data: { breadcrumb: "campaign" }
       },
       {
         path: "campaign-main",

@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbInputModule, NbCardModule, NbAccordionModule, NbCheckboxModule, NbStepperModule, NbTooltipModule, NbTabsetModule, NbTreeGridModule, NbSelectModule, NbCalendarModule, NbAlertModule, NbRadioModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbInputModule, NbCardModule, NbAccordionModule, NbCheckboxModule, NbStepperModule, NbTooltipModule, NbTabsetModule, NbTreeGridModule, NbSelectModule, NbCalendarModule, NbAlertModule, NbRadioModule, NbCalendarRangeModule } from '@nebular/theme';
 import { MainComponent } from './main/main.component';
 import { DashboardComponent } from './main/dashboard/dashboard.component';
 import { TemplatesComponent } from './main/templates/templates.component';
@@ -56,15 +56,18 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ModalMemberComponent } from './shared/components/modal-member/modal-member.component';
 import { PagesComponent } from './main/pages/pages.component';
 import { MarketersComponent } from './main/marketers/marketers.component';
+import { CampaignTypeComponent } from './main/campaign-main/campaign-type/campaign-type.component';
+import { CampaignTemplatesComponent } from './main/campaign-main/campaign-templates/campaign-templates.component';
+import { DashboardInfoAdminComponent } from './main/dashboard-info-admin/dashboard-info-admin.component';
 
 export const firebaseConfig = {
-    apiKey: "AIzaSyB_f_r3DPfN5tZ6x0olJaGCjSogT9rWapM",
-    authDomain: "walletly-dev3.firebaseapp.com",
-    databaseURL: "https://walletly-dev3.firebaseio.com",
-    projectId: "walletly-dev3",
-    storageBucket: "walletly-dev3.appspot.com",
-    messagingSenderId: "1044334423585",
-    appId: "1:1044334423585:web:a2ed86cb0ba66c34"
+  apiKey: "AIzaSyB_f_r3DPfN5tZ6x0olJaGCjSogT9rWapM",
+  authDomain: "walletly-dev3.firebaseapp.com",
+  databaseURL: "https://walletly-dev3.firebaseio.com",
+  projectId: "walletly-dev3",
+  storageBucket: "walletly-dev3.appspot.com",
+  messagingSenderId: "1044334423585",
+  appId: "1:1044334423585:web:a2ed86cb0ba66c34"
 
 };
 
@@ -109,7 +112,10 @@ export const firebaseConfig = {
     BreadcrumbComponent,
     ModalMemberComponent,
     PagesComponent,
-    MarketersComponent
+    MarketersComponent,
+    CampaignTypeComponent,
+    CampaignTemplatesComponent,
+    DashboardInfoAdminComponent
   ],
   imports: [
     BrowserModule,
@@ -142,7 +148,8 @@ export const firebaseConfig = {
     ImageCropperModule,
     AngularFireDatabaseModule,
     NgxMaskModule.forRoot(),
-    BreadcrumbModule
+    BreadcrumbModule,
+    NbCalendarRangeModule
   ],
   providers: [
     AuthService,

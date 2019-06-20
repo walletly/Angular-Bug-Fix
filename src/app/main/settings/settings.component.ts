@@ -27,6 +27,7 @@ export class SettingsComponent implements OnInit {
   api;
 
   logoName;
+  iconName;
   coverName;
 
   showPaymentDetails;
@@ -39,6 +40,7 @@ export class SettingsComponent implements OnInit {
 
   photoLogo;
   photoCover;
+  photoIcon;
   coverSizeValidation = true;
   brandSizeValidation = true;
   platform;
@@ -62,6 +64,8 @@ export class SettingsComponent implements OnInit {
   showModalMember;
   userAdmin;
   fbId;
+  iconImage;
+
   defaultColumns = ["Name", "Icon", "Number of Campaigns", "Number of Coupons", "Pricing", "Status", "Action"];
 
 
@@ -227,7 +231,14 @@ export class SettingsComponent implements OnInit {
 
   uploadLogo(file: File) {
     console.log(file);
-    this.logoName = file['srcElement'].files[0].name;
+    this.iconName = file['srcElement'].files[0].name;
+    this.fileImg = file;
+    this.uploadType = 'logo';
+    this.showLogoUploader = true;
+  }
+
+  uploadIcon(file: File) {
+    console.log(file);
     this.fileImg = file;
     this.uploadType = 'logo';
     this.showLogoUploader = true;
@@ -252,6 +263,10 @@ export class SettingsComponent implements OnInit {
         name = this.coverName;
         folder = 'cover';
         break;
+      case 'icon':
+        name = this.iconName;
+        folder = 'icon';
+        break;
       default:
         break;
     }
@@ -267,6 +282,9 @@ export class SettingsComponent implements OnInit {
             break;
           case 'cover':
             this.photoCover = result['data'].url;
+            break;
+          case 'icon':
+            this.photoIcon = result['data'].url;
             break;
           default:
             break;

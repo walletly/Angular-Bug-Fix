@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-marketers',
@@ -8,7 +9,13 @@ import { Component, OnInit } from '@angular/core';
 export class MarketersComponent implements OnInit {
   defaultColumns = ["First Name", "Last Name", "Email Adreesss", "Phone Number", "Pages", "Join Date", "Last Login", "Country"];
   source;
-  constructor() {}
+  constructor(
+    private router: Router
+  ) {
+    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 3){
+      router.navigate(['/main/dashboard']);
+    } 
+  }
 
   data = [
     {

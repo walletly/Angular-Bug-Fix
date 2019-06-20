@@ -22,7 +22,6 @@
                         !customValidationPackages
                     }"
                     formControlName="packagesName"
-                    class="color-link"
                     type="text"
                     nbInput
                     fullWidth
@@ -53,7 +52,6 @@
                         !customValidationPackages
                     }"
                     formControlName="numberOfCampaigns"
-                    class="color-link"
                     type="text"
                     nbInput
                     fullWidth
@@ -84,7 +82,6 @@
                         !customValidationPackages
                     }"
                     formControlName="numberOfCoupons"
-                    class="color-link"
                     type="text"
                     nbInput
                     fullWidth
@@ -115,7 +112,6 @@
                         !customValidationPackages
                     }"
                     formControlName="pricing"
-                    class="color-link"
                     type="text"
                     nbInput
                     fullWidth
@@ -142,30 +138,35 @@
                 Icon Image
               </div>
               <div class="value">
-                <div class="pos-r full-width">
-                  <input
-                    [ngClass]="{
-                      error:
-                        myFormPackages.controls['iconImage'].invalid &&
-                        !customValidationPackages
-                    }"
-                    formControlName="iconImage"
-                    class="color-link"
-                    type="text"
-                    nbInput
-                    fullWidth
-                    fieldSize="medium"
-                  />
-                  <div
-                    *ngIf="
+                <div
+                  (click)="file.click()"
+                  class="custome-input-field df ai-c c-p"
+                  [ngClass]="{
+                    error:
                       myFormPackages.controls['iconImage'].invalid &&
                       !customValidationPackages
-                    "
-                    class="error-lable"
-                  >
-                    Field error (must have at least 1 character)
-                  </div>
+                  }"
+                >
+                  {{ iconImage }}
                 </div>
+                <div
+                  *ngIf="
+                    myFormPackages.controls['iconImage'].invalid &&
+                    !customValidationPackages
+                  "
+                  class="error-lable"
+                  (click)="file.focus()"
+                >
+                  Field error (must be uploaded image)
+                </div>
+                  <input
+                    #file
+                    hidden
+                    [(ngModel)]="iconImage"
+                    formControlName="iconImage"
+                    (change)="uploadIcon($event)"
+                    type="file"
+                  />
               </div>
             </div>
             <div class="row-input ">
@@ -246,10 +247,7 @@
                     src="assets/svg-icon/shared.svg"
                     alt=""
                   />
-                  <div
-                    *ngIf="showActions === row.data"
-                    class="action-drb"
-                  >
+                  <div *ngIf="showActions === row.data" class="action-drb">
                     <div (click)="showActions = null" class="item">
                       <img src="assets/svg-icon/view.svg" alt="" />
                       View
