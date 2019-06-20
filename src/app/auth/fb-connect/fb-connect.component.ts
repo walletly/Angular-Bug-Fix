@@ -20,6 +20,7 @@ export class FbConnectComponent implements OnInit {
 
   loader = false;
   platform;
+  ibeacon = 'no';
   api = '9945f3ab-5de4-4769-b630-5c6520203d7a';
   stepIndex;
   toolTipStatus;
@@ -34,7 +35,13 @@ export class FbConnectComponent implements OnInit {
   customValidationStep2 = true;
   customValidationStep3 = true;
 
-  categories = ["category1", "category2", "category3", "category4"];
+  categories = [
+    "E-commerce", "Infopreneurship", "Professional Consulting", 
+    "Celebrity, Artist or Public figure", "Local business or Place",
+    "Hotel and Hospitality", "Personal blog",
+    "Fun (jokes, community, daily quotes etc)",
+    "Organization or Institution", "Other"
+  ];
 
   myFormStep1: FormGroup;
   myFormStep2: FormGroup;
@@ -87,7 +94,7 @@ export class FbConnectComponent implements OnInit {
       facebookPageID: ['www.facebook.com/'],
       fakeData: ['', [Validators.required]]
     });
-
+     
     this.myFormStep2 = formBuilder.group({
       facebookPageID: [this.myFormStep1.get('facebookPageID').value, [Validators.required, Validators.pattern("((http|https):\/\/|)(www\.|)facebook\.com\/[a-zA-Z0-9.]{1,}")]],
       brandName: ["", [Validators.required]],
@@ -97,15 +104,45 @@ export class FbConnectComponent implements OnInit {
       moreInfo: ["", [Validators.required]],
       category: ["", [Validators.required]],
       location: ["", [Validators.required]],
-      phone: ["", [Validators.required, Validators.pattern("^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$")]],
+      phone: ["", [Validators.required, Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
       email: ["", [Validators.required, Validators.email]],
       website: ["", [Validators.required]],
     });
 
     this.myFormStep3 = formBuilder.group({
-      apiKey: ["", [Validators.required]],
+      ibeacon_uuid: [""],
+      ibeacon_major: [""],
+      ibeacon_minor: [""],
+      ibeacon_notificationtext: ["", [Validators.required]]
     });
+}
+
+ibeaconToggle(toggle){
+  if (toggle=='yes'){
+    this.ibeacon='yes';
+    this.myFormStep3.get('ibeacon_uuid').setValidators([Validators.required,
+      Validators.pattern("^(?!00)[0-9a-f]{8}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{12}$")]);
+    this.myFormStep3.controls['ibeacon_uuid'].setValue('');
+    this.myFormStep3.get('ibeacon_uuid').updateValueAndValidity();
+    this.myFormStep3.get('ibeacon_major').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
+    this.myFormStep3.controls['ibeacon_major'].setValue('');
+    this.myFormStep3.get('ibeacon_major').updateValueAndValidity();
+    this.myFormStep3.get('ibeacon_minor').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
+    this.myFormStep3.controls['ibeacon_minor'].setValue('');
+    this.myFormStep3.get('ibeacon_minor').updateValueAndValidity();
+  }else{
+    this.ibeacon='no';
+    this.myFormStep3.get('ibeacon_uuid').setValidators([]);
+    this.myFormStep3.controls['ibeacon_uuid'].setValue('');
+    this.myFormStep3.get('ibeacon_uuid').updateValueAndValidity();
+    this.myFormStep3.get('ibeacon_major').setValidators([]);
+    this.myFormStep3.controls['ibeacon_major'].setValue('');
+    this.myFormStep3.get('ibeacon_major').updateValueAndValidity();
+    this.myFormStep3.get('ibeacon_minor').setValidators([]);
+    this.myFormStep3.controls['ibeacon_minor'].setValue('');
+    this.myFormStep3.get('ibeacon_minor').updateValueAndValidity();
   }
+}
 
   ngOnInit() {
     this.showLoader = true;
@@ -252,6 +289,25 @@ export class FbConnectComponent implements OnInit {
 
   goDashboard() {
     if (this.myFormStep3.valid) {
+      let data;
+      let brand_id = this.fbResponse['brand_id'];
+      if(this.ibeacon=='yes'){
+        data={
+          'ibeacon': 1,
+          'ibeacon_uuid': this.myFormStep3.get('ibeacon_uuid').value,
+          'ibeacon_major': this.myFormStep3.get('ibeacon_major').value,
+          'ibeacon_minor': this.myFormStep3.get('ibeacon_minor').value,
+          'ibeacon_notificationtext': this.myFormStep3.get('ibeacon_notificationtext').value
+        }
+      }else{
+        data={
+          'ibeacon': 2,
+          'ibeacon_notificationtext': this.myFormStep3.get('ibeacon_notificationtext').value
+        }
+      }
+      this.brandService.addIbeacon(brand_id, data).subscribe(async result => {
+        console.log(result);
+      });
       this.router.navigate(['/main/dashboard']);
       this.customValidationStep3 = true;
     } else {

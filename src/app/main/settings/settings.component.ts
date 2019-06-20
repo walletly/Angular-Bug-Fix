@@ -45,7 +45,7 @@ export class SettingsComponent implements OnInit {
   brandSizeValidation = true;
   platform;
   container;
-
+  ibeacon;
   showLogoUploader = false;
   showBrandUploader = false;
   fileImg;
@@ -54,12 +54,14 @@ export class SettingsComponent implements OnInit {
   customValidation = true;
   customValidationPayment = true;
   customValidationPackages = true;
+  customValidationiBeacon = true;
 
   showActions;
 
   myForm: FormGroup;
   myFormPayment: FormGroup;
   myFormPackages: FormGroup;
+  myFormiBeacon: FormGroup;
   showLoader;
   showModalMember;
   userAdmin;
@@ -68,6 +70,13 @@ export class SettingsComponent implements OnInit {
 
   defaultColumns = ["Name", "Icon", "Number of Campaigns", "Number of Coupons", "Pricing", "Status", "Action"];
 
+  categories = [
+    "E-commerce", "Infopreneurship", "Professional Consulting", 
+    "Celebrity, Artist or Public figure", "Local business or Place",
+    "Hotel and Hospitality", "Personal blog",
+    "Fun (jokes, community, daily quotes etc)",
+    "Organization or Institution", "Other"
+  ];
 
   dataTablePackages = [
     {
@@ -119,8 +128,9 @@ export class SettingsComponent implements OnInit {
       coverImage: [""],
       description: ["", [Validators.required]],
       moreInfo: ["", [Validators.required]],
+      category: ["", [Validators.required]],
       location: ["", [Validators.required]],
-      phone: ["", [Validators.required]],
+      phone: ["", [Validators.required, Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
       email: ["", [Validators.required, Validators.email]],
       website: ["", [Validators.required]],
     });
@@ -130,6 +140,12 @@ export class SettingsComponent implements OnInit {
       numberOfCoupons: ["", [Validators.required]],
       pricing: ["", [Validators.required]],
       iconImage: ["", [Validators.required]]
+    });
+    this.myFormiBeacon = formBuilder.group({
+      ibeacon_uuid: [""],
+      ibeacon_major: [""],
+      ibeacon_minor: [""],
+      ibeacon_notificationtext: ["", [Validators.required]]
     });
     this.myFormPayment = formBuilder.group({
       plan: ["", [Validators.required]],
@@ -157,6 +173,27 @@ export class SettingsComponent implements OnInit {
       this.userAdmin = true;
     } else {
       this.userAdmin = false;
+    }
+  }
+
+  ibeaconToggle(toggle){
+    if (toggle=='yes'){
+      this.ibeacon='yes';
+      this.myFormiBeacon.get('ibeacon_uuid').setValidators([Validators.required,
+        Validators.pattern("^(?!00)[0-9a-f]{8}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{12}$")]);
+      this.myFormiBeacon.get('ibeacon_uuid').updateValueAndValidity();
+      this.myFormiBeacon.get('ibeacon_major').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
+      this.myFormiBeacon.get('ibeacon_major').updateValueAndValidity();
+      this.myFormiBeacon.get('ibeacon_minor').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
+      this.myFormiBeacon.get('ibeacon_minor').updateValueAndValidity();
+    }else{
+      this.ibeacon='no';
+      this.myFormiBeacon.get('ibeacon_uuid').setValidators([]);
+      this.myFormiBeacon.get('ibeacon_uuid').updateValueAndValidity();
+      this.myFormiBeacon.get('ibeacon_major').setValidators([]);
+      this.myFormiBeacon.get('ibeacon_major').updateValueAndValidity();
+      this.myFormiBeacon.get('ibeacon_minor').setValidators([]);
+      this.myFormiBeacon.get('ibeacon_minor').updateValueAndValidity();
     }
   }
 
@@ -210,6 +247,40 @@ export class SettingsComponent implements OnInit {
       });
     } else {
       this.customValidation = false;
+    }
+  }
+
+  updateiBeacon(){
+    if (this.myFormiBeacon.valid) {
+      let data;
+      if(this.ibeacon=='yes'){
+        data={
+          'ibeacon': 1,
+          'ibeacon_uuid': this.myFormiBeacon.get('ibeacon_uuid').value,
+          'ibeacon_major': this.myFormiBeacon.get('ibeacon_major').value,
+          'ibeacon_minor': this.myFormiBeacon.get('ibeacon_minor').value,
+          'ibeacon_notificationtext': this.myFormiBeacon.get('ibeacon_notificationtext').value
+        }
+      }else{
+        data={
+          'ibeacon': 2,
+          'ibeacon_uuid': this.brand['ibeacon'].ibeacon_uuid,
+          'ibeacon_major': this.brand['ibeacon'].ibeacon_major,
+          'ibeacon_minor': this.brand['ibeacon'].ibeacon_minor,
+          'ibeacon_notificationtext': this.myFormiBeacon.get('ibeacon_notificationtext').value
+        }
+      }
+      let brand_id = JSON.parse(localStorage.getItem('currentBrand'))['brand_id'];
+      this.customValidationiBeacon = true;
+      this.brandService.updateIbeacon(brand_id, data).subscribe(result => {
+        console.log(result);
+        this.brandService.getBrandById(brand_id).subscribe(data => {
+          localStorage.setItem('currentBrand', JSON.stringify(data['brand']));
+          this.mainService.showToastrSuccess.emit({text: 'Settings updated'});
+        });
+      });
+    } else {
+      this.customValidationiBeacon = false;
     }
   }
 
@@ -321,6 +392,10 @@ export class SettingsComponent implements OnInit {
     this.myForm.controls['website'].setValue(this.brand['website']);
     this.myForm.controls['facebookPageID'].disable();
     this.myForm.controls['brandName'].disable();
+    this.myFormiBeacon.controls['ibeacon_uuid'].setValue(this.brand['ibeacon'].ibeacon_uuid);
+    this.myFormiBeacon.controls['ibeacon_minor'].setValue(this.brand['ibeacon'].ibeacon_minor);
+    this.myFormiBeacon.controls['ibeacon_major'].setValue(this.brand['ibeacon'].ibeacon_major);
+    this.myFormiBeacon.controls['ibeacon_notificationtext'].setValue(this.brand['ibeacon'].ibeacon_notificationtext);
   }
 
   getBrand() {

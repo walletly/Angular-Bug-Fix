@@ -70,4 +70,22 @@ export class BrandService {
     });
     return this.http.get(SERVER_API_URL + 'coupon/audience/' + brand_id, { headers: httpHeaders});
   }
+
+  addIbeacon(brand_id, body){
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.post(SERVER_API_URL + 'ibeacon/addIbeacon/' + brand_id, body, { headers: httpHeaders});
+  }
+
+  updateIbeacon(brand_id, body){
+    const httpHeaders = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.put(SERVER_API_URL + 'ibeacon/updateIbeacon/' + brand_id, body, { headers: httpHeaders});
+  }
 }

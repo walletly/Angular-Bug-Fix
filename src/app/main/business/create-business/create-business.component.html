@@ -67,7 +67,7 @@
           </div>
           <div class="value">
             <input [ngClass]="{'error': myForm.controls['phoneNumber'].invalid && !customValidation}" formControlName="phoneNumber"
-              type="number" [(ngModel)]="data.phone" nbInput fullWidth fieldSize="medium" placeholder="" pattern="^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$">
+              type="text" [(ngModel)]="data.phone" nbInput fullWidth fieldSize="medium" placeholder="">
             <div *ngIf="myForm.controls['phoneNumber'].invalid && !customValidation" class="error-lable">
               Field error (must have at least 5 digits of phone number)
             </div>

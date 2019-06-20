@@ -479,6 +479,28 @@
               </div>
             </div>
             <div class="row-input">
+                <div class="lable">
+                  Category
+                </div>
+                <div class="value">
+                  <div class="pos-r full-width">
+                    <nb-select [ngClass]="{'error': myForm.controls['category'].invalid && !customValidation}"
+                      formControlName="category" placeholder="">
+                      <nb-option disabled>- Select Category -</nb-option>
+                      <nb-option *ngFor="let category of categories" [value]="category">{{category}}</nb-option>
+                    </nb-select>
+                    <div
+                      *ngIf="
+                        myForm.controls['category'].invalid && !customValidation
+                      "
+                      class="error-lable"
+                    >
+                    Select Category
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <div class="row-input">
               <div class="lable">
                 Location
               </div>
@@ -520,12 +542,11 @@
                         myForm.controls['phone'].invalid && !customValidation
                     }"
                     formControlName="phone"
-                    type="number"
+                    type="text"
                     nbInput
                     fullWidth
                     fieldSize="medium"
                     placeholder=""
-                    pattern="^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$"
                   />
                   <div
                     *ngIf="
@@ -794,6 +815,102 @@
               <div class="play">
                 <span></span>
               </div>
+            </div>
+          </div>
+        </div>
+      </nb-tab>
+      <nb-tab *ngIf="!userAdmin" #apiSettingsTab tabTitle="iBeacon">
+        <div class="container">
+          <div class="row">
+            <div class="col-8">
+              <div class="m-b-60 m-t-45 fs-18 fw-500">
+                Do you have an iBeacon?
+                <input (click)="ibeaconToggle('yes')" style="margin-left: 30px;" type="radio" name="iBeacon" value="yes"> Yes
+                <input (click)="ibeaconToggle('no')" style="margin-left: 30px;" type="radio" name="iBeacon" value="no" checked> No
+              </div>
+              <form [formGroup]="myFormiBeacon">
+                <div class="input-wrapper">
+                  <div class="row-input" *ngIf="ibeacon === 'yes'">
+                      <div class="lable">
+                        iBeacon UUID
+                      </div>
+                      <div class="value">
+                        <div class="pos-r full-width">
+                          <input [ngClass]="{'error': myFormiBeacon.controls['ibeacon_uuid'].invalid && !customValidationiBeacon}"
+                            formControlName="ibeacon_uuid" type="text" nbInput fullWidth fieldSize="medium"
+                            placeholder="">
+                          <div *ngIf="myFormiBeacon.controls['ibeacon_uuid'].invalid && !customValidationiBeacon"
+                            class="error-lable">
+                            Field error (must have iBeacon UUID in the format '258ce5a2-eca1-273f-a9b1-778e5a42ab8a')
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="ibeacon === 'yes'">
+                      <div class="col-7">
+                        <div class="row-input">
+                          <div class="lable">
+                            iBeacon Major
+                          </div>
+                          <div class="value">
+                            <div class="pos-r full-width">
+                              <input [ngClass]="{'error': myFormiBeacon.controls['ibeacon_major'].invalid && !customValidationiBeacon}"
+                                formControlName="ibeacon_major" type="number" nbInput fullWidth fieldSize="medium"
+                                placeholder="" style="padding-left: 8px !important; padding-right: 8px !important;">
+                              <div *ngIf="myFormiBeacon.controls['ibeacon_major'].invalid && !customValidationiBeacon"
+                                class="error-lable">
+                                Field error (must have iBeacon Major (range 0-65535))
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-5 p-l-5">
+                        <div class="row-input">
+                          <div class="lable" style="min-width: 45px;">
+                            Minor
+                          </div>
+                          <div class="value">
+                            <div class="pos-r full-width">
+                              <input [ngClass]="{'error': myFormiBeacon.controls['ibeacon_minor'].invalid && !customValidationiBeacon}"
+                                formControlName="ibeacon_minor" type="number" nbInput fullWidth fieldSize="medium"
+                                placeholder="" style="padding-left: 8px !important; padding-right: 8px !important;">
+                              <div *ngIf="myFormiBeacon.controls['ibeacon_minor'].invalid && !customValidationiBeacon"
+                                class="error-lable">
+                                Field error (must have iBeacon Minor (range 0-65535))
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row-input">
+                      <div class="lable">
+                        Broadcast Message
+                      </div>
+                      <div class="value">
+                        <div class="pos-r full-width">
+                          <textarea [ngClass]="{'error': myFormiBeacon.controls['ibeacon_notificationtext'].invalid && !customValidationiBeacon}"
+                            formControlName="ibeacon_notificationtext" nbInput fullWidth placeholder=""></textarea>
+                          <div *ngIf="myFormiBeacon.controls['ibeacon_notificationtext'].invalid && !customValidationiBeacon"
+                            class="error-lable">
+                            Field error (must have iBeacon Broadcast Message)
+                          </div>
+                        </div>
+                        <div class="tab-cust">
+                            <div class="tab-body p-t-20">
+                              <button (click)="updateiBeacon()" class="cust-button btn-210" nbButton status="success">
+                                Update
+                              </button>
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-4 p-t-35">
+              <img src="assets/img/mobileibeaconLarge.png" alt="" />
             </div>
           </div>
         </div>

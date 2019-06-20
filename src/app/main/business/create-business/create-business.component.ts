@@ -44,7 +44,7 @@ export class CreateBusinessComponent implements OnInit {
       firstName: ["", [Validators.required]],
       lastName: ["", [Validators.required]],
       permission: ["", [Validators.required]],
-      phoneNumber: ["", [Validators.required]],
+      phoneNumber: ["", [Validators.required, Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
       email: ["", [Validators.required, Validators.email]],
     });
 
