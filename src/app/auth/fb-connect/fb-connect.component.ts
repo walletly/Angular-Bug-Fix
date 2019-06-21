@@ -20,7 +20,7 @@ export class FbConnectComponent implements OnInit {
 
   loader = false;
   platform;
-  ibeacon = 'no';
+  // ibeacon = 'no';
   api = '9945f3ab-5de4-4769-b630-5c6520203d7a';
   stepIndex;
   toolTipStatus;
@@ -35,7 +35,7 @@ export class FbConnectComponent implements OnInit {
   customValidationStep2 = true;
   customValidationStep3 = true;
 
-  categories = [
+  businessTypes = [
     "E-commerce", "Infopreneurship", "Professional Consulting", 
     "Celebrity, Artist or Public figure", "Local business or Place",
     "Hotel and Hospitality", "Personal blog",
@@ -102,47 +102,52 @@ export class FbConnectComponent implements OnInit {
       coverImage: ["", [Validators.required]],
       description: ["", [Validators.required]],
       moreInfo: ["", [Validators.required]],
-      category: ["", [Validators.required]],
       location: ["", [Validators.required]],
       phone: ["", [Validators.required, Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
       email: ["", [Validators.required, Validators.email]],
       website: ["", [Validators.required]],
     });
 
+    // this.myFormStep3 = formBuilder.group({
+    //   ibeacon_uuid: [""],
+    //   ibeacon_major: [""],
+    //   ibeacon_minor: [""],
+    //   ibeacon_notificationtext: ["", [Validators.required]]
+    // });
+
     this.myFormStep3 = formBuilder.group({
-      ibeacon_uuid: [""],
-      ibeacon_major: [""],
-      ibeacon_minor: [""],
-      ibeacon_notificationtext: ["", [Validators.required]]
+      noOfStaff: ["", [Validators.required, Validators.min(1)]],
+      businessType: ["", [Validators.required]],
+      noOfLocations: ["", [Validators.required, Validators.min(1)]]
     });
 }
 
-ibeaconToggle(toggle){
-  if (toggle=='yes'){
-    this.ibeacon='yes';
-    this.myFormStep3.get('ibeacon_uuid').setValidators([Validators.required,
-      Validators.pattern("^(?!00)[0-9a-f]{8}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{12}$")]);
-    this.myFormStep3.controls['ibeacon_uuid'].setValue('');
-    this.myFormStep3.get('ibeacon_uuid').updateValueAndValidity();
-    this.myFormStep3.get('ibeacon_major').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
-    this.myFormStep3.controls['ibeacon_major'].setValue('');
-    this.myFormStep3.get('ibeacon_major').updateValueAndValidity();
-    this.myFormStep3.get('ibeacon_minor').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
-    this.myFormStep3.controls['ibeacon_minor'].setValue('');
-    this.myFormStep3.get('ibeacon_minor').updateValueAndValidity();
-  }else{
-    this.ibeacon='no';
-    this.myFormStep3.get('ibeacon_uuid').setValidators([]);
-    this.myFormStep3.controls['ibeacon_uuid'].setValue('');
-    this.myFormStep3.get('ibeacon_uuid').updateValueAndValidity();
-    this.myFormStep3.get('ibeacon_major').setValidators([]);
-    this.myFormStep3.controls['ibeacon_major'].setValue('');
-    this.myFormStep3.get('ibeacon_major').updateValueAndValidity();
-    this.myFormStep3.get('ibeacon_minor').setValidators([]);
-    this.myFormStep3.controls['ibeacon_minor'].setValue('');
-    this.myFormStep3.get('ibeacon_minor').updateValueAndValidity();
-  }
-}
+// ibeaconToggle(toggle){
+//   if (toggle=='yes'){
+//     this.ibeacon='yes';
+//     this.myFormStep3.get('ibeacon_uuid').setValidators([Validators.required,
+//       Validators.pattern("^(?!00)[0-9a-f]{8}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{12}$")]);
+//     this.myFormStep3.controls['ibeacon_uuid'].setValue('');
+//     this.myFormStep3.get('ibeacon_uuid').updateValueAndValidity();
+//     this.myFormStep3.get('ibeacon_major').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
+//     this.myFormStep3.controls['ibeacon_major'].setValue('');
+//     this.myFormStep3.get('ibeacon_major').updateValueAndValidity();
+//     this.myFormStep3.get('ibeacon_minor').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
+//     this.myFormStep3.controls['ibeacon_minor'].setValue('');
+//     this.myFormStep3.get('ibeacon_minor').updateValueAndValidity();
+//   }else{
+//     this.ibeacon='no';
+//     this.myFormStep3.get('ibeacon_uuid').setValidators([]);
+//     this.myFormStep3.controls['ibeacon_uuid'].setValue('');
+//     this.myFormStep3.get('ibeacon_uuid').updateValueAndValidity();
+//     this.myFormStep3.get('ibeacon_major').setValidators([]);
+//     this.myFormStep3.controls['ibeacon_major'].setValue('');
+//     this.myFormStep3.get('ibeacon_major').updateValueAndValidity();
+//     this.myFormStep3.get('ibeacon_minor').setValidators([]);
+//     this.myFormStep3.controls['ibeacon_minor'].setValue('');
+//     this.myFormStep3.get('ibeacon_minor').updateValueAndValidity();
+//   }
+// }
 
   ngOnInit() {
     this.showLoader = true;
@@ -287,26 +292,46 @@ ibeaconToggle(toggle){
     }
   }
 
-  goDashboard() {
+  async goDashboard() {
+    // if (this.myFormStep3.valid) {
+    //   let data;
+    //   let brand_id = this.fbResponse['brand_id'];
+    //   if(this.ibeacon=='yes'){
+    //     data={
+    //       'ibeacon': 1,
+    //       'ibeacon_uuid': this.myFormStep3.get('ibeacon_uuid').value,
+    //       'ibeacon_major': this.myFormStep3.get('ibeacon_major').value,
+    //       'ibeacon_minor': this.myFormStep3.get('ibeacon_minor').value,
+    //       'ibeacon_notificationtext': this.myFormStep3.get('ibeacon_notificationtext').value
+    //     }
+    //   }else{
+    //     data={
+    //       'ibeacon': 2,
+    //       'ibeacon_notificationtext': this.myFormStep3.get('ibeacon_notificationtext').value
+    //     }
+    //   }
+    //   this.brandService.addIbeacon(brand_id, data).subscribe(async result => {
+    //     console.log(result);
+    //   });
+    //   this.router.navigate(['/main/dashboard']);
+    //   this.customValidationStep3 = true;
+    // } else {
+    //   this.customValidationStep3 = false;
+    // }
     if (this.myFormStep3.valid) {
-      let data;
-      let brand_id = this.fbResponse['brand_id'];
-      if(this.ibeacon=='yes'){
-        data={
-          'ibeacon': 1,
-          'ibeacon_uuid': this.myFormStep3.get('ibeacon_uuid').value,
-          'ibeacon_major': this.myFormStep3.get('ibeacon_major').value,
-          'ibeacon_minor': this.myFormStep3.get('ibeacon_minor').value,
-          'ibeacon_notificationtext': this.myFormStep3.get('ibeacon_notificationtext').value
-        }
-      }else{
-        data={
-          'ibeacon': 2,
-          'ibeacon_notificationtext': this.myFormStep3.get('ibeacon_notificationtext').value
-        }
+      let data = {
+        'noOfStaff': this.myFormStep3.get('noOfStaff').value,
+        'businessType': this.myFormStep3.get('businessType').value,
+        'noOfLocations': this.myFormStep3.get('noOfLocations').value,
       }
-      this.brandService.addIbeacon(brand_id, data).subscribe(async result => {
+      let brand_id = this.fbResponse['brand_id'];
+      await this.brandService.updateBrand(brand_id, data).subscribe(async result => {
         console.log(result);
+        let data ={
+          'ibeacon': 2,
+          'ibeacon_notificationtext': `You are near ${this.brand.brand_name} Store. Get your coupon scanned for the discounts`
+        }
+        await this.brandService.addIbeacon(brand_id, data).subscribe(async result => {});
       });
       this.router.navigate(['/main/dashboard']);
       this.customValidationStep3 = true;

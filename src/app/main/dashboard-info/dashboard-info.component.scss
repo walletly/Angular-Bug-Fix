@@ -23,3 +23,9 @@
 .select{
     width: 235px;
 }
+nb-calendar {
+  position: absolute;
+  z-index: 11;
+  top: 40px;
+  right: 0;
+}

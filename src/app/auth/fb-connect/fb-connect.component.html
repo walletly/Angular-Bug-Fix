@@ -26,7 +26,7 @@
           Done
         </div>
         <div class="text-center color-secondary fs-11 fw-600 m-b-25">
-          Configure iBeacon
+          Just Answer Some Questions
         </div>
       </div>
       <nb-card>
@@ -248,7 +248,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="row-input">
+                  <!-- <div class="row-input">
                     <div class="lable">
                       Category
                     </div>
@@ -265,7 +265,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="row-input">
                     <div class="lable">
                       Location
@@ -345,9 +345,9 @@
 
             </nb-step>
             <nb-step [label]="labelThird" [stepControl]="myFormStep3">
-              <ng-template #labelThird>Configure iBeacon</ng-template>
+              <ng-template #labelThird>Questionaire</ng-template>
 
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col-8">
                   <div class="m-b-60 m-t-45 fs-18 fw-500">
                     Do you have an iBeacon?
@@ -431,7 +431,54 @@
                 <div class="col-4 p-t-35 p-l-30">
                     <img src="assets/img/mobileibeacon.png" alt="" />
                 </div>
-              </div>
+              </div> -->
+
+              <form [formGroup]="myFormStep3">
+                <div class="input-wrapper">
+                  <div class="row-input">
+                      <div class="lable" style="min-width: 250px;">
+                        How many Staff you have?
+                      </div>
+                      <div class="value">
+                        <div class="pos-r full-width">
+                          <input [ngClass]="{'error': myFormStep3.controls['noOfStaff'].invalid && !customValidationStep3}"
+                            formControlName="noOfStaff" type="number" nbInput fullWidth fieldSize="medium"
+                            placeholder="">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row-input">
+                      <div class="lable" style="min-width: 250px;">
+                        What type of business you have?
+                      </div>
+                      <div class="value">
+                        <div class="pos-r full-width">
+                            <nb-select [ngClass]="{'error': myFormStep3.controls['businessType'].invalid && !customValidationStep3}"
+                              formControlName="businessType" placeholder="">
+                              <nb-option disabled>- Select Business Type -</nb-option>
+                              <nb-option *ngFor="let businessType of businessTypes" [value]="businessType">{{businessType}}</nb-option>
+                            </nb-select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row-input">
+                      <div class="lable" style="min-width: 250px;">
+                        On how many locations is your business running?
+                      </div>
+                      <div class="value">
+                        <div class="pos-r full-width">
+                          <input [ngClass]="{'error': myFormStep3.controls['noOfLocations'].invalid && !customValidationStep3}"
+                            formControlName="noOfLocations" type="number" nbInput fullWidth fieldSize="medium"
+                            placeholder="">
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="myFormStep3.invalid && !customValidationStep3"
+                      class="error-lable">
+                      Please Answer Above Questions..
+                    </div>
+                </div>    
+              </form>
               
               <div class="df jc-c">
                 <button (click)="goDashboard()" class="cust-button" nbButton status="success">

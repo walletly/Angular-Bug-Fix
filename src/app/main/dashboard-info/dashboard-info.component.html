@@ -2,14 +2,34 @@
   <h1 class="m-t-0 m-b-0 fs-24 fw-600 m-r-22">
     Dashboard
   </h1>
-  <div class="select">
+  <!-- <div class="select">
     <nb-select size="small" placeholder="Select Range" [(selected)]="selectedItem">
       <nb-option value="1">Option 1</nb-option>
       <nb-option value="2">Option 2</nb-option>
       <nb-option value="3">Option 3</nb-option>
       <nb-option value="4">Option 4</nb-option>
     </nb-select>
-  </div>
+  </div> -->
+  <div class="row-input">
+      <div class="value df ai-c">
+        <div (clickOutside)="showDatePickerStart = false" class="pos-r m-r-34">
+          <input
+            class="small" (focus)="showDatePickerStart = true" [(ngModel)]="startDate" type="text" nbInput
+            fullWidth fieldSize="small" placeholder="start date" readonly>
+          <nb-calendar *ngIf="showDatePickerStart" (dateChange)="dateStartChange($event);" [(date)]="dateStart">
+          </nb-calendar>
+        </div>
+        <div class="pos-r df">
+          <div (clickOutside)="showDatePickerEnd = false" class="pos-r">
+            <input
+              class="small" (focus)="showDatePickerEnd = true" [(ngModel)]="endDate" type="text" nbInput
+              fullWidth fieldSize="small" placeholder="end date" readonly>
+            <nb-calendar *ngIf="showDatePickerEnd" (dateChange)="dateEndChange($event);" [(date)]="dateEnd">
+            </nb-calendar>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 <nb-card>
   <nb-card-body>
@@ -75,11 +95,11 @@
   </div>
   <div class="col-12 col-md-6">
     <nb-card>
-      <nb-card-body>
+      <nb-card-body >
         <div class="m-b-20 fs-18">
           CUSTOMERS BY MONTH
         </div>
-        <canvas id="myChart3" width="400" height="100"></canvas>
+        <canvas id="myChart3" width="400" height="200"></canvas>
       </nb-card-body>
     </nb-card>
   </div>
@@ -89,7 +109,7 @@
         <div class="m-b-20 fs-18">
           SPENDING BY DAY OF THE MONTH
         </div>
-        <canvas id="myChart4" width="400" height="100"></canvas>
+        <canvas id="myChart4" width="400" height="200"></canvas>
       </nb-card-body>
     </nb-card>
   </div>

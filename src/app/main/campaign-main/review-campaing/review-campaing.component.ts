@@ -68,7 +68,7 @@ export class ReviewCampaingComponent implements OnInit {
             campaign_type: '',
             brand_id: ''
           };
-          this.router.navigate(['/main/campaign-main/campaign']);
+          this.router.navigate(['/main/campaign-main/details/' + this.id]);
           this.mainService.showToastrSuccess.emit({text: 'Campaign updated'});
           this.inProcces = false;
         }
@@ -91,7 +91,7 @@ export class ReviewCampaingComponent implements OnInit {
             brand_id: ''
           };
           this.mainService.showToastrSuccess.emit({text: 'Campaign created'});
-          this.router.navigate(['/main/campaign-main/campaign']);
+          this.router.navigate(['/main/campaign-main/details/' + result['campaign']]);
           this.inProcces = false;
         }
       }, err => {

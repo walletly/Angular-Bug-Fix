@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { MainService } from 'src/app/shared/services/main.service';
 import { BusinessService } from 'src/app/shared/services/business.service';
+import { BrandService } from 'src/app/shared/services/brand.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -31,10 +33,83 @@ export class BusinessPageComponent implements OnInit {
   showActions;
   showLoader;
 
-  constructor(private mainService: MainService, private business: BusinessService, private router: Router) {
+  ibeacon;
+  customValidationiBeacon = true;
+  myFormiBeacon: FormGroup;
+  currentbrand;
+
+  constructor(private formBuilder: FormBuilder,private brandService: BrandService,private mainService: MainService, private business: BusinessService, private router: Router) {
     // this.mainService.showLoader.emit(true);
     this.showLoader = true;
     this.getBusiness();
+    this.currentbrand = JSON.parse(localStorage.getItem('currentBrand'));
+    this.myFormiBeacon = formBuilder.group({
+      ibeacon_uuid: [""],
+      ibeacon_major: [""],
+      ibeacon_minor: [""],
+      ibeacon_notificationtext: ["", [Validators.required]]
+    });
+    this.ibeacon = (this.currentbrand['ibeacon'].ibeacon == 1) ? 'yes' : 'no';
+    this.myFormiBeacon.controls['ibeacon_uuid'].setValue(this.currentbrand['ibeacon'].ibeacon_uuid);
+    this.myFormiBeacon.controls['ibeacon_minor'].setValue(this.currentbrand['ibeacon'].ibeacon_minor);
+    this.myFormiBeacon.controls['ibeacon_major'].setValue(this.currentbrand['ibeacon'].ibeacon_major);
+    this.myFormiBeacon.controls['ibeacon_notificationtext'].setValue(this.currentbrand['ibeacon'].ibeacon_notificationtext);
+    console.log(this.ibeacon, this.currentbrand);
+  }
+
+  ibeaconToggle(toggle){
+    if (toggle=='yes'){
+      this.ibeacon='yes';
+      this.myFormiBeacon.get('ibeacon_uuid').setValidators([Validators.required,
+        Validators.pattern("^(?!00)[0-9a-f]{8}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{12}$")]);
+      this.myFormiBeacon.get('ibeacon_uuid').updateValueAndValidity();
+      this.myFormiBeacon.get('ibeacon_major').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
+      this.myFormiBeacon.get('ibeacon_major').updateValueAndValidity();
+      this.myFormiBeacon.get('ibeacon_minor').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
+      this.myFormiBeacon.get('ibeacon_minor').updateValueAndValidity();
+    }else{
+      this.ibeacon='no';
+      this.myFormiBeacon.get('ibeacon_uuid').setValidators([]);
+      this.myFormiBeacon.get('ibeacon_uuid').updateValueAndValidity();
+      this.myFormiBeacon.get('ibeacon_major').setValidators([]);
+      this.myFormiBeacon.get('ibeacon_major').updateValueAndValidity();
+      this.myFormiBeacon.get('ibeacon_minor').setValidators([]);
+      this.myFormiBeacon.get('ibeacon_minor').updateValueAndValidity();
+    }
+  }
+
+  updateiBeacon(){
+    if (this.myFormiBeacon.valid) {
+      let data;
+      if(this.ibeacon=='yes'){
+        data={
+          'ibeacon': 1,
+          'ibeacon_uuid': this.myFormiBeacon.get('ibeacon_uuid').value,
+          'ibeacon_major': this.myFormiBeacon.get('ibeacon_major').value,
+          'ibeacon_minor': this.myFormiBeacon.get('ibeacon_minor').value,
+          'ibeacon_notificationtext': this.myFormiBeacon.get('ibeacon_notificationtext').value
+        }
+      }else{
+        data={
+          'ibeacon': 2,
+          'ibeacon_uuid': this.currentbrand['ibeacon'].ibeacon_uuid,
+          'ibeacon_major': this.currentbrand['ibeacon'].ibeacon_major,
+          'ibeacon_minor': this.currentbrand['ibeacon'].ibeacon_minor,
+          'ibeacon_notificationtext': this.myFormiBeacon.get('ibeacon_notificationtext').value
+        }
+      }
+      let brand_id = JSON.parse(localStorage.getItem('currentBrand'))['brand_id'];
+      this.customValidationiBeacon = true;
+      this.brandService.updateIbeacon(brand_id, data).subscribe(result => {
+        console.log(result);
+        this.brandService.getBrandById(brand_id).subscribe(data => {
+          localStorage.setItem('currentBrand', JSON.stringify(data['brand']));
+          this.mainService.showToastrSuccess.emit({text: 'Settings updated'});
+        });
+      });
+    } else {
+      this.customValidationiBeacon = false;
+    }
   }
 
   ngOnInit() {
@@ -46,6 +121,13 @@ export class BusinessPageComponent implements OnInit {
     Secret code
       `;
     this.secretNumbersArr = Array(this.secretNumber.length).fill(0).map((x, i) => i);
+    // setTimeout(() => {
+    //   if(this.ibeacon == 'yes'){
+    //     (document.getElementById('ibeaconYes') as HTMLInputElement).checked = true;
+    //   } else{
+    //     (document.getElementById('ibeaconNo') as HTMLInputElement).checked = true;
+    //   }
+    // }, 4000);
   }
 
   getBusiness() {
