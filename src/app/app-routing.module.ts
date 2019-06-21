@@ -45,7 +45,8 @@ const routes: Routes = [
     children: [
       {
         path: "dashboard",
-        component: DashboardComponent,
+        // component: DashboardComponent,
+        component: DashboardInfoComponent,
         canActivate: [AuthGuard],
         data: { breadcrumb: "hiddenBreadcrumb" }
       },
