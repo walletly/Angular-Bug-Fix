@@ -50,7 +50,7 @@ export class FbLoginComponent implements OnInit {
             const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${uid}`);
             await userRef.set({
               account_type: 'starter',
-              crated_at: new Date(),
+              created_at: new Date(),
               firstname: firstname,
               lastname: lastname,
               email: email,

@@ -206,11 +206,19 @@ export class FbConnectComponent implements OnInit {
       const connectingBrand = {
         brand_id: this.fbResponse['brand_id'],
         user_admin_id: localStorage.getItem('userID'),
-        brand_name: this.myFormStep2.get('brandName').value
+        brand_name: this.fbResponse['brand_name'],
+        brand_logo: this.fbResponse['profile_logo'],
+        facebook_page_id: this.fbResponse['brand_id'],
+        is_facebook: true
       };
 
-      this.brandService.connectBrand(connectingBrand).subscribe(result => {
+      this.brandService.connectBrand(connectingBrand).subscribe(async result => {
         console.log(result);
+        let ibeaconData ={
+          'ibeacon': 2,
+          'ibeacon_notificationtext': `You are near ${this.fbResponse['brand_name']} Store. Get your coupon scanned for the discounts`
+        }
+        await this.brandService.addIbeacon(this.fbResponse['brand_id'], ibeaconData).subscribe(async result => {});
         if (result['success']) {
           this.api = result['apikey'];
           this.loader = false;
@@ -327,11 +335,6 @@ export class FbConnectComponent implements OnInit {
       let brand_id = this.fbResponse['brand_id'];
       await this.brandService.updateBrand(brand_id, data).subscribe(async result => {
         console.log(result);
-        let data ={
-          'ibeacon': 2,
-          'ibeacon_notificationtext': `You are near ${this.brand.brand_name} Store. Get your coupon scanned for the discounts`
-        }
-        await this.brandService.addIbeacon(brand_id, data).subscribe(async result => {});
       });
       this.router.navigate(['/main/dashboard']);
       this.customValidationStep3 = true;
@@ -389,8 +392,10 @@ export class FbConnectComponent implements OnInit {
       if (result['success']) {
         this.authService.updateUser(this.brand.user_admin_id, { activeBrand: this.brand['brand_id'] }).subscribe(res => {
           if (res['success']) {
-            localStorage.setItem('user', JSON.stringify(res['data']));
-            localStorage.setItem('currentBrand', JSON.stringify(this.brand));
+            this.brandService.getBrandById(this.brand['brand_id']).subscribe((brandData)=>{
+              localStorage.setItem('currentBrand', JSON.stringify(brandData['brand']));
+            })
+            localStorage.setItem('user', JSON.stringify(res['data']))
             this.inProcces = false;
 
             this.mainService.showToastrSuccess.emit({text: 'Brand created'});
