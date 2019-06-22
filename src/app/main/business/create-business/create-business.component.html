@@ -83,6 +83,9 @@
             <div *ngIf="myForm.controls['email'].invalid && !customValidation" class="error-lable">
               Field error (for example: "user@mail.com")
             </div>
+            <div *ngIf="invalidUser" class="error-lable">
+              The email address you provided is already in use by another account.
+            </div>
           </div>
         </div>
       </form>

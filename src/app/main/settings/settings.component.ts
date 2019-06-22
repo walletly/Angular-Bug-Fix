@@ -128,7 +128,6 @@ export class SettingsComponent implements OnInit {
       coverImage: [""],
       description: ["", [Validators.required]],
       moreInfo: ["", [Validators.required]],
-      category: ["", [Validators.required]],
       location: ["", [Validators.required]],
       phone: ["", [Validators.required, Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
       email: ["", [Validators.required, Validators.email]],

@@ -395,9 +395,7 @@ export class FbConnectComponent implements OnInit {
             this.brandService.getBrandById(this.brand['brand_id']).subscribe((brandData)=>{
               localStorage.setItem('currentBrand', JSON.stringify(brandData['brand']));
             })
-            localStorage.setItem('user', JSON.stringify(res['data']))
             this.inProcces = false;
-
             this.mainService.showToastrSuccess.emit({text: 'Brand created'});
             this.stepper.next();
           }

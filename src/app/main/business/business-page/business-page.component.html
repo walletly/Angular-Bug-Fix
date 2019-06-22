@@ -69,10 +69,10 @@
                 <div *ngIf="column === 'Action'" class="pos-r text-right">
                   <img (click)="showActions = row.data" class="c-p" src="assets/svg-icon/shared.svg" alt="">
                   <div *ngIf="showActions === row.data" class="action-drb">
-                    <div (click)="edit(row.data.id)" class="item">
+                    <!-- <div (click)="edit(row.data.id)" class="item">
                       <img src="assets/svg-icon/edit.svg" alt="">
                       Edit
-                    </div>
+                    </div> -->
                     <div (click)="delete(row.data.id)" class="item">
                       <img src="assets/svg-icon/delete.svg" alt="">
                       Delete

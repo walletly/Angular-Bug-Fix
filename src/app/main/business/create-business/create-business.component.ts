@@ -15,6 +15,7 @@ export class CreateBusinessComponent implements OnInit {
   showAletr = false;
   id;
   inProcces = false;
+  invalidUser = false;
 
   options = [
     { value: true, label: 'YES' },
@@ -103,6 +104,7 @@ export class CreateBusinessComponent implements OnInit {
   }
 
   addUser() {
+    this.invalidUser = false;
     this.inProcces = true;
     if (this.myForm.valid) {
       this.customValidation = true;
@@ -120,6 +122,10 @@ export class CreateBusinessComponent implements OnInit {
         } else {
           this.inProcces = false;
         }
+      },error =>{
+        console.log(error);
+        this.invalidUser = true;
+        this.inProcces = false;
       });
     } else {
       this.customValidation = false;
