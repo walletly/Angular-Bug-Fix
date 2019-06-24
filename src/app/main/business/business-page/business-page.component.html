@@ -144,14 +144,18 @@
       </nb-tab>
       <nb-tab *ngIf="!userAdmin" tabTitle="iBeacon">
         <div class="container">
-          <div class="row">
+          <div class="row" style="overflow: hidden;">
             <div class="col-8">
               <div class="m-b-60 m-t-45 fs-18 fw-500">
                 Do you have an iBeacon?
-                <input (click)="ibeaconToggle('yes')" style="margin-left: 30px;" type="radio"
-                  ng-model="ibeacon" ng-value='yes' name="ibeaconToggle"> Yes
-                <input (click)="ibeaconToggle('no')" style="margin-left: 30px;" type="radio"
-                  ng-model="ibeacon" ng-value='no' name="ibeaconToggle"> No
+                <input *ngIf="ibeacon == 'yes'" (click)="ibeaconToggle('yes')" style="margin-left: 30px;"
+                  type="radio" value='yes' name="ibeaconToggle" checked>
+                <input *ngIf="ibeacon == 'no'" (click)="ibeaconToggle('yes')" style="margin-left: 30px;"
+                  type="radio" value='yes' name="ibeaconToggle"> Yes
+                <input *ngIf="ibeacon == 'yes'" (click)="ibeaconToggle('no')" style="margin-left: 30px;"
+                  type="radio" value='no' name="ibeaconToggle">
+                <input *ngIf="ibeacon == 'no'" (click)="ibeaconToggle('no')" style="margin-left: 30px;"
+                  type="radio" value='no' name="ibeaconToggle" checked> No
               </div>
               <form [formGroup]="myFormiBeacon">
                 <div class="input-wrapper">
