@@ -35,6 +35,7 @@ import { MarketersComponent } from './main/marketers/marketers.component';
 import { CampaignTemplatesComponent } from './main/campaign-main/campaign-templates/campaign-templates.component';
 import { CampaignTypeComponent } from './main/campaign-main/campaign-type/campaign-type.component';
 import { DashboardInfoAdminComponent } from './main/dashboard-info-admin/dashboard-info-admin.component';
+import { PushNotificationComponent } from './main/push-notification/push-notification.component';
 
 const routes: Routes = [
   {
@@ -67,6 +68,12 @@ const routes: Routes = [
         component: BotQrComponent,
         canActivate: [AuthGuard],
         data: { breadcrumb: "Chat Bot QR" }
+      },
+      {
+        path: "push-notification",
+        component: PushNotificationComponent,
+        canActivate: [AuthGuard],
+        data: { breadcrumb: "Push Notification" }
       },
       {
         path: "settings",

@@ -1,15 +1,15 @@
 <nb-layout>
-  <nb-layout-column class="main-wrap">
+  <nb-layout-column class="main-wrap" style="padding-top: 15px;">
 
     <div>
-      <div class="m-b-50 c-p">
+      <div class="c-p">
         <img (click)="redirectToDashboard()" src="assets/svg-icon/logo-dark.svg" alt="">
       </div>
       <div *ngIf="stepper.selectedIndex === 0">
         <div class="text-center fw-600 fs-22 color-dark">
           Connect Facebook Page
         </div>
-        <div class="text-center color-secondary fs-11 fw-600 m-b-25">
+        <div class="text-center color-secondary fs-11 fw-600 m-b-15">
           Add a page Link to create Campaign
         </div>
       </div>
@@ -17,7 +17,7 @@
         <div class="text-center fw-600 fs-22 color-dark">
           Almost there
         </div>
-        <div class="text-center color-secondary fs-11 fw-600 m-b-25">
+        <div class="text-center color-secondary fs-11 fw-600 m-b-15">
           Now review your page data
         </div>
       </div>
@@ -25,7 +25,7 @@
         <div class="text-center fw-600 fs-22 color-dark">
           Done
         </div>
-        <div class="text-center color-secondary fs-11 fw-600 m-b-25">
+        <div class="text-center color-secondary fs-11 fw-600 m-b-15">
           Just Answer Some Questions
         </div>
       </div>
@@ -66,9 +66,10 @@
                           </span>
                         </div>
                         <div *ngIf="!checkUsersBrand(item.id)">
-                          <span (click)="goStep2(item.id)" class="status connect c-p">
+                          <button [disabled]="inProcces" (click)="goStep2(item.id)" class="status connect c-p">
+                            <i *ngIf="item.id == selectedPageId" class="fas fa-spinner fa-pulse"></i>
                             Connect
-                          </span>
+                          </button>
                         </div>
                       </div>
                     </div>

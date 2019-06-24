@@ -1,0 +1,48 @@
+<div class="df jc-b m-b-15">
+    <h1 class="m-t-0 m-b-0 fs-24 fw-600">
+      Push Notification
+    </h1>
+  </div>
+  <nb-card class="m-b-0">
+    <nb-card-body>
+      <div class="df jc-b">
+        <div class="full-width">
+          <form [formGroup]="myForm">
+            <div class="input-wrap">
+              <div class="lable">
+                Campaign
+              </div>
+              <div class="value">
+                <nb-select #select [ngClass]="{'error': myForm.controls['campaign'].invalid && !customValidation}"
+                  formControlName="campaign" size="small" placeholder="Select Campaign">
+                  <nb-option *ngFor="let campaign of campaigns" [value]="campaign">{{campaign}}</nb-option>
+                </nb-select>
+              </div>
+            </div>
+            <div class="input-wrap">
+              <div class="lable">
+                Message
+              </div>
+              <div class="value">
+                <textarea [ngClass]="{'error': myForm.controls['message'].invalid && !customValidation}"
+                  formControlName="message" style="height: 100px;" class="small" type="text" nbInput
+                  fullWidth fieldSize="small" placeholder="Your offer will be expired in { 30 days }"></textarea>
+              </div>
+            </div>
+          </form>
+          <div class="input-wrap">
+            <div class="lable">
+            </div>
+            <div class="value">
+              <button (click)="send()" class="cust-button" nbButton status="success">
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <img src="assets/img/pushnotificationPhone.png" style="height: 450px;">
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>

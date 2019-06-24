@@ -614,6 +614,16 @@ nb-stepper.horinzotal {
       background-image: url("assets/svg-icon/menu-icon-SVG/menu-chatbotQR-active.svg");
     }
   }
+  &.pushnotification {
+    background-image: url("assets/svg-icon/menu-icon-SVG/menu-pushnotification-icon.svg");
+    background-size: 100% 100%;
+    margin-right: 10px;
+    min-width: 24px !important;
+    height: 24px;
+    &.active {
+      background-image: url("assets/svg-icon/menu-icon-SVG/menu-pushnotification-active.svg");
+    }
+  }
   &.settings {
     background-image: url("assets/svg-icon/menu-icon-SVG/menu-setting-icon.svg");
     background-size: 100% 100%;
@@ -947,6 +957,9 @@ nb-card {
         &.bots-store {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-botstore-active.svg");
         }
+        &.pushnotification {
+          background-image: url("assets/svg-icon/menu-icon-SVG/menu-pushnotification-active.svg");
+        }
         &.qr {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-chatbotQR-active.svg");
         }
@@ -986,6 +999,9 @@ nb-card {
         }
         &.qr {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-chatbotQR-active.svg");
+        }
+        &.pushnotification {
+          background-image: url("assets/svg-icon/menu-icon-SVG/menu-pushnotification-active.svg");
         }
         &.settings {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-setting-active.svg");

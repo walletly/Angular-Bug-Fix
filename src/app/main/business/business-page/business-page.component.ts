@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { MainService } from 'src/app/shared/services/main.service';
 import { BusinessService } from 'src/app/shared/services/business.service';
 import { BrandService } from 'src/app/shared/services/brand.service';
 import { Router } from '@angular/router';
 
+declare var addHyphens: any;
+
 @Component({
   selector: 'app-business-page',
   templateUrl: './business-page.component.html',
   styleUrls: ['./business-page.component.scss']
 })
-export class BusinessPageComponent implements OnInit {
+export class BusinessPageComponent implements OnInit, AfterViewInit {
 
   showBlink;
   // defaultColumns = ['Check', 'First Name', 'Last Name', 'Email Address', 'Phone Number', 'Permission', 'Invite', 'Action'];
@@ -57,6 +59,27 @@ export class BusinessPageComponent implements OnInit {
     console.log(this.ibeacon, this.currentbrand);
   }
 
+  ngAfterViewInit() {
+    if (this.ibeacon=='yes'){
+      this.ibeacon='yes';
+      this.myFormiBeacon.get('ibeacon_uuid').setValidators([Validators.required,
+        Validators.pattern("^(?!00)[0-9a-f]{8}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{12}$")]);
+      this.myFormiBeacon.get('ibeacon_uuid').updateValueAndValidity();
+      this.myFormiBeacon.get('ibeacon_major').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
+      this.myFormiBeacon.get('ibeacon_major').updateValueAndValidity();
+      this.myFormiBeacon.get('ibeacon_minor').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
+      this.myFormiBeacon.get('ibeacon_minor').updateValueAndValidity();
+    }else{
+      this.ibeacon='no';
+      this.myFormiBeacon.get('ibeacon_uuid').setValidators([]);
+      this.myFormiBeacon.get('ibeacon_uuid').updateValueAndValidity();
+      this.myFormiBeacon.get('ibeacon_major').setValidators([]);
+      this.myFormiBeacon.get('ibeacon_major').updateValueAndValidity();
+      this.myFormiBeacon.get('ibeacon_minor').setValidators([]);
+      this.myFormiBeacon.get('ibeacon_minor').updateValueAndValidity();
+    }
+  }
+
   ibeaconToggle(toggle){
     if (toggle=='yes'){
       this.ibeacon='yes';
@@ -78,7 +101,15 @@ export class BusinessPageComponent implements OnInit {
     }
   }
 
+  ibeaconUUIDChange(input){
+    console.log("hgjkgk",input);
+    console.log("hgjvwefewfkgk",document.getElementById('ibeaconUUID'));
+    return;
+    addHyphens(document.getElementById('ibeaconUUID'));
+  }
+
   updateiBeacon(){
+    console.log(this.myFormiBeacon.get('ibeacon_uuid').value);
     if (this.myFormiBeacon.valid) {
       let data;
       if(this.ibeacon=='yes'){

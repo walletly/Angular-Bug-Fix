@@ -20,13 +20,15 @@
         <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{column}}</th>
         <td (click)="selectedSell = row.data[column].name; selectType(row.data[column].name)"
           [ngClass]="{'active-sell': (selectedSell === row.data[column].name && row.data[column].name), 'c-p': row.data[column].name, 'pe-n': !row.data[column].name}"
-          nbTreeGridCell *nbTreeGridCellDef="let row">
+          nbTreeGridCell *nbTreeGridCellDef="let row" [ngStyle]="{'pointer-events': row.data[column].locked ? 'none' : 'auto'}">
           <div class="df ai-c">
             <img *ngIf="selectedSell === row.data[column].name" class="m-r-15" width="30px"
               src="assets/svg-icon/success-circle.svg" alt="">
             <img *ngIf="selectedSell !== row.data[column].name" class="m-r-15" width="30px"
               [src]="row.data[column].icon" alt="">
             <span>{{row.data[column].name}}</span>
+            <img *ngIf="row.data[column].locked == true" src="assets/img/lockIcon.png" alt=""
+            style="margin-left: auto">
           </div>
         </td>
       </ng-container>

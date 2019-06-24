@@ -167,7 +167,7 @@
                         <div class="pos-r full-width">
                           <input [ngClass]="{'error': myFormiBeacon.controls['ibeacon_uuid'].invalid && !customValidationiBeacon}"
                             formControlName="ibeacon_uuid" type="text" nbInput fullWidth fieldSize="medium"
-                            placeholder="">
+                            placeholder="" id="ibeaconUUID" (input)="ibeaconUUIDChange($event.target.value)">
                           <div *ngIf="myFormiBeacon.controls['ibeacon_uuid'].invalid && !customValidationiBeacon"
                             class="error-lable">
                             Field error (must have iBeacon UUID in the format '258ce5a2-eca1-273f-a9b1-778e5a42ab8a')

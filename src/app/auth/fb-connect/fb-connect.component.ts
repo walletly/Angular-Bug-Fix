@@ -77,6 +77,7 @@ export class FbConnectComponent implements OnInit {
   terms;
   messError;
   inProcces;
+  selectedPageId;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -188,6 +189,8 @@ export class FbConnectComponent implements OnInit {
   }
 
   goStep2(id) {
+    this.selectedPageId = id;
+    this.inProcces = true;
     this.myFormStep1.controls['fakeData'].setValue('true');
 
     this.loader = true;
@@ -222,9 +225,11 @@ export class FbConnectComponent implements OnInit {
         if (result['success']) {
           this.api = result['apikey'];
           this.loader = false;
+          this.inProcces = false;
           if (result['code'] === 602) {
             this.setActiveBrandAndUpdateUser(id);
             this.loader = false;
+            this.inProcces = false;
           }
           if (result['code'] !== 602 && result['code'] !== 603) {
             this.stepper.next();
@@ -240,11 +245,13 @@ export class FbConnectComponent implements OnInit {
         if (err['error'].code === 603) {
           this.setActiveBrandAndUpdateUser(id);
           this.loader = false;
+          this.inProcces = false;
         }
       });
 
     }, err => {
       this.loader = false;
+      this.inProcces = false;
     });
 
     this.customValidationStep1 = true;
@@ -275,7 +282,6 @@ export class FbConnectComponent implements OnInit {
     this.authService.updateUser(localStorage.getItem('userID'), { activeBrand: id })]).subscribe(results => {
       const brandResult = results[0];
       const userResult = results[1];
-      localStorage.setItem('user', JSON.stringify(userResult['data']));
       localStorage.setItem('currentBrand', JSON.stringify(brandResult['brand']));
       this.router.navigate(['/main/dashboard']);
       this.loader = false;

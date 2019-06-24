@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from "@angular/core";
+import { Component, OnInit, AfterViewInit, ViewChild, Input } from "@angular/core";
 import { NbSidebarService, NbMenuItem } from "@nebular/theme";
 import { NbMenuService } from "@nebular/theme";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -11,7 +11,7 @@ import { AuthService } from "../shared/services/auth.service";
   templateUrl: "./main.component.html",
   styleUrls: ["./main.component.scss"]
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, AfterViewInit {
   @ViewChild("menu") menu;
   @Input() menuItem = <NbMenuItem>null;
 
@@ -47,14 +47,19 @@ export class MainComponent implements OnInit {
           link: ["business/business-page"]
         },
         {
-          icon: "icon-menu bots-store",
-          title: "Bots Store",
-          link: ["bots-store/bots-list"]
-        },
-        {
           icon: "icon-menu audience",
           title: "Audience",
           link: ["audience"]
+        },
+        {
+          icon: "icon-menu pushnotification",
+          title: "Push Notification",
+          link: ["push-notification"]
+        },
+        {
+          icon: "icon-menu bots-store",
+          title: "Bots Store",
+          link: ["bots-store/bots-list"]
         },
         {
           icon: "icon-menu qr",
@@ -138,6 +143,9 @@ export class MainComponent implements OnInit {
         crumpValue2 = "";
       } else if (this.roter.url === "/main/bot-qr") {
         crumpValue1 = "Chat Bot QR";
+        crumpValue2 = "";
+      }else if (this.roter.url === "/main/push-notification") {
+        crumpValue1 = "Push Notification";
         crumpValue2 = "";
       } else if (this.roter.url === "/main/audience") {
         crumpValue1 = "Audience";
@@ -323,6 +331,19 @@ export class MainComponent implements OnInit {
         this.username.lastName
       }`;
     }
+
+  }
+
+  ngAfterViewInit() {
+    let item = document.getElementsByClassName('menu-item')[8] as HTMLSpanElement;
+    item.setAttribute("style", `pointer-events: none;`);
+
+    let title = document.getElementsByClassName('menu-title')[8] as HTMLSpanElement;
+    title.setAttribute("style",
+      `background-image: url('assets/img/lockIcon.png');
+      background-repeat: no-repeat;
+      background-position: right;`
+    );
   }
 
   refreshPage() {
