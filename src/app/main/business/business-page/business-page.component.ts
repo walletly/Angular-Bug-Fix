@@ -6,6 +6,7 @@ import { BrandService } from 'src/app/shared/services/brand.service';
 import { Router } from '@angular/router';
 
 declare var addHyphens: any;
+declare var inputEventListener: any;
 
 @Component({
   selector: 'app-business-page',
@@ -38,6 +39,7 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
   ibeacon;
   customValidationiBeacon = true;
   myFormiBeacon: FormGroup;
+  eventsAdded = false;
   currentbrand;
 
   constructor(private formBuilder: FormBuilder,private brandService: BrandService,private mainService: MainService, private business: BusinessService, private router: Router) {
@@ -92,6 +94,7 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
       this.myFormiBeacon.get('ibeacon_minor').updateValueAndValidity();
     }else{
       this.ibeacon='no';
+      this.eventsAdded = false;
       this.myFormiBeacon.get('ibeacon_uuid').setValidators([]);
       this.myFormiBeacon.get('ibeacon_uuid').updateValueAndValidity();
       this.myFormiBeacon.get('ibeacon_major').setValidators([]);
@@ -101,15 +104,23 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ibeaconUUIDChange(input){
-    console.log("hgjkgk",input);
-    console.log("hgjvwefewfkgk",document.getElementById('ibeaconUUID'));
-    return;
-    addHyphens(document.getElementById('ibeaconUUID'));
+  ibeaconUUIDInput(e){
+    console.log("ibeaconUUIDInput",e,e.data);
+    return
+    if(!this.eventsAdded){
+      this.eventsAdded = true;
+      addHyphens(document.getElementById('ibeaconUUID'));
+    }
+    if(e.data){
+      console.log('e.data')
+      inputEventListener(document.getElementById('ibeaconUUID'),e.data);
+    }
+    // this.myFormiBeacon.get('ibeacon_uuid').setValue(
+    //   (document.getElementById('ibeaconUUID') as HTMLInputElement).value
+    // );
   }
 
   updateiBeacon(){
-    console.log(this.myFormiBeacon.get('ibeacon_uuid').value);
     if (this.myFormiBeacon.valid) {
       let data;
       if(this.ibeacon=='yes'){
