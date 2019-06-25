@@ -6,7 +6,6 @@ import { BrandService } from 'src/app/shared/services/brand.service';
 import { Router } from '@angular/router';
 
 declare var addHyphens: any;
-declare var inputEventListener: any;
 
 @Component({
   selector: 'app-business-page',
@@ -39,7 +38,6 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
   ibeacon;
   customValidationiBeacon = true;
   myFormiBeacon: FormGroup;
-  eventsAdded = false;
   currentbrand;
 
   constructor(private formBuilder: FormBuilder,private brandService: BrandService,private mainService: MainService, private business: BusinessService, private router: Router) {
@@ -94,7 +92,6 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
       this.myFormiBeacon.get('ibeacon_minor').updateValueAndValidity();
     }else{
       this.ibeacon='no';
-      this.eventsAdded = false;
       this.myFormiBeacon.get('ibeacon_uuid').setValidators([]);
       this.myFormiBeacon.get('ibeacon_uuid').updateValueAndValidity();
       this.myFormiBeacon.get('ibeacon_major').setValidators([]);
@@ -105,19 +102,37 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
   }
 
   ibeaconUUIDInput(e){
-    console.log("ibeaconUUIDInput",e,e.data);
-    return
-    if(!this.eventsAdded){
-      this.eventsAdded = true;
-      addHyphens(document.getElementById('ibeaconUUID'));
-    }
     if(e.data){
-      console.log('e.data')
-      inputEventListener(document.getElementById('ibeaconUUID'),e.data);
+      if(this.myFormiBeacon.get('ibeacon_uuid').value.length > 36){
+        (document.getElementById('ibeaconUUID') as HTMLInputElement).value = this.myFormiBeacon.get('ibeacon_uuid').value.slice(0,36);
+        this.myFormiBeacon.get('ibeacon_uuid').setValue(
+          (document.getElementById('ibeaconUUID') as HTMLInputElement).value
+        )
+        return;
+      }
+      if(e.inputType == 'insertText'){
+        addHyphens(document.getElementById('ibeaconUUID'), e.data, false);
+        this.myFormiBeacon.get('ibeacon_uuid').setValue(
+          (document.getElementById('ibeaconUUID') as HTMLInputElement).value
+        )
+      }
+    }else{
+      if(this.myFormiBeacon.get('ibeacon_uuid').value.length > 36){
+        (document.getElementById('ibeaconUUID') as HTMLInputElement).value = this.myFormiBeacon.get('ibeacon_uuid').value.slice(0,36);
+        this.myFormiBeacon.get('ibeacon_uuid').setValue(
+          (document.getElementById('ibeaconUUID') as HTMLInputElement).value
+        )
+        return;
+      }
+      if(e.inputType == 'insertFromPaste'){
+        addHyphens(document.getElementById('ibeaconUUID'), e.data, true);
+        setTimeout(() => {
+          this.myFormiBeacon.get('ibeacon_uuid').setValue(
+            (document.getElementById('ibeaconUUID') as HTMLInputElement).value
+          )
+        }, 100);
+      }
     }
-    // this.myFormiBeacon.get('ibeacon_uuid').setValue(
-    //   (document.getElementById('ibeaconUUID') as HTMLInputElement).value
-    // );
   }
 
   updateiBeacon(){
