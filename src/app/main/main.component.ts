@@ -335,10 +335,20 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    let item = document.getElementsByClassName('menu-item')[8] as HTMLSpanElement;
+    let item = document.getElementsByClassName('menu-item')[6] as HTMLSpanElement;
     item.setAttribute("style", `pointer-events: none;`);
 
-    let title = document.getElementsByClassName('menu-title')[8] as HTMLSpanElement;
+    let title = document.getElementsByClassName('menu-title')[6] as HTMLSpanElement;
+    title.setAttribute("style",
+      `background-image: url('assets/img/lockIcon.png');
+      background-repeat: no-repeat;
+      background-position: right;`
+    );
+
+    item = document.getElementsByClassName('menu-item')[8] as HTMLSpanElement;
+    item.setAttribute("style", `pointer-events: none;`);
+
+    title = document.getElementsByClassName('menu-title')[8] as HTMLSpanElement;
     title.setAttribute("style",
       `background-image: url('assets/img/lockIcon.png');
       background-repeat: no-repeat;

@@ -102,9 +102,9 @@ export class FbConnectComponent implements OnInit {
       profileLogo: ["", [Validators.required]],
       coverImage: ["", [Validators.required]],
       description: ["", [Validators.required]],
-      moreInfo: ["", [Validators.required]],
-      location: ["", [Validators.required]],
-      phone: ["", [Validators.required, Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
+      moreInfo: ["", []],
+      location: ["", []],
+      phone: ["", [Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
       email: ["", [Validators.required, Validators.email]],
       website: ["", [Validators.required]],
     });

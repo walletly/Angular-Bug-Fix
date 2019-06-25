@@ -1441,7 +1441,7 @@
               Status
             </div>
           </div>
-          <div class="item">
+          <div *ngFor="let admin of brandAdmins" class="item">
             <div class="user-wrap">
               <div class="icon">
                 <img
@@ -1450,23 +1450,7 @@
                 />
               </div>
               <div>
-                Rashid Sharif
-              </div>
-            </div>
-            <div class="status">
-              Admin
-            </div>
-          </div>
-          <div class="item">
-            <div class="user-wrap">
-              <div class="icon">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png"
-                  alt=""
-                />
-              </div>
-              <div>
-                Rashid Sharif
+                {{admin.firstname}} {{ admin.lastname }}
               </div>
             </div>
             <div class="status">
