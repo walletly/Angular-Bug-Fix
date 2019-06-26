@@ -124,8 +124,12 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.brandService
       .getUsersBrands(localStorage.getItem("userID"))
       .subscribe(result => {
-        console.log(result);
-        this.brands = result["data"]["brands"];
+        this.brands = [];
+        result["data"]["brands"].forEach(brand => {
+          if(JSON.parse(localStorage.currentBrand)['brand_id'] != brand.brand_id){
+            this.brands.push(brand);
+          }
+        });
         this.filteredBrands = this.brands;
       });
 
@@ -449,10 +453,11 @@ export class MainComponent implements OnInit, AfterViewInit {
                 this.mainService.changeBrandBool = true;
                 this.mainService.showLoader.emit(false);
 
-                if (this.roter.url.includes("/main/dashboard")) {
-                  window.location.reload();
-                }
-                this.roter.navigate(["/main/dashboard"]);
+                window.location.reload();
+                // if (this.roter.url.includes("/main/dashboard")) {
+                //   window.location.reload();
+                // }
+                // this.roter.navigate(["/main/dashboard"]);
               },
               error => {
                 this.mainService.showLoader.emit(false);
