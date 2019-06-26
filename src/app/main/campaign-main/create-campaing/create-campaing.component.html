@@ -33,163 +33,146 @@
         </td>
       </ng-container>
     </table>
-    <div *ngIf="selectedSell === 'Coupon in %'" class="p-l-60">
+    <div *ngIf="selectedSell === 'Coupon in %'">
       <form [formGroup]="myForm">
-        <div class="row-input">
-          <div class="lable">
-            Campaign Name
-          </div>
-          <div class="value">
-            <div class="pos-r full-width">
-              <input [ngClass]="{'error': myForm.controls['campaignName'].invalid && !customValidation}"
-                formControlName="campaignName" type="text" [(ngModel)]="dataCoupon.name" nbInput fullWidth
-                fieldSize="small" placeholder="">
-              <div *ngIf="myForm.controls['campaignName'].invalid && !customValidation" class="error-lable">
-                Field error (must have at least 1 character)
+        <div class="p-l-30 m-b-30" style="font-size: 25px">
+          Campaign
+        </div>
+        <div class="p-l-60">
+          <div class="row-input">
+            <div class="lable">
+              Campaign Name
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <input [ngClass]="{'error': myForm.controls['campaignName'].invalid && !customValidation}"
+                  formControlName="campaignName" type="text" [(ngModel)]="dataCoupon.name" nbInput fullWidth
+                  fieldSize="small" placeholder="">
+                <div *ngIf="myForm.controls['campaignName'].invalid && !customValidation" class="error-lable">
+                  Field error (must have at least 1 character)
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row-input">
-          <div class="lable">
-            Description
-          </div>
-          <div class="value">
-            <div class="pos-r full-width">
-              <textarea [ngClass]="{'error': myForm.controls['description'].invalid && !customValidation}"
-                formControlName="description" [(ngModel)]="dataCoupon.desription" nbInput fullWidth
-                placeholder="Textarea"></textarea>
-              <div *ngIf="myForm.controls['description'].invalid && !customValidation" class="error-lable">
-                Field error (must have at least 1 character)
+          <div class="row-input">
+            <div class="lable">
+              Description
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <textarea [ngClass]="{'error': myForm.controls['description'].invalid && !customValidation}"
+                  formControlName="description" [(ngModel)]="dataCoupon.desription" nbInput fullWidth
+                  placeholder="Textarea"></textarea>
+                <div *ngIf="myForm.controls['description'].invalid && !customValidation" class="error-lable">
+                  Field error (must have at least 1 character)
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row-input">
-          <div class="lable">
-            Template
-          </div>
-          <div class="value">
-            <div *ngIf="cards.length" class="pos-r full-width">
-              <nb-select [ngClass]="{'error': myForm.controls['template'].invalid && !customValidation}"
-                formControlName="template" #select size="small" placeholder="Select Template"
-                [(selected)]="dataCoupon.card_id">
-                <nb-option *ngFor="let item of cards" value="{{item.id}}">
-                  {{ item.template_name }}
-                </nb-option>
-              </nb-select>
+          <div class="row-input">
+            <div class="lable">
+              Template
             </div>
-            <div *ngIf="myForm.controls['template'].invalid && !customValidation" class="error-lable">
-              Field error (make your choice)
-            </div>
-            <div *ngIf="noTemplates" class="error-lable fs-16">
-              Please create Template First
-              <a [routerLink]="[ '/main/templates/create-cards' ]" class="c-p">
-                (click here)
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="row-input">
-          <div class="lable">
-            Discount
-          </div>
-          <div class="value">
-            <div class="pos-r full-width">
-              <input [ngClass]="{'error': myForm.controls['discount'].invalid && !customValidation}"
-                formControlName="discount" [ngModel]="dataCoupon.discount" (ngModelChange)="changeDiscount($event)"
-                mask='00' class="small" type="text" nbInput fullWidth fieldSize="small" placeholder="" maxlength="2">
-              <div *ngIf="myForm.controls['discount'].invalid && !customValidation" class="error-lable">
-                Field error (must have at least 1 character)
+            <div class="value">
+              <div *ngIf="cards.length" class="pos-r full-width">
+                <nb-select [ngClass]="{'error': myForm.controls['template'].invalid && !customValidation}"
+                  formControlName="template" #select size="small" placeholder="Select Template"
+                  [(selected)]="dataCoupon.card_id">
+                  <nb-option *ngFor="let item of cards" value="{{item.id}}">
+                    {{ item.template_name }}
+                  </nb-option>
+                </nb-select>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="row-input">
-          <div class="lable">
-            Number of Coupon
-          </div>
-          <div class="value df ai-c">
-            <div class="pos-r m-r-34">
-              <nb-select style="width: 159px;" #selectNumber [(ngModel)]="numberOfCoupon"
-                (selectedChange)="numberOfCouponChange($event)"
-                [ngClass]="{'error': myForm.controls['numberOfCoupon'].invalid && !customValidation}"
-                formControlName="numberOfCoupon" size="small" placeholder="Select" [(selected)]="numberOfCoupon">
-                <nb-option value="Up to 100">
-                  <div class="df ai-c jc-b">
-                    <span>Up to 100</span>
-                    <div class="coupon-status free">
-                      FREE
-                    </div>
-                  </div>
-                </nb-option>
-                <nb-option *ngIf="user.account_type === 'basic'" value="100-10k">
-                  <div class="df ai-c jc-b">
-                    <span>100-10k</span>
-                    <div class="coupon-status basic">
-                      BASIC
-                    </div>
-                  </div>
-                </nb-option>
-                <nb-option *ngIf="user.account_type !== 'starter'" value="Unlimited">
-                  <div class="df ai-c jc-b">
-                    <span>Unlimited</span>
-                    <div class="coupon-status pro">
-                      pro
-                    </div>
-                  </div>
-                </nb-option>
-              </nb-select>
-              <div *ngIf="myForm.controls['numberOfCoupon'].invalid && !customValidation" class="error-lable">
+              <div *ngIf="myForm.controls['template'].invalid && !customValidation" class="error-lable">
                 Field error (make your choice)
               </div>
-            </div>
-            <div *ngIf="numberOfCoupon" class="pos-r df">
-              <div class="m-r-13 p-t-10">
-                Set Limit
+              <div *ngIf="noTemplates" class="error-lable fs-16">
+                Please create Template First
+                <a [routerLink]="[ '/main/templates/create-cards' ]" class="c-p">
+                  (click here)
+                </a>
               </div>
+            </div>
+          </div>
+          <div class="row-input">
+            <div class="lable">
+              Start Date
+            </div>
+            <div class="value df ai-c">
+              <div (clickOutside)="showDatePicker = false" class="pos-r m-r-34">
+                <input [ngClass]="{'error': !dataCoupon.startDate && !customValidation}" formControlName="startDate"
+                  class="small" (focus)="showDatePicker = true" [(ngModel)]="dataCoupon.startDate" type="text" nbInput
+                  fullWidth fieldSize="small" placeholder="">
+                <div *ngIf="!dataCoupon.startDate && !customValidation" class="error-lable">
+                  Field error (make your choice)
+                </div>
+                <nb-calendar *ngIf="showDatePicker" (dateChange)="dateStartChange($event);" [(date)]="dateStart">
+                </nb-calendar>
+              </div>
+              <div class="pos-r df">
+                <div class="m-r-13 p-t-10">
+                  End Date
+                </div>
+                <div (clickOutside)="showDatePickerEnd = false" class="pos-r">
+                  <input [ngClass]="{'error': !dataCoupon.endDate && !customValidation}" formControlName="endDate"
+                    class="small" (focus)="showDatePickerEnd = true" [(ngModel)]="dataCoupon.endDate" type="text" nbInput
+                    fullWidth fieldSize="small" placeholder="">
+                  <div *ngIf="!dataCoupon.endDate && !customValidation" class="error-lable">
+                    Field error (make your choice)
+                  </div>
+                  <nb-calendar *ngIf="showDatePickerEnd" (dateChange)="dateEndChange($event);" [(date)]="dateEnd">
+                  </nb-calendar>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
+          Coupon
+        </div>
+        <div class="p-l-60">
+          <div class="row-input">
+            <div class="lable">
+              Discount
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <input [ngClass]="{'error': myForm.controls['discount'].invalid && !customValidation}"
+                  formControlName="discount" [ngModel]="dataCoupon.discount" (ngModelChange)="changeDiscount($event)"
+                  mask='00' class="small" type="text" nbInput fullWidth fieldSize="small" placeholder="" maxlength="2">
+                <div *ngIf="myForm.controls['discount'].invalid && !customValidation" class="error-lable">
+                  set discount
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row-input">
+            <div class="lable">
+              Set Limit
+            </div>
+            <div class="value">
               <div class="pos-r">
                 <input placeholder="Optional"
                   [ngClass]="{'error': myForm.controls['setLimit'].invalid && !customValidation}"
                   formControlName="setLimit" class="small" [(ngModel)]="limit" (ngModelChange)="onChange()" max="100"
                   type="number" nbInput fullWidth fieldSize="small" placeholder="">
                 <div *ngIf="myForm.controls['setLimit'].invalid && !customValidation" class="error-lable">
-                  Field error (make your choice)
+                  set maximum number of coupons that can be created
                 </div>
               </div>
-            </div>
+            </div>      
           </div>
-        </div>
-        <div class="row-input">
-          <div class="lable">
-            Start Date
-          </div>
-          <div class="value df ai-c">
-            <div (clickOutside)="showDatePicker = false" class="pos-r m-r-34">
-              <input [ngClass]="{'error': !dataCoupon.startDate && !customValidation}" formControlName="startDate"
-                class="small" (focus)="showDatePicker = true" [(ngModel)]="dataCoupon.startDate" type="text" nbInput
-                fullWidth fieldSize="small" placeholder="">
-              <div *ngIf="!dataCoupon.startDate && !customValidation" class="error-lable">
-                Field error (make your choice)
-              </div>
-              <nb-calendar *ngIf="showDatePicker" (dateChange)="dateStartChange($event);" [(date)]="dateStart">
-              </nb-calendar>
+          <div class="row-input">
+            <div class="lable">
+              Coupon Validity
             </div>
-            <div class="pos-r df">
-              <div class="m-r-13 p-t-10">
-                End Date
+            <div class="value">
+              <div class="pos-r">
+                <input [ngClass]="{'error': myForm.controls['validity'].invalid && !customValidation}"
+                formControlName="validity" class="small" nbInput fullWidth fieldSize="small" placeholder="" readonly
+                style="background-color: #ebeff5;">
               </div>
-              <div (clickOutside)="showDatePickerEnd = false" class="pos-r">
-                <input [ngClass]="{'error': !dataCoupon.endDate && !customValidation}" formControlName="endDate"
-                  class="small" (focus)="showDatePickerEnd = true" [(ngModel)]="dataCoupon.endDate" type="text" nbInput
-                  fullWidth fieldSize="small" placeholder="">
-                <div *ngIf="!dataCoupon.endDate && !customValidation" class="error-lable">
-                  Field error (make your choice)
-                </div>
-                <nb-calendar *ngIf="showDatePickerEnd" (dateChange)="dateEndChange($event);" [(date)]="dateEnd">
-                </nb-calendar>
-              </div>
-            </div>
+            </div>      
           </div>
         </div>
       </form>

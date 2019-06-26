@@ -2,14 +2,6 @@
   <h1 class="m-t-0 m-b-0 fs-24 fw-600 m-r-22">
     Dashboard
   </h1>
-  <!-- <div class="select">
-    <nb-select size="small" placeholder="Select Range" [(selected)]="selectedItem">
-      <nb-option value="1">Option 1</nb-option>
-      <nb-option value="2">Option 2</nb-option>
-      <nb-option value="3">Option 3</nb-option>
-      <nb-option value="4">Option 4</nb-option>
-    </nb-select>
-  </div> -->
   <div class="row-input">
       <div class="value df ai-c">
         <div (clickOutside)="showDatePickerStart = false" class="pos-r m-r-34">
@@ -34,39 +26,39 @@
 <nb-card>
   <nb-card-body>
     <div class="m-b-20 fs-18">
-      OFFERS INFORMATION
+      COUPONS INFORMATION
     </div>
     <div class="df wrap jc-b">
       <div class="card-info">
         <div class="label">
-          Total Offers Given
+          Total Coupons Created
         </div>
         <div class="value">
-          61,042
+          {{total_coupons_created}}
         </div>
       </div>
       <div class="card-info">
         <div class="label">
-          Total Accepted
+          Total Redeemed
         </div>
         <div class="value">
-          13,447
+          {{total_redeems}}
         </div>
       </div>
       <div class="card-info">
         <div class="label">
-          Total Missing
+          Total Unredeemed
         </div>
         <div class="value">
-          47,036
+          {{unredeemed}}
         </div>
       </div>
       <div class="card-info">
         <div class="label">
-          Avg. Offer Conv.
+          Avg. Coupons Redeems
         </div>
         <div class="value">
-          22%
+          {{avg_coupon_redeems}}
         </div>
       </div>
     </div>
@@ -77,7 +69,7 @@
     <nb-card>
       <nb-card-body>
         <div class="m-b-20 fs-18">
-          CUSTOMERS BY WEEKDAY
+          CUSTOMERS BY WEEKDAY (DUMMY DATA)
         </div>
         <canvas id="myChart" width="400" height="100"></canvas>
       </nb-card-body>
@@ -87,7 +79,7 @@
     <nb-card>
       <nb-card-body>
         <div class="m-b-20 fs-18">
-          SPENDING BY DAY OF THE WEEK
+          SPENDING BY DAY OF THE WEEK (DUMMY DATA)
         </div>
         <canvas id="myChart2" width="400" height="100"></canvas>
       </nb-card-body>
@@ -97,7 +89,7 @@
     <nb-card>
       <nb-card-body >
         <div class="m-b-20 fs-18">
-          CUSTOMERS BY MONTH
+          CUSTOMERS BY MONTH (DUMMY DATA)
         </div>
         <canvas id="myChart3" width="400" height="200"></canvas>
       </nb-card-body>
@@ -107,7 +99,7 @@
     <nb-card>
       <nb-card-body>
         <div class="m-b-20 fs-18">
-          SPENDING BY DAY OF THE MONTH
+          SPENDING BY CAMPAIGNS
         </div>
         <canvas id="myChart4" width="400" height="200"></canvas>
       </nb-card-body>
@@ -117,7 +109,7 @@
     <nb-card>
       <nb-card-body>
         <div class="m-b-20 fs-18">
-          COUPONS
+          COUPONS BY CAMPAIGNS
         </div>
         <canvas id="myChart5" width="400" height="50"></canvas>
       </nb-card-body>

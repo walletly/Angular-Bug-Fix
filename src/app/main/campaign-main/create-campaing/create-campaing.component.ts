@@ -17,7 +17,7 @@ export class CreateCampaingComponent implements OnInit {
   customValidation = true;
   campaign = {};
   id;
-  numberOfCoupon;
+  // numberOfCoupon;
   cards = [];
 
   template;
@@ -70,8 +70,9 @@ export class CreateCampaingComponent implements OnInit {
       description: ["", [Validators.required]],
       template: ["", [Validators.required]],
       discount: ["", [Validators.required]],
-      numberOfCoupon: ["", [Validators.required]],
+      // numberOfCoupon: ["", [Validators.required]],
       setLimit: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
+      validity: ["30 Days", [Validators.required]],
       startDate: ["", [Validators.required]],
       endDate: ["", [Validators.required]],
     });
@@ -139,27 +140,27 @@ export class CreateCampaingComponent implements OnInit {
   ngOnInit() {
   }
 
-  onChange() {
-    console.log(this.numberOfCoupon);
-    // const userType = JSON.parse(localStorage.getItem('user')).account_type;
-    let validationRegex;
+  // onChange() {
+  //   console.log(this.numberOfCoupon);
+  //   // const userType = JSON.parse(localStorage.getItem('user')).account_type;
+  //   let validationRegex;
 
-    switch (this.numberOfCoupon) {
-      case 'Up to 100':
-        validationRegex = /^(100|([1-9]{1}[0-9]?))$/g;
-        break;
-      case '100-10k':
-        validationRegex = /^(10000|([1-9]{1}[0-9]{0,3}))$/g;
-        break;
-      default:
-        validationRegex = /^(100|([1-9]{1}[0-9]?))$/g;
-        break;
-    }
+  //   switch (this.numberOfCoupon) {
+  //     case 'Up to 100':
+  //       validationRegex = /^(100|([1-9]{1}[0-9]?))$/g;
+  //       break;
+  //     case '100-10k':
+  //       validationRegex = /^(10000|([1-9]{1}[0-9]{0,3}))$/g;
+  //       break;
+  //     default:
+  //       validationRegex = /^(100|([1-9]{1}[0-9]?))$/g;
+  //       break;
+  //   }
 
-    if (!validationRegex.exec(this.limit)) {
-      this.limit = '';
-    }
-  }
+  //   if (!validationRegex.exec(this.limit)) {
+  //     this.limit = '';
+  //   }
+  // }
 
   changeDiscount(event) {
     this.dataCoupon.discount = event;
@@ -200,11 +201,11 @@ export class CreateCampaingComponent implements OnInit {
     this.showDatePickerEnd = false;
   }
 
-  numberOfCouponChange(e) {
-    console.log(this.selectNumber);
-    console.log(e);
-    this.numberOfCoupon = e;
-  }
+  // numberOfCouponChange(e) {
+  //   console.log(this.selectNumber);
+  //   console.log(e);
+  //   this.numberOfCoupon = e;
+  // }
 
   dateStartChange(event) {
     this.dataCoupon.startDate = moment(event).format('YYYY-MM-DD');
@@ -242,5 +243,6 @@ export class CreateCampaingComponent implements OnInit {
       startDate: '',
       endDate: '',
     };
+    this.myForm.get('setLimit').setValue('');
   }
 }
