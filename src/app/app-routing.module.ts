@@ -21,7 +21,6 @@ import { BotsListComponent } from "./main/bots-store/bots-list/bots-list.compone
 import { BotsDetailsComponent } from "./main/bots-store/bots-details/bots-details.component";
 import { BotQrComponent } from "./main/bot-qr/bot-qr.component";
 import { SettingsComponent } from "./main/settings/settings.component";
-import { DashboardInfoComponent } from "./main/dashboard-info/dashboard-info.component";
 import { ProfileComponent } from "./main/profile/profile.component";
 import { AudienceComponent } from "./main/audience/audience.component";
 import { AuthGuard } from "./shared/services/guard/auth.guard";
@@ -46,14 +45,7 @@ const routes: Routes = [
     children: [
       {
         path: "dashboard",
-        // component: DashboardComponent,
-        component: DashboardInfoComponent,
-        canActivate: [AuthGuard],
-        data: { breadcrumb: "hiddenBreadcrumb" }
-      },
-      {
-        path: "dashboard-info",
-        component: DashboardInfoComponent,
+        component: DashboardComponent,
         canActivate: [AuthGuard],
         data: { breadcrumb: "hiddenBreadcrumb" }
       },
@@ -251,7 +243,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

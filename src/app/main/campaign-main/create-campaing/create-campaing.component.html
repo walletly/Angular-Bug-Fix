@@ -139,14 +139,14 @@
               <div class="pos-r full-width">
                 <input [ngClass]="{'error': myForm.controls['discount'].invalid && !customValidation}"
                   formControlName="discount" [ngModel]="dataCoupon.discount" (ngModelChange)="changeDiscount($event)"
-                  mask='00' class="small" type="text" nbInput fullWidth fieldSize="small" placeholder="" maxlength="2">
+                  class="small" (input)="checkDiscount($event.target.value)" type="number" nbInput fullWidth fieldSize="small">
                 <div *ngIf="myForm.controls['discount'].invalid && !customValidation" class="error-lable">
                   set discount
                 </div>
               </div>
             </div>
           </div>
-          <div class="row-input">
+          <!-- <div class="row-input">
             <div class="lable">
               Set Limit
             </div>
@@ -161,7 +161,7 @@
                 </div>
               </div>
             </div>      
-          </div>
+          </div> -->
           <div class="row-input">
             <div class="lable">
               Coupon Validity

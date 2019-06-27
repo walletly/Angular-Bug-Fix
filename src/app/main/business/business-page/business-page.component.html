@@ -23,10 +23,14 @@
             <img src="assets/img/mail-icon.png" alt="">
             Invite All
           </div>
+          <div (click)="refresh()" class="refresh">
+            <img src="assets/svg-icon/refresh-Btn.svg" alt="">
+            Refresh
+          </div>
         </div>
         <div class="box-container">
 
-          <table *ngIf="data.length" class="m-b-40" [nbTreeGrid]="data">
+          <table *ngIf="data.length" class="m-b-40" [nbTreeGrid]="data" style="width: 100%;">
             <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
             <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
 
@@ -83,8 +87,9 @@
             </ng-container>
           </table>
 
-          <div *ngIf="!data.length" class="create-btn-wrap">
-            <div class="m-b-20">
+          <div *ngIf="!data.length && !showLoader" class="create-btn-wrap">
+            <img class="m-b-16" src="assets/svg-icon/noUser.svg" alt="">
+            <div class="m-b-25 fs-28">
               No Users Added yet
             </div>
             <button [routerLink]="[ '/main/business/create-business' ]" class="cust-button" nbButton status="success">

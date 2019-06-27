@@ -8,6 +8,7 @@ import { BrandService } from 'src/app/shared/services/brand.service';
 })
 export class AudienceComponent implements OnInit {
   showActions;
+  showLoader;
   // defaultColumns = ['First Name', 'Last Name', 'Email Address', 'Type', 'Campaign Name', 'Issue Date', 'Expiry', 'Status'];
   defaultColumns = ['Full Name', 'Email Address', 'Type', 'Campaign Name', 'Issue Date', 'Expiry', 'Status'];
   allColumns = this.defaultColumns;
@@ -27,7 +28,15 @@ export class AudienceComponent implements OnInit {
   // ];
 
   constructor(private brandService: BrandService) {
-    brandService.getBrandAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+    this.showLoader = true;
+    this.getAudience();
+  }
+
+  ngOnInit() {
+  }
+
+  getAudience(){
+    this.brandService.getBrandAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
       console.log(result);
       this.data = [];
       let audiences;
@@ -51,12 +60,16 @@ export class AudienceComponent implements OnInit {
           });
         });
       }
+      this.showLoader = false;
     }, err => {
       this.data = [];
+      this.showLoader = false;
     });
   }
 
-  ngOnInit() {
+  refresh(){
+    this.showLoader = true;
+    this.getAudience();
   }
 
 }

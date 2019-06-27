@@ -277,4 +277,9 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     });
   }
 
+  refresh(){
+    this.showLoader = true;
+    this.getBusiness();
+  }
+
 }

@@ -118,3 +118,17 @@ nb-card {
 table {
     width: auto;
 }
+
+.box-container {
+    min-height: calc(100vh - 360px);
+    margin-bottom: 100px;
+    .create-btn-wrap {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        min-height: calc(100vh - 360px);
+        padding: 40px;
+    }
+}

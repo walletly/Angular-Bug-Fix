@@ -11,85 +11,6 @@
 <nb-card>
   <nb-card-body>
     <nb-tabset *ngIf="data?.length && !showLoader" class="tabs-card">
-      <nb-tab tabTitle="Card">
-        <div class="df wrap p-t-20">
-          <div *ngFor="let coupon of data" class="m-r-30">
-            <div *ngIf="coupon.card_type === 2" class="coupon small-size">
-              <div class="hover-couon">
-                <button (click)="addToCampaign(coupon.brand_id, coupon.id)" class="cust-button m-b-10" nbButton
-                  status="success">
-                  Add to Campaing
-                </button>
-                <button [routerLink]="[ '/main/templates/create-coupon/' + coupon.id ]" class="cust-button" nbButton
-                  status="gray">
-                  Edit
-                </button>
-              </div>
-              <div class="head m-b-3">
-                <div class="df ai-c">
-                  <img style="border-radius: 100px; background: white" class="m-r-5" width="29px"
-                    [src]="coupon.card_logo" alt="">
-                  <div class="fs-10 fw-400">
-                    {{coupon.brand_name}}
-                  </div>
-                </div>
-                <div *ngIf="coupon.card_type === 1" class="text-right">
-                  <div class="fs-10 fw-400">
-                    Days left
-                  </div>
-                  <div class="fs-8 fw-600">
-                    30
-                  </div>
-                </div>
-                <div *ngIf="coupon.card_type === 2" class="text-right">
-                  <div class="fs-10 fw-400">
-                    Point
-                  </div>
-                  <div class="fs-8 fw-600">
-                    100
-                  </div>
-                </div>
-                <div *ngIf="coupon.card_type === 3" class="text-right">
-                  <div class="fs-10 fw-400">
-                    Stamp
-                  </div>
-                  <div class="fs-8 fw-600">
-                    4
-                  </div>
-                </div>
-              </div>
-              <div class="m-b-4 df ai-c jc-c">
-                <img style="max-height: 66px; max-width: 100%;" [src]="coupon.card_cover" alt="">
-              </div>
-              <div class="df jc-b color-white fs-10 fw-400 p-l-5 p-r-5">
-                <div>
-                  CUSTOMER
-                </div>
-                <div *ngIf="coupon.card_type === 1">
-                  DISCOUNT
-                </div>
-              </div>
-              <div class="df jc-b color-white fs-9 fw-600 m-b-28 p-l-5 p-r-5">
-                <div>
-                  {{'{Dynamic}'}}
-                </div>
-                <div *ngIf="coupon.card_type === 1">
-                  {{'{Dynamic}'}}
-                </div>
-              </div>
-              <div class="text-center">
-                <img width="71px" class="m-b-20" src="assets/img/QR_code.png" alt="">
-              </div>
-              <div class="combined">
-                <img width="13px" src="assets/svg-icon/Combined_Shape.svg" alt="">
-              </div>
-            </div>
-            <div *ngIf="coupon.card_type === 2" class="text-center m-t-16 fs-16 fw-600">
-              {{coupon.template_name}}
-            </div>
-          </div>
-        </div>
-      </nb-tab>
       <nb-tab tabTitle="Coupon">
         <div class="df wrap p-t-20">
           <div *ngFor="let coupon of data" class="m-r-30">
@@ -164,6 +85,85 @@
               </div>
             </div>
             <div *ngIf="coupon.card_type === 1" class="text-center m-t-16 fs-16 fw-600">
+              {{coupon.template_name}}
+            </div>
+          </div>
+        </div>
+      </nb-tab>
+      <nb-tab tabTitle="Card">
+        <div class="df wrap p-t-20">
+          <div *ngFor="let coupon of data" class="m-r-30">
+            <div *ngIf="coupon.card_type === 2" class="coupon small-size">
+              <div class="hover-couon">
+                <button (click)="addToCampaign(coupon.brand_id, coupon.id)" class="cust-button m-b-10" nbButton
+                  status="success">
+                  Add to Campaing
+                </button>
+                <button [routerLink]="[ '/main/templates/create-coupon/' + coupon.id ]" class="cust-button" nbButton
+                  status="gray">
+                  Edit
+                </button>
+              </div>
+              <div class="head m-b-3">
+                <div class="df ai-c">
+                  <img style="border-radius: 100px; background: white" class="m-r-5" width="29px"
+                    [src]="coupon.card_logo" alt="">
+                  <div class="fs-10 fw-400">
+                    {{coupon.brand_name}}
+                  </div>
+                </div>
+                <div *ngIf="coupon.card_type === 1" class="text-right">
+                  <div class="fs-10 fw-400">
+                    Days left
+                  </div>
+                  <div class="fs-8 fw-600">
+                    30
+                  </div>
+                </div>
+                <div *ngIf="coupon.card_type === 2" class="text-right">
+                  <div class="fs-10 fw-400">
+                    Point
+                  </div>
+                  <div class="fs-8 fw-600">
+                    100
+                  </div>
+                </div>
+                <div *ngIf="coupon.card_type === 3" class="text-right">
+                  <div class="fs-10 fw-400">
+                    Stamp
+                  </div>
+                  <div class="fs-8 fw-600">
+                    4
+                  </div>
+                </div>
+              </div>
+              <div class="m-b-4 df ai-c jc-c">
+                <img style="max-height: 66px; max-width: 100%;" [src]="coupon.card_cover" alt="">
+              </div>
+              <div class="df jc-b color-white fs-10 fw-400 p-l-5 p-r-5">
+                <div>
+                  CUSTOMER
+                </div>
+                <div *ngIf="coupon.card_type === 1">
+                  DISCOUNT
+                </div>
+              </div>
+              <div class="df jc-b color-white fs-9 fw-600 m-b-28 p-l-5 p-r-5">
+                <div>
+                  {{'{Dynamic}'}}
+                </div>
+                <div *ngIf="coupon.card_type === 1">
+                  {{'{Dynamic}'}}
+                </div>
+              </div>
+              <div class="text-center">
+                <img width="71px" class="m-b-20" src="assets/img/QR_code.png" alt="">
+              </div>
+              <div class="combined">
+                <img width="13px" src="assets/svg-icon/Combined_Shape.svg" alt="">
+              </div>
+            </div>
+            <div *ngIf="coupon.card_type === 2" class="text-center m-t-16 fs-16 fw-600">
               {{coupon.template_name}}
             </div>
           </div>

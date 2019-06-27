@@ -885,6 +885,24 @@ nb-select button::after {
       margin-right: 6px;
     }
   }
+  .refresh{
+    width: 109px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid #dee3e5;
+    color: #323232;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    cursor: pointer;
+    img {
+      margin-right: 6px;
+    }
+  }
 }
 .check-row {
   width: 22px;

@@ -29,7 +29,6 @@ import { BotsListComponent } from './main/bots-store/bots-list/bots-list.compone
 import { BotsDetailsComponent } from './main/bots-store/bots-details/bots-details.component';
 import { BotQrComponent } from './main/bot-qr/bot-qr.component';
 import { SettingsComponent } from './main/settings/settings.component';
-import { DashboardInfoComponent } from './main/dashboard-info/dashboard-info.component';
 import { CampaignMainComponent } from './main/campaign-main/campaign-main.component';
 import { ProfileComponent } from './main/profile/profile.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -97,7 +96,6 @@ export const firebaseConfig = {
     BotsDetailsComponent,
     BotQrComponent,
     SettingsComponent,
-    DashboardInfoComponent,
     CampaignMainComponent,
     ProfileComponent,
     DialogUploadImageComponent,

@@ -69,9 +69,9 @@ export class CreateCampaingComponent implements OnInit {
       campaignName: ["", [Validators.required]],
       description: ["", [Validators.required]],
       template: ["", [Validators.required]],
-      discount: ["", [Validators.required]],
+      discount: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
       // numberOfCoupon: ["", [Validators.required]],
-      setLimit: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
+      // setLimit: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
       validity: ["30 Days", [Validators.required]],
       startDate: ["", [Validators.required]],
       endDate: ["", [Validators.required]],
@@ -166,6 +166,12 @@ export class CreateCampaingComponent implements OnInit {
     this.dataCoupon.discount = event;
   }
 
+  checkDiscount(e){
+    if(this.myForm.get('discount').invalid){
+      this.myForm.get('discount').setValue('');
+    }
+  }
+
   create() {
 
     if (!this.dataCoupon.brand_id) {
@@ -243,6 +249,6 @@ export class CreateCampaingComponent implements OnInit {
       startDate: '',
       endDate: '',
     };
-    this.myForm.get('setLimit').setValue('');
+    // this.myForm.get('setLimit').setValue('');
   }
 }

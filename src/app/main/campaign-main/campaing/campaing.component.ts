@@ -21,6 +21,7 @@ export class CampaingComponent implements OnInit {
   showLoader;
 
   constructor(private campaignService: CompaignService, private router: Router, private mainService: MainService) {
+    this.showLoader = true;
     this.getCampaigns();
   }
 
@@ -29,7 +30,6 @@ export class CampaingComponent implements OnInit {
 
   getCampaigns() {
     // this.mainService.showLoader.emit(true);
-    this.showLoader = true;
 
     this.campaignService.getСampaignsBrands(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
       this.data = [];
@@ -141,5 +141,10 @@ export class CampaingComponent implements OnInit {
   showShared(row, event) {
     event.stopPropagation();
     this.showActions = row;
+  }
+
+  refresh(){
+    this.showLoader = true;
+    this.getCampaigns();
   }
 }

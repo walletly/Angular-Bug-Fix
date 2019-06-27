@@ -96,7 +96,7 @@ export class ReviewCampaingComponent implements OnInit {
         }
       }, err => {
         console.log(err);
-        if (err.error.code === 605) {
+        if (err.error.code === 602) {
           this.mainService.showToastr.emit({currentCountCompany: '4/4', futureCountCompany: '10/10', type: 'basic'});
         }
         this.messError = 'Error at creation';
