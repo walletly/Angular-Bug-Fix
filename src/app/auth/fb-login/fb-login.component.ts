@@ -36,6 +36,7 @@ export class FbLoginComponent implements OnInit {
           const lastname = res.additionalUserInfo.profile['last_name'];
           const email = res.user.email;
           const uid = res.user.uid;
+          const photo = res.user.photoURL || 'https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png';
           const newUser = res.additionalUserInfo.isNewUser;
 
           localStorage.setItem('userID', res.user.uid);
@@ -56,7 +57,12 @@ export class FbLoginComponent implements OnInit {
               email: email,
               marketing: true,
               user_type: 1,
-              avatar: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png'
+              avatar: photo
+            });
+          } else{
+            const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${uid}`);
+            await userRef.update({
+              avatar: photo
             });
           }
 
