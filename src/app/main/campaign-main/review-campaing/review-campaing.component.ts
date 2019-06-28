@@ -117,7 +117,7 @@ export class ReviewCampaingComponent implements OnInit {
     this.campaign['campaign_name'] = this.dataCoupon.name;
     this.campaign['description'] = this.dataCoupon.desription;
     this.campaign['campaign_type'] = 1;
-    this.campaign['campaign_value'] = this.dataCoupon.discount;
+    this.campaign['campaign_value'] = String(this.dataCoupon.discount);
     this.campaign['start_date'] = this.dataCoupon.startDate;
     this.campaign['end_date'] = this.dataCoupon.endDate;
     this.campaign['card_id'] = this.dataCoupon.card_id;
