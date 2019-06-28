@@ -43,9 +43,7 @@ nb-card {
 }
 
 .box-container {
-    border: 1px solid #dee3e5;
-    min-height: calc(100vh - 360px);
-    margin-bottom: 100px;
+    min-height: calc(100vh - 500px);
     .create-btn-wrap {
         display: flex;
         flex-flow: column;

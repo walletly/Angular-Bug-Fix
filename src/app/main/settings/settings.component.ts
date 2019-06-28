@@ -200,7 +200,7 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.brandService.getBrandAdmins((JSON.parse(localStorage.getItem('currentBrand'))['brand_id'])).subscribe((result)=>{
       this.brandAdmins = result['brand_admins'];
-    })
+    });
     
 
   }

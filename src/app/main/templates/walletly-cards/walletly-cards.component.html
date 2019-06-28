@@ -250,12 +250,12 @@
       </nb-tab>
     </nb-tabset>
     <!-- have no cards -->
-    <div *ngIf="!data?.length && !showLoader" class="p-t-100 text-center">
-      <img class="m-b-16" src="assets/img/no-cards.png" alt="">
-      <div class="m-b-25 fs-28">
+    <div *ngIf="!data?.length && !showLoader" class="p-t-50 text-center">
+      <img class="m-b-16" src="assets/svg-icon/notemplate.svg" alt="">
+      <div class="m-b-25 fs-22">
         No Walletly Card
       </div>
-      <div class="m-b-100">
+      <div class="m-b-30">
         <button [routerLink]="[ '/main/templates/create-cards' ]" class="cust-button btn-210" nbButton status="success">
           Create your first card
         </button>

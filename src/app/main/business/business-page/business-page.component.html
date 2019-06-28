@@ -15,11 +15,11 @@
     </div>
     <nb-tabset  *ngIf="!showLoader" class="tabs-card">
       <nb-tab tabTitle="Business Users">
-        <div class="check-all-wrap">
-          <div *ngIf="data.length" class="all">
+        <div *ngIf="data.length" class="check-all-wrap">
+          <div class="all">
             <nb-checkbox [(ngModel)]="checkAll">All</nb-checkbox>
           </div>
-          <div *ngIf="data.length" (click)="inviteAll()" class="invite">
+          <div (click)="inviteAll()" class="invite">
             <img src="assets/img/mail-icon.png" alt="">
             Invite All
           </div>
@@ -30,7 +30,8 @@
         </div>
         <div class="box-container">
 
-          <table *ngIf="data.length" class="m-b-40" [nbTreeGrid]="data" style="width: 100%;">
+          <table *ngIf="data.length" class="m-b-40" [nbTreeGrid]="data"
+            style="width: 100%; border-right: 1px solid #dee3e5; border-left: 1px solid #dee3e5;">
             <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
             <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
 
@@ -87,12 +88,12 @@
             </ng-container>
           </table>
 
-          <div *ngIf="!data.length && !showLoader" class="create-btn-wrap">
-            <img class="m-b-16" src="assets/svg-icon/noUser.svg" alt="">
-            <div class="m-b-25 fs-28">
+          <div *ngIf="!data.length && !showLoader" class="create-btn-wrap p-0">
+            <img class="m-b-16 m-t-40" src="assets/svg-icon/noUser.svg" alt="">
+            <div class="m-b-25 fs-22">
               No Users Added yet
             </div>
-            <button [routerLink]="[ '/main/business/create-business' ]" class="cust-button" nbButton status="success">
+            <button [routerLink]="[ '/main/business/create-business' ]" class="cust-button m-b-20" nbButton status="success">
               + Add User
             </button>
           </div>
