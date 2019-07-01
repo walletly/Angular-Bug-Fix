@@ -11,15 +11,15 @@
   <nb-card-body>
     <div class="df wrap m-b-100">
       <div class="m-r-30">
-        <div class="coupon small-size">
+        <div class="coupon small-size" style="background-image: url('assets/svg-icon/coupon-bg.svg');">
           <div class="hover-couon">
             <button (click)="getType('coupons')" class="cust-button" nbButton status="success">
               Use Template
             </button>
           </div>
-          <div class="head m-b-3">
-            <img style="border-radius: 100px;" width="29px" src="assets/svg-icon/walletly-circle.svg" alt="">
-            <div class="text-right">
+          <div class="head m-b-3" style="font-size: 10px; justify-content: left;">
+            <img style="border-radius: 100px;" width="25px" src="assets/svg-icon/walletly-circle.svg" alt="">Coupons
+            <div class="text-right" style="margin-left: auto">
               <div class="fs-6 fw-400">
                 Days left
               </div>
@@ -59,15 +59,17 @@
         </div>
       </div>
       <div class="m-r-30">
-        <div class="coupon small-size">
+        <div class="coupon small-size" style="background-image: url('assets/svg-icon/card-bg.svg'); 
+        margin: 5px 0px 25px;">
           <div class="hover-couon">
-            <button (click)="getType('cards')" class="cust-button" nbButton status="success">
+            <button (click)="getType('cards')" class="cust-button" nbButton status="success"
+             style="pointer-events: none;">
               Use Template
             </button>
           </div>
-          <div class="head m-b-3">
-            <img style="border-radius: 100px;" width="29px" src="assets/svg-icon/walletly-circle.svg" alt="">
-            <div class="text-right">
+          <div class="head m-b-3" style="font-size: 10px; justify-content: left;">
+            <img style="border-radius: 100px;" width="25px" src="assets/svg-icon/walletly-circle.svg" alt="">Membership Card
+            <div class="text-right" style="margin-left: auto">
               <div class="fs-6 fw-400">
                 Point
               </div>
@@ -76,59 +78,98 @@
               </div>
             </div>
           </div>
-          <div class="m-b-4">
-            <img class="full-width" src="assets/img/coupon-2.png" alt="">
+          <div class="m-b-4 m-t-5">
+            <div class="df jc-b color-white fs-6 fw-400 p-l-5 p-r-5">
+              <div>
+                TYPE
+              </div>
+              <div>
+                CUSTOMER
+              </div>
+            </div>
+            <div class="df jc-b color-white fs-9 fw-600 m-b-28 p-l-5 p-r-5">
+              <div>
+                GOLD
+              </div>
+              <div>
+                {{'{Dynamic}'}}
+              </div>
+            </div>
+            <div class="df jc-b color-white fs-6 fw-400 p-l-5 p-r-5">
+              <div>
+                MEMBER SINCE
+              </div>
+              <div>
+                MEMBER ID
+              </div>
+            </div>
+            <div class="df jc-b color-white fs-9 fw-600 m-b-28 p-l-5 p-r-5">
+              <div>
+                JUL 2019
+              </div>
+              <div>
+                B540*****
+              </div>
+            </div>
           </div>
           <div class="df jc-b color-white fs-6 fw-400 p-l-5 p-r-5">
             <div>
-              CUSTOMER
+              Name
             </div>
           </div>
           <div class="df jc-b color-white fs-9 fw-600 m-b-28 p-l-5 p-r-5">
             <div>
-              {{'{Dynamic}'}}
+              Jesse Prehodick
             </div>
           </div>
           <div class="text-center">
-            <img width="71px" class="m-b-20" src="assets/img/QR_code.png" alt="">
+            <img width="125px" class="m-b-20" src="assets/img/bar code.png" alt="">
           </div>
           <div class="combined">
             <img width="13px" src="assets/svg-icon/Combined_Shape.svg" alt="">
           </div>
         </div>
         <div class="text-center m-t-16 fs-16 fw-600">
+          <img src="assets/img/lockIcon.png">
           Cards
         </div>
       </div>
       <div class="m-r-30">
-        <div class="coupon small-size">
+        <div class="coupon small-size" style="background-image: url('assets/svg-icon/event-bg.svg');">
           <div class="hover-couon">
-            <button (click)="getType('tickets')" class="cust-button" nbButton status="success">
+            <button (click)="getType('tickets')" class="cust-button" nbButton status="success"
+            style="pointer-events: none;">
               Use Template
             </button>
           </div>
-          <div class="head m-b-3">
-            <img style="border-radius: 100px;" width="29px" src="assets/svg-icon/walletly-circle.svg" alt="">
-            <div class="text-right">
+          <div class="head m-b-3" style="font-size: 10px; justify-content: left;">
+            <img style="border-radius: 100px;" width="25px" src="assets/svg-icon/walletly-circle.svg" alt="">Event Ticket
+            <div class="text-right" style="margin-left: auto">
               <div class="fs-6 fw-400">
-                Stamp
+                TICKET NO
               </div>
               <div class="fs-8 fw-600">
-                4
+                786786
               </div>
             </div>
           </div>
           <div class="m-b-4">
-            <img class="full-width" src="assets/img/coupon-3.png" alt="">
+            <img class="full-width" src="assets/img/eventCover.png" alt="">
           </div>
           <div class="df jc-b color-white fs-6 fw-400 p-l-5 p-r-5">
             <div>
-              CUSTOMER
+              CALL
+            </div>
+            <div>
+              EVENT DATES
             </div>
           </div>
           <div class="df jc-b color-white fs-9 fw-600 m-b-28 p-l-5 p-r-5">
             <div>
-              {{'{Dynamic}'}}
+              407-878-1234
+            </div>
+            <div>
+              NOV 1 - NOV 30
             </div>
           </div>
           <div class="text-center">
@@ -139,6 +180,7 @@
           </div>
         </div>
         <div class="text-center m-t-16 fs-16 fw-600">
+          <img src="assets/img/lockIcon.png">
           Tickets
         </div>
       </div>
