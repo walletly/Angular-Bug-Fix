@@ -129,7 +129,6 @@ export const firebaseConfig = {
     NbInputModule,
     NbCardModule,
     NbAccordionModule,
-    FormsModule,
     NbCheckboxModule,
     NbStepperModule,
     NbTooltipModule,

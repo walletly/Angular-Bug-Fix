@@ -14,6 +14,7 @@ export class CampaingComponent implements OnInit {
    defaultColumns = ['Campaign Name', 'Description', 'Template', 'Issued', 'Redeemed', 'Start Date', 'End Date', 'Status', 'Action'];
   allColumns = this.defaultColumns;
   campaigns;
+  inChangeStatus = '';
   searchText;
 
   data;
@@ -92,15 +93,21 @@ export class CampaingComponent implements OnInit {
     });
   }
 
-  changeStatus(id, status, event) {
+  changeStatus(label, input, id, status, event) {
     event.stopPropagation();
-
+    this.inChangeStatus = id;
+    label.classList.add('disable');
     this.campaignService.updateСampaign(id, { is_active: !status }).subscribe(result => {
       console.log(result);
       this.mainService.showToastrSuccess.emit({text: 'Status changed'});
       this.getCampaigns();
+      (document.getElementById(input) as HTMLInputElement).checked = !((document.getElementById(input) as HTMLInputElement).checked);
+      label.classList.remove('disable');
+      this.inChangeStatus = '';
     }, err => {
       console.log(err);
+      label.classList.add('disable');
+      this.inChangeStatus = '';
     });
   }
 

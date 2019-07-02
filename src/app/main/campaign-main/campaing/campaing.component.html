@@ -90,7 +90,27 @@
             </div>
             <div class="df ai-c">
               <span *ngIf="column === 'Status'">
-                <span
+                <label class="campaignSwitch" 
+                  (click)="changeStatus(
+                    $event.target,
+                    'check-' + row.data['Id'].name,
+                    row.data['Id'].name,
+                    row.data['Status'].name,
+                    $event)">
+                  <input *ngIf="row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" checked disabled>
+                  <input *ngIf="!row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" disabled>
+                  <div class="campaignSlider campaignRound">
+                    <span class="on disable">
+                      <i *ngIf="inChangeStatus == row.data['Id'].name" class="fas fa-spinner fa-pulse"></i>
+                      <span *ngIf="inChangeStatus != row.data['Id'].name">Active</span>
+                    </span>
+                    <span class="off disable">
+                      <span *ngIf="inChangeStatus != row.data['Id'].name">Inactive</span>
+                      <i *ngIf="inChangeStatus == row.data['Id'].name" class="fas fa-spinner fa-pulse"></i>
+                    </span>
+                  </div>
+                </label>
+                <!-- <span
                   *ngIf="row.data[column].name === true"
                   (click)="
                     changeStatus(
@@ -104,14 +124,14 @@
                   <span class="circle"></span>
                   <span>Active</span>
                 </span>
-                <!-- <span
+                <span
                   *ngIf="row.data[column].name === false"
                   (click)="changeStatus(row.data['Id'].name, row.data['Status'].name, $event)"
                   class="expired c-p"
                 >
                 <span class="circle"></span>
                   <span>Expired</span>
-                </span> -->
+                </span>
                 <span
                   *ngIf="row.data[column].name === false"
                   (click)="
@@ -125,7 +145,7 @@
                 >
                   <span class="circle"></span>
                   <span>Inactive</span>
-                </span>
+                </span> -->
               </span>
               <div class="df jc-e full-width">
                 <span *ngIf="column === 'Action'">

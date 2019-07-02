@@ -104,3 +104,90 @@ nb-card {
         padding: 40px;
     }
 }
+
+.campaignSwitch {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+}
+  
+.campaignSwitch input {
+    display:none;
+}
+  
+.campaignSlider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #dee3e5;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+  
+.campaignSlider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+  
+input:checked + .campaignSlider {
+    background-color: #4cd964;
+}
+  
+input:focus + .campaignSlider {
+    box-shadow: 0 0 1px #2196F3;
+}
+  
+input:checked + .campaignSlider:before {
+    -webkit-transform: translateX(50px);
+    -ms-transform: translateX(50px);
+    transform: translateX(50px);
+}
+  
+.on {
+    display:none;
+}
+
+.off {
+    margin-left:22px;
+}
+  
+.on, .off { 
+    color: #323232;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 35%;
+    font-size: 10px;
+    font-family: Verdana, sans-serif;
+}
+  
+input:checked+ .campaignSlider .on {
+    display: block;
+}
+  
+input:checked + .campaignSlider .off {
+    display: none;
+}
+  
+.campaignSlider.campaignRound {
+    border-radius: 34px;
+}
+  
+.campaignSlider.campaignRound:before {
+    border-radius: 50%;
+}
+
+.disable {
+    pointer-events: none;
+}
