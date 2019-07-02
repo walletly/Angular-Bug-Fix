@@ -35,6 +35,7 @@ import { CampaignTemplatesComponent } from './main/campaign-main/campaign-templa
 import { CampaignTypeComponent } from './main/campaign-main/campaign-type/campaign-type.component';
 import { DashboardInfoAdminComponent } from './main/dashboard-info-admin/dashboard-info-admin.component';
 import { PushNotificationComponent } from './main/push-notification/push-notification.component';
+import { HelpComponent } from './main/help/help.component';
 
 const routes: Routes = [
   {
@@ -213,7 +214,8 @@ const routes: Routes = [
         component: AudienceComponent,
         canActivate: [AuthGuard],
         data: { breadcrumb: "audience" },
-      }
+      },
+      { path: "help", component: HelpComponent, canActivate: [AuthGuard], data: { breadcrumb: "help" } },
     ]
   },
   { path: "profile", component: ProfileComponent, canActivate: [AuthGuard] },

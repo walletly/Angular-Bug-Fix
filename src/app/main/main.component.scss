@@ -52,7 +52,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  &:hover {
+  &:hover, &.active {
     color: #2a2a2a;
     font-weight: 600;
   }

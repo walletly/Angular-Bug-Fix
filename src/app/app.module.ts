@@ -59,6 +59,7 @@ import { CampaignTypeComponent } from './main/campaign-main/campaign-type/campai
 import { CampaignTemplatesComponent } from './main/campaign-main/campaign-templates/campaign-templates.component';
 import { DashboardInfoAdminComponent } from './main/dashboard-info-admin/dashboard-info-admin.component';
 import { PushNotificationComponent } from './main/push-notification/push-notification.component';
+import { HelpComponent } from './main/help/help.component';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB_f_r3DPfN5tZ6x0olJaGCjSogT9rWapM",
@@ -115,7 +116,8 @@ export const firebaseConfig = {
     CampaignTypeComponent,
     CampaignTemplatesComponent,
     DashboardInfoAdminComponent,
-    PushNotificationComponent
+    PushNotificationComponent,
+    HelpComponent,
   ],
   imports: [
     BrowserModule,

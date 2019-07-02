@@ -17,6 +17,7 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   headerTitle;
   avatar;
+  helpPage = false;
 
   items = [
     {
@@ -171,8 +172,6 @@ export class MainComponent implements OnInit, AfterViewInit {
         crumpValue1 = "Campaign";
       } else if (crumps[2] === "bots-store") {
         crumpValue1 = "Bots Store";
-      } else if (crumps[2] === "dashboard-info") {
-        crumpValue2 = "";
       }
 
       if (crumps[3] === "bots-details") {
@@ -193,11 +192,6 @@ export class MainComponent implements OnInit, AfterViewInit {
         this.headerTitle = `Welcome back ${this.username.firstName} ${
           this.username.lastName
         }`;
-      } else if (this.roter.url === "/main/dashboard-info") {
-        this.headerTitle = `Welcome back ${this.username.firstName} ${
-          this.username.lastName
-        }`;
-        this.brandName = null;
       } else {
         if ((this.roter.url.split("/").length = 3)) {
           const currentBrand = JSON.parse(localStorage.getItem("currentBrand"));
@@ -257,6 +251,13 @@ export class MainComponent implements OnInit, AfterViewInit {
         menuItems = document.querySelector("nb-menu .menu-item>.menu-items")
           .children;
       }
+      if(this.roter.url.includes('help')){
+        this.helpPage = true;
+        return;
+      }
+      else{
+        this.helpPage = false;
+      }
       for (const menu in menuItems) {
         if (!isNaN(+menu)) {
           if (
@@ -285,6 +286,13 @@ export class MainComponent implements OnInit, AfterViewInit {
               ).children;
             }
           }
+        }
+        if(this.roter.url.includes('help')){
+          this.helpPage = true;
+          return;
+        }
+        else{
+          this.helpPage = false;
         }
         for (const menu in menuItems) {
           if (!isNaN(+menu)) {
@@ -382,6 +390,13 @@ export class MainComponent implements OnInit, AfterViewInit {
         .children;
       for (const menu in menuItems) {
         setTimeout(() => {
+          if(this.roter.url.includes('help')){
+            this.helpPage = true;
+            return;
+          }
+          else{
+            this.helpPage = false;
+          }
           for (const menu in menuItems) {
             if (!isNaN(+menu)) {
               if (
