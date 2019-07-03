@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { QrcodeService } from 'src/app/shared/services/qrcode.service';
 
 @Component({
   selector: 'app-bot-qr',
@@ -20,9 +21,9 @@ export class BotQrComponent implements OnInit {
     size: '',
     margin: false,
     color: false
-  }
+  };
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private qrCodeService: QrcodeService) {
     this.myForm = formBuilder.group({
       botRefURL: ["", [Validators.required]],
       backgroundImage: ["", [Validators.required]],
@@ -48,10 +49,23 @@ export class BotQrComponent implements OnInit {
       size: '',
       margin: false,
       color: false
-    }
+    };
   }
 
   ngOnInit() {
   }
 
+  click() {
+    this.qrCodeService.addChatbotQR({
+      "ref_url": "example.com",
+      "backgroundImageUrl": "https://media.wired.com/photos/5cdefc28b2569892c06b2ae4/master/w_1500,c_limit/Culture-Grumpy-Cat-487386121-2.jpg",
+      "size": "200x200",
+      "brand_id": "22222222222",
+      "user_id": "sdsdasdasdad",
+      "extraOptions": "white margin"
+    }).subscribe(res => {
+      console.log(res);
+
+    });
+  }
 }

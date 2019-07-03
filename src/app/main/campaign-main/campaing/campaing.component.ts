@@ -22,8 +22,10 @@ export class CampaingComponent implements OnInit {
   showLoader;
 
   constructor(private campaignService: CompaignService, private router: Router, private mainService: MainService) {
-    this.showLoader = true;
-    this.getCampaigns();
+    if (JSON.parse(localStorage.getItem("user"))["user_type"] !== 4) {
+      this.showLoader = true;
+      this.getCampaigns();
+    }
   }
 
   ngOnInit() {

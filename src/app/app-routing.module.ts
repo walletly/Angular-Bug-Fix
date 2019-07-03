@@ -116,7 +116,7 @@ const routes: Routes = [
         ]
       },
       {
-        path: "campaign-templates",
+        path: "create-templates",
         component: CampaignTemplatesComponent,
         canActivate: [AuthGuard],
         data: { breadcrumb: "templates" }
@@ -228,12 +228,12 @@ const routes: Routes = [
     path: "auth",
     component: AuthComponent,
     children: [
-      { path: "login", component: LoginComponent },
-      { path: "sign-up", component: SignUpComponent },
-      { path: "forget-password", component: ForgetPassComponent },
-      { path: "reset-password", component: ResetPasswordComponent }
+      { path: 'sign-up', component: SignUpComponent },
+      { path: 'forget-password', component: ForgetPassComponent },
+      { path: 'reset-password', component: ResetPasswordComponent }
     ]
   },
+  { path: 'master-admin', component: LoginComponent },
   {
     path: "fb-connect",
     component: FbConnectComponent,

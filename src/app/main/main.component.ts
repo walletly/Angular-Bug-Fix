@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { MainService } from "../shared/services/main.service";
 import { BrandService } from "../shared/services/brand.service";
 import { AuthService } from "../shared/services/auth.service";
+import { AngularFireAuth } from "angularfire2/auth";
 
 @Component({
   selector: "app-main",
@@ -83,6 +84,7 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   user;
   username;
+  userAdmin;
 
   brands = [];
   filteredBrands;
@@ -95,12 +97,63 @@ export class MainComponent implements OnInit, AfterViewInit {
     private activatedRoute: ActivatedRoute,
     private mainService: MainService,
     private brandService: BrandService,
-    private authService: AuthService
+    private authService: AuthService,
+    private firebaseAuth: AngularFireAuth
   ) {
-    if (JSON.parse(localStorage.getItem('user'))['user_type'] === 3){
-      this.items[0].children.splice(1, 0, { icon: "icon-menu pages", title: "Pages", link: ["pages"] })
-      this.items[0].children.splice(2, 0, { icon: "icon-menu marketers", title: "Marketers", link: ["marketers"] })
-    } 
+    if (JSON.parse(localStorage.getItem("user"))["user_type"] === 4) {
+      this.items = [];
+      this.items = [
+        {
+          icon: "icon-menu test-sunny icon-brand-menu",
+          title: "SunnyMeats",
+          expanded: true,
+          pathMatch: "prefix",
+          children: [
+            {
+              title: "Dashboard",
+              icon: "icon-menu dashboard",
+              link: ["dashboard-info-admin"],
+              pathMatch: "prefix"
+            },
+            {
+              icon: "icon-menu pages",
+              title: "Pages",
+              link: ["pages"]
+            },
+            {
+              icon: "icon-menu marketers",
+              title: "Marketers",
+              link: ["marketers"]
+            },
+            {
+              icon: "icon-menu audience",
+              title: "Audience",
+              link: ["audience"]
+            },
+            {
+              icon: "icon-menu templates",
+              title: "Templates",
+              link: ["create-templates"]
+            },
+            {
+              icon: "icon-menu campaign",
+              title: "Campaign",
+              link: ["campaign-type"]
+            },
+            {
+              icon: "icon-menu settings",
+              title: "Settings",
+              link: ["settings"]
+            }
+          ]
+        }
+      ];
+    }
+    if (JSON.parse(localStorage.getItem("user"))["user_type"] === 4) {
+      this.userAdmin = true;
+    } else {
+      this.userAdmin = false;
+    }
     this.user = JSON.parse(localStorage.getItem("user"));
     this.username = {
       firstName: this.user["firstname"],
@@ -347,25 +400,27 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    let item = document.getElementsByClassName('menu-item')[6] as HTMLSpanElement;
-    item.setAttribute("style", `pointer-events: none;`);
+    if (!this.userAdmin) {
+      let item = document.getElementsByClassName('menu-item')[6] as HTMLSpanElement;
+      item.setAttribute("style", `pointer-events: none;`);
 
-    let title = document.getElementsByClassName('menu-title')[6] as HTMLSpanElement;
-    title.setAttribute("style",
-      `background-image: url('assets/img/lockIcon.png');
-      background-repeat: no-repeat;
-      background-position: right;`
-    );
+      let title = document.getElementsByClassName('menu-title')[6] as HTMLSpanElement;
+      title.setAttribute("style",
+        `background-image: url('assets/img/lockIcon.png');
+        background-repeat: no-repeat;
+        background-position: right;`
+      );
 
-    item = document.getElementsByClassName('menu-item')[8] as HTMLSpanElement;
-    item.setAttribute("style", `pointer-events: none;`);
+      item = document.getElementsByClassName('menu-item')[8] as HTMLSpanElement;
+      item.setAttribute("style", `pointer-events: none;`);
 
-    title = document.getElementsByClassName('menu-title')[8] as HTMLSpanElement;
-    title.setAttribute("style",
-      `background-image: url('assets/img/lockIcon.png');
-      background-repeat: no-repeat;
-      background-position: right;`
-    );
+      title = document.getElementsByClassName('menu-title')[8] as HTMLSpanElement;
+      title.setAttribute("style",
+        `background-image: url('assets/img/lockIcon.png');
+        background-repeat: no-repeat;
+        background-position: right;`
+      );
+    }
   }
 
   refreshPage() {
@@ -485,5 +540,14 @@ export class MainComponent implements OnInit, AfterViewInit {
         }
       );
     // this.setBrand()
+  }
+  logout() {
+    this.firebaseAuth.auth.signOut().then(() => {
+      localStorage.removeItem("usertoken");
+      localStorage.removeItem("user");
+      localStorage.removeItem("currentBrand");
+      localStorage.removeItem("userID");
+      this.roter.navigate(["/master-admin"]);
+    });
   }
 }

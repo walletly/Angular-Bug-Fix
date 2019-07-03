@@ -71,7 +71,7 @@
     }
   }
 }
-.loader{
+.loader {
   position: fixed;
   top: 0;
   left: 0;
@@ -82,4 +82,36 @@
   height: 100%;
   background: #00000038;
   z-index: 1111111;
+}
+.menu-item-aditation {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #afafb9;
+  font-family: Poppins;
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-weight: 400;
+  .icon {
+    &.logout {
+      background-image: url("../../assets/svg-icon/menu-icon-SVG/logout.svg");
+      background-size: 100% 100%;
+      margin-right: 4px;
+      min-width: 24px !important;
+      width: 24px;
+      height: 19px;
+      margin-left: -2px;
+      &.active {
+        background-image: url("../../assets/svg-icon/menu-icon-SVG/logout-active.svg");
+      }
+    }
+  }
+  &:hover {
+    color: #20beea;
+    .icon {
+      &.logout {
+        background-image: url("../../assets/svg-icon/menu-icon-SVG/logout-active.svg");
+      }
+    }
+  }
 }

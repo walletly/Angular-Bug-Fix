@@ -36,35 +36,40 @@ export class AudienceComponent implements OnInit {
   }
 
   getAudience(){
-    this.brandService.getBrandAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
-      console.log(result);
-      this.data = [];
-      let audiences;
+     if (JSON.parse(localStorage.getItem("user"))["user_type"] !== 4) {
+	this.brandService.getBrandAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+		console.log(result);
+		this.data = [];
+		let audiences;
 
-      if (result['success']) {
-        audiences = result['data']['coupons'];
-        audiences.forEach(element => {
+		if (result['success']) {
+			audiences = result['data']['coupons'];
+			audiences.forEach(element => {
 
-          this.data.push({
-            data: {
-              // 'First Name': { name: element.firstName },
-              // 'Last Name': { name: element.lastName },
-              'Full Name' : {name : `${element.firstName} ${element.lastName}`},
-              'Email Address': { name: element.email },
-              'Type': { name: element.campaign_type, icon: 'assets/img/Coupon.png' },
-              'Campaign Name': { name: element.campaign_name },
-              'Issue Date': { name: element.createDateFormatted },
-              'Expiry': { name: element.endDateFormatted },
-              'Status': { name:  element.status }
-            }
-          });
-        });
-      }
-      this.showLoader = false;
-    }, err => {
-      this.data = [];
-      this.showLoader = false;
-    });
+			  this.data.push({
+			    data: {
+			      // 'First Name': { name: element.firstName },
+			      // 'Last Name': { name: element.lastName },
+			      'Full Name' : {name : `${element.firstName} ${element.lastName}`},
+			      'Email Address': { name: element.email },
+			      'Type': { name: element.campaign_type, icon: 'assets/img/Coupon.png' },
+			      'Campaign Name': { name: element.campaign_name },
+			      'Issue Date': { name: element.createDateFormatted },
+			      'Expiry': { name: element.endDateFormatted },
+			      'Status': { name:  element.status }
+			    }
+			  });
+			});
+		}
+		this.showLoader = false;
+	}, err => {
+		this.data = [];
+		this.showLoader = false;
+	});
+    } else{
+	this.data = [];
+	this.showLoader = false;
+    }
   }
 
   refresh(){

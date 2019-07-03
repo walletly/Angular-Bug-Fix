@@ -1,63 +1,92 @@
-<div class="main-wrap">
-    <div>
+<nb-layout>
+  <nb-layout-column class="main-wrap-outer">
+    <div class="main-wrap">
+      <div>
         <div class="text-center m-b-29">
-            <img src="assets/svg-icon/logo-short-white.svg" alt="">
-        </div>
-        <div class="fs-22 fw-600 color-white text-center m-b-35">
-            Login In
+          <img src="assets/svg-icon/logo-dark.svg" alt="" />
         </div>
         <nb-card class="auth-card m-b-40">
-            <nb-card-body class="m-t-50">
-                <form [formGroup]="myForm">
-                    <div class="inputs-row">
-                        <div class="input-wrap full-width">
-                            <div class="fs-15 m-b-5">
-                                Username
-                            </div>
-                            <input [ngClass]="{'error': myForm.controls['name'].invalid && !customValidation}" type="text"
-                                formControlName="name" nbInput fullWidth fieldSize="medium" placeholder="">
-                            <div *ngIf="myForm.controls['name'].invalid && !customValidation" class="error-lable">
-                                Field error (must have at least 1 character)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inputs-row">
-                        <div class="input-wrap full-width">
-                            <div class="fs-15 m-b-5">
-                                Password
-                            </div>
-                            <input [ngClass]="{'error': myForm.controls['password'].invalid && !customValidation}" type="password"
-                                formControlName="password" nbInput fullWidth fieldSize="medium" placeholder="">
-                            <div *ngIf="myForm.controls['password'].invalid && !customValidation" class="error-lable">
-                                Field error (must have at least 6 characters)
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <div class="m-b-25">
-                    <button (click)="login()" class="cust-button fw-400 fs-14" fullWidth nbButton status="success">
-                        Login
-                    </button>
+          <nb-card-body>
+            <div class="fs-22 fw-400 m-b-9">
+                Login In
+            </div>
+            <form [formGroup]="myForm">
+              <div class="inputs-row m-b-26">
+                <div class="input-wrap full-width">
+                  <div class="fs-15 m-b-5">
+                    Username
+                  </div>
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['name'].invalid && !customValidation
+                    }"
+                    type="text"
+                    formControlName="name"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                    placeholder=""
+                  />
+                  <div
+                    *ngIf="myForm.controls['name'].invalid && !customValidation"
+                    class="error-lable"
+                  >
+                    Field error (must have at least 1 character)
+                  </div>
                 </div>
-                <div [routerLink]="[ '/auth/forget-password' ]" class="c-p color-dark fs-13 text-center fw-700 m-b-50">
-                    Forgot your password?
+              </div>
+              <div class="inputs-row m-b-33">
+                <div class="input-wrap full-width">
+                  <div class="fs-15 m-b-5">
+                    Password
+                  </div>
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['password'].invalid && !customValidation
+                    }"
+                    type="password"
+                    formControlName="password"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                    placeholder=""
+                  />
+                  <div
+                    *ngIf="
+                      myForm.controls['password'].invalid && !customValidation
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have at least 6 characters)
+                  </div>
                 </div>
-                <div class="custome-hr m-b-25">
-                    <span>or</span>
-                </div>
-                <div>
-                    <button (click)="signInWithFacebook()" class="cust-button fw-400 fs-14 df ai-c jc-c" fullWidth
-                        nbButton status="primary">
-                        <img class="m-b-5" src="assets/svg-icon/fb.svg" alt=""> Connect with Facebook
-                    </button>
-                </div>
-            </nb-card-body>
+              </div>
+            </form>
+            <div class="m-b-25">
+              <button
+                (click)="login()"
+                class="cust-button fw-400 fs-14"
+                fullWidth
+                nbButton
+                status="success"
+              >
+                Login
+              </button>
+            </div>
+            <div
+              [routerLink]="['/auth/forget-password']"
+              class="c-p color-dark fs-13 text-center fw-700 m-b-13"
+            >
+              Forgot your password?
+            </div>
+          </nb-card-body>
         </nb-card>
-        <div class="fs-13 m-b-40 fw-400 color-white text-center">
-            Don’t have an account? <span class="c-p fw-700" [routerLink]="[ '/auth/sign-up']"> SIGN UP</span>
-        </div>
-    </div>
-    <div class="text-center fs-11 color-white">
+      </div>
+      <div class="text-center fs-11 color-secondary">
         ®2019 Walletly Business, All rights reserved. Termsand Privacy
+      </div>
     </div>
-</div>
+  </nb-layout-column>
+</nb-layout>

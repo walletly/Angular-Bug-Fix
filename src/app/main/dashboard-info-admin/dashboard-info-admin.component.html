@@ -115,27 +115,17 @@
             Account Signed
           </div>
           <div (clickOutside)="showAccountSignedDate = false" class="pos-r">
-            <input
-              class="small"
-              (focus)="showAccountSignedDate = true"
-              [(ngModel)]="accountSignedDate"
-              type="text"
-              nbInput
-              fullWidth
-              fieldSize="small"
-              placeholder=""
-            />
+            <input class="small" (focus)="showAccountSignedDate = true" [(ngModel)]="accountSignedDate" type="text"
+              nbInput fullWidth fieldSize="small" placeholder="" />
             <div class="icon-calendar">
               <img src="assets/svg-icon/calendar-blue.svg" alt="" />
             </div>
-            <nb-calendar-range
-              *ngIf="showAccountSignedDate"
-              (rangeChange)="accountSignedDateChange()"
-              [(range)]="range"
-            >
+            <nb-calendar-range *ngIf="showAccountSignedDate" (rangeChange)="accountSignedDateChange()"
+              [(range)]="range">
             </nb-calendar-range>
           </div>
         </div>
+        <div id="chart-area4"></div>
       </nb-card-body>
     </nb-card>
   </div>
@@ -147,27 +137,17 @@
             pages by industries
           </div>
           <div (clickOutside)="showPagesByIndustriesDate = false" class="pos-r">
-            <input
-              class="small"
-              (focus)="showPagesByIndustriesDate = true"
-              [(ngModel)]="pagesByIndustriesDate"
-              type="text"
-              nbInput
-              fullWidth
-              fieldSize="small"
-              placeholder=""
-            />
+            <input class="small" (focus)="showPagesByIndustriesDate = true" [(ngModel)]="pagesByIndustriesDate"
+              type="text" nbInput fullWidth fieldSize="small" placeholder="" />
             <div class="icon-calendar">
               <img src="assets/svg-icon/calendar-blue.svg" alt="" />
             </div>
-            <nb-calendar-range
-              *ngIf="showPagesByIndustriesDate"
-              (rangeChange)="pagesByIndustriesDateChange()"
-              [(range)]="range"
-            >
+            <nb-calendar-range *ngIf="showPagesByIndustriesDate" (rangeChange)="pagesByIndustriesDateChange()"
+              [(range)]="range">
             </nb-calendar-range>
           </div>
         </div>
+        <div id="chart-area5"></div>
       </nb-card-body>
     </nb-card>
   </div>
@@ -179,27 +159,16 @@
             Marketer by week
           </div>
           <div (clickOutside)="showPagesByWeekDate = false" class="pos-r">
-            <input
-              class="small"
-              (focus)="showPagesByWeekDate = true"
-              [(ngModel)]="pagesByWeekDate"
-              type="text"
-              nbInput
-              fullWidth
-              fieldSize="small"
-              placeholder=""
-            />
+            <input class="small" (focus)="showPagesByWeekDate = true" [(ngModel)]="pagesByWeekDate" type="text" nbInput
+              fullWidth fieldSize="small" placeholder="" />
             <div class="icon-calendar">
               <img src="assets/svg-icon/calendar-blue.svg" alt="" />
             </div>
-            <nb-calendar-range
-              *ngIf="showPagesByWeekDate"
-              (rangeChange)="pagesByWeekDateChange()"
-              [(range)]="range"
-            >
+            <nb-calendar-range *ngIf="showPagesByWeekDate" (rangeChange)="pagesByWeekDateChange()" [(range)]="range">
             </nb-calendar-range>
           </div>
         </div>
+        <div id="chart-area"></div>
       </nb-card-body>
     </nb-card>
   </div>
@@ -211,27 +180,17 @@
             Pages by week
           </div>
           <div (clickOutside)="showMarketerByWeekDate = false" class="pos-r">
-            <input
-              class="small"
-              (focus)="showMarketerByWeekDate = true"
-              [(ngModel)]="marketerByWeekDate"
-              type="text"
-              nbInput
-              fullWidth
-              fieldSize="small"
-              placeholder=""
-            />
+            <input class="small" (focus)="showMarketerByWeekDate = true" [(ngModel)]="marketerByWeekDate" type="text"
+              nbInput fullWidth fieldSize="small" placeholder="" />
             <div class="icon-calendar">
               <img src="assets/svg-icon/calendar-blue.svg" alt="" />
             </div>
-            <nb-calendar-range
-              *ngIf="showMarketerByWeekDate"
-              (rangeChange)="marketerByWeekDateChange()"
-              [(range)]="range"
-            >
+            <nb-calendar-range *ngIf="showMarketerByWeekDate" (rangeChange)="marketerByWeekDateChange()"
+              [(range)]="range">
             </nb-calendar-range>
           </div>
         </div>
+        <div id="chart-area2"></div>
       </nb-card-body>
     </nb-card>
   </div>
@@ -243,27 +202,16 @@
             Growth
           </div>
           <div (clickOutside)="showGrowthDate = false" class="pos-r">
-            <input
-              class="small"
-              (focus)="showGrowthDate = true"
-              [(ngModel)]="growthDate"
-              type="text"
-              nbInput
-              fullWidth
-              fieldSize="small"
-              placeholder=""
-            />
+            <input class="small" (focus)="showGrowthDate = true" [(ngModel)]="growthDate" type="text" nbInput fullWidth
+              fieldSize="small" placeholder="" />
             <div class="icon-calendar">
               <img src="assets/svg-icon/calendar-blue.svg" alt="" />
             </div>
-            <nb-calendar-range
-              *ngIf="showGrowthDate"
-              (rangeChange)="growthDateChange()"
-              [(range)]="range"
-            >
+            <nb-calendar-range *ngIf="showGrowthDate" (rangeChange)="growthDateChange()" [(range)]="range">
             </nb-calendar-range>
           </div>
         </div>
+        <div id="chart-area3"></div>
       </nb-card-body>
     </nb-card>
   </div>

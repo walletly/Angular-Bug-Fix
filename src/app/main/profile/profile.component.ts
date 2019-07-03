@@ -137,7 +137,7 @@ export class ProfileComponent implements OnInit {
       localStorage.removeItem('user');
       localStorage.removeItem('currentBrand');
       localStorage.removeItem('userID');
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['/fb-login']);
     });
   }
 }

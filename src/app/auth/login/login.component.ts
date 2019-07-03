@@ -20,16 +20,15 @@ export class LoginComponent implements OnInit {
     private authService: AuthService, private brandService: BrandService) {
 
     this.myForm = formBuilder.group({
-      name: ["", [Validators.required]],
-      password: ["", [Validators.required, Validators.minLength(6)]]
+      name: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
 
-    this.firebaseAuth.authState.subscribe(data => {
-      if (data && !this.isLogin) {
-        this.router.navigate(['/main/dashboard']);
-      }
-    });
-
+    // this.firebaseAuth.authState.subscribe(data => {
+    //   if (data && !this.isLogin) {
+    //     this.router.navigate(['/main/dashboard']);
+    //   }
+    // });
   }
 
   ngOnInit() {
@@ -54,19 +53,21 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('usertoken', value.user['ra']);
         this.authService.getUser(value.user.uid).subscribe(result => {
           localStorage.setItem('user', JSON.stringify(result['data']));
-          if (result['data']['activeBrand']) {
-            this.brandService.getBrandById(result['data']['activeBrand']).subscribe(brand => {
-              localStorage.setItem('currentBrand', JSON.stringify(brand['brand']));
+          this.router.navigate(['/main/dashboard-info-admin']);
+          // if (result['data']['activeBrand']) {
+          //   this.brandService.getBrandById(result['data']['activeBrand']).subscribe(brand => {
+          //     localStorage.setItem('currentBrand', JSON.stringify(brand['brand']));
 
-              this.router.navigate(['/main/dashboard']);
-            });
-          } else {
-            this.router.navigate(['/connect']);
-          }
+          //     this.router.navigate(['/main/dashboard']);
+          //   });
+          // } else {
+          //   this.router.navigate(['/connect']);
+          // }
         });
       })
       .catch(err => {
         this.messError = err.message;
+        console.log(err);
       });
     } else {
       this.customValidation = false;

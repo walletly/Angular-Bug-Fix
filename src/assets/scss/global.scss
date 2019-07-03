@@ -985,7 +985,7 @@ nb-card {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-setting-active.svg");
         }
         &.business {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-business-active.svg");
+          background-image: url("assets/svg-icon/menu-icon-SVG/menu-business-active.svg") !important;
         }
       }
     }
@@ -1211,4 +1211,13 @@ button[status="facebook"] {
   &.error {
     box-shadow: 0px 0px 5px 2px red;
   }
+}
+nb-menu.admin-type > ul > li > a{
+  display: none !important;
+}
+.nb-theme-default nb-menu.admin-type .menu-item > .menu-items > .menu-item:first-child{
+  margin-top: 0px !important;
+}
+div.top > nb-menu.admin-type{
+  margin-bottom: 0 !important;  
 }

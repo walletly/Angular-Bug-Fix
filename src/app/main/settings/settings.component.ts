@@ -67,6 +67,7 @@ export class SettingsComponent implements OnInit {
   userAdmin;
   fbId;
   iconImage;
+  inProcces;
   brandAdmins;
 
   defaultColumns = ["Name", "Icon", "Number of Campaigns", "Number of Coupons", "Pricing", "Status", "Action"];
@@ -167,12 +168,12 @@ export class SettingsComponent implements OnInit {
 
     // this.mainService.showLoader.emit(true);
     this.showLoader = true;
-    this.getBrandSettings();
     this.goPayment();
-    if (JSON.parse(localStorage.getItem('user'))['user_type'] === 3){
+    if (JSON.parse(localStorage.getItem('user'))['user_type'] === 4){
       this.userAdmin = true;
     } else {
       this.userAdmin = false;
+      this.getBrandSettings();
     }
   }
 
@@ -240,6 +241,7 @@ export class SettingsComponent implements OnInit {
   update() {
     if (this.myForm.valid) {
       this.customValidation = true;
+      this.inProcces = true;
       this.getBrand();
       console.log(this.brand);
       this.brandService.updateBrand(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'], this.brand).subscribe(result => {
@@ -247,10 +249,16 @@ export class SettingsComponent implements OnInit {
         this.brandService.getBrandById(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
           localStorage.setItem('currentBrand', JSON.stringify(data['brand']));
           this.mainService.showToastrSuccess.emit({text: 'Settings updated'});
+          this.inProcces = false;
+        }, err => {
+          this.inProcces = false;
         });
+      }, err2 => {
+        this.inProcces = true;
       });
     } else {
       this.customValidation = false;
+      this.inProcces = false;
     }
   }
 

@@ -26,9 +26,15 @@ export class BreadcrumbComponent implements OnInit {
   brand = localStorage.getItem('currentBrand') ? JSON.parse(localStorage.getItem('currentBrand'))['brand_name'] : ''
 
   show;
+  userAdmin;
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {
     this.breadcrumbs = [];
+    if (JSON.parse(localStorage.getItem("user"))["user_type"] === 4) {
+      this.userAdmin = true;
+    } else {
+      this.userAdmin = false;
+    }
   }
 
   ngOnInit() {

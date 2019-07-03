@@ -88,7 +88,6 @@ export class FbLoginComponent implements OnInit {
             console.log(err);
           });
         } else {
-          console.log('asdadsdasdasd');
           this.showLoader = false;
         }
       });

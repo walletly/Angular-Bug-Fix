@@ -12,9 +12,9 @@ export class PagesComponent implements OnInit {
   constructor(
     private router: Router
   ) {
-    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 3){
+    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4){
       router.navigate(['/main/dashboard']);
-    } 
+    }
   }
 
   data = [

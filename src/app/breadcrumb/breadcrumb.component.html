@@ -1,11 +1,26 @@
 <h3 *ngIf="!show && name">Welcome back, {{ name }}</h3>
 <h3 *ngIf="show" class="df ai-c">
   <a
+    *ngIf="!userAdmin"
     class="fs-11 fw-400 c-p m-r-3"
     style="color: #afafb9; text-transform: capitalize"
     [routerLink]="['/main/dashboard']"
     [ngClass]="{ active: !breadcrumbs.length }"
-    >{{ brand }}
+  >
+    <span>
+      {{ brand }}
+    </span>
+  </a>
+  <a
+    *ngIf="userAdmin"
+    class="fs-11 fw-400 c-p m-r-3"
+    style="color: #afafb9; text-transform: capitalize"
+    [routerLink]="['/main/dashboard-info-admin']"
+    [ngClass]="{ active: !breadcrumbs.length }"
+  >
+    <span>
+      Dashboard
+    </span>
   </a>
   <a
     class="fs-11 fw-400 c-p"
