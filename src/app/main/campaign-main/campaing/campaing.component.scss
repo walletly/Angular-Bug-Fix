@@ -105,6 +105,10 @@ nb-card {
     }
 }
 
+.disable {
+    pointer-events: none;
+}
+
 .campaignSwitch {
     position: relative;
     display: inline-block;
@@ -186,8 +190,4 @@ input:checked + .campaignSlider .off {
   
 .campaignSlider.campaignRound:before {
     border-radius: 50%;
-}
-
-.disable {
-    pointer-events: none;
 }

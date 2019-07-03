@@ -101,14 +101,15 @@ export class CampaingComponent implements OnInit {
     label.classList.add('disable');
     this.campaignService.updateСampaign(id, { is_active: !status }).subscribe(result => {
       console.log(result);
-      this.mainService.showToastrSuccess.emit({text: 'Status changed'});
+      const msg = (!status) ? 'activated' : 'deactivated';
+      this.mainService.showToastrSuccess.emit({text: `Campaign has been ${msg}`});
       this.getCampaigns();
       (document.getElementById(input) as HTMLInputElement).checked = !((document.getElementById(input) as HTMLInputElement).checked);
       label.classList.remove('disable');
       this.inChangeStatus = '';
     }, err => {
       console.log(err);
-      label.classList.add('disable');
+      label.classList.remove('disable');
       this.inChangeStatus = '';
     });
   }

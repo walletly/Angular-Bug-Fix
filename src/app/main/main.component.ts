@@ -523,11 +523,11 @@ export class MainComponent implements OnInit, AfterViewInit {
                 this.mainService.changeBrandBool = true;
                 this.mainService.showLoader.emit(false);
 
-                window.location.reload();
-                // if (this.roter.url.includes("/main/dashboard")) {
-                //   window.location.reload();
-                // }
-                // this.roter.navigate(["/main/dashboard"]);
+                // window.location.reload();
+                if (this.roter.url.includes("/main/dashboard")) {
+                  window.location.reload();
+                }
+                this.roter.navigate(["/main/dashboard"]);
               },
               error => {
                 this.mainService.showLoader.emit(false);

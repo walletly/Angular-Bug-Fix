@@ -90,7 +90,7 @@
             </div>
             <div class="df ai-c">
               <span *ngIf="column === 'Status'">
-                <label class="campaignSwitch" 
+                <!-- <label class="campaignSwitch" 
                   (click)="changeStatus(
                     $event.target,
                     'check-' + row.data['Id'].name,
@@ -109,6 +109,17 @@
                       <i *ngIf="inChangeStatus == row.data['Id'].name" class="fas fa-spinner fa-pulse"></i>
                     </span>
                   </div>
+                </label> -->
+                <label class="switch"
+                  (click)="changeStatus(
+                  $event.target,
+                  'check-' + row.data['Id'].name,
+                  row.data['Id'].name,
+                  row.data['Status'].name,
+                  $event)">
+                  <input *ngIf="row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" checked disabled>
+                  <input *ngIf="!row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" disabled>
+                  <span class="slider round"></span>
                 </label>
                 <!-- <span
                   *ngIf="row.data[column].name === true"
