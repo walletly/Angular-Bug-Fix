@@ -75,10 +75,10 @@ const routes: Routes = [
         data: { breadcrumb: "settings" }
       },
       {
-        path: "pages",
+        path: "brands",
         component: PagesComponent,
         canActivate: [AuthGuard],
-        data: { breadcrumb: "pages" }
+        data: { breadcrumb: "brands" }
       },
       {
         path: "marketers",

@@ -117,8 +117,8 @@ export class MainComponent implements OnInit, AfterViewInit {
             },
             {
               icon: "icon-menu pages",
-              title: "Pages",
-              link: ["pages"]
+              title: "Brands",
+              link: ["brands"]
             },
             {
               icon: "icon-menu marketers",

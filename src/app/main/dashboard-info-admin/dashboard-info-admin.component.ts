@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { NbCalendarRange, NbDateService } from '@nebular/theme';
 import chart from 'tui-chart';
 import { Router } from '@angular/router';
+import { ReportService } from 'src/app/shared/services/masterAdmin/report.service';
 
 @Component({
   selector: 'app-dashboard-info-admin',
@@ -11,12 +12,22 @@ import { Router } from '@angular/router';
 })
 export class DashboardInfoAdminComponent implements OnInit {
   range: NbCalendarRange<Date>;
+  total_coupons;
+  total_brands;
+  total_marketeers;
+  total_audiences;
 
-  constructor(protected dateService: NbDateService<Date>, private router: Router) {
+  constructor(private reportService: ReportService, protected dateService: NbDateService<Date>, private router: Router) {
     if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4){
       router.navigate(['/main/dashboard']);
     }
-   }
+    this.reportService.getStats().subscribe(result => {
+      this.total_coupons = result['data'].total_coupons;
+      this.total_brands = result['data'].total_brands;
+      this.total_marketeers = result['data'].total_marketeers;
+      this.total_audiences = result['data'].total_audiences;
+    });
+  }
 
   get monthStart(): Date {
     return this.dateService.getMonthStart(new Date());
