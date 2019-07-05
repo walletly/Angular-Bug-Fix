@@ -25,6 +25,7 @@ export class FbConnectComponent implements OnInit {
   stepIndex;
   toolTipStatus;
   showLoader;
+  FbPages = true;
 
   photoLogo;
   photoCover;
@@ -170,6 +171,10 @@ export class FbConnectComponent implements OnInit {
           this.showLoader = false;
         }
       });
+    }, error =>{
+      console.log(error);
+      this.showLoader = false;
+      this.FbPages = false;
     });
   }
 

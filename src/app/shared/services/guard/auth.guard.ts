@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthService } from '../auth.service';
 import { MainService } from '../main.service';
+import { BrandService } from '../brand.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ export class AuthGuard implements CanActivate {
   constructor(private firebaseAuth: AngularFireAuth,
     private router: Router,
     private authService: AuthService,
-    private mainService: MainService) {}
+    private mainService: MainService,
+    private brandService: BrandService,) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -55,5 +57,18 @@ export class AuthGuard implements CanActivate {
       });
 
       // return false;
+  }
+
+
+  canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<boolean> | Promise<boolean> | boolean {
+    return Observable.create(observer => {
+      this.brandService.getUsersBrands(localStorage.getItem("userID"))
+        .subscribe(result => {
+          observer.next(true);
+        }, error => {
+          this.router.navigate(['/fb-connect']);
+          observer.next(false);
+        });
+    });
   }
 }

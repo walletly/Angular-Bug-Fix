@@ -38,7 +38,12 @@
                 <input type="hidden" formControlName="fakeData" nbInput>
               </form>
               <div class="page-list">
-                <div class="body">
+                <div class="body" *ngIf="!FbPages">
+                  <div style="min-height: 200px; max-width: 70%; padding: calc(26% - 100px); margin: auto; text-align: center;">
+                    Please give access rights to your facebook pages after login. If you don't have a page create one now !
+                  </div>
+                </div>
+                <div class="body" *ngIf="FbPages">
                   <div class="body-scroll">
                     <div *ngIf="showLoader" class="loader-table">
                       <img width="70px" src="assets/img/Loader2x.gif" alt="">

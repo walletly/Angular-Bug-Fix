@@ -42,6 +42,7 @@ const routes: Routes = [
     path: "main",
     component: MainComponent,
     canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     data: { breadcrumb: "" },
     children: [
       {
