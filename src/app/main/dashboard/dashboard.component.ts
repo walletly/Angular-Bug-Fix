@@ -43,6 +43,10 @@ export class DashboardComponent implements OnInit {
       window.location.reload();
     }
     this.reportService.reportBrand(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe(result =>{
+      if (!result['data'].campaignsStats.summary){
+        this.showGraph = 2;
+        return;
+      }
       this.showGraph = 3;
       this.total_coupons_created = result['data'].brandData.total_coupons_created;
       this.total_redeems = result['data'].brandData.total_redeems;
