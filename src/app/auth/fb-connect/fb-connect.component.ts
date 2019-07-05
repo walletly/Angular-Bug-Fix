@@ -234,7 +234,7 @@ export class FbConnectComponent implements OnInit {
           if (result['code'] !== 602 && result['code'] !== 603) {
             this.stepper.next();
             this.setForm2();
-            this.photoCover = this.fbResponse['cover_image'];
+            // this.photoCover = this.fbResponse['cover_image'];
             this.photoLogo = this.fbResponse['profile_logo'];
             this.myFormStep2.controls['facebookPageID'].setValue('www.facebook.com/' + this.fbResponse.brand_id);
           }
