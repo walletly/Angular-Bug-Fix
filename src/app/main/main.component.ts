@@ -19,6 +19,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   headerTitle;
   avatar;
   helpPage = false;
+  brandPlan;
 
   items = [
     {
@@ -168,6 +169,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       if (localStorage.getItem("currentBrand")) {
         this.setBrand();
+        this.brandPlan = JSON.parse(localStorage.getItem("currentBrand"))['plan_details'].plan_name;
       }
     }, 200);
 

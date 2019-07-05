@@ -20,12 +20,14 @@ export class DashboardComponent implements OnInit {
   unredeemed;
   avg_coupon_redeems;
 
-  colors = ['#ff6384', '#36a2eb', '#ffce56', '#ff9fbc', '#4bc0c0',
-            '#9966ff', '#ff9f40', '#03fcbc', '#e2c5ff', '#00803b'];
+  colors = [ 'rgb(255,99,132)', 'rgb(54,162,235)', 'rgb(255,206,86)', 'rgb(153,102,255)', 'rgb(75,192,192)',
+             'rgb(255,159,188)', 'rgb(255,159,64)', 'rgb(3,252,188)', 'rgb(226,197,255)', 'rgb(0,128,59)'];
+  blurColors = [ 'rgb(255,99,132, 0.5)', 'rgb(54,162,235, 0.5)', 'rgb(255,206,86, 0.5)', 'rgb(153,102,255, 0.5)', 'rgb(75,192,192, 0.5)',
+                 'rgb(255,159,188, 0.5)', 'rgb(255,159,64, 0.5)', 'rgb(3,252,188, 0.5)', 'rgb(226,197,255, 0.5)', 'rgb(0,128,59, 0.5)'];
 
   brandCampaings;
-  stackedChart = { labels: [], data1: [], data2: [] };
-  earningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors, borderColor: this.colors }
+  stackedChart = { labels: [], data1: [], data2: [], backgroundColor1: this.colors, backgroundColor2: this.blurColors };
+  earningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors }
   
 
   campign
@@ -42,7 +44,7 @@ export class DashboardComponent implements OnInit {
     if (mainService.changeBrandBool) {
       window.location.reload();
     }
-    this.reportService.reportBrand(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe(result =>{
+    this.reportService.reportBrand(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe( result =>{
       if (!result['data'].campaignsStats.summary){
         this.showGraph = 2;
         return;
@@ -65,11 +67,18 @@ export class DashboardComponent implements OnInit {
       while(this.stackedChart.labels.length < 8){
         this.stackedChart.labels.push('');
       }
-      while(this.earningCampaignsChart.backgroundColor.length < this.earningCampaignsChart.data.length){
-        let randomColor = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
-        this.earningCampaignsChart.backgroundColor.push(randomColor);
-        this.earningCampaignsChart.borderColor.push(randomColor);
+      
+      const len = this.earningCampaignsChart.backgroundColor.length;
+      for (var i = len; i < this.earningCampaignsChart.data.length; i++){
+        const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
+          return String(Math.floor(Math.random() * 255));
+        });
+        const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
+        this.earningCampaignsChart.backgroundColor[i] = randomColor1;
+        this.stackedChart.backgroundColor1[i] = randomColor1;        
+        this.stackedChart.backgroundColor2[i] = randomColor2;
       }
+
       setTimeout(() => {
         this.generateGraphs();
       }, 50);
@@ -82,100 +91,54 @@ export class DashboardComponent implements OnInit {
   }
 
   generateGraphs() {
-    // var ctx = document.getElementById('myChart');
-    // var ctx2 = document.getElementById('myChart2');
+    var ctx1 = document.getElementById('myChart1');
+    var ctx2 = document.getElementById('myChart2');
     var ctx3 = document.getElementById('myChart3');
-    var ctx4 = document.getElementById('myChart4');
-    var ctx5 = document.getElementById('myChart5');
-    // var myChart = new Chart(ctx, {
-    //   type: 'bar',
-    //   data: {
-    //     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    //     datasets: [{
-    //       label: '# of Votes',
-    //       data: [12, 10, 3, 5, 6, 3],
-    //       backgroundColor: [
-    //         'rgba(255, 99, 132, 1)',
-    //         'rgba(54, 162, 235, 1)',
-    //         'rgba(255, 206, 86, 1)',
-    //         'rgba(75, 192, 192, 1)',
-    //         'rgba(153, 102, 255, 1)',
-    //         'rgba(255, 159, 64, 1)'
-    //       ],
-    //       borderColor: [
-    //         'rgba(255, 99, 132, 1)',
-    //         'rgba(54, 162, 235, 1)',
-    //         'rgba(255, 206, 86, 1)',
-    //         'rgba(75, 192, 192, 1)',
-    //         'rgba(153, 102, 255, 1)',
-    //         'rgba(255, 159, 64, 1)'
-    //       ],
-    //       borderWidth: 1,
-    //     }]
-    //   },
-    //   options: {
-    //     scales: {
-    //       yAxes: [{
-    //         ticks: {
-    //           display: false
-    //         },
-    //       }],
-    //       xAxes: [{
-    //         gridLines: {
-    //           display: false
-    //         } 
-    //       }]
-    //     },
-    //     legend: {
-    //       display: false
-    //     },
-    //   }
-    // });
-    // var myChart = new Chart(ctx2, {
-    //   type: 'bar',
-    //   data: {
-    //     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    //     datasets: [{
-    //       label: '# of Votes',
-    //       data: [12, 10, 3, 5, 4, 3],
-    //       backgroundColor: [
-    //         'rgba(255, 99, 132, 1)',
-    //         'rgba(54, 162, 235, 1)',
-    //         'rgba(255, 206, 86, 1)',
-    //         'rgba(75, 192, 192, 1)',
-    //         'rgba(153, 102, 255, 1)',
-    //         'rgba(255, 159, 64, 1)'
-    //       ],
-    //       borderColor: [
-    //         'rgba(255, 99, 132, 1)',
-    //         'rgba(54, 162, 235, 1)',
-    //         'rgba(255, 206, 86, 1)',
-    //         'rgba(75, 192, 192, 1)',
-    //         'rgba(153, 102, 255, 1)',
-    //         'rgba(255, 159, 64, 1)'
-    //       ],
-    //       borderWidth: 1
-    //     }]
-    //   },
-    //   options: {
-    //     scales: {
-    //       yAxes: [{
-    //         ticks: {
-    //           display: false
-    //         },
-    //       }],
-    //       xAxes: [{
-    //         gridLines: {
-    //           display: false
-    //         } 
-    //       }]
-    //     },
-    //     legend: {
-    //       display: false
-    //     },
-    //   }
-    // });
-    var myChart = new Chart(ctx3, {
+    
+    var stackedChart = new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: this.stackedChart.labels,
+        datasets: [{
+          type: 'bar',
+          label: 'Total Redeems',
+          backgroundColor: this.stackedChart.backgroundColor1,
+          borderColor: this.stackedChart.backgroundColor1,
+          data: this.stackedChart.data1,
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: 'Total Unredeemed',
+          backgroundColor: this.stackedChart.backgroundColor2,
+          borderColor: this.stackedChart.backgroundColor1,
+          data: this.stackedChart.data2,
+          borderWidth: 1,
+        }
+      ]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              display: false
+            },
+            stacked: true,
+          }],
+          xAxes: [{
+            maxBarThickness: 50,
+            gridLines: {
+              display: false
+            },
+            stacked: true,
+          }]
+        },
+        legend: {
+          display: false
+        },
+      }
+    });
+    var redeemedChart = new Chart(ctx2, {
       type: 'doughnut',
       data: {
         labels: ['Redeemed', 'Unredeemed'],
@@ -199,7 +162,7 @@ export class DashboardComponent implements OnInit {
         },
       }
     });
-    var earningCampaignsChart = new Chart(ctx4, {
+    var earningCampaignsChart = new Chart(ctx3, {
       type: 'pie',
       data: {
         labels: this.earningCampaignsChart.labels,
@@ -207,52 +170,11 @@ export class DashboardComponent implements OnInit {
           label: 'spendings',
           data: this.earningCampaignsChart.data,
           backgroundColor: this.earningCampaignsChart.backgroundColor,
-          borderColor: this.earningCampaignsChart.borderColor,
+          borderColor: this.earningCampaignsChart.backgroundColor,
           borderWidth: 1
         }]
       },
       options: {
-        legend: {
-          display: false
-        },
-      }
-    });
-    var stackedChart = new Chart(ctx5, {
-      type: 'bar',
-      data: {
-        labels: this.stackedChart.labels,
-        datasets: [{
-          type: 'bar',
-          label: 'Total Redeems',
-          backgroundColor: "#007BFF",
-          data: this.stackedChart.data1,
-          borderWidth: 1
-        },
-        {
-          type: 'bar',
-          label: 'Total Unredeemed',
-          backgroundColor: "#B2D7FF",
-          data: this.stackedChart.data2,
-          borderWidth: 1
-        }
-      ]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              display: false
-            },
-            stacked: true,
-          }],
-          xAxes: [{
-            maxBarThickness: 50,
-            gridLines: {
-              display: false
-            },
-            stacked: true,
-          }]
-        },
         legend: {
           display: false
         },

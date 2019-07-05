@@ -90,6 +90,11 @@
     <!-- <h3 style="text-transform: capitalize;" [ngClass]="{'fs-11 fw-400': brandName}">
            <span style="color: #afafb9;">{{brandName}}</span> {{headerTitle}}
         </h3> -->
+    <div class="m-r-5">
+      <img *ngIf="brandPlan == 'pro'" src="assets/svg-icon/proBadge.svg">
+      <img *ngIf="brandPlan == 'basic'" src="assets/svg-icon/basicBadge.svg">
+      <img *ngIf="brandPlan == 'starter'" src="assets/svg-icon/starterBadge.svg">
+    </div>
     <app-breadcrumb [name]="username.firstName"></app-breadcrumb>
   </nb-layout-header>
 
