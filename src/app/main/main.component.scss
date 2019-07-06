@@ -115,3 +115,18 @@
     }
   }
 }
+.badge:hover .badgeInfo{
+  display: block;
+}
+.badgeInfo{
+  position: absolute;
+  margin-top: 5px;
+  display: none;
+  width: 400px;
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  border: none !important;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 12px;
+  padding: 10px;
+}

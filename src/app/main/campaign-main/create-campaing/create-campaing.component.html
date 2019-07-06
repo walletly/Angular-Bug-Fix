@@ -33,7 +33,7 @@
         </td>
       </ng-container>
     </table>
-    <div *ngIf="selectedSell === 'Coupon in %'">
+    <div *ngIf="selectedSell === 'Coupon in %' || selectedSell === 'Coupon in $'">
       <form [formGroup]="myForm">
         <div class="p-l-30 m-b-30" style="font-size: 25px">
           Campaign
@@ -137,9 +137,10 @@
             </div>
             <div class="value">
               <div class="pos-r full-width">
-                <input [ngClass]="{'error': myForm.controls['discount'].invalid && !customValidation}"
+                <input id="discountInput" [ngClass]="{'error': myForm.controls['discount'].invalid && !customValidation}"
                   formControlName="discount" [ngModel]="dataCoupon.discount" (ngModelChange)="changeDiscount($event)"
-                  class="small" (input)="checkDiscount($event.target.value)" type="number" nbInput fullWidth fieldSize="small">
+                  class="small p-r-25" (input)="checkDiscount($event.target.value)" type="number" nbInput fullWidth fieldSize="small"
+                  style="background-repeat: no-repeat; background-position: right;">
                 <div *ngIf="myForm.controls['discount'].invalid && !customValidation" class="error-lable">
                   set discount
                 </div>

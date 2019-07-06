@@ -156,6 +156,9 @@ export class FbConnectComponent implements OnInit {
     this.http.get('https://graph.facebook.com/v3.3/me/accounts?fields=cover,name,picture&access_token='
       + localStorage.getItem('access') + '&limit=1000').subscribe((res) => {
       console.log(res);
+      if(res['data'].length < 1){
+        this.FbPages = false;
+      }
       this.fbBrands = res['data'];
       this.brandService.getUsersBrands(localStorage.getItem('userID')).subscribe(result => {
         this.userBrands = result['data']['brands'];

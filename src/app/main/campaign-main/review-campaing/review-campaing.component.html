@@ -165,8 +165,11 @@
           <div class="lable">
             Campaign Type
           </div>
-          <div class="value">
+          <div *ngIf="dataCoupon.campaign_type == 1" class="value">
             Coupon in %
+          </div>
+          <div *ngIf="dataCoupon.campaign_type == 2" class="value">
+            Coupon in $
           </div>
         </div>
         <div class="row-info">

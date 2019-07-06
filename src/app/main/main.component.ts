@@ -308,10 +308,6 @@ export class MainComponent implements OnInit, AfterViewInit {
       }
       if(this.roter.url.includes('help')){
         this.helpPage = true;
-        return;
-      }
-      else{
-        this.helpPage = false;
       }
       for (const menu in menuItems) {
         if (!isNaN(+menu)) {
@@ -321,6 +317,7 @@ export class MainComponent implements OnInit, AfterViewInit {
             )
           ) {
             menuItems[menu].classList.add("active");
+            this.helpPage = false;
           } else {
             menuItems[menu].classList.remove("active");
           }
@@ -344,10 +341,6 @@ export class MainComponent implements OnInit, AfterViewInit {
         }
         if(this.roter.url.includes('help')){
           this.helpPage = true;
-          return;
-        }
-        else{
-          this.helpPage = false;
         }
         for (const menu in menuItems) {
           if (!isNaN(+menu)) {
@@ -357,6 +350,7 @@ export class MainComponent implements OnInit, AfterViewInit {
               )
             ) {
               menuItems[menu].classList.add("active");
+              this.helpPage = false;
             } else {
               menuItems[menu].classList.remove("active");
             }
@@ -449,10 +443,6 @@ export class MainComponent implements OnInit, AfterViewInit {
         setTimeout(() => {
           if(this.roter.url.includes('help')){
             this.helpPage = true;
-            return;
-          }
-          else{
-            this.helpPage = false;
           }
           for (const menu in menuItems) {
             if (!isNaN(+menu)) {
@@ -462,6 +452,7 @@ export class MainComponent implements OnInit, AfterViewInit {
                 )
               ) {
                 menuItems[menu].classList.add("active");
+                this.helpPage = false;
               } else {
                 menuItems[menu].classList.remove("active");
               }

@@ -42,7 +42,7 @@ export class CreateCampaingComponent implements OnInit {
 
   data = [
     {
-      data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', locked: true }, 'Cards': { name: 'Loyalty Card', icon: 'assets/img/LoyaltyCard.png', locked: true }, 'Tickets': { name: 'Event Tickets', icon: 'assets/img/eventTickets.png', locked: true } },
+      data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', locked: false }, 'Cards': { name: 'Loyalty Card', icon: 'assets/img/LoyaltyCard.png', locked: true }, 'Tickets': { name: 'Event Tickets', icon: 'assets/img/eventTickets.png', locked: true } },
     },
     {
       data: { 'Coupons': { name: 'Coupon in %', icon: 'assets/img/Coupon.png', locked: false }, 'Cards': { name: 'Stamp Card', icon: 'assets/img/stampCard.png', locked: true }, 'Tickets': { name: '', icon: '' } },
@@ -69,7 +69,7 @@ export class CreateCampaingComponent implements OnInit {
       campaignName: ["", [Validators.required]],
       description: ["", [Validators.required]],
       template: ["", [Validators.required]],
-      discount: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
+      discount: ["", []],
       // numberOfCoupon: ["", [Validators.required]],
       // setLimit: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
       validity: ["30 Days", [Validators.required]],
@@ -233,7 +233,19 @@ export class CreateCampaingComponent implements OnInit {
 
   selectType(typeName) {
     if (typeName === 'Coupon in %') {
-      this.dataCoupon.campaign_type = '1';
+      this.dataCoupon.campaign_type = 1;
+      this.myForm.get('discount').setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+      this.myForm.get('discount').updateValueAndValidity();
+      setTimeout(() => {
+        (document.getElementById('discountInput') as HTMLInputElement).style.backgroundImage = "url('assets/img/percent.png')";
+      }, 50);
+    }else if(typeName === 'Coupon in $'){
+      this.dataCoupon.campaign_type = 2;
+      this.myForm.get('discount').setValidators([Validators.required, Validators.min(0)]);
+      this.myForm.get('discount').updateValueAndValidity();
+      setTimeout(() => {
+        (document.getElementById('discountInput') as HTMLInputElement).style.backgroundImage = "url('assets/img/dollar.png')";
+      }, 50);    
     }
   }
 
