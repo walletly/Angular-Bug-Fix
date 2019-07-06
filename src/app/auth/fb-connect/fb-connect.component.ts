@@ -295,7 +295,7 @@ export class FbConnectComponent implements OnInit {
       this.loader = false;
     }, err => {
       if (err['error'].status === 401 && err['error'].statusText === 'Unauthorized') {
-        this.signOut();
+        this.logout();
       }
       console.log(err);
       this.loader = false;
@@ -505,9 +505,11 @@ export class FbConnectComponent implements OnInit {
     });
   }
 
-  signOut() {
-    this.firebaseAuth.auth.signOut().then((result) => {
-      console.log(result);
+  logout() {
+    this.firebaseAuth.auth.signOut().then(() => {
+      localStorage.clear();
+      localStorage.setItem('loggedOut', 'true');
+      this.router.navigate(['/fb-login']);
     });
   }
 

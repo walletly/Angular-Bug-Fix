@@ -62,6 +62,10 @@ export class AuthGuard implements CanActivate {
 
   canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<boolean> | Promise<boolean> | boolean {
     return Observable.create(observer => {
+      if (JSON.parse(localStorage.getItem("user"))["user_type"] === 4){
+        observer.next(true);
+        return;
+      }
       this.brandService.getUsersBrands(localStorage.getItem("userID"))
         .subscribe(result => {
           observer.next(true);

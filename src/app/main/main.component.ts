@@ -536,11 +536,9 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
   logout() {
     this.firebaseAuth.auth.signOut().then(() => {
-      localStorage.removeItem("usertoken");
-      localStorage.removeItem("user");
-      localStorage.removeItem("currentBrand");
-      localStorage.removeItem("userID");
-      this.roter.navigate(["/master-admin"]);
+      localStorage.clear();
+      localStorage.setItem('loggedOut', 'true');
+      this.roter.navigate(['/master-admin']);
     });
   }
 }

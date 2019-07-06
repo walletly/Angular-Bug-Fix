@@ -133,10 +133,8 @@ export class ProfileComponent implements OnInit {
 
   logout() {
     this.firebaseAuth.auth.signOut().then(() => {
-      localStorage.removeItem('usertoken');
-      localStorage.removeItem('user');
-      localStorage.removeItem('currentBrand');
-      localStorage.removeItem('userID');
+      localStorage.clear();
+      localStorage.setItem('loggedOut', 'true');
       this.router.navigate(['/fb-login']);
     });
   }

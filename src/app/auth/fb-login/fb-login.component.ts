@@ -30,6 +30,11 @@ export class FbLoginComponent implements OnInit {
     setTimeout(() => {
       this.firebaseAuth.auth.getRedirectResult()
       .then(async res => {
+        if(localStorage.getItem('loggedOut') == 'true'){
+          localStorage.clear();
+          this.showLoader = false;
+          return;
+        }
         if (res.user) {
           console.log(res);
           const firstname = res.additionalUserInfo.profile['first_name'];

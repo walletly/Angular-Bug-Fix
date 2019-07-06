@@ -32,6 +32,12 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    setTimeout(() => {
+      if(localStorage.getItem('loggedOut') == 'true'){
+        localStorage.clear();
+        return;
+      }
+    }, 1000);
   }
 
   login() {
