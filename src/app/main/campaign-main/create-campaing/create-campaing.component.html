@@ -131,6 +131,22 @@
           Coupon
         </div>
         <div class="p-l-60">
+          <div *ngIf="selectedSell === 'Coupon in $'" class="row-input">
+            <div class="lable">
+              Select Currency
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select formControlName="currency" placeholder="Select Currency">
+                  <nb-option value="USD">United States Dollars</nb-option>
+                  <nb-option value="EUR">Euro</nb-option>
+                  <nb-option value="GBP">United Kingdom Pounds</nb-option>
+                  <nb-option value="AUD">Australia Dollars</nb-option>
+                  <nb-option value="CAD">Canada Dollars</nb-option>
+                </nb-select>
+              </div>
+            </div>
+          </div>
           <div class="row-input">
             <div class="lable">
               Discount

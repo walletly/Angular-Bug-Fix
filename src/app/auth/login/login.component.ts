@@ -58,6 +58,9 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('userID', value.user.uid);
         localStorage.setItem('usertoken', value.user['ra']);
         this.authService.getUser(value.user.uid).subscribe(result => {
+          if(result['data'].user_type != 4 ){
+            this.logout();
+          }
           localStorage.setItem('user', JSON.stringify(result['data']));
           this.router.navigate(['/main/dashboard-info-admin']);
           // if (result['data']['activeBrand']) {
@@ -93,4 +96,11 @@ export class LoginComponent implements OnInit {
     // .catch((err) => this.messError = err.message);
   }
 
+  logout() {
+    this.firebaseAuth.auth.signOut().then(() => {
+      localStorage.clear();
+      localStorage.setItem('loggedOut', 'true');
+      this.router.navigate(['/master-admin']);
+    });
+  }
 }
