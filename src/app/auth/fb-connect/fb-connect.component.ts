@@ -234,12 +234,14 @@ export class FbConnectComponent implements OnInit {
           this.api = result['apikey'];
           this.loader = false;
           this.inProcces = false;
+          this.setActiveBrandAndUpdateUser(id);
           if (result['code'] === 602) {
             this.setActiveBrandAndUpdateUser(id);
             this.loader = false;
             this.inProcces = false;
           }
           if (result['code'] !== 602 && result['code'] !== 603) {
+            this.setActiveBrandAndUpdateUser(id);
             this.stepper.next();
             this.setForm2();
             // this.photoCover = this.fbResponse['cover_image'];
@@ -291,7 +293,7 @@ export class FbConnectComponent implements OnInit {
       const brandResult = results[0];
       const userResult = results[1];
       localStorage.setItem('currentBrand', JSON.stringify(brandResult['brand']));
-      this.router.navigate(['/main/dashboard']);
+      // this.router.navigate(['/main/dashboard']);
       this.loader = false;
     }, err => {
       if (err['error'].status === 401 && err['error'].statusText === 'Unauthorized') {
