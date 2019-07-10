@@ -140,7 +140,7 @@ export class CreateBusinessComponent implements OnInit {
       // this.mainService.addBusiness(this.data);
       this.data['brand_id'] = JSON.parse(localStorage.getItem('currentBrand'))['brand_id'];
       console.log(this.data);
-      this.business.updateBusiness(this.id, this.data).subscribe(result => {
+      this.business.updateBusinessUser(this.id, this.data).subscribe(result => {
         console.log(result);
         if (result['success']) {
           // this.showAletr = true;

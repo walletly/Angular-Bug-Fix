@@ -44,11 +44,11 @@
               <td [ngClass]="{'check-row-bg': checkAll}" nbTreeGridCell *nbTreeGridCellDef="let row">
 
                 <div class="df ai-c">
-                  <span *ngIf="column === 'Permission'">
-                    <img class="m-r-8" *ngIf="row.data[column] === 'YES'" src="assets/svg-icon/permission-yes.svg" alt="">
-                    <img class="m-r-8" *ngIf="row.data[column] === 'NO'" src="assets/svg-icon/permission-no.svg" alt="">
+                  <span *ngIf="column === 'Permission'" (click)="changePermission(row.data.id, row.data[column])">
+                    <img class="m-r-8 c-p" *ngIf="row.data[column] === 'YES'" src="assets/svg-icon/permission-yes.svg" alt="">
+                    <img class="m-r-8 c-p" *ngIf="row.data[column] === 'NO'" src="assets/svg-icon/permission-no.svg" alt="">
                   </span>
-                  <div *ngIf="column !== 'Invite'" class="ellipsis">
+                  <div *ngIf="column !== 'Invite'" (click)="changePermission(row.data.id, row.data[column])" class="ellipsis c-p">
                     <span>{{row.data[column]}}</span>
                   </div>
                 </div>
@@ -62,11 +62,11 @@
                     <img src="assets/img/mail-icon.png" alt="">
                     Invite
                   </div>
-                  <div *ngIf="row.data[column] === 2" class="chip-invite active">
+                  <div *ngIf="row.data[column] === -1" class="chip-invite active">
                     <img width="14px" src="assets/img/success-white.png" alt="">
                     Active
                   </div>
-                  <div *ngIf="row.data[column] === 1" class="chip-invite pending">
+                  <div *ngIf="row.data[column] > 0" (click)="invite(row.data['Email Address'])" class="chip-invite pending">
                 <!--    Pending -->
                 Resend
                   </div>

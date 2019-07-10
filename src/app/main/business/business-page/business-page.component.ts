@@ -202,7 +202,7 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
               'Email Address': elem.email,
               'Phone Number': elem.phone,
               'Permission': elem.permission ? 'YES' : 'NO',
-              'Invite': elem.invite,
+              'Invite': elem.is_password_change ? -1 : elem.invite,
               'Action': '',
               'id': elem.id
             }
@@ -264,7 +264,7 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
 
     this.showActions = null;
     console.log(id);
-    this.business.deleteBusiness(id).subscribe(result => {
+    this.business.deleteBusinessUser(id).subscribe(result => {
       console.log(result);
       if (result['success']) {
         this.mainService.showToastrSuccess.emit({text: 'User deleted'});
@@ -280,6 +280,25 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
   refresh(){
     this.showLoader = true;
     this.getBusiness();
+  }
+
+  changePermission(id, permission){
+    let data;
+    if(permission == 'YES'){
+      data = false;
+    }else{
+      data = true;
+    }
+
+    this.business.updateBusinessUser(id, {permission: data}).subscribe(result => {
+      console.log(result);
+      if (result['success']) {
+        this.mainService.showToastrSuccess.emit({text: 'User permission updated'});
+        this.getBusiness();
+      }
+    }, err => {
+
+    });
   }
 
 }
