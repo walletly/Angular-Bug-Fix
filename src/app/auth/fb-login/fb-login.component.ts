@@ -30,6 +30,7 @@ export class FbLoginComponent implements OnInit {
     setTimeout(() => {
       this.firebaseAuth.auth.getRedirectResult()
       .then(async res => {
+        console.log(res);
         if(localStorage.getItem('loggedOut') == 'true'){
           localStorage.clear();
           this.showLoader = false;
@@ -70,35 +71,67 @@ export class FbLoginComponent implements OnInit {
               avatar: photo
             });
           }
-
-          this.authService.getUser(uid).subscribe(data => {
-            console.log(data);
-            localStorage.setItem('user', JSON.stringify(data['data']));
-            if (data['data']['activeBrand']) {
-              this.brandService.getBrandById(data['data']['activeBrand']).subscribe(res_brand => {
-                console.log(res_brand);
-                localStorage.setItem('currentBrand', JSON.stringify(res_brand['brand']));
-                this.ngZone.run(() => this.router.navigate(['/main/dashboard']));
-                this.showLoader = false;
-              }, err => {
-                this.ngZone.run(() => this.router.navigate(['/fb-connect']));
-                this.showLoader = false;
-              });
-            } else {
-              this.ngZone.run(() => this.router.navigate(['/fb-connect']));
-              this.showLoader = false;
-            }
-          }, err => {
-            this.showLoader = false;
-            console.log(err);
-          });
+          this.getUser(uid);
         } else {
           this.showLoader = false;
+        }
+      }).catch( async err => {
+        if(localStorage.getItem('loggedOut') == 'true'){
+          localStorage.clear();
+          this.showLoader = false;
+          return;
+        }
+        if (err.code == "auth/account-exists-with-different-credential"){
+          localStorage.setItem('access', err.credential['accessToken']);
+          firebase.auth().fetchSignInMethodsForEmail(err.email)
+            .then(providers => {
+              firebase.auth().signInWithEmailAndPassword(err.email, 'asdf1234')
+              .then(async result=>{
+                result.user.linkAndRetrieveDataWithCredential(err.credential);
+                localStorage.setItem('userID', result.user.uid);
+                localStorage.setItem('usertoken', await result.user.getIdToken());
+                const uid = result.user.uid;
+                const photo = result.user.providerData[0].photoURL || 'https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png';
+                const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${uid}`);
+                await userRef.set({
+                  account_type: 'starter',                  
+                  marketing: true,
+                  user_type: 1,
+                  avatar: photo
+                }, {merge: true});
+                this.getUser(uid);
+              }).catch(err =>{
+                console.log('link error',err);
+              })
+            });
         }
       });
     }, 1000);
   }
 
+  getUser(uid){
+    this.authService.getUser(uid).subscribe(data => {
+      console.log(data);
+      localStorage.setItem('user', JSON.stringify(data['data']));
+      if (data['data']['activeBrand']) {
+        this.brandService.getBrandById(data['data']['activeBrand']).subscribe(res_brand => {
+          console.log(res_brand);
+          localStorage.setItem('currentBrand', JSON.stringify(res_brand['brand']));
+          this.ngZone.run(() => this.router.navigate(['/main/dashboard']));
+          this.showLoader = false;
+        }, err => {
+          this.ngZone.run(() => this.router.navigate(['/fb-connect']));
+          this.showLoader = false;
+        });
+      } else {
+        this.ngZone.run(() => this.router.navigate(['/fb-connect']));
+        this.showLoader = false;
+      }
+    }, err => {
+      this.showLoader = false;
+      console.log(err);
+    });
+  }
 
   loginFB() {
     if (this.terms) {
