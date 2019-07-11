@@ -47,6 +47,11 @@ const routes: Routes = [
     data: { breadcrumb: "" },
     children: [
       {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
         path: "dashboard",
         component: DashboardComponent,
         canActivate: [PageGuard],
@@ -89,6 +94,11 @@ const routes: Routes = [
         data: { breadcrumb: "Templates" },
         children: [
           {
+            path: '',
+            redirectTo: 'walletly-cards',
+            pathMatch: 'full'
+          },
+          {
             path: "create-cards",
             component: CreateCardsComponent,
           },
@@ -123,6 +133,11 @@ const routes: Routes = [
         component: TemplatesComponent,
         data: { breadcrumb: "campaign" },
         children: [
+          {
+            path: '',
+            redirectTo: 'campaign',
+            pathMatch: 'full'
+          },
           {
             path: "details/:id",
             component: CampaignDetailsComponent,
@@ -160,6 +175,11 @@ const routes: Routes = [
         data: { breadcrumb: "Business" },
         children: [
           {
+            path: '',
+            redirectTo: 'business-page',
+            pathMatch: 'full'
+          },
+          {
             path: "business-page",
             component: BusinessPageComponent,
           },
@@ -178,6 +198,11 @@ const routes: Routes = [
         component: BotsStoreComponent,
         data: { breadcrumb: "Bots Store" },
         children: [
+          {
+            path: '',
+            redirectTo: 'bots-list',
+            pathMatch: 'full'
+          },
           {
             path: "bots-list",
             component: BotsListComponent,
@@ -220,7 +245,6 @@ const routes: Routes = [
   },
   { path: "fb-login", component: FbLoginComponent },
   { path: "", redirectTo: "main/dashboard", pathMatch: "full" },
-  { path: "main", redirectTo: "main/dashboard", pathMatch: "full" },
   { path: "**", redirectTo: "main/dashboard", pathMatch: "full" }
 ];
 
