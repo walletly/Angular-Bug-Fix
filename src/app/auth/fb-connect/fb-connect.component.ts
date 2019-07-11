@@ -224,7 +224,11 @@ export class FbConnectComponent implements OnInit {
       };
 
       this.brandService.connectBrand(connectingBrand).subscribe(async result => {
-        console.log(result);
+        this.setActiveBrandAndUpdateUser(result['brand_id']);
+        if(result['code'] == 602){
+          this.router.navigate(['/main/dashboard']);
+          return;
+        }
         let ibeaconData ={
           'ibeacon': 2,
           'ibeacon_notificationtext': `You are near ${this.fbResponse['brand_name']} Store. Get your coupon scanned for the discounts`
@@ -307,6 +311,9 @@ export class FbConnectComponent implements OnInit {
   redirectToDashboard(id?) {
     if (id) {
       this.setActiveBrandAndUpdateUser(id);
+      setTimeout(() => {
+        this.router.navigate(['/main/dashboard']);
+      }, 2000);
     } else {
       let isBrand;
       isBrand = JSON.parse(localStorage.getItem('user')).activeBrand;
@@ -317,31 +324,6 @@ export class FbConnectComponent implements OnInit {
   }
 
   async goDashboard() {
-    // if (this.myFormStep3.valid) {
-    //   let data;
-    //   let brand_id = this.fbResponse['brand_id'];
-    //   if(this.ibeacon=='yes'){
-    //     data={
-    //       'ibeacon': 1,
-    //       'ibeacon_uuid': this.myFormStep3.get('ibeacon_uuid').value,
-    //       'ibeacon_major': this.myFormStep3.get('ibeacon_major').value,
-    //       'ibeacon_minor': this.myFormStep3.get('ibeacon_minor').value,
-    //       'ibeacon_notificationtext': this.myFormStep3.get('ibeacon_notificationtext').value
-    //     }
-    //   }else{
-    //     data={
-    //       'ibeacon': 2,
-    //       'ibeacon_notificationtext': this.myFormStep3.get('ibeacon_notificationtext').value
-    //     }
-    //   }
-    //   this.brandService.addIbeacon(brand_id, data).subscribe(async result => {
-    //     console.log(result);
-    //   });
-    //   this.router.navigate(['/main/dashboard']);
-    //   this.customValidationStep3 = true;
-    // } else {
-    //   this.customValidationStep3 = false;
-    // }
     if (this.myFormStep3.valid) {
       let data = {
         'noOfStaff': this.myFormStep3.get('noOfStaff').value,

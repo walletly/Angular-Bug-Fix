@@ -3,8 +3,10 @@ import { Routes, RouterModule } from "@angular/router";
 import { MainComponent } from "./main/main.component";
 import { DashboardComponent } from "./main/dashboard/dashboard.component";
 import { TemplatesComponent } from "./main/templates/templates.component";
-import { AuthComponent } from "./auth/auth.component";
 import { LoginComponent } from "./auth/login/login.component";
+import { AuthComponent } from "./auth/auth.component";
+import { ForgetPassComponent } from "./auth/forget-pass/forget-pass.component";
+import { ResetPasswordComponent } from "./auth/reset-password/reset-password.component";
 import { SignUpComponent } from "./auth/sign-up/sign-up.component";
 import { ConnectPageComponent } from "./main/connect-page/connect-page.component";
 import { CampaingComponent } from "./main/campaign-main/campaing/campaing.component";
@@ -24,8 +26,7 @@ import { SettingsComponent } from "./main/settings/settings.component";
 import { ProfileComponent } from "./main/profile/profile.component";
 import { AudienceComponent } from "./main/audience/audience.component";
 import { AuthGuard } from "./shared/services/guard/auth.guard";
-import { ForgetPassComponent } from "./auth/forget-pass/forget-pass.component";
-import { ResetPasswordComponent } from "./auth/reset-password/reset-password.component";
+import { PageGuard } from "./shared/services/guard/page.guard";
 import { FbConnectComponent } from "./auth/fb-connect/fb-connect.component";
 import { FbLoginComponent } from "./auth/fb-login/fb-login.component";
 import { CampaignDetailsComponent } from "./main/campaign-main/campaign-details/campaign-details.component";
@@ -48,43 +49,38 @@ const routes: Routes = [
       {
         path: "dashboard",
         component: DashboardComponent,
-        canActivate: [AuthGuard],
+        canActivate: [PageGuard],
         data: { breadcrumb: "hiddenBreadcrumb" }
       },
       {
         path: "dashboard-info-admin",
         component: DashboardInfoAdminComponent,
-        canActivate: [AuthGuard],
+        canActivate: [PageGuard],
         data: { breadcrumb: "hiddenBreadcrumb" }
       },
       {
         path: "bot-qr",
         component: BotQrComponent,
-        canActivate: [AuthGuard],
         data: { breadcrumb: "Chat Bot QR" }
       },
       {
         path: "push-notification",
         component: PushNotificationComponent,
-        canActivate: [AuthGuard],
         data: { breadcrumb: "Push Notification" }
       },
       {
         path: "settings",
         component: SettingsComponent,
-        canActivate: [AuthGuard],
         data: { breadcrumb: "settings" }
       },
       {
         path: "brands",
         component: PagesComponent,
-        canActivate: [AuthGuard],
         data: { breadcrumb: "brands" }
       },
       {
         path: "marketers",
         component: MarketersComponent,
-        canActivate: [AuthGuard],
         data: { breadcrumb: "marketers" }
       },
       {
@@ -95,37 +91,31 @@ const routes: Routes = [
           {
             path: "create-cards",
             component: CreateCardsComponent,
-            canActivate: [AuthGuard]
           },
           {
             path: "create-coupon",
             component: CreateCouponsComponent,
-            canActivate: [AuthGuard],
             data: { breadcrumb: "Coupons" }
           },
           {
             path: "create-coupon/:id",
             component: CreateCouponsComponent,
-            canActivate: [AuthGuard],
             data: { breadcrumb: "Coupons" }
           },
           {
             path: "walletly-cards",
             component: WalletlyCardsComponent,
-            canActivate: [AuthGuard]
           }
         ]
       },
       {
         path: "create-templates",
         component: CampaignTemplatesComponent,
-        canActivate: [AuthGuard],
         data: { breadcrumb: "templates" }
       },
       {
         path: "campaign-type",
         component: CampaignTypeComponent,
-        canActivate: [AuthGuard],
         data: { breadcrumb: "campaign" }
       },
       {
@@ -136,36 +126,30 @@ const routes: Routes = [
           {
             path: "details/:id",
             component: CampaignDetailsComponent,
-            canActivate: [AuthGuard],
             data: { breadcrumb: "Details" }
           },
           {
             path: "campaign",
             component: CampaingComponent,
-            canActivate: [AuthGuard]
           },
           {
             path: "create-campaign",
             component: CreateCampaingComponent,
-            canActivate: [AuthGuard],
             data: { breadcrumb: "Create" }
           },
           {
             path: "create-campaign/:id",
             component: CreateCampaingComponent,
-            canActivate: [AuthGuard],
             data: { breadcrumb: "Edit" }
           },
           {
             path: "review-campaign",
             component: ReviewCampaingComponent,
-            canActivate: [AuthGuard],
             data: { breadcrumb: "review" }
           },
           {
             path: "review-campaign/:id",
             component: ReviewCampaingComponent,
-            canActivate: [AuthGuard],
             data: { breadcrumb: "review" }
           }
         ]
@@ -178,17 +162,14 @@ const routes: Routes = [
           {
             path: "business-page",
             component: BusinessPageComponent,
-            canActivate: [AuthGuard]
           },
           {
             path: "create-business",
             component: CreateBusinessComponent,
-            canActivate: [AuthGuard]
           },
           {
             path: "create-business/:id",
             component: CreateBusinessComponent,
-            canActivate: [AuthGuard]
           }
         ]
       },
@@ -200,12 +181,10 @@ const routes: Routes = [
           {
             path: "bots-list",
             component: BotsListComponent,
-            canActivate: [AuthGuard],
           },
           {
             path: "bots-details",
             component: BotsDetailsComponent,
-            canActivate: [AuthGuard],
             data: { breadcrumb: "ManyChat" },
           }
         ]
@@ -213,36 +192,36 @@ const routes: Routes = [
       {
         path: "audience",
         component: AudienceComponent,
-        canActivate: [AuthGuard],
         data: { breadcrumb: "audience" },
       },
-      { path: "help", component: HelpComponent, canActivate: [AuthGuard], data: { breadcrumb: "help" } },
+      { path: "help", component: HelpComponent, data: { breadcrumb: "help" } },
     ]
   },
   { path: "profile", component: ProfileComponent, canActivate: [AuthGuard] },
-  {
-    path: "connect",
-    component: ConnectPageComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: "auth",
-    component: AuthComponent,
-    children: [
-      { path: 'sign-up', component: SignUpComponent },
-      { path: 'forget-password', component: ForgetPassComponent },
-      { path: 'reset-password', component: ResetPasswordComponent }
-    ]
-  },
+  // {
+  //   path: "connect",
+  //   component: ConnectPageComponent,
+  //   canActivate: [AuthGuard]
+  // },
+  // {
+  //   path: "auth",
+  //   component: AuthComponent,
+  //   children: [
+  //     { path: 'sign-up', component: SignUpComponent },
+  //     { path: 'forget-password', component: ForgetPassComponent },
+  //     { path: 'reset-password', component: ResetPasswordComponent }
+  //   ]
+  // },
   { path: 'master-admin', component: LoginComponent },
   {
     path: "fb-connect",
     component: FbConnectComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, PageGuard]
   },
   { path: "fb-login", component: FbLoginComponent },
   { path: "", redirectTo: "main/dashboard", pathMatch: "full" },
-  { path: "main", redirectTo: "main/dashboard", pathMatch: "full" }
+  { path: "main", redirectTo: "main/dashboard", pathMatch: "full" },
+  { path: "**", redirectTo: "main/dashboard", pathMatch: "full" }
 ];
 
 @NgModule({

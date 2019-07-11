@@ -36,6 +36,9 @@ export class LoginComponent implements OnInit {
       if(localStorage.getItem('loggedOut') == 'true'){
         localStorage.clear();
         return;
+      }else if(localStorage.getItem('loggedIn') == 'true'){
+        this.router.navigate(['/main/dashboard']);
+        return;
       }
     }, 1000);
   }

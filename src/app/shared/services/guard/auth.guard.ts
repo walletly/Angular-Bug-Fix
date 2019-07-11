@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, CanActivateChild } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthService } from '../auth.service';
@@ -9,7 +9,7 @@ import { BrandService } from '../brand.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, CanActivateChild {
 
   constructor(private firebaseAuth: AngularFireAuth,
     private router: Router,
@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-      // this.firebaseAuth.authState()
+    // this.firebaseAuth.authState()
     if (!this.router.url.includes('review-campaign') &&
       !this.router.url.includes('create-campaign') &&
       !this.router.url.includes('walletly-cards')) {
@@ -44,6 +44,7 @@ export class AuthGuard implements CanActivate {
           console.log(result);
 
           if (result) {
+            localStorage.setItem('loggedIn', 'true');
             localStorage.setItem('userID', result.uid);
             await result.getIdToken().then(res => {
               localStorage.setItem('usertoken', res);
