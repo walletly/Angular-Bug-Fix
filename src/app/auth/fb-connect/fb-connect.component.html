@@ -108,12 +108,12 @@
                 </div>
               </div>
 
-              <div *ngIf="loader" class="loader fw-600 ai-c color-dark fs-12 text-center">
+              <!-- <div *ngIf="loader" class="loader fw-600 ai-c color-dark fs-12 text-center">
                 <img width="70px" src="assets/img/Loader2x.gif" alt="">
                 <div>
                   Data Loading...
                 </div>
-              </div>
+              </div> -->
 
             </nb-step>
             <nb-step [label]="labelTwo" [stepControl]="myFormStep2">
@@ -476,6 +476,20 @@
                           <input [ngClass]="{'error': myFormStep3.controls['noOfLocations'].invalid && !customValidationStep3}"
                             formControlName="noOfLocations" type="number" nbInput fullWidth fieldSize="medium"
                             placeholder="">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row-input">
+                      <div class="lable" style="min-width: 250px;">
+                        Who are you affiliated with?
+                      </div>
+                      <div class="value">
+                        <div class="pos-r full-width">
+                          <nb-select [ngClass]="{'error': myFormStep3.controls['brandPartner'].invalid && !customValidationStep3}"
+                            formControlName="brandPartner" placeholder="">
+                            <nb-option value="none">None</nb-option>
+                            <nb-option [style.background-image]="getPartnerPicture(partner.picture)" class="partner" *ngFor="let partner of partners" [value]="partner">{{partner.name}}</nb-option>
+                          </nb-select>
                         </div>
                       </div>
                     </div>

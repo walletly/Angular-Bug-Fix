@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { UploadService } from 'src/app/shared/services/upload.service';
 import { BrandService } from 'src/app/shared/services/brand.service';
 import { CardService } from 'src/app/shared/services/card.service';
@@ -8,6 +9,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { MainService } from 'src/app/shared/services/main.service';
 import { HttpClient } from '@angular/common/http';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -43,6 +45,8 @@ export class FbConnectComponent implements OnInit {
     "Fun (jokes, community, daily quotes etc)",
     "Organization or Institution", "Other"
   ];
+
+  partners = [];
 
   myFormStep1: FormGroup;
   myFormStep2: FormGroup;
@@ -89,8 +93,13 @@ export class FbConnectComponent implements OnInit {
     private authService: AuthService,
     private mainService: MainService,
     private http: HttpClient,
-    private firebaseAuth: AngularFireAuth
+    private firebaseAuth: AngularFireAuth,
+    private afs: AngularFirestore,
+    private _sanitizer: DomSanitizer
   ) {
+
+    this.getPartners();
+    
 
     this.myFormStep1 = formBuilder.group({
       facebookPageID: ['www.facebook.com/'],
@@ -110,46 +119,31 @@ export class FbConnectComponent implements OnInit {
       website: ["", [Validators.required]],
     });
 
-    // this.myFormStep3 = formBuilder.group({
-    //   ibeacon_uuid: [""],
-    //   ibeacon_major: [""],
-    //   ibeacon_minor: [""],
-    //   ibeacon_notificationtext: ["", [Validators.required]]
+    // this.myFormStep1 = formBuilder.group({
+    //   facebookPageID: ['www.facebook.com/'],
+    //   fakeData: ['', []]
+    // });
+     
+    // this.myFormStep2 = formBuilder.group({
+    //   facebookPageID: [this.myFormStep1.get('facebookPageID').value, []],
+    //   brandName: ["", []],
+    //   profileLogo: ["", []],
+    //   coverImage: ["", []],
+    //   description: ["", []],
+    //   moreInfo: ["", []],
+    //   location: ["", []],
+    //   phone: ["", []],
+    //   email: ["", []],
+    //   website: ["", []],
     // });
 
     this.myFormStep3 = formBuilder.group({
       noOfStaff: ["", [Validators.required, Validators.min(1)]],
       businessType: ["", [Validators.required]],
-      noOfLocations: ["", [Validators.required, Validators.min(1)]]
+      noOfLocations: ["", [Validators.required, Validators.min(1)]],
+      brandPartner: ["none", [Validators.required]]
     });
 }
-
-// ibeaconToggle(toggle){
-//   if (toggle=='yes'){
-//     this.ibeacon='yes';
-//     this.myFormStep3.get('ibeacon_uuid').setValidators([Validators.required,
-//       Validators.pattern("^(?!00)[0-9a-f]{8}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{12}$")]);
-//     this.myFormStep3.controls['ibeacon_uuid'].setValue('');
-//     this.myFormStep3.get('ibeacon_uuid').updateValueAndValidity();
-//     this.myFormStep3.get('ibeacon_major').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
-//     this.myFormStep3.controls['ibeacon_major'].setValue('');
-//     this.myFormStep3.get('ibeacon_major').updateValueAndValidity();
-//     this.myFormStep3.get('ibeacon_minor').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
-//     this.myFormStep3.controls['ibeacon_minor'].setValue('');
-//     this.myFormStep3.get('ibeacon_minor').updateValueAndValidity();
-//   }else{
-//     this.ibeacon='no';
-//     this.myFormStep3.get('ibeacon_uuid').setValidators([]);
-//     this.myFormStep3.controls['ibeacon_uuid'].setValue('');
-//     this.myFormStep3.get('ibeacon_uuid').updateValueAndValidity();
-//     this.myFormStep3.get('ibeacon_major').setValidators([]);
-//     this.myFormStep3.controls['ibeacon_major'].setValue('');
-//     this.myFormStep3.get('ibeacon_major').updateValueAndValidity();
-//     this.myFormStep3.get('ibeacon_minor').setValidators([]);
-//     this.myFormStep3.controls['ibeacon_minor'].setValue('');
-//     this.myFormStep3.get('ibeacon_minor').updateValueAndValidity();
-//   }
-// }
 
   ngOnInit() {
     this.showLoader = true;
@@ -222,7 +216,6 @@ export class FbConnectComponent implements OnInit {
         facebook_page_id: this.fbResponse['brand_id'],
         is_facebook: true
       };
-
       this.brandService.connectBrand(connectingBrand).subscribe(async result => {
         this.setActiveBrandAndUpdateUser(result['brand_id']);
         if(result['code'] == 602){
@@ -309,16 +302,23 @@ export class FbConnectComponent implements OnInit {
   }
 
   redirectToDashboard(id?) {
+    if(this.inProcces){
+      return;
+    }
     if (id) {
+      this.inProcces = true;
       this.setActiveBrandAndUpdateUser(id);
       setTimeout(() => {
         this.router.navigate(['/main/dashboard']);
+        this.inProcces = false;
       }, 2000);
     } else {
+      this.inProcces = true;
       let isBrand;
       isBrand = JSON.parse(localStorage.getItem('user')).activeBrand;
       if (isBrand) {
         this.router.navigate(['/main/dashboard']);
+        this.inProcces = false;
       }
     }
   }
@@ -329,6 +329,7 @@ export class FbConnectComponent implements OnInit {
         'noOfStaff': this.myFormStep3.get('noOfStaff').value,
         'businessType': this.myFormStep3.get('businessType').value,
         'noOfLocations': this.myFormStep3.get('noOfLocations').value,
+        'brandPartner' : this.myFormStep3.get('brandPartner').value
       }
       let brand_id = this.fbResponse['brand_id'];
       await this.brandService.updateBrand(brand_id, data).subscribe(async result => {
@@ -495,6 +496,17 @@ export class FbConnectComponent implements OnInit {
       localStorage.setItem('loggedOut', 'true');
       this.router.navigate(['/fb-login']);
     });
+  }
+
+  async getPartners(){
+    const partnerRef = this.afs.collection('walletly_partners');
+    await partnerRef.valueChanges().subscribe(items => {
+      this.partners = items;
+    });
+  }
+
+  getPartnerPicture(image){
+    return this._sanitizer.bypassSecurityTrustStyle(`url(${image})`);
   }
 
 }

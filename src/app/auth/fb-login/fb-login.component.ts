@@ -16,6 +16,8 @@ export class FbLoginComponent implements OnInit {
   terms;
   termsError;
   showLoader = true;
+  businessUser = false;
+  businessEmail;
 
   constructor(private authService: AuthService,
     private firebaseAuth: AngularFireAuth,
@@ -84,30 +86,46 @@ export class FbLoginComponent implements OnInit {
           this.showLoader = false;
           return;
         }
-        if (err.code == "auth/account-exists-with-different-credential"){
-          localStorage.setItem('access', err.credential['accessToken']);
-          firebase.auth().fetchSignInMethodsForEmail(err.email)
-            .then(providers => {
-              firebase.auth().signInWithEmailAndPassword(err.email, 'asdf1234')
-              .then(async result=>{
-                result.user.linkAndRetrieveDataWithCredential(err.credential);
-                localStorage.setItem('userID', result.user.uid);
-                localStorage.setItem('usertoken', await result.user.getIdToken());
-                const uid = result.user.uid;
-                const photo = result.user.providerData[0].photoURL || 'https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png';
-                const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${uid}`);
-                await userRef.set({
-                  account_type: 'starter',                  
-                  marketing: true,
-                  user_type: 1,
-                  avatar: photo
-                }, {merge: true});
-                this.getUser(uid);
-              }).catch(err =>{
-                console.log('link error',err);
-              })
-            });
-        }
+        let user_type;
+        const userRef = this.afs.collection('users', ref => ref.where('email', '==', err.email));
+        await userRef.valueChanges().subscribe(async users => {
+          user_type = await users[0]['user_type'];
+        });
+
+        setTimeout(async () => {
+          if(user_type != 3){
+            await this.ngZone.run(() => {
+              this.showLoader = false;
+              this.businessUser = true;
+              this.businessEmail = err.email;
+            })
+            return;
+          }
+          if (err.code == "auth/account-exists-with-different-credential"){
+            localStorage.setItem('access', err.credential['accessToken']);
+            firebase.auth().fetchSignInMethodsForEmail(err.email)
+              .then(providers => {
+                firebase.auth().signInWithEmailAndPassword(err.email, 'asdf1234')
+                .then(async result=>{
+                  result.user.linkAndRetrieveDataWithCredential(err.credential);
+                  localStorage.setItem('userID', result.user.uid);
+                  localStorage.setItem('usertoken', await result.user.getIdToken());
+                  const uid = result.user.uid;
+                  const photo = result.user.providerData[0].photoURL || 'https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png';
+                  const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${uid}`);
+                  await userRef.set({
+                    account_type: 'starter',                  
+                    marketing: true,
+                    user_type: 1,
+                    avatar: photo
+                  }, {merge: true});
+                  this.getUser(uid);
+                }).catch(err =>{
+                  console.log('link error',err);
+                })
+              });
+          }
+        }, 1500);
       });
     }, 1000);
   }
@@ -144,4 +162,5 @@ export class FbLoginComponent implements OnInit {
       this.termsError = true;
     }
   }
+
 }

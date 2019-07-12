@@ -91,6 +91,8 @@ export class CreateCampaingComponent implements OnInit {
         // need for all template
         if (this.dataCoupon.campaign_type === '1') {
           this.selectedSell = 'Coupon in %';
+        }else if(this.dataCoupon.campaign_type === '2'){
+          this.selectedSell = 'Coupon in $';
         }
       }
     }, err => {
@@ -102,6 +104,8 @@ export class CreateCampaingComponent implements OnInit {
         // need for all template
         if (this.dataCoupon.campaign_type === '1') {
           this.selectedSell = 'Coupon in %';
+        }else if(this.dataCoupon.campaign_type === '2'){
+          this.selectedSell = 'Coupon in $';
         }
       }
     });
@@ -127,6 +131,8 @@ export class CreateCampaingComponent implements OnInit {
           // need for all template
           if (this.dataCoupon.campaign_type === '1') {
             this.selectedSell = 'Coupon in %';
+          }else if(this.dataCoupon.campaign_type === '2'){
+            this.selectedSell = 'Coupon in $';
           }
         }
         // this.mainService.showLoader.emit(false);

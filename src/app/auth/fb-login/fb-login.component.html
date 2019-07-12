@@ -35,6 +35,9 @@
                 </span>
               </div>
             </div>
+            <div *ngIf="businessUser" style="color: red; margin-top: 30px;">
+              {{ businessEmail }} is already registered as a Business User. Please login with WalletScan App.
+            </div>
           </div>
           <div *ngIf="showLoader" class="loader">
             <img width="200px" src="assets/img/Loader2x.gif" alt="">
