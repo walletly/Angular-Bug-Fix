@@ -207,8 +207,11 @@ button.primary-outline{
 }
 
 .partner{
-  background-repeat: no-repeat;
-  background-size: 42px 42px;
-  background-position: 5%;
-  padding-left: 70px !important;
+  height:45px;
+  display: flex;
+  img{
+    height: 45px;
+    width: 45px;
+    border-radius: 50px;
+  }
 }

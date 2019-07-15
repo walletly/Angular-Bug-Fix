@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MainService } from 'src/app/shared/services/main.service';
 import { BrandService } from 'src/app/shared/services/brand.service';
 import { UploadService } from 'src/app/shared/services/upload.service';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-settings',
@@ -38,6 +39,8 @@ export class SettingsComponent implements OnInit {
     { value: 'recurring ', label: 'Recurring ' },
   ];
 
+  partners = [];
+
   photoLogo;
   photoCover;
   photoIcon;
@@ -45,7 +48,6 @@ export class SettingsComponent implements OnInit {
   brandSizeValidation = true;
   platform;
   container;
-  // ibeacon;
   showLogoUploader = false;
   showBrandUploader = false;
   fileImg;
@@ -54,14 +56,12 @@ export class SettingsComponent implements OnInit {
   customValidation = true;
   customValidationPayment = true;
   customValidationPackages = true;
-  // customValidationiBeacon = true;
 
   showActions;
 
   myForm: FormGroup;
   myFormPayment: FormGroup;
   myFormPackages: FormGroup;
-  // myFormiBeacon: FormGroup;
   showLoader;
   showModalMember;
   userAdmin;
@@ -121,8 +121,11 @@ export class SettingsComponent implements OnInit {
     private router: Router,
     private mainService: MainService,
     private brandService: BrandService,
-    private uploadService: UploadService
+    private uploadService: UploadService,
+    private afs: AngularFirestore,
   ) {
+    this.getPartners();
+
     this.myForm = formBuilder.group({
       facebookPageID: ["www.facebook.com/", [Validators.required, Validators.pattern("((http|https):\/\/|)(www\.|)facebook\.com\/[a-zA-Z0-9.]{1,}")]],
       brandName: ["", [Validators.required]],
@@ -134,6 +137,7 @@ export class SettingsComponent implements OnInit {
       phone: ["", [Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
       email: ["", [Validators.required, Validators.email]],
       website: ["", [Validators.required]],
+      brandPartner: ["", [Validators.required]]
     });
     this.myFormPackages = formBuilder.group({
       packagesName: ["", [Validators.required]],
@@ -142,12 +146,6 @@ export class SettingsComponent implements OnInit {
       pricing: ["", [Validators.required]],
       iconImage: ["", [Validators.required]]
     });
-    // this.myFormiBeacon = formBuilder.group({
-    //   ibeacon_uuid: [""],
-    //   ibeacon_major: [""],
-    //   ibeacon_minor: [""],
-    //   ibeacon_notificationtext: ["", [Validators.required]]
-    // });
     this.myFormPayment = formBuilder.group({
       plan: ["", [Validators.required]],
       type: ["", [Validators.required]],
@@ -176,27 +174,6 @@ export class SettingsComponent implements OnInit {
       this.getBrandSettings();
     }
   }
-
-  // ibeaconToggle(toggle){
-  //   if (toggle=='yes'){
-  //     this.ibeacon='yes';
-  //     this.myFormiBeacon.get('ibeacon_uuid').setValidators([Validators.required,
-  //       Validators.pattern("^(?!00)[0-9a-f]{8}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{4}[-]{1}(?!00)[0-9a-f]{12}$")]);
-  //     this.myFormiBeacon.get('ibeacon_uuid').updateValueAndValidity();
-  //     this.myFormiBeacon.get('ibeacon_major').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
-  //     this.myFormiBeacon.get('ibeacon_major').updateValueAndValidity();
-  //     this.myFormiBeacon.get('ibeacon_minor').setValidators([Validators.required, Validators.min(0), Validators.max(65535)]);
-  //     this.myFormiBeacon.get('ibeacon_minor').updateValueAndValidity();
-  //   }else{
-  //     this.ibeacon='no';
-  //     this.myFormiBeacon.get('ibeacon_uuid').setValidators([]);
-  //     this.myFormiBeacon.get('ibeacon_uuid').updateValueAndValidity();
-  //     this.myFormiBeacon.get('ibeacon_major').setValidators([]);
-  //     this.myFormiBeacon.get('ibeacon_major').updateValueAndValidity();
-  //     this.myFormiBeacon.get('ibeacon_minor').setValidators([]);
-  //     this.myFormiBeacon.get('ibeacon_minor').updateValueAndValidity();
-  //   }
-  // }
 
   ngOnInit() {
     this.brandService.getBrandAdmins((JSON.parse(localStorage.getItem('currentBrand'))['brand_id'])).subscribe((result)=>{
@@ -238,11 +215,11 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  update() {
+  async update() {
     if (this.myForm.valid) {
       this.customValidation = true;
       this.inProcces = true;
-      this.getBrand();
+      await this.getBrand();
       console.log(this.brand);
       this.brandService.updateBrand(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'], this.brand).subscribe(result => {
         console.log(result);
@@ -261,40 +238,6 @@ export class SettingsComponent implements OnInit {
       this.inProcces = false;
     }
   }
-
-  // updateiBeacon(){
-  //   if (this.myFormiBeacon.valid) {
-  //     let data;
-  //     if(this.ibeacon=='yes'){
-  //       data={
-  //         'ibeacon': 1,
-  //         'ibeacon_uuid': this.myFormiBeacon.get('ibeacon_uuid').value,
-  //         'ibeacon_major': this.myFormiBeacon.get('ibeacon_major').value,
-  //         'ibeacon_minor': this.myFormiBeacon.get('ibeacon_minor').value,
-  //         'ibeacon_notificationtext': this.myFormiBeacon.get('ibeacon_notificationtext').value
-  //       }
-  //     }else{
-  //       data={
-  //         'ibeacon': 2,
-  //         'ibeacon_uuid': this.brand['ibeacon'].ibeacon_uuid,
-  //         'ibeacon_major': this.brand['ibeacon'].ibeacon_major,
-  //         'ibeacon_minor': this.brand['ibeacon'].ibeacon_minor,
-  //         'ibeacon_notificationtext': this.myFormiBeacon.get('ibeacon_notificationtext').value
-  //       }
-  //     }
-  //     let brand_id = JSON.parse(localStorage.getItem('currentBrand'))['brand_id'];
-  //     this.customValidationiBeacon = true;
-  //     this.brandService.updateIbeacon(brand_id, data).subscribe(result => {
-  //       console.log(result);
-  //       this.brandService.getBrandById(brand_id).subscribe(data => {
-  //         localStorage.setItem('currentBrand', JSON.stringify(data['brand']));
-  //         this.mainService.showToastrSuccess.emit({text: 'Settings updated'});
-  //       });
-  //     });
-  //   } else {
-  //     this.customValidationiBeacon = false;
-  //   }
-  // }
 
   addPackages(){
     if (this.myFormPackages.invalid){
@@ -390,8 +333,7 @@ export class SettingsComponent implements OnInit {
   }
 
   getData() {
-    // this.myForm.controls['coverImage'].setValue(this.brand['brand_cover']);
-    // this.myForm.controls['profileLogo'].setValue(this.brand['brand_logo']);
+    const partnerId = this.brand['brandPartner'].id || 'none';
     this.photoCover = this.brand['brand_cover'];
     this.photoLogo = this.brand['brand_logo'];
     this.myForm.controls['facebookPageID'].setValue('www.facebook.com/' + this.brand['facebook_page_id']);
@@ -402,15 +344,12 @@ export class SettingsComponent implements OnInit {
     this.myForm.controls['moreInfo'].setValue(this.brand['more_info']);
     this.myForm.controls['phone'].setValue(this.brand['phone']);
     this.myForm.controls['website'].setValue(this.brand['website']);
+    this.myForm.controls['brandPartner'].setValue(partnerId);
     this.myForm.controls['facebookPageID'].disable();
     this.myForm.controls['brandName'].disable();
-    // this.myFormiBeacon.controls['ibeacon_uuid'].setValue(this.brand['ibeacon'].ibeacon_uuid);
-    // this.myFormiBeacon.controls['ibeacon_minor'].setValue(this.brand['ibeacon'].ibeacon_minor);
-    // this.myFormiBeacon.controls['ibeacon_major'].setValue(this.brand['ibeacon'].ibeacon_major);
-    // this.myFormiBeacon.controls['ibeacon_notificationtext'].setValue(this.brand['ibeacon'].ibeacon_notificationtext);
   }
 
-  getBrand() {
+  async getBrand() {
     this.fbId = this.myForm.get('facebookPageID').value.split('/');
     this.brand['facebook_page_id'] = this.fbId[this.fbId.length - 1];
     this.brand['brand_name'] = this.myForm.get('brandName').value;
@@ -422,6 +361,8 @@ export class SettingsComponent implements OnInit {
     this.brand['website'] = this.myForm.get('website').value;
     this.brand['brand_cover'] = this.photoCover;
     this.brand['brand_logo'] = this.photoLogo;
+    const partnerData = await this.getPartnerData(this.myForm.get('brandPartner').value);
+    this.brand['brandPartner'] = partnerData;
   }
 
   mouseMove() {
@@ -430,5 +371,25 @@ export class SettingsComponent implements OnInit {
 
   copyApi() {
     this.toolTipStatus = 'Copied';
+  }
+
+  async getPartners(){
+    const partnerRef = this.afs.collection('walletly_partners');
+    await partnerRef.valueChanges().subscribe(items => {
+      this.partners = items;
+    });
+  }
+
+  async getPartnerData(id){
+    if (id == 'none'){
+      return 'none';
+    }
+    let partnerData;
+    await this.partners.forEach(partner => {
+      if (partner.id == id){
+        partnerData = partner;
+      }
+    })
+    return partnerData;
   }
 }

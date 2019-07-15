@@ -141,7 +141,7 @@ export class FbConnectComponent implements OnInit {
       noOfStaff: ["", [Validators.required, Validators.min(1)]],
       businessType: ["", [Validators.required]],
       noOfLocations: ["", [Validators.required, Validators.min(1)]],
-      brandPartner: ["none", [Validators.required]]
+      brandPartner: ["", [Validators.required]]
     });
 }
 
@@ -505,8 +505,8 @@ export class FbConnectComponent implements OnInit {
     });
   }
 
-  getPartnerPicture(image){
-    return this._sanitizer.bypassSecurityTrustStyle(`url(${image})`);
-  }
+  // getPartnerPicture(image){
+  //   return this._sanitizer.bypassSecurityTrustStyle(`url(${image})`);
+  // }
 
 }

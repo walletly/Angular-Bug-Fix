@@ -481,14 +481,24 @@
                     </div>
                     <div class="row-input">
                       <div class="lable" style="min-width: 250px;">
-                        Who are you affiliated with?
+                        Select Walletly Partner, whom you like to work with
                       </div>
                       <div class="value">
                         <div class="pos-r full-width">
                           <nb-select [ngClass]="{'error': myFormStep3.controls['brandPartner'].invalid && !customValidationStep3}"
                             formControlName="brandPartner" placeholder="">
-                            <nb-option value="none">None</nb-option>
-                            <nb-option [style.background-image]="getPartnerPicture(partner.picture)" class="partner" *ngFor="let partner of partners" [value]="partner">{{partner.name}}</nb-option>
+                            <nb-option style="padding: 10px;" value="none">
+                              <div class="partner m-l-60">
+                                <p>I am good</p>
+                              </div>
+                            </nb-option>
+                            <!-- <nb-option [style.background-image]="getPartnerPicture(partner.picture)" class="partner" *ngFor="let partner of partners" [value]="partner">{{partner.name}}</nb-option> -->
+                            <nb-option style="padding: 10px;" *ngFor="let partner of partners" [value]="partner">
+                              <div class="partner">
+                                <img class="m-r-15" src="{{ partner.picture }}">
+                                <p>{{ partner.name }}</p>
+                              </div>
+                            </nb-option>
                           </nb-select>
                         </div>
                       </div>

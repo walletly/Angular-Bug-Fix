@@ -348,6 +348,15 @@ td {
     background-color: #11ca6d;
   }
 }
+.partner{
+  height:45px;
+  display: flex;
+  img{
+    height: 45px;
+    width: 45px;
+    border-radius: 50px;
+  }
+}
 .icon-status {
   &.active {
     width: 91px;

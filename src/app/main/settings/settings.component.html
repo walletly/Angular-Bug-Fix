@@ -619,6 +619,29 @@
               </div>
             </div>
             <div class="row-input">
+              <div class="lable">
+                Walletly Partner
+              </div>
+              <div class="value">
+                <div class="pos-r full-width">
+                  <nb-select [ngClass]="{'error': myForm.controls['brandPartner'].invalid && !customValidation}"
+                    formControlName="brandPartner" placeholder="">
+                    <nb-option style="padding: 10px;" value="none">
+                      <div class="partner m-l-60">
+                        <p>I am good</p>
+                      </div>
+                    </nb-option>
+                    <nb-option style="padding: 10px;" *ngFor="let partner of partners" [value]="partner.id">
+                      <div class="partner">
+                        <img class="m-r-15" src="{{ partner.picture }}">
+                        <p>{{ partner.name }}</p>
+                      </div>
+                    </nb-option>
+                  </nb-select>
+                </div>
+              </div>
+            </div>
+            <div class="row-input">
               <div class="lable"></div>
               <div class="value">
                 <button
