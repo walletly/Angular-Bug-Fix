@@ -18,7 +18,7 @@
 
       <ng-container *ngFor="let column of defaultColumns" [nbTreeGridColumnDef]="column">
         <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{column}}</th>
-        <td (click)="selectedSell = row.data[column].name; selectType(row.data[column].name)"
+        <td (click)="selectType(row.data[column].name)"
           [ngClass]="{'active-sell': (selectedSell === row.data[column].name && row.data[column].name), 'c-p': row.data[column].name, 'pe-n': !row.data[column].name}"
           nbTreeGridCell *nbTreeGridCellDef="let row" [ngStyle]="{'pointer-events': row.data[column].locked ? 'none' : 'auto'}">
           <div class="df ai-c">
@@ -78,7 +78,7 @@
                 <nb-select [ngClass]="{'error': myForm.controls['template'].invalid && !customValidation}"
                   formControlName="template" #select size="small" placeholder="Select Template"
                   [(selected)]="dataCoupon.card_id">
-                  <nb-option *ngFor="let item of cards" value="{{item.id}}">
+                  <nb-option *ngFor="let item of cards" [value]="item.id">
                     {{ item.template_name }}
                   </nb-option>
                 </nb-select>
@@ -137,12 +137,12 @@
             </div>
             <div class="value">
               <div class="pos-r full-width">
-                <nb-select formControlName="currency" placeholder="Select Currency">
-                  <nb-option value="USD">United States Dollars</nb-option>
-                  <nb-option value="EUR">Euro</nb-option>
-                  <nb-option value="GBP">United Kingdom Pounds</nb-option>
-                  <nb-option value="AUD">Australia Dollars</nb-option>
-                  <nb-option value="CAD">Canada Dollars</nb-option>
+                <nb-select formControlName="currency" [(ngModel)]="dataCoupon.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
+                  <nb-option value="USD">USD</nb-option>
+                  <nb-option value="EUR">EUR</nb-option>
+                  <nb-option value="GBP">GBP</nb-option>
+                  <nb-option value="AUD">AUD</nb-option>
+                  <nb-option value="CAD">CAD</nb-option>
                 </nb-select>
               </div>
             </div>
@@ -185,9 +185,11 @@
             </div>
             <div class="value">
               <div class="pos-r">
-                <input [ngClass]="{'error': myForm.controls['validity'].invalid && !customValidation}"
-                formControlName="validity" class="small" nbInput fullWidth fieldSize="small" placeholder="" readonly
-                style="background-color: #ebeff5;">
+                <input [ngClass]="{'error': myForm.controls['validity'].invalid && !customValidation}" (input)="checkValidity($event.target.value)"
+                formControlName="validity" [(ngModel)]="dataCoupon.coupon_validity" type="text" class="small" nbInput fullWidth fieldSize="small" placeholder="">
+                <div *ngIf="myForm.controls['validity'].invalid && !customValidation" class="error-lable">
+                  Enter Validity in days e.g. 30 (1-100)
+                </div>
               </div>
             </div>      
           </div>

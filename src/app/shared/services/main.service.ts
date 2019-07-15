@@ -25,7 +25,9 @@ export class MainService {
     startDate: '',
     endDate: '',
     brand_id: '',
-    campaign_type: ''
+    campaign_type: '',
+    coupon_validity: '',
+    currency: ''
   };
 
   addBusiness(item) {

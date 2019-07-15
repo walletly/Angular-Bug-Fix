@@ -66,7 +66,9 @@ export class ReviewCampaingComponent implements OnInit {
             startDate: '',
             endDate: '',
             campaign_type: '',
-            brand_id: ''
+            brand_id: '',
+            coupon_validity: '',
+            currency: ''
           };
           this.router.navigate(['/main/campaign-main/details/' + this.id]);
           this.mainService.showToastrSuccess.emit({text: 'Campaign updated'});
@@ -88,7 +90,9 @@ export class ReviewCampaingComponent implements OnInit {
             startDate: '',
             endDate: '',
             campaign_type: '',
-            brand_id: ''
+            brand_id: '',
+            coupon_validity: '',
+            currency: ''
           };
           this.mainService.showToastrSuccess.emit({text: 'Campaign created'});
           this.router.navigate(['/main/campaign-main/details/' + result['campaign']]);
@@ -118,6 +122,7 @@ export class ReviewCampaingComponent implements OnInit {
     this.campaign['description'] = this.dataCoupon.desription;
     this.campaign['campaign_type'] = parseInt(this.dataCoupon.campaign_type);
     this.campaign['currency'] = this.dataCoupon.currency;
+    this.campaign['coupon_validity'] = parseInt(this.dataCoupon.coupon_validity);
     this.campaign['campaign_value'] = String(this.dataCoupon.discount);
     this.campaign['start_date'] = this.dataCoupon.startDate;
     this.campaign['end_date'] = this.dataCoupon.endDate;

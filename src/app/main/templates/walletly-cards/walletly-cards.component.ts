@@ -39,7 +39,9 @@ export class WalletlyCardsComponent implements OnInit {
       startDate: '',
       endDate: '',
       campaign_type: '',
-      brand_id: brandId
+      brand_id: brandId,
+      coupon_validity: '',
+      currency: ''
     };
     this.router.navigate(['/main/campaign-main/create-campaign']);
   }

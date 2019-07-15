@@ -34,7 +34,9 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         startDate: '',
         endDate: '',
         campaign_type: '',
-        brand_id: ''
+        brand_id: '',
+        coupon_validity: '',
+        currency: ''
       };
     }
 

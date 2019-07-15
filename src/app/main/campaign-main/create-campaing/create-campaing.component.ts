@@ -72,8 +72,8 @@ export class CreateCampaingComponent implements OnInit {
       discount: ["", []],
       // numberOfCoupon: ["", [Validators.required]],
       // setLimit: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
-      currency: ["USD", [Validators.required]],
-      validity: ["30 Days", [Validators.required]],
+      currency: ["", [Validators.required]],
+      validity: ["", [Validators.required, Validators.pattern('^[0-9]*$'), Validators.min(1), Validators.max(100)]],
       startDate: ["", [Validators.required]],
       endDate: ["", [Validators.required]],
     });
@@ -90,9 +90,9 @@ export class CreateCampaingComponent implements OnInit {
         console.log(this.dataCoupon);
         // need for all template
         if (this.dataCoupon.campaign_type === '1') {
-          this.selectedSell = 'Coupon in %';
+          this.selectType('Coupon in %');
         }else if(this.dataCoupon.campaign_type === '2'){
-          this.selectedSell = 'Coupon in $';
+          this.selectType('Coupon in $');
         }
       }
     }, err => {
@@ -103,14 +103,14 @@ export class CreateCampaingComponent implements OnInit {
         console.log(this.dataCoupon);
         // need for all template
         if (this.dataCoupon.campaign_type === '1') {
-          this.selectedSell = 'Coupon in %';
+          this.selectType('Coupon in %');
         }else if(this.dataCoupon.campaign_type === '2'){
-          this.selectedSell = 'Coupon in $';
+          this.selectType('Coupon in $');
         }
       }
     });
 
-    if (this.id && !this.mainService.dataCoupon.name) {
+    if (this.id) {
       // this.mainService.showLoader.emit(true);
       this.showLoader = true;
       this.campaignService.getСampaignById(this.id).subscribe(result => {
@@ -124,15 +124,16 @@ export class CreateCampaingComponent implements OnInit {
           this.mainService.dataCoupon.endDate = result['data'].endDateFormatted;
           this.mainService.dataCoupon.brand_id = result['data'].brand_id;
           this.mainService.dataCoupon.card_id = result['data'].card_id;
+          this.mainService.dataCoupon.coupon_validity = (result['data'].coupon_validity) ? String(result['data'].coupon_validity) : '';
+          this.mainService.dataCoupon.currency = result['data'].currency;
           this.dataCoupon = this.mainService.dataCoupon;
-          console.log(this.dataCoupon);
           this.myForm.controls['template'].setValue(this.dataCoupon.card_id);
 
           // need for all template
           if (this.dataCoupon.campaign_type === '1') {
-            this.selectedSell = 'Coupon in %';
+            this.selectType('Coupon in %');
           }else if(this.dataCoupon.campaign_type === '2'){
-            this.selectedSell = 'Coupon in $';
+            this.selectType('Coupon in $');
           }
         }
         // this.mainService.showLoader.emit(false);
@@ -141,6 +142,19 @@ export class CreateCampaingComponent implements OnInit {
         // this.mainService.showLoader.emit(false);
         this.showLoader = false;
       });
+    }else{
+      this.mainService.dataCoupon.name = '';
+      this.mainService.dataCoupon.desription = '';
+      this.mainService.dataCoupon.campaign_type = '';
+      this.mainService.dataCoupon.discount = '';
+      this.mainService.dataCoupon.startDate = '';
+      this.mainService.dataCoupon.endDate = '';
+      this.mainService.dataCoupon.brand_id = '';
+      this.mainService.dataCoupon.card_id = '';
+      this.mainService.dataCoupon.coupon_validity = '';
+      this.mainService.dataCoupon.currency = '';
+      this.dataCoupon = this.mainService.dataCoupon;
+      this.myForm.controls['template'].setValue('');
     }
   }
 
@@ -179,6 +193,12 @@ export class CreateCampaingComponent implements OnInit {
     }
   }
 
+  checkValidity(e){
+    if(this.myForm.get('validity').invalid){
+      this.myForm.get('validity').setValue('');
+    }
+  }
+
   create() {
 
     if (!this.dataCoupon.brand_id) {
@@ -186,6 +206,7 @@ export class CreateCampaingComponent implements OnInit {
     }
     if (this.myForm.valid) {
       this.dataCoupon.currency = this.myForm.get('currency').value;
+      this.dataCoupon.coupon_validity = this.myForm.get('validity').value;
       this.mainService.dataCoupon = this.dataCoupon;
       console.log(this.mainService.dataCoupon);
 
@@ -241,6 +262,7 @@ export class CreateCampaingComponent implements OnInit {
 
   selectType(typeName) {
     if (typeName === 'Coupon in %') {
+      this.selectedSell = 'Coupon in %';
       this.dataCoupon.campaign_type = 1;
       this.myForm.get('discount').setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       this.myForm.get('discount').updateValueAndValidity();
@@ -248,6 +270,7 @@ export class CreateCampaingComponent implements OnInit {
         (document.getElementById('discountInput') as HTMLInputElement).style.backgroundImage = "url('assets/img/percent.png')";
       }, 50);
     }else if(typeName === 'Coupon in $'){
+      this.selectedSell = 'Coupon in $';
       this.dataCoupon.campaign_type = 2;
       this.myForm.get('discount').setValidators([Validators.required, Validators.min(0)]);
       this.myForm.get('discount').updateValueAndValidity();
