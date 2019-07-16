@@ -333,7 +333,6 @@ export class SettingsComponent implements OnInit {
   }
 
   getData() {
-    const partnerId = this.brand['brandPartner'].id || 'none';
     this.photoCover = this.brand['brand_cover'];
     this.photoLogo = this.brand['brand_logo'];
     this.myForm.controls['facebookPageID'].setValue('www.facebook.com/' + this.brand['facebook_page_id']);
@@ -344,9 +343,12 @@ export class SettingsComponent implements OnInit {
     this.myForm.controls['moreInfo'].setValue(this.brand['more_info']);
     this.myForm.controls['phone'].setValue(this.brand['phone']);
     this.myForm.controls['website'].setValue(this.brand['website']);
-    this.myForm.controls['brandPartner'].setValue(partnerId);
     this.myForm.controls['facebookPageID'].disable();
     this.myForm.controls['brandName'].disable();
+    setTimeout(() => {
+      const partnerId = (this.brand['brandPartner']) ? this.brand['brandPartner'].id || 'none' : 'none';
+      this.myForm.controls['brandPartner'].setValue(partnerId);
+    }, 500);
   }
 
   async getBrand() {
