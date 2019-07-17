@@ -16,6 +16,7 @@ export class CreateBusinessComponent implements OnInit {
   id;
   inProcces = false;
   invalidUser = false;
+  invalidUserMessage = '';
 
   options = [
     { value: true, label: 'YES' },
@@ -125,6 +126,7 @@ export class CreateBusinessComponent implements OnInit {
       },error =>{
         console.log(error);
         this.invalidUser = true;
+        this.invalidUserMessage = error.error.message;
         this.inProcces = false;
       });
     } else {

@@ -34,6 +34,7 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
   fullData = [];
   showActions;
   showLoader;
+  deleteId;
 
   ibeacon;
   customValidationiBeacon = true;
@@ -258,17 +259,34 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/main/business/create-business/' + id]);
   }
 
-  delete(id) {
+  openDeleteBox(id){
+    this.showActions = null;
+    this.deleteId = id;
+    (document.getElementById('myModal') as HTMLDivElement).style.display = 'block';
+  }
+
+  closeDeleteBox(event){
+    console.log((event.target as HTMLElement).className);
+    if((event.target as HTMLElement).className == 'modal-content'){
+      return;
+    }
+    this.deleteId = null;
+    (document.getElementById('myModal') as HTMLDivElement).style.display = 'none';
+  }
+
+  delete() {
+    (document.getElementById('myModal') as HTMLDivElement).style.display = 'none';
     // this.mainService.showLoader.emit(true);
     this.showLoader = true;
 
     this.showActions = null;
-    console.log(id);
-    this.business.deleteBusinessUser(id).subscribe(result => {
+    console.log(this.deleteId);
+    this.business.deleteBusinessUser(this.deleteId, JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
       console.log(result);
       if (result['success']) {
         this.mainService.showToastrSuccess.emit({text: 'User deleted'});
         this.getBusiness();
+        this.showLoader = false;
       }
       // this.mainService.showLoader.emit(false);
     }, err => {
@@ -290,14 +308,14 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
       data = true;
     }
 
-    this.business.updateBusinessUser(id, {permission: data}).subscribe(result => {
+    this.business.changePermission(id, JSON.parse(localStorage.getItem('currentBrand'))['brand_id'], { permission: data } ).subscribe(result => {
       console.log(result);
       if (result['success']) {
         this.mainService.showToastrSuccess.emit({text: 'User permission updated'});
         this.getBusiness();
       }
     }, err => {
-
+      console.log(err);
     });
   }
 

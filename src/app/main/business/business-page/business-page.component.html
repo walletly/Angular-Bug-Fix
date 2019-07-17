@@ -1,3 +1,17 @@
+<!-- The Modal -->
+<div id="myModal" (click)="closeDeleteBox($event)" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close" (click)="closeDeleteBox($event)">&times;</span>
+    <p style="pointer-events: none;">Are you sure you want to delete this user ?</p>
+    <div style="margin-left: 155px; margin-top: 20px;">
+    <button class="modalButton" (click)="delete()">Yes</button>
+    <button class="modalButton" (click)="closeDeleteBox($event)">No</button>
+    </div>
+  </div>
+
+</div>
 <div class="df jc-b m-b-15">
   <h1 class="m-t-0 m-b-0 fs-24 fw-600">
     Business
@@ -48,7 +62,7 @@
                     <img class="m-r-8 c-p" *ngIf="row.data[column] === 'YES'" src="assets/svg-icon/permission-yes.svg" alt="">
                     <img class="m-r-8 c-p" *ngIf="row.data[column] === 'NO'" src="assets/svg-icon/permission-no.svg" alt="">
                   </span>
-                  <div *ngIf="column !== 'Invite'" (click)="changePermission(row.data.id, row.data[column])" class="ellipsis c-p">
+                  <div *ngIf="column !== 'Invite'" class="ellipsis c-p">
                     <span>{{row.data[column]}}</span>
                   </div>
                 </div>
@@ -78,7 +92,7 @@
                       <img src="assets/svg-icon/edit.svg" alt="">
                       Edit
                     </div> -->
-                    <div (click)="delete(row.data.id)" class="item">
+                    <div (click)="openDeleteBox(row.data.id)" class="item">
                       <img src="assets/svg-icon/delete.svg" alt="">
                       Delete
                     </div>
