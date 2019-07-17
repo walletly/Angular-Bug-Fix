@@ -54,4 +54,12 @@ export class CompaignService {
     });
     return this.http.get(SERVER_API_URL + 'campaign/all/' + id, { headers: httpHeaders });
   }
+
+  sendCampaignNotification(campaign_id, body){
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.post(SERVER_API_URL + 'campaign/notification/' + campaign_id, body, { headers: httpHeaders });
+  }
 }
