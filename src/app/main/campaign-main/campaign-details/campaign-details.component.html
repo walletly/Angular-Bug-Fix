@@ -69,7 +69,7 @@
               Discount
             </div>
             <div class="value">
-              {{campaign?.campaign_value}}%
+              {{campaign?.campaign_value}}
             </div>
           </div>
           <div class="row">
@@ -124,7 +124,7 @@
                 Days left
               </div>
               <div class="fs-15 fw-600">
-                30
+                {{campaign?.coupon_validity}}
               </div>
             </div>
             <div *ngIf="card?.card_type === 2" class="text-right">

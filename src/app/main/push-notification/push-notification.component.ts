@@ -32,8 +32,12 @@ export class PushNotificationComponent implements OnInit {
   }
 
   getCampaigns(brand_id){
-    this.campaignService.getСampaignsBrands(brand_id).subscribe(data => {
-      this.campaigns = data['data'];
+    this.campaignService.getСampaignsBrands(brand_id).subscribe(campaigns => {
+      campaigns['data'].forEach(campaign => {
+        if (campaign.campaign_status != 'expired' && campaign.campaign_status != 'inactive'){
+          this.campaigns.push(campaign);
+        }
+      });;
     });
   }
 
