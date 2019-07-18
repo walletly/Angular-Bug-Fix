@@ -30,10 +30,12 @@ export class ReviewCampaingComponent implements OnInit {
   messError;
   inProcces = false;
   showLoader;
+  discount;
 
   ngOnInit() {
     this.dataCoupon = this.mainService.dataCoupon;
     console.log(this.dataCoupon);
+    this.discount = (this.dataCoupon.campaign_type == 1) ? `${this.dataCoupon.discount} %` : `${this.dataCoupon.discount} ${this.dataCoupon.currency}`
 
     this.data = this.mainService.couponsData[0];
     // this.mainService.showLoader.emit(true);

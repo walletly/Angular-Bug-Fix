@@ -19,6 +19,7 @@ export class CampaignDetailsComponent implements OnInit {
   campaign;
   campaignType;
   card;
+  discount;
 
   url = SERVER_API_URL + 'coupon';
 
@@ -33,6 +34,7 @@ export class CampaignDetailsComponent implements OnInit {
     this.campaignService.getСampaignById(this.id).subscribe(data => {
       console.log(data);
       this.campaign = data['data'];
+      this.discount = (this.campaign.campaign_type == 1) ? `${this.campaign.campaign_value} %` : `${this.campaign.campaign_value} ${this.campaign.currency}`;
       this.cardService.getCardById(this.campaign.card_id).subscribe(dataCard => {
         console.log(dataCard);
         this.card = dataCard['data'];

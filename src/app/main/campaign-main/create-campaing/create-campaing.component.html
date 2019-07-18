@@ -137,12 +137,12 @@
             </div>
             <div class="value">
               <div class="pos-r full-width">
-                <nb-select formControlName="currency" [(ngModel)]="dataCoupon.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
-                  <nb-option value="USD">USD</nb-option>
-                  <nb-option value="EUR">EUR</nb-option>
-                  <nb-option value="GBP">GBP</nb-option>
-                  <nb-option value="AUD">AUD</nb-option>
-                  <nb-option value="CAD">CAD</nb-option>
+                <nb-select [ngClass]="{'error': myForm.controls['currency'].invalid && !customValidation}" formControlName="currency" [(ngModel)]="dataCoupon.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
+                  <nb-option value="$">USD ($)</nb-option>
+                  <nb-option value="€">EUR (€)</nb-option>
+                  <nb-option value="£">GBP (£)</nb-option>
+                  <nb-option value="$">AUD ($)</nb-option>
+                  <nb-option value="$">CAD ($)</nb-option>
                 </nb-select>
               </div>
             </div>

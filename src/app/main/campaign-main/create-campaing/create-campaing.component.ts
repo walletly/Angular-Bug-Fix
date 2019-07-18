@@ -205,8 +205,6 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCoupon.brand_id = JSON.parse(localStorage.getItem('currentBrand'))['brand_id'];
     }
     if (this.myForm.valid) {
-      this.dataCoupon.currency = this.myForm.get('currency').value;
-      this.dataCoupon.coupon_validity = this.myForm.get('validity').value;
       this.mainService.dataCoupon = this.dataCoupon;
       console.log(this.mainService.dataCoupon);
 
