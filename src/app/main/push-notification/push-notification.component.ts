@@ -16,6 +16,7 @@ export class PushNotificationComponent implements OnInit {
   customValidation = true;
   inProcces = false;
   notificationError = false;
+  notificationErrorMessage;
 
   campaigns = [];
 
@@ -57,15 +58,12 @@ export class PushNotificationComponent implements OnInit {
         console.log(result);
         this.inProcces = false;
         this.notificationError = false;
-        if(result['success']){
-          this.mainService.showToastrSuccess.emit({text: result['message']});
-        }else{
-          this.mainService.showToastrSuccess.emit({text: result['message']});
-        }
+        this.mainService.showToastrSuccess.emit({text: result['message']});
       }, error =>{
         console.log(error);
         this.inProcces = false;
         this.notificationError = true;
+        this.notificationErrorMessage = error['error'].message
       });
     }
   }
