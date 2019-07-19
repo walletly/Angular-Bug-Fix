@@ -308,7 +308,7 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
       data = true;
     }
 
-    this.business.changePermission(id, JSON.parse(localStorage.getItem('currentBrand'))['brand_id'], { permission: data } ).subscribe(result => {
+    this.business.changeUserAccess(id, JSON.parse(localStorage.getItem('currentBrand'))['brand_id'], { permission: data } ).subscribe(result => {
       console.log(result);
       if (result['success']) {
         this.mainService.showToastrSuccess.emit({text: 'User permission updated'});

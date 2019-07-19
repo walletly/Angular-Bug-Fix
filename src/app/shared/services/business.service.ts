@@ -49,12 +49,12 @@ export class BusinessService {
     return this.http.put(SERVER_API_URL + 'business/updateUser/' + id, body, { headers: httpHeaders});
   }
 
-  changePermission(user_id, brand_id, body) {
+  changeUserAccess(user_id, brand_id, body) {
     const httpHeaders = new HttpHeaders ({
       'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
       'x-auth-user': localStorage.getItem('userID')
     });
-    return this.http.put(SERVER_API_URL + 'business/changePermission/' + user_id + '/' + brand_id, body, { headers: httpHeaders});
+    return this.http.put(SERVER_API_URL + 'business/changeUserAccess/' + user_id + '/' + brand_id, body, { headers: httpHeaders});
   }
 
   deleteBusinessUser(user_id, brand_id) {
