@@ -52,7 +52,7 @@ export class AudienceComponent implements OnInit {
 			      // 'Last Name': { name: element.lastName },
 			      'Full Name' : {name : `${element.firstName} ${element.lastName}`},
 			      'Email Address': { name: element.email },
-            'Type': { name: element.discount_type,
+            'Type': { name: element.campaign_type,
                       icon: (element.discount_type == 1) ? 
                             'assets/img/Coupon.png' :
                             (element.discount_type == 2) ?
