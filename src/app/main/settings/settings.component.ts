@@ -257,7 +257,7 @@ export class SettingsComponent implements OnInit {
 
   uploadLogo(file: File) {
     console.log(file);
-    this.iconName = file['srcElement'].files[0].name;
+    this.logoName = file['srcElement'].files[0].name;
     this.fileImg = file;
     this.uploadType = 'logo';
     this.showLogoUploader = true;
