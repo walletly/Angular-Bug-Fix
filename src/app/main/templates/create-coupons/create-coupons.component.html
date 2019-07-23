@@ -484,7 +484,7 @@
         >
           <div class="flip-card-inner">
             <div [ngClass]="{'smart-hidden': accordionFront.collapsedValue}" class="flip-card-front">
-              <div class="coupon">
+              <div [ngClass]="{'coupon': dataCard.cardType === 1, 'card': dataCard.cardType === 2, 'ticket': dataCard.cardType === 3}">
                 <div class="head m-b-15">
                   <div class="df ai-c">
                     <div class="coupon-brand m-r-8">
@@ -495,7 +495,7 @@
                     </div>
                   </div>
                   <div
-                    *ngIf="dataCard.cardType === 'coupons'"
+                    *ngIf="dataCard.cardType === 1"
                     class="text-right"
                   >
                     <div class="fs-10 fw-400">
@@ -505,7 +505,7 @@
                       30
                     </div>
                   </div>
-                  <div *ngIf="dataCard.cardType === 'cards'" class="text-right">
+                  <div *ngIf="dataCard.cardType === 2" class="text-right">
                     <div class="fs-10 fw-400">
                       Point
                     </div>
@@ -514,14 +514,14 @@
                     </div>
                   </div>
                   <div
-                    *ngIf="dataCard.cardType === 'tickets'"
+                    *ngIf="dataCard.cardType === 3"
                     class="text-right"
                   >
                     <div class="fs-10 fw-400">
-                      Stamp
+                      Time
                     </div>
                     <div class="fs-15 fw-600">
-                      4
+                      Date
                     </div>
                   </div>
                 </div>

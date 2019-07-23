@@ -32,6 +32,12 @@ button[status="success"] {
 nb-card {
   min-height: calc(100% - 100px);
 }
-.coupon{
+.coupon, .ticket{
   width: 100%;
+}
+.ticket{
+  background-size: auto auto !important
+}
+.ticket-back{
+  height: 512.33px !important
 }

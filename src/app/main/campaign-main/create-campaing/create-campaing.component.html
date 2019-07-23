@@ -33,7 +33,7 @@
         </td>
       </ng-container>
     </table>
-    <div *ngIf="selectedSell === 'Coupon in %' || selectedSell === 'Coupon in $'">
+    <div *ngIf="cardType === 'coupon'">
       <form [formGroup]="myForm">
         <div class="p-l-30 m-b-30" style="font-size: 25px">
           Campaign
@@ -46,7 +46,7 @@
             <div class="value">
               <div class="pos-r full-width">
                 <input [ngClass]="{'error': myForm.controls['campaignName'].invalid && !customValidation}"
-                  formControlName="campaignName" type="text" [(ngModel)]="dataCoupon.name" nbInput fullWidth
+                  formControlName="campaignName" type="text" [(ngModel)]="dataCampaign.name" nbInput fullWidth
                   fieldSize="small" placeholder="">
                 <div *ngIf="myForm.controls['campaignName'].invalid && !customValidation" class="error-lable">
                   Field error (must have at least 1 character)
@@ -61,7 +61,7 @@
             <div class="value">
               <div class="pos-r full-width">
                 <textarea [ngClass]="{'error': myForm.controls['description'].invalid && !customValidation}"
-                  formControlName="description" [(ngModel)]="dataCoupon.desription" nbInput fullWidth
+                  formControlName="description" [(ngModel)]="dataCampaign.desription" nbInput fullWidth
                   placeholder="Textarea"></textarea>
                 <div *ngIf="myForm.controls['description'].invalid && !customValidation" class="error-lable">
                   Field error (must have at least 1 character)
@@ -77,8 +77,8 @@
               <div *ngIf="cards.length" class="pos-r full-width">
                 <nb-select [ngClass]="{'error': myForm.controls['template'].invalid && !customValidation}"
                   formControlName="template" #select size="small" placeholder="Select Template"
-                  [(selected)]="dataCoupon.card_id">
-                  <nb-option *ngFor="let item of cards" [value]="item.id">
+                  [(selected)]="dataCampaign.card_id">
+                  <nb-option *ngFor="let item of coupons" [value]="item.id">
                     {{ item.template_name }}
                   </nb-option>
                 </nb-select>
@@ -100,10 +100,10 @@
             </div>
             <div class="value df ai-c">
               <div (clickOutside)="showDatePicker = false" class="pos-r m-r-34">
-                <input [ngClass]="{'error': !dataCoupon.startDate && !customValidation}" formControlName="startDate"
-                  class="small" (focus)="showDatePicker = true" [(ngModel)]="dataCoupon.startDate" type="text" nbInput
+                <input [ngClass]="{'error': !dataCampaign.startDate && !customValidation}" formControlName="startDate"
+                  class="small" (focus)="showDatePicker = true" [(ngModel)]="dataCampaign.startDate" type="text" nbInput
                   fullWidth fieldSize="small" placeholder="">
-                <div *ngIf="!dataCoupon.startDate && !customValidation" class="error-lable">
+                <div *ngIf="!dataCampaign.startDate && !customValidation" class="error-lable">
                   Field error (make your choice)
                 </div>
                 <nb-calendar *ngIf="showDatePicker" (dateChange)="dateStartChange($event);" [(date)]="dateStart">
@@ -114,10 +114,10 @@
                   End Date
                 </div>
                 <div (clickOutside)="showDatePickerEnd = false" class="pos-r">
-                  <input [ngClass]="{'error': !dataCoupon.endDate && !customValidation}" formControlName="endDate"
-                    class="small" (focus)="showDatePickerEnd = true" [(ngModel)]="dataCoupon.endDate" type="text" nbInput
+                  <input [ngClass]="{'error': !dataCampaign.endDate && !customValidation}" formControlName="endDate"
+                    class="small" (focus)="showDatePickerEnd = true" [(ngModel)]="dataCampaign.endDate" type="text" nbInput
                     fullWidth fieldSize="small" placeholder="">
-                  <div *ngIf="!dataCoupon.endDate && !customValidation" class="error-lable">
+                  <div *ngIf="!dataCampaign.endDate && !customValidation" class="error-lable">
                     Field error (make your choice)
                   </div>
                   <nb-calendar *ngIf="showDatePickerEnd" (dateChange)="dateEndChange($event);" [(date)]="dateEnd">
@@ -137,7 +137,7 @@
             </div>
             <div class="value">
               <div class="pos-r full-width">
-                <nb-select [ngClass]="{'error': myForm.controls['currency'].invalid && !customValidation}" formControlName="currency" [(ngModel)]="dataCoupon.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
+                <nb-select [ngClass]="{'error': myForm.controls['currency'].invalid && !customValidation}" formControlName="currency" #select [(ngModel)]="dataCampaign.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
                   <nb-option value="$">USD ($)</nb-option>
                   <nb-option value="€">EUR (€)</nb-option>
                   <nb-option value="£">GBP (£)</nb-option>
@@ -154,7 +154,7 @@
             <div class="value">
               <div class="pos-r full-width">
                 <input id="discountInput" [ngClass]="{'error': myForm.controls['discount'].invalid && !customValidation}"
-                  formControlName="discount" [ngModel]="dataCoupon.discount" (ngModelChange)="changeDiscount($event)"
+                  formControlName="discount" [ngModel]="dataCampaign.discount" (ngModelChange)="changeDiscount($event)"
                   class="small p-r-25" (input)="checkDiscount($event.target.value)" type="number" nbInput fullWidth fieldSize="small"
                   style="background-repeat: no-repeat; background-position: right;">
                 <div *ngIf="myForm.controls['discount'].invalid && !customValidation" class="error-lable">
@@ -186,9 +186,162 @@
             <div class="value">
               <div class="pos-r">
                 <input [ngClass]="{'error': myForm.controls['validity'].invalid && !customValidation}" (input)="checkValidity($event.target.value)"
-                formControlName="validity" [(ngModel)]="dataCoupon.coupon_validity" type="text" class="small" nbInput fullWidth fieldSize="small" placeholder="">
+                formControlName="validity" [(ngModel)]="dataCampaign.coupon_validity" type="text" class="small" nbInput fullWidth fieldSize="small" placeholder="">
                 <div *ngIf="myForm.controls['validity'].invalid && !customValidation" class="error-lable">
                   Enter Validity in days e.g. 30 (1-100)
+                </div>
+              </div>
+            </div>      
+          </div>
+        </div>
+      </form>
+      <!-- <div *ngIf="myForm.invalid && !customValidation" class="row-input">
+        <div class="lable">
+        </div>
+        <div class="value message-error" style="text-align: left;">
+          Validation Error
+        </div>
+      </div> -->
+      <div class="row-input">
+        <div class="lable">
+        </div>
+        <div class="value">
+          <div class="pos-r full-width">
+            <button (click)="clear()" class="cust-button m-r-15" nbButton status="gray">
+              Clear
+            </button>
+            <button *ngIf="!id && !noTemplates" (click)="create()" class="cust-button" nbButton status="success">
+              Create
+            </button>
+            <button *ngIf="id" (click)="create()" class="cust-button" nbButton status="success">
+              Update
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="cardType === 'ticket'">
+      <form [formGroup]="ticketForm">
+        <div class="p-l-30 m-b-30" style="font-size: 25px">
+          Campaign
+        </div>
+        <div class="p-l-60">
+          <div class="row-input">
+            <div class="lable">
+              Campaign Name
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <input [ngClass]="{'error': ticketForm.controls['campaignName'].invalid && !customValidation}"
+                  formControlName="campaignName" type="text" [(ngModel)]="dataCampaign.name" nbInput fullWidth
+                  fieldSize="small" placeholder="">
+                <div *ngIf="ticketForm.controls['campaignName'].invalid && !customValidation" class="error-lable">
+                  Field error (must have at least 1 character)
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row-input">
+            <div class="lable">
+              Description
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <textarea [ngClass]="{'error': ticketForm.controls['description'].invalid && !customValidation}"
+                  formControlName="description" [(ngModel)]="dataCampaign.desription" nbInput fullWidth
+                  placeholder="Textarea"></textarea>
+                <div *ngIf="ticketForm.controls['description'].invalid && !customValidation" class="error-lable">
+                  Field error (must have at least 1 character)
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row-input">
+            <div class="lable">
+              Template
+            </div>
+            <div class="value">
+              <div *ngIf="cards.length" class="pos-r full-width">
+                <nb-select [ngClass]="{'error': ticketForm.controls['template'].invalid && !customValidation}"
+                  formControlName="template" #select size="small" placeholder="Select Template"
+                  [(selected)]="dataCampaign.card_id">
+                  <nb-option *ngFor="let item of tickets" [value]="item.id">
+                    {{ item.template_name }}
+                  </nb-option>
+                </nb-select>
+              </div>
+              <div *ngIf="ticketForm.controls['template'].invalid && !customValidation" class="error-lable">
+                Field error (make your choice)
+              </div>
+              <div *ngIf="noTemplates" class="error-lable fs-16">
+                Please create Template First
+                <a [routerLink]="[ '/main/templates/create-cards' ]" class="c-p">
+                  (click here)
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="row-input">
+            <div class="lable">
+              Start Date
+            </div>
+            <div class="value df ai-c">
+              <div (clickOutside)="showDatePicker = false" class="pos-r m-r-34">
+                <input [ngClass]="{'error': !dataCampaign.startDate && !customValidation}" formControlName="startDate"
+                  class="small" (focus)="showDatePicker = true" [(ngModel)]="dataCampaign.startDate" type="text" nbInput
+                  fullWidth fieldSize="small" placeholder="">
+                <div *ngIf="!dataCampaign.startDate && !customValidation" class="error-lable">
+                  Field error (make your choice)
+                </div>
+                <nb-calendar *ngIf="showDatePicker" (dateChange)="dateStartChange($event);" [(date)]="dateStart">
+                </nb-calendar>
+              </div>
+              <div class="pos-r df">
+                <div class="m-r-13 p-t-10">
+                  Time
+                </div>
+                <div class="pos-r">
+                  <input [ngClass]="{'error': ticketForm.controls['time'].invalid && !customValidation}"
+                    formControlName="time" type="text" [(ngModel)]="dataCampaign.time" nbInput fullWidth
+                    fieldSize="small" placeholder="08:00 AM">
+                  <div *ngIf="ticketForm.controls['time'].invalid && !customValidation" class="error-lable">
+                    enter time in format (08:00 AM)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
+          Ticket
+        </div>
+        <div class="p-l-60">
+          <div class="row-input">
+            <div class="lable">
+              Event Name
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <input [ngClass]="{'error': ticketForm.controls['event_name'].invalid && !customValidation}"
+                  formControlName="event_name" [(ngModel)]="dataCampaign.event_name"
+                  type="text" nbInput fullWidth fieldSize="small"
+                  style="background-repeat: no-repeat; background-position: right;">
+                <div *ngIf="ticketForm.controls['event_name'].invalid && !customValidation" class="error-lable">
+                  Enter event name
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row-input">
+            <div class="lable">
+              Venue
+            </div>
+            <div class="value">
+              <div class="pos-r">
+                <input [ngClass]="{'error': ticketForm.controls['venue'].invalid && !customValidation}"
+                formControlName="venue" [(ngModel)]="dataCampaign.venue" type="text" nbInput fullWidth fieldSize="small" placeholder="">
+                <div *ngIf="ticketForm.controls['venue'].invalid && !customValidation" class="error-lable">
+                  Enter Venue
                 </div>
               </div>
             </div>      

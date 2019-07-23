@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       !this.router.url.includes('create-campaign') &&
       !this.router.url.includes('walletly-cards')) {
 
-      this.mainService.dataCoupon = {
+      this.mainService.dataCampaign = {
         name: '',
         desription: '',
         card_id: '',
@@ -36,7 +36,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         campaign_type: '',
         brand_id: '',
         coupon_validity: '',
-        currency: ''
+        currency: '',
+        event_name: '',
+        venue: '',
+        time: '',
+        cardType: ''
       };
     }
 

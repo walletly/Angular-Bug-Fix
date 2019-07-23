@@ -188,6 +188,76 @@ a {
     }
   }
 }
+
+.card {
+  background-image: url("assets/svg-icon/card-bg.svg");
+  background-size: 100% 100%;
+  width: 321px;
+  min-height: 467px;
+  margin-left: auto;
+  position: relative;
+  .combined {
+    position: absolute;
+    right: 10px;
+    bottom: 16px;
+  }
+  .cover-image {
+    width: 100% !important;
+    max-height: 126px;
+  }
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    padding: 19px 5px 0 5px;
+    .coupon-brand {
+      width: 45px;
+      min-width: 45px;
+      height: 45px;
+      overflow: hidden;
+      border-radius: 100px;
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.ticket {
+  background-image: url("assets/svg-icon/event-bg.svg");
+  background-size: 100% 100%;
+  width: 321px;
+  min-height: 467px;
+  margin-left: auto;
+  position: relative;
+  .combined {
+    position: absolute;
+    right: 10px;
+    bottom: 16px;
+  }
+  .cover-image {
+    width: 100% !important;
+    max-height: 126px;
+  }
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    padding: 19px 5px 0 5px;
+    .coupon-brand {
+      width: 45px;
+      min-width: 45px;
+      height: 45px;
+      overflow: hidden;
+      border-radius: 100px;
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
 .coupon-back {
   width: 320px;
   border: 1px solid #e0e0e0;
@@ -669,6 +739,78 @@ div.menu-inside > nb-menu > ul > li > ul > li.menu-item > a {
 }
 
 .coupon {
+  &.small-size {
+    margin-left: 0;
+    margin-right: 0;
+    width: 172px;
+    min-height: 250px;
+    .head {
+      padding-top: 13px;
+    }
+    .hover-couon {
+      position: absolute;
+      height: calc(100% - 20px);
+      top: 10px;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-flow: column;
+      z-index: 11;
+      border-radius: 10px;
+      display: none;
+      button {
+        border-radius: 8px !important;
+        padding: 6px 10px;
+        font-size: 13px;
+        width: 137px;
+      }
+    }
+    &:hover {
+      .hover-couon {
+        display: flex;
+      }
+    }
+  }
+}
+.card {
+  &.small-size {
+    margin-left: 0;
+    margin-right: 0;
+    width: 172px;
+    min-height: 250px;
+    .head {
+      padding-top: 13px;
+    }
+    .hover-couon {
+      position: absolute;
+      height: calc(100% - 20px);
+      top: 10px;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-flow: column;
+      z-index: 11;
+      border-radius: 10px;
+      display: none;
+      button {
+        border-radius: 8px !important;
+        padding: 6px 10px;
+        font-size: 13px;
+        width: 137px;
+      }
+    }
+    &:hover {
+      .hover-couon {
+        display: flex;
+      }
+    }
+  }
+}
+.ticket {
   &.small-size {
     margin-left: 0;
     margin-right: 0;

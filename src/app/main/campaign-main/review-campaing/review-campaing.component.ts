@@ -12,6 +12,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class ReviewCampaingComponent implements OnInit {
 
   id;
+  monthNames = [
+    "January", "February", "March",
+    "April", "May", "June", "July",
+    "August", "September", "October",
+    "November", "December"
+  ];
+
+  date;
 
   constructor(
     private mainService: MainService,
@@ -21,9 +29,14 @@ export class ReviewCampaingComponent implements OnInit {
     private activeRout: ActivatedRoute
   ) {
     this.id = this.activeRout.snapshot.paramMap.get('id');
+    this.dataCampaign = this.mainService.dataCampaign;
+    console.log(this.dataCampaign);
+
+    this.date = new Date(this.dataCampaign.startDate);
+    this.date = `${this.date.getDate()} ${this.monthNames[this.date.getMonth()]} ${this.date.getFullYear()}`;
   }
 
-  dataCoupon;
+  dataCampaign;
   data;
   couponBack;
   campaign = {};
@@ -33,14 +46,12 @@ export class ReviewCampaingComponent implements OnInit {
   discount;
 
   ngOnInit() {
-    this.dataCoupon = this.mainService.dataCoupon;
-    console.log(this.dataCoupon);
-    this.discount = (this.dataCoupon.campaign_type == 1) ? `${this.dataCoupon.discount} %` : `${this.dataCoupon.discount} ${this.dataCoupon.currency}`
+    this.discount = (this.dataCampaign.campaign_type == 1) ? `${this.dataCampaign.discount} %` : `${this.dataCampaign.discount} ${this.dataCampaign.currency}`
 
     this.data = this.mainService.couponsData[0];
     // this.mainService.showLoader.emit(true);
     this.showLoader = true;
-    this.cardService.getCardById(this.dataCoupon.card_id).subscribe(data => {
+    this.cardService.getCardById(this.dataCampaign.card_id).subscribe(data => {
       console.log(data);
       this.data = data['data'];
       // this.mainService.showLoader.emit(false);
@@ -53,14 +64,14 @@ export class ReviewCampaingComponent implements OnInit {
 
   create() {
     this.inProcces = true;
-    this.mainService.dataCoupon = this.dataCoupon;
+    this.mainService.dataCampaign = this.dataCampaign;
     this.createCampaign();
     if (this.id) {
       console.log(this.campaign);
       this.campaignService.updateСampaign(this.id, this.campaign).subscribe(result => {
         console.log(result);
         if (result['success']) {
-          this.mainService.dataCoupon = {
+          this.mainService.dataCampaign = {
             name: '',
             desription: '',
             card_id: '',
@@ -70,7 +81,11 @@ export class ReviewCampaingComponent implements OnInit {
             campaign_type: '',
             brand_id: '',
             coupon_validity: '',
-            currency: ''
+            currency: '',
+            event_name: '',
+            venue: '',
+            time: '',
+            cardType: ''
           };
           this.router.navigate(['/main/campaign-main/details/' + this.id]);
           this.mainService.showToastrSuccess.emit({text: 'Campaign updated'});
@@ -84,7 +99,7 @@ export class ReviewCampaingComponent implements OnInit {
       this.campaignService.createСampaign(this.campaign).subscribe(result => {
         console.log(result);
         if (result['success']) {
-          this.mainService.dataCoupon = {
+          this.mainService.dataCampaign = {
             name: '',
             desription: '',
             card_id: '',
@@ -94,7 +109,11 @@ export class ReviewCampaingComponent implements OnInit {
             campaign_type: '',
             brand_id: '',
             coupon_validity: '',
-            currency: ''
+            currency: '',
+            event_name: '',
+            venue: '',
+            time: '',
+            cardType: ''
           };
           this.mainService.showToastrSuccess.emit({text: 'Campaign created'});
           this.router.navigate(['/main/campaign-main/details/' + result['campaign']]);
@@ -120,15 +139,18 @@ export class ReviewCampaingComponent implements OnInit {
   }
 
   createCampaign() {
-    this.campaign['campaign_name'] = this.dataCoupon.name;
-    this.campaign['description'] = this.dataCoupon.desription;
-    this.campaign['campaign_type'] = parseInt(this.dataCoupon.campaign_type);
-    this.campaign['currency'] = this.dataCoupon.currency;
-    this.campaign['coupon_validity'] = parseInt(this.dataCoupon.coupon_validity);
-    this.campaign['campaign_value'] = String(this.dataCoupon.discount);
-    this.campaign['start_date'] = this.dataCoupon.startDate;
-    this.campaign['end_date'] = this.dataCoupon.endDate;
-    this.campaign['card_id'] = this.dataCoupon.card_id;
-    this.campaign['brand_id'] = this.dataCoupon.brand_id;
+    this.campaign['campaign_name'] = this.dataCampaign.name;
+    this.campaign['description'] = this.dataCampaign.desription;
+    this.campaign['campaign_type'] = parseInt(this.dataCampaign.campaign_type);
+    this.campaign['currency'] = this.dataCampaign.currency;
+    this.campaign['coupon_validity'] = parseInt(this.dataCampaign.coupon_validity);
+    this.campaign['campaign_value'] = String(this.dataCampaign.discount);
+    this.campaign['start_date'] = this.dataCampaign.startDate;
+    this.campaign['end_date'] = this.dataCampaign.endDate;
+    this.campaign['card_id'] = this.dataCampaign.card_id;
+    this.campaign['brand_id'] = this.dataCampaign.brand_id;
+    this.campaign['event_name'] = this.dataCampaign.event_name;
+    this.campaign['time'] = this.dataCampaign.time;
+    this.campaign['venue'] = this.dataCampaign.venue;
   }
 }

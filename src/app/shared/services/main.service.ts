@@ -17,7 +17,7 @@ export class MainService {
 
   couponsData = [];
   businessData = [];
-  dataCoupon = {
+  dataCampaign = {
     name: '',
     desription: '',
     card_id: '', // template
@@ -27,7 +27,11 @@ export class MainService {
     brand_id: '',
     campaign_type: '',
     coupon_validity: '',
-    currency: ''
+    currency: '',
+    event_name: '',
+    venue: '',
+    time: '',
+    cardType: ''
   };
 
   addBusiness(item) {
