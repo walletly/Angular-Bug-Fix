@@ -33,7 +33,9 @@ export class CreateCampaingComponent implements OnInit {
   showDatePickerEnd;
   showDatePicker;
   showLoader;
-  noTemplates = false;
+  noCoupons = true;
+  noCards = true;
+  noTickets = true;
   limit = '';
 
   @ViewChild('select') select;
@@ -99,10 +101,13 @@ export class CreateCampaingComponent implements OnInit {
       for (let i in data['data']){
         if(data['data'][i].card_type == 1){
           this.coupons.push(data['data'][i]);
+          this.noCoupons = false;
         }else if(data['data'][i].card_type == 2){
           this.cards.push(data['data'][i]);
+          this.noCards = false;
         }else if(data['data'][i].card_type == 3){
           this.tickets.push(data['data'][i]);
+          this.noTickets = false;
         }
       }
       console.log(this.dataCampaign);
@@ -120,7 +125,6 @@ export class CreateCampaingComponent implements OnInit {
     }, err => {
       if (!this.dataCampaign) {
         this.dataCampaign = this.mainService.dataCampaign;
-        this.noTemplates = true;
         this.myForm.controls['template'].setValue(this.dataCampaign.card_id);
         console.log(this.dataCampaign);
         // need for all template
@@ -334,7 +338,7 @@ export class CreateCampaingComponent implements OnInit {
   }
 
   clear() {
-    if (!this.noTemplates) {
+    if (!this.noCoupons || !this.noCards || !this.noTickets) {
       this.select.reset();
     }
     this.dataCampaign = {

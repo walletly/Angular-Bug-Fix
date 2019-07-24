@@ -74,7 +74,7 @@
               Template
             </div>
             <div class="value">
-              <div *ngIf="cards.length" class="pos-r full-width">
+              <div *ngIf="coupons.length" class="pos-r full-width">
                 <nb-select [ngClass]="{'error': myForm.controls['template'].invalid && !customValidation}"
                   formControlName="template" #select size="small" placeholder="Select Template"
                   [(selected)]="dataCampaign.card_id">
@@ -86,8 +86,8 @@
               <div *ngIf="myForm.controls['template'].invalid && !customValidation" class="error-lable">
                 Field error (make your choice)
               </div>
-              <div *ngIf="noTemplates" class="error-lable fs-16">
-                Please create Template First
+              <div *ngIf="noCoupons" class="error-lable fs-16">
+                Please create Coupon Template First
                 <a [routerLink]="[ '/main/templates/create-cards' ]" class="c-p">
                   (click here)
                 </a>
@@ -210,7 +210,7 @@
             <button (click)="clear()" class="cust-button m-r-15" nbButton status="gray">
               Clear
             </button>
-            <button *ngIf="!id && !noTemplates" (click)="create()" class="cust-button" nbButton status="success">
+            <button *ngIf="!id && !noCoupons" (click)="create()" class="cust-button" nbButton status="success">
               Create
             </button>
             <button *ngIf="id" (click)="create()" class="cust-button" nbButton status="success">
@@ -261,7 +261,7 @@
               Template
             </div>
             <div class="value">
-              <div *ngIf="cards.length" class="pos-r full-width">
+              <div *ngIf="tickets.length" class="pos-r full-width">
                 <nb-select [ngClass]="{'error': ticketForm.controls['template'].invalid && !customValidation}"
                   formControlName="template" #select size="small" placeholder="Select Template"
                   [(selected)]="dataCampaign.card_id">
@@ -273,8 +273,8 @@
               <div *ngIf="ticketForm.controls['template'].invalid && !customValidation" class="error-lable">
                 Field error (make your choice)
               </div>
-              <div *ngIf="noTemplates" class="error-lable fs-16">
-                Please create Template First
+              <div *ngIf="noTickets" class="error-lable fs-16">
+                Please create Tickets Template First
                 <a [routerLink]="[ '/main/templates/create-cards' ]" class="c-p">
                   (click here)
                 </a>
@@ -363,7 +363,7 @@
             <button (click)="clear()" class="cust-button m-r-15" nbButton status="gray">
               Clear
             </button>
-            <button *ngIf="!id && !noTemplates" (click)="create()" class="cust-button" nbButton status="success">
+            <button *ngIf="!id && !noTickets" (click)="create()" class="cust-button" nbButton status="success">
               Create
             </button>
             <button *ngIf="id" (click)="create()" class="cust-button" nbButton status="success">
