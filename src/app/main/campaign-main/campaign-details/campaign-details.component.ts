@@ -21,7 +21,7 @@ export class CampaignDetailsComponent implements OnInit {
   card;
   discount;
 
-  url = SERVER_API_URL + 'coupon';
+  url;
 
   constructor(
     private activeRout: ActivatedRoute,
@@ -38,6 +38,11 @@ export class CampaignDetailsComponent implements OnInit {
       this.cardService.getCardById(this.campaign.card_id).subscribe(dataCard => {
         console.log(dataCard);
         this.card = dataCard['data'];
+        if (this.card.card_type == 1){
+          this.url = SERVER_API_URL + 'coupon';
+        }else if(this.card.card_type == 3){
+          this.url = SERVER_API_URL + 'ticket';
+        }
         this.showLoader = false;
       });
 
