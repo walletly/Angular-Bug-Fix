@@ -77,3 +77,8 @@ nb-card {
     background-color: #20beea;
   }
 }
+
+.disable{
+  pointer-events: none !important;
+  opacity: 0.3;
+}

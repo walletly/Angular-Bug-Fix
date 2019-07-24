@@ -49,16 +49,16 @@ export class CreateCampaingComponent implements OnInit {
 
   data = [
     {
-      data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', locked: false }, 'Cards': { name: 'Loyalty Card', icon: 'assets/img/LoyaltyCard.png', locked: true }, 'Tickets': { name: 'Event Tickets', icon: 'assets/img/eventTickets.png', locked: true } },
+      data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', type: 'coupon', locked: false }, 'Cards': { name: 'Loyalty Card', icon: 'assets/img/LoyaltyCard.png', type: 'card', locked: true }, 'Tickets': { name: 'Event Tickets', icon: 'assets/img/eventTickets.png', type: 'ticket', locked: true } },
     },
     {
-      data: { 'Coupons': { name: 'Coupon in %', icon: 'assets/img/Coupon.png', locked: false }, 'Cards': { name: 'Stamp Card', icon: 'assets/img/stampCard.png', locked: true }, 'Tickets': { name: 'Webinar Event', icon: 'assets/img/webinarIcon.png', locked: false } },
+      data: { 'Coupons': { name: 'Coupon in %', icon: 'assets/img/Coupon.png', type: 'coupon', locked: false }, 'Cards': { name: 'Stamp Card', icon: 'assets/img/stampCard.png', type: 'card', locked: true }, 'Tickets': { name: 'Webinar Event', icon: 'assets/img/webinarIcon.png', type: 'ticket', locked: false } },
     },
     {
-      data: { 'Coupons': { name: 'Birthday Coupon', icon: 'assets/img/Birthday-Coupon.png', locked: true }, 'Cards': { name: 'Membership Card', icon: 'assets/img/membershipCard.png', locked: true }, 'Tickets': { name: '', icon: '' } },
+      data: { 'Coupons': { name: 'Birthday Coupon', icon: 'assets/img/Birthday-Coupon.png', type: 'coupon', locked: true }, 'Cards': { name: 'Membership Card', icon: 'assets/img/membershipCard.png', type: 'card', locked: true }, 'Tickets': { name: '', icon: '' } },
     },
     {
-      data: { 'Coupons': { name: 'Referral Coupon', icon: 'assets/img/Referral-Coupon.png', locked: true }, 'Cards': { name: '', icon: '' }, 'Tickets': { name: '', icon: '' } },
+      data: { 'Coupons': { name: 'Referral Coupon', icon: 'assets/img/Referral-Coupon.png', type: 'coupon', locked: true }, 'Cards': { name: '', icon: '' }, 'Tickets': { name: '', icon: '' } },
     },
   ];
 
