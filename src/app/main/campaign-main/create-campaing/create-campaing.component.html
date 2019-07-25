@@ -62,7 +62,7 @@
             <div class="value">
               <div class="pos-r full-width">
                 <textarea [ngClass]="{'error': myForm.controls['description'].invalid && !customValidation}"
-                  formControlName="description" [(ngModel)]="dataCampaign.desription" nbInput fullWidth
+                  formControlName="description" [(ngModel)]="dataCampaign.description" nbInput fullWidth
                   placeholder="Textarea"></textarea>
                 <div *ngIf="myForm.controls['description'].invalid && !customValidation" class="error-lable">
                   Field error (must have at least 1 character)
@@ -249,7 +249,7 @@
             <div class="value">
               <div class="pos-r full-width">
                 <textarea [ngClass]="{'error': ticketForm.controls['description'].invalid && !customValidation}"
-                  formControlName="description" [(ngModel)]="dataCampaign.desription" nbInput fullWidth
+                  formControlName="description" [(ngModel)]="dataCampaign.description" nbInput fullWidth
                   placeholder="Textarea"></textarea>
                 <div *ngIf="ticketForm.controls['description'].invalid && !customValidation" class="error-lable">
                   Field error (must have at least 1 character)
@@ -335,14 +335,14 @@
           </div>
           <div class="row-input">
             <div class="lable">
-              Venue
+              Webinar Access Link
             </div>
             <div class="value">
               <div class="pos-r">
                 <input [ngClass]="{'error': ticketForm.controls['venue'].invalid && !customValidation}"
                 formControlName="venue" [(ngModel)]="dataCampaign.venue" type="text" nbInput fullWidth fieldSize="small" placeholder="">
                 <div *ngIf="ticketForm.controls['venue'].invalid && !customValidation" class="error-lable">
-                  Enter Venue
+                  Enter Link of Webinar
                 </div>
               </div>
             </div>      

@@ -38,7 +38,8 @@ export class ReviewCampaingComponent implements OnInit {
 
   dataCampaign;
   data;
-  couponBack;
+  couponBack = false;
+  couponBackSide = false;
   campaign = {};
   messError;
   inProcces = false;
@@ -73,7 +74,7 @@ export class ReviewCampaingComponent implements OnInit {
         if (result['success']) {
           this.mainService.dataCampaign = {
             name: '',
-            desription: '',
+            description: '',
             card_id: '',
             discount: '',
             startDate: '',
@@ -101,7 +102,7 @@ export class ReviewCampaingComponent implements OnInit {
         if (result['success']) {
           this.mainService.dataCampaign = {
             name: '',
-            desription: '',
+            description: '',
             card_id: '',
             discount: '',
             startDate: '',
@@ -140,7 +141,7 @@ export class ReviewCampaingComponent implements OnInit {
 
   createCampaign() {
     this.campaign['campaign_name'] = this.dataCampaign.name;
-    this.campaign['description'] = this.dataCampaign.desription;
+    this.campaign['description'] = this.dataCampaign.description;
     this.campaign['campaign_type'] = parseInt(this.dataCampaign.campaign_type);
     this.campaign['currency'] = this.dataCampaign.currency;
     this.campaign['coupon_validity'] = parseInt(this.dataCampaign.coupon_validity);
@@ -152,5 +153,12 @@ export class ReviewCampaingComponent implements OnInit {
     this.campaign['event_name'] = this.dataCampaign.event_name;
     this.campaign['time'] = this.dataCampaign.time;
     this.campaign['venue'] = this.dataCampaign.venue;
+  }
+
+  changeSide(){
+    this.couponBack = !this.couponBack;
+    setTimeout(() => {
+      this.couponBackSide = !this.couponBackSide;
+    }, 200);
   }
 }

@@ -33,7 +33,7 @@ export class WalletlyCardsComponent implements OnInit {
   addToCampaign(brandId, cardId, cardType) {
     this.mainService.dataCampaign = {
       name: '',
-      desription: '',
+      description: '',
       card_id: cardId,
       discount: '',
       startDate: '',

@@ -19,7 +19,7 @@ export class MainService {
   businessData = [];
   dataCampaign = {
     name: '',
-    desription: '',
+    description: '',
     card_id: '', // template
     discount: '',
     startDate: '',

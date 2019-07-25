@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
       this.mainService.dataCampaign = {
         name: '',
-        desription: '',
+        description: '',
         card_id: '',
         discount: '',
         startDate: '',

@@ -93,7 +93,7 @@ export class CreateCampaingComponent implements OnInit {
       startDate: ["", [Validators.required]],
       time: ["", [Validators.required, Validators.pattern("((1[0-2]|0?[1-9]):([0-5][0-9]) ?((AM)|(PM)|(am)|(pm)))")]],
       event_name: ["", [Validators.required]],
-      venue: ["", [Validators.required]]
+      venue: ["", [Validators.required, Validators.pattern("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$")]]
     });
 
     this.id = this.activeRout.snapshot.paramMap.get('id');
@@ -135,7 +135,7 @@ export class CreateCampaingComponent implements OnInit {
         console.log(result['data']);
         if (result['success']) {
           this.mainService.dataCampaign.name = result['data'].campaign_name;
-          this.mainService.dataCampaign.desription = result['data'].description;
+          this.mainService.dataCampaign.description = result['data'].description;
           this.mainService.dataCampaign.campaign_type = result['data'].campaign_type.toString();
           this.mainService.dataCampaign.discount = result['data'].campaign_value;
           this.mainService.dataCampaign.startDate = result['data'].startDateFormatted;
@@ -316,7 +316,7 @@ export class CreateCampaingComponent implements OnInit {
     }
     this.dataCampaign = {
       name: '',
-      desription: '',
+      description: '',
       template: '',
       discount: '',
       startDate: '',

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CompaignService } from 'src/app/shared/services/compaign.service';
 import { CardService } from 'src/app/shared/services/card.service';
 import { SERVER_API_URL } from '../../../../environments/environment';
+import { MainService } from 'src/app/shared/services/main.service';
 
 @Component({
   selector: 'app-campaign-details',
@@ -27,7 +28,8 @@ export class CampaignDetailsComponent implements OnInit {
     private activeRout: ActivatedRoute,
     private campaignService: CompaignService,
     private cardService: CardService,
-    private router: Router
+    private router: Router,
+    private mainService: MainService
   ) {
     this.id = this.activeRout.snapshot.paramMap.get('id');
     this.showLoader = true;
@@ -75,15 +77,19 @@ export class CampaignDetailsComponent implements OnInit {
     this.router.navigate(['/main/campaign-main/create-campaign/' + this.id]);
   }
 
-  delete() {
-    console.log('asdasdasd');
-    
+  delete() {    
     this.inProcces = true;
-    // this.campaignService.deleteСampaign({ campaign_id: this.id, brand_id: this.card.brand_id }).subscribe(result => {
-    //   console.log(result);
-    //   this.router.navigate(['/main/campaign-main/campaign']);
-    //   this.inProcces = false;
-    // });
+    this.campaignService.deleteСampaign({ campaign_id: this.id, brand_id: this.card.brand_id }).subscribe(result => {
+      console.log(result);
+      if (result['success']) {
+        this.mainService.showToastrSuccess.emit({text: 'Campaign deleted'});
+        this.router.navigate(['/main/campaign-main/campaign']);
+      }
+      this.inProcces = false;
+    }, err => {
+      console.log(err);
+      this.inProcces = false;
+    });
   }
 
   mouseMove() {
