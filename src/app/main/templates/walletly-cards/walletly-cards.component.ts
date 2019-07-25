@@ -30,7 +30,7 @@ export class WalletlyCardsComponent implements OnInit {
     }
   }
 
-  addToCampaign(brandId, cardId) {
+  addToCampaign(brandId, cardId, cardType) {
     this.mainService.dataCampaign = {
       name: '',
       desription: '',
@@ -45,7 +45,7 @@ export class WalletlyCardsComponent implements OnInit {
       event_name: '',
       venue: '',
       time: '',
-      cardType: ''
+      cardType: cardType
     };
     this.router.navigate(['/main/campaign-main/create-campaign']);
   }

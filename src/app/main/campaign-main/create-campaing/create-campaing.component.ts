@@ -18,6 +18,7 @@ export class CreateCampaingComponent implements OnInit {
   customValidation = true;
   campaign = {};
   id;
+  disable;
   // numberOfCoupon;
   coupons = [];
   cards = [];
@@ -96,7 +97,20 @@ export class CreateCampaingComponent implements OnInit {
     });
 
     this.id = this.activeRout.snapshot.paramMap.get('id');
-
+    if(this.id){
+      this.disable = true;
+    }
+    console.log(this.dataCampaign);
+    if (!this.dataCampaign) {
+      this.dataCampaign = this.mainService.dataCampaign;
+      console.log(this.dataCampaign);
+      this.myForm.controls['template'].setValue(this.dataCampaign.card_id);
+      this.cardType = this.dataCampaign.cardType;
+      if(this.cardType != ''){
+        this.disable = true;
+      }
+    }
+    
     cardService.getBrandsCards(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
       for (let i in data['data']){
         if(data['data'][i].card_type == 1){
@@ -110,30 +124,8 @@ export class CreateCampaingComponent implements OnInit {
           this.noTickets = false;
         }
       }
-      console.log(this.dataCampaign);
-      if (!this.dataCampaign) {
-        this.dataCampaign = this.mainService.dataCampaign;
-        this.myForm.controls['template'].setValue(this.dataCampaign.card_id);
-        console.log(this.dataCampaign);
-        // need for all template
-        if (this.dataCampaign.campaign_type === '1') {
-          this.selectType('Coupon in %');
-        }else if(this.dataCampaign.campaign_type === '2'){
-          this.selectType('Coupon in $');
-        }
-      }
     }, err => {
-      if (!this.dataCampaign) {
-        this.dataCampaign = this.mainService.dataCampaign;
-        this.myForm.controls['template'].setValue(this.dataCampaign.card_id);
-        console.log(this.dataCampaign);
-        // need for all template
-        if (this.dataCampaign.campaign_type === '1') {
-          this.selectType('Coupon in %');
-        }else if(this.dataCampaign.campaign_type === '2'){
-          this.selectType('Coupon in $');
-        }
-      }
+      console.log(err);
     });
 
     if (this.id) {
@@ -176,24 +168,6 @@ export class CreateCampaingComponent implements OnInit {
         // this.mainService.showLoader.emit(false);
         this.showLoader = false;
       });
-    }else{
-      this.mainService.dataCampaign.name = '';
-      this.mainService.dataCampaign.desription = '';
-      this.mainService.dataCampaign.campaign_type = '';
-      this.mainService.dataCampaign.discount = '';
-      this.mainService.dataCampaign.startDate = '';
-      this.mainService.dataCampaign.endDate = '';
-      this.mainService.dataCampaign.brand_id = '';
-      this.mainService.dataCampaign.card_id = '';
-      this.mainService.dataCampaign.coupon_validity = '';
-      this.mainService.dataCampaign.currency = '';
-      this.mainService.dataCampaign.event_name = '';
-      this.mainService.dataCampaign.venue = '';
-      this.mainService.dataCampaign.time = '';
-      this.mainService.dataCampaign.cardType = '';
-      this.dataCampaign = this.mainService.dataCampaign;
-      this.myForm.controls['template'].setValue('');
-      this.ticketForm.controls['template'].setValue('');
     }
   }
 
@@ -332,7 +306,6 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCampaign.currency = '';
       this.dataCampaign.discount='';
       this.dataCampaign.coupon_validity='';
-      console.log(this.dataCampaign);
       this.cardType = 'ticket';    
     }
   }
