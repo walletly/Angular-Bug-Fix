@@ -225,7 +225,8 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     const message = {
       recepient: email,
       subject: 'email subject',
-      message: 'Email message body'
+      message: 'Email message body',
+      brand_id: JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
     };
 
     this.business.sendEmail([message]).subscribe(result => {
@@ -240,7 +241,8 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
       return {
         recepient: element.email,
         subject: 'email subject',
-        message: 'Email message body'
+        message: 'Email message body',
+        brand_id: JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
       };
     });
 
