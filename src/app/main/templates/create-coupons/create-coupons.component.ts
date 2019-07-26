@@ -80,20 +80,22 @@ export class CreateCouponsComponent implements OnInit {
     // this.mainService.showLoader.emit(true);
     this.showLoader = true;
 
-    if (this.mainService.cardType) {
-      this.type = this.mainService.cardType;
-      this.typeId = this.mainService.cardTypeId;
-    } else {
-      this.type = 'coupons';
-      this.typeId = 1;
-    }
-
     this.id = this.activeRout.snapshot.paramMap.get('id');
     console.log(this.id);
     if (this.id) {
       this.cardService.getCardById(this.id).subscribe(result => {
         console.log(result);
         this.card = result['data'];
+        this.typeId = this.card.card_type;
+        
+        if(this.typeId == 1){
+          this.type = 'coupons';
+        }else if(this.typeId == 2){
+          this.type = 'cards';
+        }else if(this.typeId == 3){
+          this.type = 'tickets';
+        }
+
         this.createDataCard();
         this.photoLogo = this.dataCard.brandLogo;
         this.photoCover = this.dataCard.coverImage;
@@ -117,6 +119,14 @@ export class CreateCouponsComponent implements OnInit {
       });
     } else {
 
+      if (this.mainService.cardType) {
+        this.type = this.mainService.cardType;
+        this.typeId = this.mainService.cardTypeId;
+      } else {
+        this.type = 'coupons';
+        this.typeId = 1;
+      }
+      
       this.dataCard = {
         templateName: '',
         brandName: '',
@@ -162,6 +172,7 @@ export class CreateCouponsComponent implements OnInit {
         }
       }, 200);
     }
+
   }
 
   clear() {
