@@ -68,7 +68,7 @@ export class CreateCouponsComponent implements OnInit {
       description: ["", [Validators.required]],
       moreInfo: ["", [Validators.required]],
       location: ["", [Validators.required]],
-      phone: ["", [Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
+      phone: ["", [Validators.required, Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
       email: ["", [Validators.required, Validators.email]],
       website: ["", [Validators.required]],
       facebook: ["www.facebook.com/", [Validators.required, Validators.pattern("((http|https):\/\/|)(www\.|)facebook\.com\/[a-zA-Z0-9.]{1,}")]],
