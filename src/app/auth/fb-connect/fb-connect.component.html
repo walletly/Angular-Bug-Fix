@@ -72,7 +72,7 @@
                         </div>
                         <div *ngIf="!checkUsersBrand(item.id)">
                           <button [disabled]="inProcces" (click)="goStep2(item.id)" class="status connect c-p">
-                            <i *ngIf="item.id == selectedPageId" class="fas fa-spinner fa-pulse"></i>
+                            <i *ngIf="item.id == selectedPageId && inProcces" class="fas fa-spinner fa-pulse"></i>
                             Connect
                           </button>
                         </div>
@@ -630,3 +630,13 @@
 <app-dialog-upload-image *ngIf="showBrandUploader" [uploadType]="uploadType"
   (uploadEmit)="uploadPhoto($event, 'cover'); showBrandUploader = false" (closeEmit)="showBrandUploader = $event"
   [image]="fileImg"></app-dialog-upload-image>
+
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header style="position: relative !important;">
+      Error in Connecting Brand
+      <button class="dialogClose" (click)="ref.close()">x</button>
+    </nb-card-header>
+    <nb-card-body>{{ data }}</nb-card-body>
+  </nb-card>
+</ng-template>

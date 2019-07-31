@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbInputModule, NbCardModule, NbAccordionModule, NbCheckboxModule, NbStepperModule, NbTooltipModule, NbTabsetModule, NbTreeGridModule, NbSelectModule, NbCalendarModule, NbAlertModule, NbRadioModule, NbCalendarRangeModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbSidebarModule, NbMenuModule, NbInputModule, NbCardModule, NbAccordionModule, NbCheckboxModule, NbStepperModule, NbTooltipModule, NbTabsetModule, NbTreeGridModule, NbSelectModule, NbCalendarModule, NbAlertModule, NbRadioModule, NbCalendarRangeModule, NbDialogModule } from '@nebular/theme';
 import { MainComponent } from './main/main.component';
 import { DashboardComponent } from './main/dashboard/dashboard.component';
 import { TemplatesComponent } from './main/templates/templates.component';
@@ -150,7 +150,8 @@ export const firebaseConfig = {
     AngularFireDatabaseModule,
     NgxMaskModule.forRoot(),
     BreadcrumbModule,
-    NbCalendarRangeModule
+    NbCalendarRangeModule,
+    NbDialogModule.forRoot(),
   ],
   providers: [
     AuthService,

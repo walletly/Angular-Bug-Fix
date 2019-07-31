@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, TemplateRef } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { forkJoin } from 'rxjs';
+import { NbDialogService } from '@nebular/theme';
 
 @Component({
   selector: 'app-fb-connect',
@@ -19,6 +20,7 @@ import { forkJoin } from 'rxjs';
 })
 export class FbConnectComponent implements OnInit {
   @ViewChild('stepper') stepper;
+  @ViewChild('dialog') public templateref: TemplateRef<any>;
 
   loader = false;
   platform;
@@ -95,7 +97,8 @@ export class FbConnectComponent implements OnInit {
     private http: HttpClient,
     private firebaseAuth: AngularFireAuth,
     private afs: AngularFirestore,
-    private _sanitizer: DomSanitizer
+    private _sanitizer: DomSanitizer,
+    private dialogService: NbDialogService
   ) {
 
     this.getPartners();
@@ -257,8 +260,12 @@ export class FbConnectComponent implements OnInit {
       });
 
     }, err => {
+      console.log(err);
       this.loader = false;
       this.inProcces = false;
+      if (err.status == 404){
+        this.dialogService.open(this.templateref, { context: 'Your page is not published for public use.' });
+      }
     });
 
     this.customValidationStep1 = true;
