@@ -86,10 +86,11 @@ export class FbLoginComponent implements OnInit {
           this.showLoader = false;
           return;
         }
-        let user_type;
+        let user_type, tempPassword;
         const userRef = this.afs.collection('users', ref => ref.where('email', '==', err.email));
         await userRef.valueChanges().subscribe(async users => {
           user_type = await users[0]['user_type'];
+          tempPassword = await users[0]['tempPassword']
         });
 
         setTimeout(async () => {
@@ -105,7 +106,7 @@ export class FbLoginComponent implements OnInit {
             localStorage.setItem('access', err.credential['accessToken']);
             firebase.auth().fetchSignInMethodsForEmail(err.email)
               .then(providers => {
-                firebase.auth().signInWithEmailAndPassword(err.email, 'asdf1234')
+                firebase.auth().signInWithEmailAndPassword(err.email, tempPassword)
                 .then(async result=>{
                   result.user.linkAndRetrieveDataWithCredential(err.credential);
                   localStorage.setItem('userID', result.user.uid);
