@@ -43,6 +43,14 @@ export class AuthService {
     return this.http.get(SERVER_API_URL + 'auth/' + id, { headers: httpHeaders});
   }
 
+  getUserByEmail(email) {
+    return this.http.get(SERVER_API_URL + 'auth/email/' + email);
+  }
+
+  deleteUser(id) {
+    return this.http.delete(SERVER_API_URL + 'auth/' + id );
+  }
+
   getFacebookInfo(fbId) {
     const httpHeaders = new HttpHeaders ({
       'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,

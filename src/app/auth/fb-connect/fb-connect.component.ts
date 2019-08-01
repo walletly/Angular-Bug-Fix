@@ -244,7 +244,7 @@ export class FbConnectComponent implements OnInit {
             this.setActiveBrandAndUpdateUser(id);
             this.stepper.next();
             this.setForm2();
-            // this.photoCover = this.fbResponse['cover_image'];
+            this.photoCover = this.fbResponse['cover_image'];
             this.photoLogo = this.fbResponse['profile_logo'];
             this.myFormStep2.controls['facebookPageID'].setValue('www.facebook.com/' + this.fbResponse.brand_id);
           }

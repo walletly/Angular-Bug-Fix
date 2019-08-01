@@ -18,6 +18,9 @@ export class FbLoginComponent implements OnInit {
   showLoader = true;
   businessUser = false;
   businessEmail;
+  deleteUserId;
+  deleteSuccess = false;
+  disableButton = false;
 
   constructor(private authService: AuthService,
     private firebaseAuth: AngularFireAuth,
@@ -86,23 +89,23 @@ export class FbLoginComponent implements OnInit {
           this.showLoader = false;
           return;
         }
-        let user_type, tempPassword;
-        const userRef = this.afs.collection('users', ref => ref.where('email', '==', err.email));
-        await userRef.valueChanges().subscribe(async users => {
-          user_type = await users[0]['user_type'];
-          tempPassword = await users[0]['tempPassword'];
-        });
 
-        setTimeout(async () => {
-          if(user_type != 3){
+        let user_type, user_id, tempPassword;
+        const userData = await this.authService.getUserByEmail(err.email).subscribe(async data => {
+          user_type = data['user'].user_type;
+          user_id = data['user'].user_id;
+          tempPassword = data['user'].tempPassword;
+
+          if(user_type == 2 && err.code == "auth/account-exists-with-different-credential"){
             await this.ngZone.run(() => {
               this.showLoader = false;
               this.businessUser = true;
               this.businessEmail = err.email;
+              this.deleteUserId = user_id;
+              this.openDeleteBox();
             })
-            return;
           }
-          if (err.code == "auth/account-exists-with-different-credential"){
+          else if (user_type ==3 && err.code == "auth/account-exists-with-different-credential"){
             localStorage.setItem('access', err.credential['accessToken']);
             if(!tempPassword){
               tempPassword = 'asdf1234';
@@ -129,7 +132,7 @@ export class FbLoginComponent implements OnInit {
                 })
               });
           }
-        }, 1500);
+        });
       });
     }, 1000);
   }
@@ -165,6 +168,30 @@ export class FbLoginComponent implements OnInit {
     } else {
       this.termsError = true;
     }
+  }
+
+  openDeleteBox(){
+    (document.getElementById('myModal') as HTMLDivElement).style.display = 'block';
+  }
+
+  closeDeleteBox(){
+    (document.getElementById('myModal') as HTMLDivElement).style.display = 'none';
+    localStorage.clear();
+    window.location.reload();
+  }
+
+  deleteUser(id){
+    this.disableButton = true;
+    this.authService.deleteUser(id).subscribe(data => {
+      if(data['success'] == true){
+        this.deleteSuccess = true;
+      }
+    });
+  }
+
+  continue(){
+    localStorage.clear();
+    window.location.reload();
   }
 
 }

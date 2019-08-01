@@ -59,7 +59,7 @@
                 </div>
               </div>
               <div class="m-b-4 df ai-c jc-c">
-                <img style="max-height: 100%; max-width: 100%;" [src]="coupon.card_cover" alt="">
+                <img style="height: 67px; width: 172px;" [src]="coupon.card_cover" alt="">
               </div>
               <div class="df jc-b color-white fs-10 fw-400 p-l-5 p-r-5">
                 <div>
@@ -94,7 +94,7 @@
       <nb-tab tabTitle="Card" style="overflow-y: hidden;">
         <div class="df wrap p-t-20">
           <div *ngFor="let coupon of data">
-            <div *ngIf="coupon.card_type === 2" class="card small-size m-r-30">
+            <div *ngIf="coupon.card_type === 2" class="card small-size m-t-16 m-r-30">
               <div class="hover-couon">
                 <button (click)="addToCampaign(coupon.brand_id, coupon.id, 'card')" class="cust-button m-b-10" nbButton
                   status="success">
@@ -139,7 +139,7 @@
                 </div>
               </div>
               <div class="m-b-4 df ai-c jc-c">
-                <img style="max-height: 100%; max-width: 100%;" [src]="coupon.card_cover" alt="">
+                <img style="height: 67px; width: 172px;" [src]="coupon.card_cover" alt="">
               </div>
               <div class="df jc-b color-white fs-10 fw-400 p-l-5 p-r-5">
                 <div>
@@ -173,7 +173,7 @@
       <nb-tab tabTitle="Tickets" style="overflow-y: hidden;">
         <div class="df wrap p-t-20">
           <div *ngFor="let coupon of data">
-            <div *ngIf="coupon.card_type === 3" class="ticket small-size m-r-30">
+            <div *ngIf="coupon.card_type === 3" class="ticket small-size m-t-16 m-r-30">
               <div class="hover-couon">
                 <button (click)="addToCampaign(coupon.brand_id, coupon.id, 'ticket')" class="cust-button m-b-10" nbButton
                   status="success">
@@ -218,7 +218,7 @@
                 </div>
               </div>
               <div class="m-b-4 df ai-c jc-c">
-                <img style="max-height: 100%; max-width: 100%;" [src]="coupon.card_cover" alt="">
+                <img style="height: 67px; width: 172px;" [src]="coupon.card_cover" alt="">
               </div>
               <div class="df jc-b color-white fs-10 fw-400 p-l-5 p-r-5">
                 <div>
