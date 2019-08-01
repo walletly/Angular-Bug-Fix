@@ -90,7 +90,7 @@ export class FbLoginComponent implements OnInit {
         const userRef = this.afs.collection('users', ref => ref.where('email', '==', err.email));
         await userRef.valueChanges().subscribe(async users => {
           user_type = await users[0]['user_type'];
-          tempPassword = await users[0]['tempPassword']
+          tempPassword = await users[0]['tempPassword'];
         });
 
         setTimeout(async () => {
@@ -104,6 +104,9 @@ export class FbLoginComponent implements OnInit {
           }
           if (err.code == "auth/account-exists-with-different-credential"){
             localStorage.setItem('access', err.credential['accessToken']);
+            if(!tempPassword){
+              tempPassword = 'asdf1234';
+            }
             firebase.auth().fetchSignInMethodsForEmail(err.email)
               .then(providers => {
                 firebase.auth().signInWithEmailAndPassword(err.email, tempPassword)
