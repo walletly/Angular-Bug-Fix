@@ -21,6 +21,7 @@ export class CampaignDetailsComponent implements OnInit {
   campaignType;
   card;
   discount;
+  platform;
 
   url;
 

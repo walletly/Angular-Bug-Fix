@@ -172,6 +172,33 @@
         </div>
       </div>
 
+      <div style="max-width: 730px;" class="row m-b-20">
+        <div class="col-md-3 col-lg-3 col-6">
+          <div
+            (click)="platform = 'bitmap'"
+            [ngClass]="{ active: platform === 'bitmap' }"
+            class="card-platform"
+          >
+            <img src="assets/img/Bitmap-platfotm.png" alt="" />
+            <div *ngIf="platform === 'bitmap'" class="icon-active">
+              <img src="assets/svg-icon/success-circle.svg" alt="" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-lg-3 col-6">
+          <div
+            (click)="platform = '2'"
+            [ngClass]="{ active: platform === '2' }"
+            class="card-platform"
+          >
+            <img src="assets/img/activeChat-logo.jpg" alt="" />
+            <div *ngIf="platform === '2'" class="icon-active">
+              <img src="assets/svg-icon/success-circle.svg" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="df m-b-30">
         <div class="inputs-wrapper">
           <div class="api-wrap">
