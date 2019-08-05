@@ -152,7 +152,7 @@
               </div>
             </div>
           </div>
-  
+
           <div (click)="changeSide()" class="df jc-e ai-e c-p m-t-15">
             <div class="color-dark fs-16 fw-700">
               Card <span *ngIf="!couponBack"> Back</span>
@@ -238,12 +238,12 @@
               status="success"
             >
               <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
-              Post
+              Confirm
             </button>
           </div>
         </div>
       </div>
-    
+
       <div *ngIf="dataCampaign.cardType == 'ticket'" class="df m-b-100">
         <div class="m-r-100">
           <div *ngIf="data" class="flip-card" [ngClass]="{ active: couponBack }">
@@ -261,10 +261,10 @@
                     </div>
                     <div class="text-right">
                       <div class="fs-10 fw-400">
-                        Venue
+                        Time
                       </div>
                       <div class="fs-15 fw-600">
-                        Webinar
+                        Date
                       </div>
                     </div>
                   </div>
@@ -275,36 +275,30 @@
                     <div>
                       EVENT
                     </div>
+                    <div>
+                      MEMBERS
+                    </div>
                   </div>
                   <div class="df jc-b color-white fw-16 fw-600 m-b-10 p-l-15 p-r-15">
                     <div>
                       {{ dataCampaign.event_name }}
                     </div>
-                  </div>
-                  <div class="df jc-b color-white fw-11 fw-400 p-l-15 p-r-15">
                     <div>
-                      Date
-                    </div>
-                    <div>
-                      Time
-                    </div>
-                  </div>
-                  <div
-                    class="df jc-b color-white fw-16 fw-600 m-b-10 p-l-15 p-r-15"
-                  >
-                    <div>
-                      {{ date }}
-                    </div>
-                    <div>
-                      {{ dataCampaign.time }}
+                      {{ "{Dynamic}" }}
                     </div>
                   </div>
                   <div class="df jc-b color-white fw-11 fw-400 p-l-15 p-r-15">
+                    <div>
+                      VENUE
+                    </div>
                     <div>
                       CUSTOMER
                     </div>
                   </div>
                   <div class="df jc-b color-white fw-16 fw-600 m-b-10 p-l-15 p-r-15">
+                    <div>
+                      {{ dataCampaign.venue }}
+                    </div>
                     <div>
                       {{ "{Dynamic}" }}
                     </div>
@@ -365,10 +359,16 @@
                   </div>
                   <div class="p-l-16 p-r-3 bg-white">
                     <div class="info-row">
-                      <div class="info-head">
+                      <div *ngIf="dataCampaign.campaign_type == 8" class="info-head">
+                        Venue
+                      </div>
+                      <div *ngIf="dataCampaign.campaign_type == 9" class="info-head">
                         Webinar Access Link
                       </div>
-                      <a [href]="dataCampaign.venue" target="_blank">
+                      <a *ngIf="dataCampaign.campaign_type == 8">
+                        {{ dataCampaign.venue }}
+                      </a>
+                      <a *ngIf="dataCampaign.campaign_type == 9" [href]="dataCampaign.venue" target="_blank">
                         {{ dataCampaign.venue }}
                       </a>
                     </div>
@@ -433,7 +433,7 @@
               </div>
             </div>
           </div>
-  
+
           <div (click)="changeSide()" class="df jc-e ai-e c-p m-t-50">
             <div class="color-dark fs-16 fw-700">
               Card <span *ngIf="!couponBack"> Back</span>
@@ -487,10 +487,16 @@
             </div>
           </div>
           <div class="row-info">
-            <div class="lable">
+            <div *ngIf="dataCampaign.campaign_type == 8" class="lable">
+              Venue
+            </div>
+            <div *ngIf="dataCampaign.campaign_type == 9" class="lable">
               Webinar Access Link
             </div>
-            <a [href]="dataCampaign.venue" target="_blank" class="value">
+            <a *ngIf="dataCampaign.campaign_type == 8" class="value">
+                {{ dataCampaign.venue }}
+              </a>
+            <a *ngIf="dataCampaign.campaign_type == 9" [href]="dataCampaign.venue" target="_blank" class="value">
               {{ dataCampaign.venue }}
             </a>
           </div>
@@ -527,12 +533,12 @@
               status="success"
             >
               <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
-              Post
+              Confirm
             </button>
           </div>
         </div>
       </div>
     </div>
-    
+
   </nb-card-body>
 </nb-card>

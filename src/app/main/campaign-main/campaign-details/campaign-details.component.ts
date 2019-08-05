@@ -15,13 +15,14 @@ export class CampaignDetailsComponent implements OnInit {
   showAletr = true;
   showLoader;
   inProcces;
+  integrations = [];
 
   id;
   campaign;
   campaignType;
   card;
   discount;
-  platform;
+  platform = { 'ManyChat': false, 'ActiveChat': false, 'Offline': false };
 
   url;
 
@@ -34,6 +35,12 @@ export class CampaignDetailsComponent implements OnInit {
   ) {
     this.id = this.activeRout.snapshot.paramMap.get('id');
     this.showLoader = true;
+    this.getCampaignDetails();
+  }
+
+  ngOnInit() { }
+
+  getCampaignDetails() {
     this.campaignService.getСampaignById(this.id).subscribe(data => {
       console.log(data);
       this.campaign = data['data'];
@@ -41,44 +48,39 @@ export class CampaignDetailsComponent implements OnInit {
       this.cardService.getCardById(this.campaign.card_id).subscribe(dataCard => {
         console.log(dataCard);
         this.card = dataCard['data'];
-        if (this.card.card_type == 1){
+        if (this.card.card_type == 1) {
           this.url = SERVER_API_URL + 'coupon';
-        }else if(this.card.card_type == 3){
+        } else if (this.card.card_type == 3) {
           this.url = SERVER_API_URL + 'ticket';
         }
         this.showLoader = false;
       });
 
-      switch (this.campaign.campaign_type) {
-        case 1:
-          this.campaignType = 'Coupon in %';
-          break;
-
-        case 2:
-          this.campaignType = 'Coupon in $';
-          break;
-
-        case 3:
-          this.campaignType = 'Birthday Coupon';
-          break;
-
-        case 4:
-          this.campaignType = 'Referral Coupon';
-          break;
-
-        default:
-          break;
+      if (this.campaign.campaign_type) {
+        this.campaignType = this.campaign.campaign_type_formatted;
+      }
+      this.integrations = this.campaign.integrations;
+      if (this.campaign.integrations) {
+        this.campaign.integrations.forEach(element => {
+          if (element === 'ManyChat') {
+            this.platform.ManyChat = true;
+          }
+          if (element === 'ActiveChat') {
+            this.platform.ActiveChat = true;
+          }
+          if (element === 'Offline') {
+            this.platform.Offline = true;
+          }
+        });
       }
     });
   }
-
-  ngOnInit() { }
 
   edit() {
     this.router.navigate(['/main/campaign-main/create-campaign/' + this.id]);
   }
 
-  delete() {    
+  delete() {
     this.inProcces = true;
     this.campaignService.deleteСampaign({ campaign_id: this.id, brand_id: this.card.brand_id }).subscribe(result => {
       console.log(result);
@@ -92,7 +94,6 @@ export class CampaignDetailsComponent implements OnInit {
       this.inProcces = false;
     });
   }
-
   mouseMove() {
     this.toolTipStatus = 'Copy';
   }
@@ -103,5 +104,32 @@ export class CampaignDetailsComponent implements OnInit {
 
   copyApi() {
     this.toolTipStatus = 'Copied';
+  }
+  updateCampaignIntegrations() {
+    this.integrations = [];
+     // Checking Active Platforms For Integrations
+     if (this.platform.ActiveChat) {
+      this.integrations.push('ActiveChat');
+    }
+    if (this.platform.ManyChat) {
+      this.integrations.push('ManyChat');
+    }
+    if (this.platform.Offline) {
+      this.integrations.push('Offline');
+    }
+    // Updating Campaign With Selected Integrations
+    console.log(this.integrations);
+    this.inProcces = true;
+    this.campaignService.updateСampaign(this.id, { 'integrations': this.integrations}).subscribe(result => {
+      console.log(result);
+      this.integrations = [];
+      this.getCampaignDetails();
+      this.mainService.showToastrSuccess.emit({text: 'Integration saved'});
+      this.inProcces = false;
+    }, err => {
+      console.log(err);
+      this.integrations = [];
+      this.inProcces = false;
+    });
   }
 }

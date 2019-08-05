@@ -6,7 +6,9 @@
   </div>
 </div>
 <nb-card>
+
   <nb-card-body class="p-0">
+
     <div *ngIf="!showLoader">
       <!-- <nb-alert
       *ngIf="showAletr"
@@ -21,7 +23,7 @@
           You has been expired!
         </div> -->
       <!-- <div class="m-r-10">
-          You've reached the limit of coupon (100/100). 
+          You've reached the limit of coupon (100/100).
         </div>
         <div>
           <button class="outline-white alert-btn">
@@ -30,249 +32,439 @@
         </div>
       </div>
     </nb-alert> -->
-      <div class="df m-b-20">
-        <div class="row-wrap">
-          <div class="row">
-            <div class="label">
-              Campaign Type
-            </div>
-            <div class="value">
-              {{campaignType}}
-            </div>
-          </div>
-          <div class="row">
-            <div class="label">
-              Campaign Name
-            </div>
-            <div class="value">
-              {{campaign?.campaign_name}}
-            </div>
-          </div>
-          <div class="row">
-            <div class="label">
-              Description
-            </div>
-            <div class="value">
-              {{campaign?.description}}
-            </div>
-          </div>
-          <div class="row">
-            <div class="label">
-              Template
-            </div>
-            <div class="value">
-              {{campaign?.description}}
-            </div>
-          </div>
-          <div class="row">
-            <div class="label">
-              Discount
-            </div>
-            <div class="value">
-              {{ discount }}
-            </div>
-          </div>
-          <div class="row">
-            <div class="df">
-              <div class="label">
-                Start Date
-              </div>
-              <div class="value">
-                {{campaign?.startDateFormatted}}
-              </div>
-            </div>
-            <div class="df">
-              <div class="label small">
-                End Date
-              </div>
-              <div class="value">
-                {{campaign?.endDateFormatted}}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="df">
-              <div class="label">
-                Number of Coupons
-              </div>
-              <div class="value">
-                {{campaign?.coupons_created}}
-              </div>
-            </div>
-            <div class="df">
-              <div class="label small">
-                Set Limit
-              </div>
-              <div class="value">
-                {{campaign?.coupons_limit}}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="coupon">
-          <div class="head m-b-15">
-            <div class="df ai-c">
-              <div class="coupon-brand m-r-8">
-                <img src="{{card?.card_logo}}" alt="" />
-              </div>
-              <div class="fs-18 fw-700">
-                {{card?.brand_name}}
-              </div>
-            </div>
-            <div *ngIf="card?.card_type === 1" class="text-right">
-              <div class="fs-10 fw-400">
-                Days left
-              </div>
-              <div class="fs-15 fw-600">
-                {{campaign?.coupon_validity}}
-              </div>
-            </div>
-            <div *ngIf="card?.card_type === 2" class="text-right">
-              <div class="fs-10 fw-400">
-                Point
-              </div>
-              <div class="fs-15 fw-600">
-                100
-              </div>
-            </div>
-            <div *ngIf="card?.card_type === 3" class="text-right">
-              <div class="fs-10 fw-400">
-                Stamp
-              </div>
-              <div class="fs-15 fw-600">
-                4
-              </div>
-            </div>
-          </div>
-          <div class="m-b-16 df jc-c">
-            <img class="cover-image" src="{{card?.card_cover}}" alt="" />
-          </div>
-          <div class="df jc-b color-white fw-11 fw-400 p-l-15 p-r-15">
-            <div>
-              CUSTOMER
-            </div>
-            <!-- <div *ngIf="dataCard.cardType === 'coupons'">
-            DISCOUNT
-          </div> -->
-          </div>
-          <div class="df jc-b color-white fw-16 fw-600 m-b-50 p-l-15 p-r-15">
-            <div>
-              {{ "{Dynamic}" }}
-            </div>
-            <!-- <div *ngIf="dataCard.cardType === 'coupons'">
-            {{ "{Dynamic}" }}
-          </div> -->
-          </div>
-          <div class="text-center">
-            <img width="133px" class="m-b-20" src="assets/img/QR_code.png" alt="" />
-          </div>
-          <div class="combined">
-            <img src="assets/svg-icon/Combined_Shape.svg" alt="" />
-          </div>
-        </div>
-      </div>
 
-      <div style="max-width: 730px;" class="row m-b-20">
-        <div class="col-md-3 col-lg-3 col-6">
-          <div
-            (click)="platform = 'manychat'"
-            [ngClass]="{ active: platform === 'manychat' }"
-            class="card-platform"
-          >
-            <img src="assets/img/manyChat-logo.png" alt="" />
-            <div *ngIf="platform === 'manychat'" class="icon-active m-l-60">
-              <img src="assets/svg-icon/success-circle.svg" alt="" />
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-lg-3 col-6">
-          <div
-            (click)="platform = 'activechat'"
-            [ngClass]="{ active: platform === 'activechat' }"
-            class="card-platform"
-          >
-            <img src="assets/img/activeChat-logo.png" alt="" />
-            <div *ngIf="platform === 'activechat'" class="icon-active m-l-60">
-              <img src="assets/svg-icon/success-circle.svg" alt="" />
-            </div>
-          </div>
-        </div>
-      </div>
+    <nb-tabset>
+      <nb-tab tabTitle="Details">
+        <div class="tab-body">
+          <div class="df m-b-60">
+            <div class="row-wrap">
+              <div class="row">
+                <div class="label">
+                  Campaign Type
+                </div>
+                <div class="value">
+                  {{campaignType}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="label">
+                  Campaign Name
+                </div>
+                <div class="value">
+                  {{campaign?.campaign_name}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="label">
+                  Integrations
+                </div>
+                <div class="df value">
+                  <span *ngFor="let bot of integrations">
+                    <div *ngIf="bot === 'ManyChat'"><img src="assets/svg-icon/template-icons/platform/manychat.svg" alt=""></div>
+                    <div *ngIf="bot === 'ActiveChat'"><img src="assets/svg-icon/template-icons/platform/activechat.svg" alt=""></div>
+                    <div *ngIf="bot === 'Offline'"><img src="assets/svg-icon/template-icons/platform/newspaper.svg" alt=""></div>
+                  </span>
+                  <!-- <div *ngIf="platform.ManyChat === true"><img src="assets/svg-icon/template-icons/platform/manychat.svg" alt=""></div>
+                  <div *ngIf="platform.ActiveChat === true"><img src="assets/svg-icon/template-icons/platform/activechat.svg" alt=""></div>
+                  <div *ngIf="platform.Offline === true"><img src="assets/svg-icon/template-icons/platform/newspaper.svg" alt=""></div> -->
+                </div>
+              </div>
+              <div class="row">
+                <div class="label">
+                  Description
+                </div>
+                <div class="value">
+                  {{campaign?.description}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="label">
+                  Template
+                </div>
+                <div class="value">
+                  {{campaign?.description}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="df">
+                  <div class="label">
+                    Start Date
+                  </div>
+                  <div class="value">
+                    {{campaign?.startDateFormatted}}
+                  </div>
+                </div>
+                <div class="df">
+                  <div class="label small">
+                    End Date
+                  </div>
+                  <div class="value">
+                    {{campaign?.endDateFormatted}}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="label">
+                  Discount
+                </div>
+                <div class="value">
+                  {{ discount }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="label">
+                  Coupon Validity
+                </div>
+                <div class="value">
+                  30 Days
+                </div>
+              </div>
 
-      <div class="df m-b-30">
-        <div class="inputs-wrapper">
-          <div class="api-wrap">
-            <div class="fs-16 fw-600 m-r-12 api-lable">
-              URL
+              <!-- <div class="row">
+                <div class="df">
+                  <div class="label">
+                    Number of Coupons
+                  </div>
+                  <div class="value">
+                    {{campaign?.coupons_created}}
+                  </div>
+                </div>
+                <div class="df">
+                  <div class="label small">
+                    Set Limit
+                  </div>
+                  <div class="value">
+                    {{campaign?.coupons_limit}}
+                  </div>
+                </div>
+              </div> -->
             </div>
-            <div class="pos-r input-wrap">
-              <input [(ngModel)]="url" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
-                placeholder="" />
-              <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard [cbContent]="url" [container]="container"
-                nbTooltip="{{ toolTipStatus }}" class="input-icon">
-                <img src="assets/img/copy.png" alt="" />
+            <div class="coupon">
+              <div class="head m-b-15">
+                <div class="df ai-c">
+                  <div class="coupon-brand m-r-8">
+                    <img src="{{card?.card_logo}}" alt="" />
+                  </div>
+                  <div class="fs-18 fw-700">
+                    {{card?.brand_name}}
+                  </div>
+                </div>
+                <div *ngIf="card?.card_type === 1" class="text-right">
+                  <div class="fs-10 fw-400">
+                    Days left
+                  </div>
+                  <div class="fs-15 fw-600">
+                    {{campaign?.coupon_validity}}
+                  </div>
+                </div>
+                <div *ngIf="card?.card_type === 2" class="text-right">
+                  <div class="fs-10 fw-400">
+                    Point
+                  </div>
+                  <div class="fs-15 fw-600">
+                    100
+                  </div>
+                </div>
+                <div *ngIf="card?.card_type === 3" class="text-right">
+                  <div class="fs-10 fw-400">
+                    Stamp
+                  </div>
+                  <div class="fs-15 fw-600">
+                    4
+                  </div>
+                </div>
+              </div>
+              <div class="m-b-16 df jc-c">
+                <img class="cover-image" src="{{card?.card_cover}}" alt="" />
+              </div>
+              <div class="df jc-b color-white fw-11 fw-400 p-l-15 p-r-15">
+                <div>
+                  CUSTOMER
+                </div>
+                <!-- <div *ngIf="dataCard.cardType === 'coupons'">
+                DISCOUNT
+              </div> -->
+              </div>
+              <div class="df jc-b color-white fw-16 fw-600 m-b-50 p-l-15 p-r-15">
+                <div>
+                  {{ "{Dynamic}" }}
+                </div>
+                <!-- <div *ngIf="dataCard.cardType === 'coupons'">
+                {{ "{Dynamic}" }}
+              </div> -->
+              </div>
+              <div class="text-center">
+                <img width="133px" class="m-b-20" src="assets/img/QR_code.png" alt="" />
+              </div>
+              <div class="combined">
+                <img src="assets/svg-icon/Combined_Shape.svg" alt="" />
               </div>
             </div>
           </div>
-          <div class="api-wrap">
-            <div class="fs-16 fw-600 m-r-12 api-lable">
-              API KEY
-            </div>
-            <div class="pos-r input-wrap">
-              <input [(ngModel)]="campaign.brand_apiKey" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
-                placeholder="" />
-              <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard  [cbContent]="campaign.brand_apiKey" [container]="container"
-                nbTooltip="{{ toolTipStatus }}" class="input-icon">
-                <img src="assets/img/copy.png" alt="" />
-              </div>
-            </div>
-          </div>
-          <div class="api-wrap">
-            <div class="fs-16 fw-600 m-r-12 api-lable">
-              Campaign Key
-            </div>
-            <div class="pos-r input-wrap">
-              <input [(ngModel)]="campaign.campaign_code" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
-                placeholder="" />
-              <div (mouseover)="mouseMove()" (click)="copyApi()" readonly ngxClipboard [cbContent]="campaign.campaign_code" [container]="container"
-                nbTooltip="{{ toolTipStatus }}" class="input-icon">
-                <img src="assets/img/copy.png" alt="" />
-              </div>
-            </div>
+
+          <div class="button-wrap">
+            <button [routerLink]="['/main/campaign-main/campaign']" class="back">BACK</button>
+            <button (click)="edit()" class="edit">Edit</button>
+            <button [disabled]="inProcces" (click)="delete()" class="delete" nbButton>
+              <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
+              Delete
+            </button>
           </div>
         </div>
-        <div class="video-wrappper">
-          <!-- <div class="video-wrap">
-            <video>
-              Browser not supported
-            </video>
-            <div class="play">
-              <span></span>
-            </div>
-          </div> -->
-          <div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
-            <div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
-              <div class="wistia_embed wistia_async_y6mqdllmkf videoFoam=true" style="height:100%;position:relative;width:100%">
-                <div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
-                  <img src="https://fast.wistia.com/embed/medias/y6mqdllmkf/swatch(3 kB)
-                            https://fast.wistia.com/embed/medias/y6mqdllmkf/swatch"
-                            style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" />
+      </nb-tab>
+
+      <nb-tab tabTitle="Integrations Settings">
+        <div class="tab-body">
+          <div style="max-width: 730px;" class="row m-b-40">
+              <div class="col-md-4">
+                <div
+                  (click)="platform.ManyChat = !platform.ManyChat"
+                  [ngClass]="{ active: platform.ManyChat === true }"
+                  class="card-platform"
+                >
+                  <img src="assets/img/manyChat-logo.png" alt="" />
+                  <div *ngIf="platform.ManyChat === true" class="icon-active">
+                    <img src="assets/svg-icon/success-circle.svg" alt="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div
+                  (click)="platform.ActiveChat = !platform.ActiveChat"
+                  [ngClass]="{ active: platform.ActiveChat === true }"
+                  class="card-platform"
+                >
+                  <img src="assets/img/activeChat-logo.png" alt="" />
+                  <div *ngIf="platform.ActiveChat === true" class="icon-active">
+                    <img src="assets/svg-icon/success-circle.svg" alt="" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div
+                  (click)="platform.Offline = !platform.Offline"
+                  [ngClass]="{ active: platform.Offline === true }"
+                  class="card-platform"
+                >
+                  <img src="assets/img/OfflineNewsPaper.png" alt="" />
+                  <div *ngIf="platform.Offline === true" class="icon-active">
+                    <img src="assets/svg-icon/success-circle.svg" alt="" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div> 
+
+          <div *ngIf="platform.ManyChat === true" class="bot-div m-b-40">
+            <div class="bot-heading">
+              ManyChat
+            </div>
+          <div class="df m-b-30">
+              <div class="inputs-wrapper">
+                <div class="api-wrap">
+                  <div class="fs-16 fw-600 m-r-12 api-lable">
+                    URL
+                  </div>
+                  <div class="pos-r input-wrap">
+                    <input [(ngModel)]="url" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                      placeholder="" />
+                    <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard [cbContent]="url" [container]="container"
+                      nbTooltip="{{ toolTipStatus }}" class="input-icon">
+                      <img src="assets/img/copy.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+                <div class="api-wrap">
+                  <div class="fs-16 fw-600 m-r-12 api-lable">
+                    API KEY
+                  </div>
+                  <div class="pos-r input-wrap">
+                    <input [(ngModel)]="campaign.brand_apiKey" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                      placeholder="" />
+                    <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard  [cbContent]="campaign.brand_apiKey" [container]="container"
+                      nbTooltip="{{ toolTipStatus }}" class="input-icon">
+                      <img src="assets/img/copy.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+                <div class="api-wrap">
+                  <div class="fs-16 fw-600 m-r-12 api-lable">
+                    Campaign Key
+                  </div>
+                  <div class="pos-r input-wrap">
+                    <input [(ngModel)]="campaign.campaign_code" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                      placeholder="" />
+                    <div (mouseover)="mouseMove()" (click)="copyApi()" readonly ngxClipboard [cbContent]="campaign.campaign_code" [container]="container"
+                      nbTooltip="{{ toolTipStatus }}" class="input-icon">
+                      <img src="assets/img/copy.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="video-wrappper">
+                <!-- <div class="video-wrap">
+                  <video>
+                    Browser not supported
+                  </video>
+                  <div class="play">
+                    <span></span>
+                  </div>
+                </div> -->
+                <div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+                  <div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+                    <div class="wistia_embed wistia_async_y6mqdllmkf videoFoam=true" style="height:100%;position:relative;width:100%">
+                      <div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+                        <img src="https://fast.wistia.com/embed/medias/y6mqdllmkf/swatch(3 kB)
+                                  https://fast.wistia.com/embed/medias/y6mqdllmkf/swatch"
+                                  style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div *ngIf="platform.ActiveChat === true" class="bot-div m-b-40">
+            <div class="bot-heading">
+              ActiveChat
+            </div>
+          <div class="df m-b-30">
+              <div class="inputs-wrapper">
+                <div class="api-wrap">
+                  <div class="fs-16 fw-600 m-r-12 api-lable">
+                    URL
+                  </div>
+                  <div class="pos-r input-wrap">
+                    <input [(ngModel)]="url" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                      placeholder="" />
+                    <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard [cbContent]="url" [container]="container"
+                      nbTooltip="{{ toolTipStatus }}" class="input-icon">
+                      <img src="assets/img/copy.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+                <div class="api-wrap">
+                  <div class="fs-16 fw-600 m-r-12 api-lable">
+                    API KEY
+                  </div>
+                  <div class="pos-r input-wrap">
+                    <input [(ngModel)]="campaign.brand_apiKey" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                      placeholder="" />
+                    <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard  [cbContent]="campaign.brand_apiKey" [container]="container"
+                      nbTooltip="{{ toolTipStatus }}" class="input-icon">
+                      <img src="assets/img/copy.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+                <div class="api-wrap">
+                  <div class="fs-16 fw-600 m-r-12 api-lable">
+                    Campaign Key
+                  </div>
+                  <div class="pos-r input-wrap">
+                    <input [(ngModel)]="campaign.campaign_code" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                      placeholder="" />
+                    <div (mouseover)="mouseMove()" (click)="copyApi()" readonly ngxClipboard [cbContent]="campaign.campaign_code" [container]="container"
+                      nbTooltip="{{ toolTipStatus }}" class="input-icon">
+                      <img src="assets/img/copy.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="video-wrappper">
+                <!-- <div class="video-wrap">
+                  <video>
+                    Browser not supported
+                  </video>
+                  <div class="play">
+                    <span></span>
+                  </div>
+                </div> -->
+                <div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+                  <div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+                    <div class="wistia_embed wistia_async_y6mqdllmkf videoFoam=true" style="height:100%;position:relative;width:100%">
+                      <div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+                        <img src="https://fast.wistia.com/embed/medias/y6mqdllmkf/swatch(3 kB)
+                                  https://fast.wistia.com/embed/medias/y6mqdllmkf/swatch"
+                                  style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div *ngIf="platform.Offline === true" class="offline-div m-b-40">
+            <div class="bot-heading">
+              Offline Campaign
+            </div>
+            <div class="py-3 px-4">
+              <div class="row">
+                <div class="col-md-6 py-4" style="border-right: 1px solid #979797">
+                  <div class="df align-items-center">
+                    <div>
+                      <img src="assets/img/QRcode.png" alt="">
+                    </div>
+                    <div class="mx-3">
+                      <div class="text-center">
+                        <img src="assets/img/DownloadQR.png" alt="">
+                      </div>
+                      <button class="download-img-qr m-t-8">Download as an image</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 py-4 px-5">
+                  <div style="font-weight: 600; color: #323232;">
+                      Sharing URL for Customers
+                  </div>
+
+                  <div class="api-wrap m-t-20">
+                    <div class="pos-r input-wrap">
+                      <input [(ngModel)]="url" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                        placeholder="" />
+                      <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard [cbContent]="url" [container]="container"
+                        nbTooltip="{{ toolTipStatus }}" class="input-icon">
+                        <img src="assets/img/copy.png" alt="" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="df">
+                    <div class=m-r-5>
+                      <img src="assets/img/social/Facebook.png" alt="">
+                    </div>
+                    <div class=m-r-5>
+                      <img src="assets/img/social/Instagram.png" alt="">
+                    </div>
+                    <div class=m-r-5>
+                      <img src="assets/img/social/LinkedIN.png" alt="">
+                    </div>
+                    <div class=m-r-5>
+                      <img src="assets/img/social/Twitter.png" alt="">
+                    </div>
+                    <div class=m-r-5>
+                      <img src="assets/img/social/WhatsApp.png" alt="">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div  *ngIf="platform.ManyChat === true || platform.ActiveChat === true || platform.Offline === true" class="button-wrap">
+            <button [routerLink]="['/main/campaign-main/campaign']" class="back">BACK</button>
+            <button (click)="updateCampaignIntegrations()"  class="save">
+                <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
+                Save
+            </button>
+          </div>
         </div>
+      </nb-tab>
 
-      </div> 
+    </nb-tabset>
 
-      <div class="button-wrap">
-        <button [routerLink]="['/main/campaign-main/campaign']" class="back">BACK</button>
-        <button (click)="edit()" class="edit">Edit</button>
-        <button [disabled]="inProcces" (click)="delete()" class="delete" nbButton>
-          <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
-          Delete
-        </button>
-      </div>
     </div>
 
     <div *ngIf="showLoader" class="loader-table">

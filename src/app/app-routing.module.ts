@@ -30,6 +30,7 @@ import { PageGuard } from "./shared/services/guard/page.guard";
 import { FbConnectComponent } from "./auth/fb-connect/fb-connect.component";
 import { FbLoginComponent } from "./auth/fb-login/fb-login.component";
 import { CampaignDetailsComponent } from "./main/campaign-main/campaign-details/campaign-details.component";
+import { CampaignIntegrationComponent } from './main/campaign-main/campaign-integration/campaign-integration.component';
 import { PagesComponent } from './main/pages/pages.component';
 import { MarketersComponent } from './main/marketers/marketers.component';
 import { CampaignTemplatesComponent } from './main/campaign-main/campaign-templates/campaign-templates.component';
@@ -166,6 +167,11 @@ const routes: Routes = [
             path: "review-campaign/:id",
             component: ReviewCampaingComponent,
             data: { breadcrumb: "review" }
+          },
+          {
+            path: "campaign-integration/:id",
+            component: CampaignIntegrationComponent,
+            data: { breadcrumb: "Integration" }
           }
         ]
       },

@@ -116,8 +116,8 @@ export class ReviewCampaingComponent implements OnInit {
             time: '',
             cardType: ''
           };
+          this.router.navigate(['/main/campaign-main/campaign-integration/' + result['campaign']]);
           this.mainService.showToastrSuccess.emit({text: 'Campaign created'});
-          this.router.navigate(['/main/campaign-main/details/' + result['campaign']]);
           this.inProcces = false;
         }
       }, err => {

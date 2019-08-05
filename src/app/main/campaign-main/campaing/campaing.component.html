@@ -61,7 +61,7 @@
           >
           <div
               class="ellipsis"
-              *ngIf="column !== 'Status' && column !== 'Action'"
+              *ngIf="column !== 'Status' && column !== 'Action' && column !== 'Integrations'"
         >
 
               <span *ngIf="column !== 'Issue' && column !== 'Redeem'">{{
@@ -88,9 +88,28 @@
                 </div>
               </div>
             </div>
+
+             <div class="">
+              <span *ngIf="column === 'Integrations'">
+                <div class="row">
+                <span *ngFor="let bots of row.data[column].name">
+                    <div *ngIf="bots === 'ManyChat'">
+                      <div><img src="assets/svg-icon/template-icons/platform/manychat.svg" alt=""></div>
+                    </div>
+                    <div *ngIf="bots === 'ActiveChat'">
+                      <div><img src="assets/svg-icon/template-icons/platform/activechat.svg" alt=""></div>
+                    </div>
+                    <div *ngIf="bots === 'Offline'">
+                      <div><img src="assets/svg-icon/template-icons/platform/newspaper.svg" alt=""></div>
+                    </div>
+                  </span>
+                </div>
+              </span>
+            </div>
+
             <div class="df ai-c">
               <span *ngIf="column === 'Status'">
-                <!-- <label class="campaignSwitch" 
+                <!-- <label class="campaignSwitch"
                   (click)="changeStatus(
                     $event.target,
                     'check-' + row.data['Id'].name,

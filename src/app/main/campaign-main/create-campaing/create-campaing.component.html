@@ -358,14 +358,20 @@
             </div>
           </div>
           <div class="row-input">
-            <div class="lable">
+            <div *ngIf="dataCampaign.campaign_type == 8" class="lable">
+              Venue
+            </div>
+            <div *ngIf="dataCampaign.campaign_type == 9" class="lable">
               Webinar Access Link
             </div>
             <div class="value">
               <div class="pos-r">
                 <input [ngClass]="{'error': ticketForm.controls['venue'].invalid && !customValidation}"
                 formControlName="venue" [(ngModel)]="dataCampaign.venue" type="text" nbInput fullWidth fieldSize="small" placeholder="">
-                <div *ngIf="ticketForm.controls['venue'].invalid && !customValidation" class="error-lable">
+                <div *ngIf="dataCampaign.campaign_type == 8 && ticketForm.controls['venue'].invalid && !customValidation" class="error-lable">
+                  Enter Venue of Event
+                </div>
+                <div *ngIf="dataCampaign.campaign_type == 9 && ticketForm.controls['venue'].invalid && !customValidation" class="error-lable">
                   Enter Link of Webinar
                 </div>
               </div>

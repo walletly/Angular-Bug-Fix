@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="34px" height="34px" viewBox="0 0 34 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55 (78076) - https://sketchapp.com -->
+    <title>Group 25</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="E03" transform="translate(-508.000000, -352.000000)">
+            <g id="Group-25" transform="translate(509.000000, 353.000000)">
+                <rect id="Rectangle-Copy-3" stroke="#DCE1E3" stroke-width="1.05205479" fill="#FFFFFF" fill-rule="nonzero" x="0" y="0" width="32" height="32" rx="4.8"></rect>
+                <g id="Group-24" transform="translate(8.000000, 7.200000)">
+                    <g id="Group-23">
+                        <path d="M1.79053981,0.661493415 L0.0863537617,16.7830934 C0.0434375997,17.1890803 0.33776458,17.5529881 0.743751473,17.5959043 C0.769563795,17.5986329 0.79550192,17.6 0.821458058,17.6 L15.1252785,17.6 C15.5335274,17.6 15.8644785,17.2690489 15.8644785,16.8608 C15.8644785,16.8194921 15.861016,16.7782569 15.8541273,16.7375275 L13.1274296,0.615927481 C13.067281,0.260298673 12.7592603,1.26601188e-15 12.3985808,1.33226763e-15 L2.5256441,-2.44249065e-15 C2.14747658,-2.37302241e-15 1.83029374,0.285421216 1.79053981,0.661493415 Z" id="Path-8" stroke="#20BEEA" stroke-width="1.232" fill="#FFFFFF" stroke-linejoin="round"></path>
+                        <path d="M4.02430693,4.11914894 L10.3404187,4.11914894 C10.5445431,4.11914894 10.7100187,4.28462449 10.7100187,4.48874894 C10.7100187,4.51293716 10.7076442,4.53706697 10.7029294,4.56079125 L10.4777387,5.69393167 C10.4433645,5.86689996 10.2915788,5.99148936 10.115228,5.99148936 L3.79911623,5.99148936 C3.59499178,5.99148936 3.42951623,5.82601381 3.42951623,5.62188936 C3.42951623,5.59770114 3.43189069,5.57357133 3.43660545,5.54984705 L3.66179615,4.41670662 C3.69617039,4.24373833 3.84795609,4.11914894 4.02430693,4.11914894 Z" id="Rectangle" fill="#20BEEA"></path>
+                        <polygon id="Path-11" stroke="#20BEEA" stroke-width="1.232" fill-opacity="0.311134178" fill="#20BEEA" stroke-linecap="round" stroke-linejoin="round" points="11.5348837 17.6 13.0232558 0.374468085 16 17.6"></polygon>
+                        <polyline id="Path-12" stroke="#20BEEA" stroke-width="1.232" stroke-linecap="round" stroke-linejoin="round" points="16 17.6 13.0232558 14.9787234 11.5348837 17.6"></polyline>
+                        <path d="M11.7209302,14.9787234 L13.0232558,14.9787234" id="Path-13" stroke="#20BEEA" stroke-width="1.232" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                    <g id="iconfinder_qr_code_2639895-3" transform="translate(2.920930, 8.187234)" fill="#000000">
+                        <g id="iconfinder_qr_code_2639895-2" transform="translate(0.279070, 0.612766)">
+                            <g id="iconfinder_qr_code_2639895">
+                                <g fill-rule="nonzero">
+                                    <path d="M1.4112,0 L0.4704,0 C0.210504,0 0,0.210504 0,0.4704 L0,1.4112 C0,1.671096 0.210504,1.8816 0.4704,1.8816 L1.4112,1.8816 C1.671096,1.8816 1.8816,1.671096 1.8816,1.4112 L1.8816,0.4704 C1.8816,0.210504 1.671096,0 1.4112,0 Z M1.4112,1.4112 L0.4704,1.4112 L0.4704,0.4704 L1.4112,0.4704 L1.4112,1.4112 Z M1.176,1.176 L0.7056,1.176 L0.7056,0.7056 L1.176,0.7056 L1.176,1.176 Z" id="Shape"></path>
+                                    <path d="M1.4112,3.2928 L0.4704,3.2928 C0.210504,3.2928 0,3.503304 0,3.7632 L0,4.704 C0,4.963896 0.210504,5.1744 0.4704,5.1744 L1.4112,5.1744 C1.671096,5.1744 1.8816,4.963896 1.8816,4.704 L1.8816,3.7632 C1.8816,3.503304 1.671096,3.2928 1.4112,3.2928 Z M1.4112,4.704 L0.4704,4.704 L0.4704,3.7632 L1.4112,3.7632 L1.4112,4.704 Z M1.176,4.4688 L0.7056,4.4688 L0.7056,3.9984 L1.176,3.9984 L1.176,4.4688 Z" id="Shape"></path>
+                                    <path d="M4.704,0 L3.7632,0 C3.503304,0 3.2928,0.210504 3.2928,0.4704 L3.2928,1.4112 C3.2928,1.671096 3.503304,1.8816 3.7632,1.8816 L4.704,1.8816 C4.963896,1.8816 5.1744,1.671096 5.1744,1.4112 L5.1744,0.4704 C5.1744,0.210504 4.963896,0 4.704,0 Z M4.704,1.4112 L3.7632,1.4112 L3.7632,0.4704 L4.704,0.4704 L4.704,1.4112 Z M4.4688,1.176 L3.9984,1.176 L3.9984,0.7056 L4.4688,0.7056 L4.4688,1.176 Z" id="Shape"></path>
+                                    <rect id="Rectangle" x="2.352" y="0.4704" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="2.352" y="1.4112" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="2.352" y="2.352" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="1.4112" y="2.352" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="0.4704" y="2.352" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="3.2928" y="2.352" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="4.2336" y="2.352" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="2.8224" y="2.8224" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="3.7632" y="2.8224" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="3.2928" y="3.2928" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="2.352" y="3.2928" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="2.8224" y="3.7632" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="3.2928" y="4.2336" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="2.8224" y="4.704" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="4.704" y="2.8224" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="4.704" y="3.7632" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="3.7632" y="3.7632" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="3.7632" y="4.704" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="4.2336" y="4.2336" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="4.2336" y="3.2928" width="1" height="1"></rect>
+                                    <rect id="Rectangle" x="2.352" y="4.2336" width="1" height="1"></rect>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

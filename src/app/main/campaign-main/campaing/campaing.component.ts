@@ -10,8 +10,8 @@ import { MainService } from 'src/app/shared/services/main.service';
 })
 export class CampaingComponent implements OnInit {
   showActions;
-  // defaultColumns = ['Type', 'Campaign Name', 'Description', 'Template', 'Issue', 'Redeem', 'Start Date', 'End Date', 'Status', 'Action'];
-   defaultColumns = ['Campaign Name', 'Description', 'Template', 'Issued', 'Redeemed', 'Start Date', 'End Date', 'Status', 'Action'];
+  defaultColumns = ['Type', 'Campaign', 'Integrations', 'Template', 'Issued', 'Redeemed', 'Start Date', 'End Date', 'Status', 'Action'];
+  //  defaultColumns = ['Campaign Name', 'Description', 'Template', 'Issued', 'Redeemed', 'Start Date', 'End Date', 'Status', 'Action'];
   allColumns = this.defaultColumns;
   campaigns;
   inChangeStatus = '';
@@ -22,7 +22,7 @@ export class CampaingComponent implements OnInit {
   showLoader;
 
   constructor(private campaignService: CompaignService, private router: Router, private mainService: MainService) {
-    if (JSON.parse(localStorage.getItem("user"))["user_type"] !== 4) {
+    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
       this.showLoader = true;
       this.getCampaigns();
     }
@@ -64,13 +64,11 @@ export class CampaingComponent implements OnInit {
 
         this.data.push({
           data: {
-            // 'Type': { name: element.campaign_type_formatted },
-            'Campaign Name': { name: element.campaign_name },
-            'Description': { name: element.description },
+            'Type': { name: element.campaign_type_formatted },
+            'Campaign': { name: element.campaign_name },
+            'Integrations': { name: element.integrations },
             'Template': { name: element.campaign_type_formatted },
-            // 'Issue': { name: element.coupons_limit },
             'Issued': { name: element.coupons_created },
-            // 'Redeem': { name: element.coupons_created },
             'Redeemed': { name: element.total_redeems },
             'Start Date': { name: element.startDateFormatted },
             'End Date': { name: element.endDateFormatted },
@@ -153,7 +151,7 @@ export class CampaingComponent implements OnInit {
     this.showActions = row;
   }
 
-  refresh(){
+  refresh() {
     this.showLoader = true;
     this.getCampaigns();
   }

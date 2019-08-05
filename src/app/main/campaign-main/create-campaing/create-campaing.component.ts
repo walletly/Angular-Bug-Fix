@@ -50,7 +50,7 @@ export class CreateCampaingComponent implements OnInit {
 
   data = [
     {
-      data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', type: 'coupon', locked: false }, 'Cards': { name: 'Loyalty Card', icon: 'assets/img/LoyaltyCard.png', type: 'card', locked: true }, 'Tickets': { name: 'Event Tickets', icon: 'assets/img/eventTickets.png', type: 'ticket', locked: true } },
+      data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', type: 'coupon', locked: false }, 'Cards': { name: 'Loyalty Card', icon: 'assets/img/LoyaltyCard.png', type: 'card', locked: true }, 'Tickets': { name: 'Event Tickets', icon: 'assets/img/eventTickets.png', type: 'ticket', locked: false } },
     },
     {
       data: { 'Coupons': { name: 'Coupon in %', icon: 'assets/img/Coupon.png', type: 'coupon', locked: false }, 'Cards': { name: 'Stamp Card', icon: 'assets/img/stampCard.png', type: 'card', locked: true }, 'Tickets': { name: 'Webinar Event', icon: 'assets/img/webinarIcon.png', type: 'ticket', locked: false } },
@@ -93,7 +93,7 @@ export class CreateCampaingComponent implements OnInit {
       startDate: ["", [Validators.required]],
       time: ["", [Validators.required, Validators.pattern("((1[0-2]|0?[1-9]):([0-5][0-9]) ?((AM)|(PM)|(am)|(pm)))")]],
       event_name: ["", [Validators.required]],
-      venue: ["", [Validators.required, Validators.pattern("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$")]]
+      venue: ["", [Validators.required]]
     });
 
     this.id = this.activeRout.snapshot.paramMap.get('id');
@@ -157,6 +157,8 @@ export class CreateCampaingComponent implements OnInit {
             this.selectType('Coupon in %');
           }else if(this.dataCampaign.campaign_type === '2'){
             this.selectType('Coupon in $');
+          }else if(this.dataCampaign.campaign_type === '8'){
+            this.selectType('Event Tickets');
           }else if(this.dataCampaign.campaign_type === '9'){
             this.selectType('Webinar Event');
           }
@@ -299,6 +301,16 @@ export class CreateCampaingComponent implements OnInit {
       setTimeout(() => {
         (document.getElementById('discountInput') as HTMLInputElement).style.backgroundImage = "url('assets/img/dollar.png')";
       }, 50);    
+    }else if(typeName === 'Event Tickets'){
+      this.selectedSell = 'Event Tickets';
+      this.dataCampaign.campaign_type = 8;
+      this.dataCampaign.endDate = '';
+      this.dataCampaign.currency = '';
+      this.dataCampaign.discount='';
+      this.dataCampaign.coupon_validity='';
+      this.ticketForm.get('venue').setValidators([Validators.required]);
+      this.ticketForm.get('venue').updateValueAndValidity();
+      this.cardType = 'ticket';    
     }else if(typeName === 'Webinar Event'){
       this.selectedSell = 'Webinar Event';
       this.dataCampaign.campaign_type = 9;
@@ -306,6 +318,8 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCampaign.currency = '';
       this.dataCampaign.discount='';
       this.dataCampaign.coupon_validity='';
+      this.ticketForm.get('venue').setValidators([Validators.required, Validators.pattern("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$")]);
+      this.ticketForm.get('venue').updateValueAndValidity();
       this.cardType = 'ticket';    
     }
   }
