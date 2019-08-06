@@ -392,7 +392,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
 
@@ -422,9 +421,9 @@
 
                   <div class="api-wrap m-t-20">
                     <div class="pos-r input-wrap">
-                      <input [(ngModel)]="url" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                      <input [(ngModel)]="sharingUrl" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
                         placeholder="" />
-                      <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard [cbContent]="url" [container]="container"
+                      <div (mouseover)="mouseMove()" (click)="copyApi()" ngxClipboard [cbContent]="sharingUrl" [container]="container"
                         nbTooltip="{{ toolTipStatus }}" class="input-icon">
                         <img src="assets/img/copy.png" alt="" />
                       </div>

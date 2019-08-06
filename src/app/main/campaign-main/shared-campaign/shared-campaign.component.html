@@ -1,0 +1,152 @@
+<nb-layout>
+  <nb-layout-column class="main-wrap-outer">
+    <div *ngIf="!showLoader" class="main-wrap">
+      <div>
+        <div class="text-center m-b-29">
+          <img src="assets/svg-icon/logo-dark.svg" alt="" />
+        </div>
+        <nb-card class="auth-card m-b-40">
+          <nb-card-body *ngIf="!invalidCampaign">
+            <div class="fs-22 fw-400 m-b-9">
+                Enter User Details
+            </div>
+            <form [formGroup]="myForm">
+              <div class="inputs-row m-b-26">
+                <div class="input-wrap full-width m-r-10">
+                  <div class="fs-15 m-b-5">
+                    First Name
+                  </div>
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['firstname'].invalid && !customValidation
+                    }"
+                    [(ngModel)]="data.firstName"
+                    type="text"
+                    formControlName="firstname"
+                    nbInput
+                    fullWidth
+                    fieldSize="small"
+                    placeholder=""
+                  />
+                </div>
+                <div class="input-wrap full-width">
+                  <div class="fs-15 m-b-5">
+                    Last Name
+                  </div>
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['lastname'].invalid && !customValidation
+                    }"
+                    [(ngModel)]="data.lastName"
+                    type="text"
+                    formControlName="lastname"
+                    nbInput
+                    fullWidth
+                    fieldSize="small"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+              <!-- <div class="inputs-row m-b-33">
+                
+              </div> -->
+              <div class="inputs-row m-b-33">
+                <div class="input-wrap full-width">
+                  <div class="fs-15 m-b-5">
+                    Email
+                  </div>
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['email'].invalid && !customValidation
+                    }"
+                    [(ngModel)]="data.email"
+                    type="email"
+                    formControlName="email"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+              <div *ngIf="campaignType == 8" class="inputs-row m-b-33">
+                <div class="input-wrap full-width">
+                  <div class="fs-15 m-b-5">
+                    Members
+                  </div>
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['members'].invalid && !customValidation
+                    }"
+                    [(ngModel)]="data.members"
+                    type="number"
+                    formControlName="members"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+              <div class="inputs-row m-b-33">
+                <div class="input-wrap full-width">
+                  <div class="fs-15 m-b-5">
+                    Phone
+                  </div>
+                  <input
+                    [ngClass]="{
+                      error:
+                        myForm.controls['phone'].invalid && !customValidation
+                    }"
+                    [(ngModel)]="data.phone"
+                    type="text"
+                    formControlName="phone"
+                    nbInput
+                    fullWidth
+                    fieldSize="medium"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+            </form>
+            <div class="m-b-25">
+              <button
+                (click)="getCard()"
+                class="cust-button fw-400 fs-14"
+                fullWidth
+                nbButton
+                status="success"
+              >
+              <i *ngIf="inProcess" class="fas fa-spinner fa-pulse"></i>
+                Get {{ cardType }}
+              </button>
+            </div>
+            <div>
+              <div *ngIf="successMessage" style="color:black;">
+                {{ successMessage }}
+              </div>
+              <div *ngIf="errorMessage" style="color:red;">
+                {{ errorMessage }}
+              </div>
+            </div>
+          </nb-card-body>
+          <nb-card-body *ngIf="invalidCampaign">
+            <div>
+              Campaign Not Found (Invalid Campaign)
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="text-center fs-11 color-secondary">
+        ®2019 Walletly Business, All rights reserved. Termsand Privacy
+      </div>
+    </div>
+    <div *ngIf="showLoader" class="loader">
+      <img width="200px" src="assets/img/Loader2x.gif" alt="">
+    </div>
+  </nb-layout-column>
+</nb-layout>

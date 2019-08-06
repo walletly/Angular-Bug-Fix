@@ -61,6 +61,7 @@ import { DashboardInfoAdminComponent } from './main/dashboard-info-admin/dashboa
 import { PushNotificationComponent } from './main/push-notification/push-notification.component';
 import { HelpComponent } from './main/help/help.component';
 import { CampaignIntegrationComponent } from './main/campaign-main/campaign-integration/campaign-integration.component';
+import { SharedCampaignComponent } from './main/campaign-main/shared-campaign/shared-campaign.component';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB_f_r3DPfN5tZ6x0olJaGCjSogT9rWapM",
@@ -120,6 +121,7 @@ export const firebaseConfig = {
     PushNotificationComponent,
     HelpComponent,
     CampaignIntegrationComponent,
+    SharedCampaignComponent,
   ],
   imports: [
     BrowserModule,

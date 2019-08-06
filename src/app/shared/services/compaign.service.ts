@@ -47,6 +47,18 @@ export class CompaignService {
     return this.http.get(SERVER_API_URL + 'campaign/' + id, { headers: httpHeaders });
   }
 
+  getСampaignByCode(code) {
+    return this.http.get(SERVER_API_URL + 'campaign/code/' + code);
+  }
+
+  postCampaignCard(card_type, brand_apikey, body ){
+    const httpHeadersWithCT = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-api-key': brand_apikey
+    });
+    return this.http.post(SERVER_API_URL + card_type, body, { headers: httpHeadersWithCT });
+  }
+
   getСampaignsBrands(id) {
     const httpHeaders = new HttpHeaders ({
       'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,

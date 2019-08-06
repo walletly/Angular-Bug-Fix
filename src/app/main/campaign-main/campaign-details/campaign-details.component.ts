@@ -25,6 +25,7 @@ export class CampaignDetailsComponent implements OnInit {
   platform = { 'ManyChat': false, 'ActiveChat': false, 'Offline': false };
 
   url;
+  sharingUrl;
 
   constructor(
     private activeRout: ActivatedRoute,
@@ -48,6 +49,7 @@ export class CampaignDetailsComponent implements OnInit {
       this.cardService.getCardById(this.campaign.card_id).subscribe(dataCard => {
         console.log(dataCard);
         this.card = dataCard['data'];
+        this.sharingUrl = SERVER_API_URL + 'campaign/shared/' + this.campaign.campaign_code;
         if (this.card.card_type == 1) {
           this.url = SERVER_API_URL + 'coupon';
         } else if (this.card.card_type == 3) {

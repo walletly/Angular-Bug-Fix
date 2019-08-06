@@ -22,6 +22,8 @@ export class CampaignIntegrationComponent implements OnInit {
   platform: { 'ManyChat': false, 'ActiveChat': false, 'Offline': false };
 
   url;
+  sharingUrl;
+
   constructor(
     private activeRout: ActivatedRoute,
     private campaignService: CompaignService,
@@ -37,6 +39,7 @@ export class CampaignIntegrationComponent implements OnInit {
       console.log(data);
       this.campaign = data['data'];
 
+      this.sharingUrl = SERVER_API_URL + 'campaign/shared/' + this.campaign.campaign_code;
       if (this.campaign.campaign_type <= 1) {
         this.url = SERVER_API_URL + 'coupon';
       } else if (this.campaign.campaign_type <= 7) {

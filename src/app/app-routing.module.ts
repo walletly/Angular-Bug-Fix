@@ -38,6 +38,7 @@ import { CampaignTypeComponent } from './main/campaign-main/campaign-type/campai
 import { DashboardInfoAdminComponent } from './main/dashboard-info-admin/dashboard-info-admin.component';
 import { PushNotificationComponent } from './main/push-notification/push-notification.component';
 import { HelpComponent } from './main/help/help.component';
+import { SharedCampaignComponent } from './main/campaign-main/shared-campaign/shared-campaign.component';
 
 const routes: Routes = [
   {
@@ -229,6 +230,7 @@ const routes: Routes = [
     ]
   },
   { path: "profile", component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: "api/v3/campaign/shared/:campaign_code", component: SharedCampaignComponent },
   // {
   //   path: "connect",
   //   component: ConnectPageComponent,
