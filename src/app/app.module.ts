@@ -62,6 +62,7 @@ import { PushNotificationComponent } from './main/push-notification/push-notific
 import { HelpComponent } from './main/help/help.component';
 import { CampaignIntegrationComponent } from './main/campaign-main/campaign-integration/campaign-integration.component';
 import { SharedCampaignComponent } from './main/campaign-main/shared-campaign/shared-campaign.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB_f_r3DPfN5tZ6x0olJaGCjSogT9rWapM",
@@ -156,6 +157,7 @@ export const firebaseConfig = {
     BreadcrumbModule,
     NbCalendarRangeModule,
     NbDialogModule.forRoot(),
+    QRCodeModule
   ],
   providers: [
     AuthService,

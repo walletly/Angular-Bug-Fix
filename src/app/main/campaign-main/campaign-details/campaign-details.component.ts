@@ -134,4 +134,13 @@ export class CampaignDetailsComponent implements OnInit {
       this.inProcces = false;
     });
   }
+
+  downloadQR(){
+    const qrCode = document.getElementById('qrCode') as HTMLElement;
+    const img = qrCode.children[1];
+    qrCode.innerHTML = qrCode.innerHTML + `<a download='${this.campaign.campaign_code}' id='downloadQR' href='${img['src']}' style="display: none;">DownloadQR</a>`;
+    const a = document.getElementById('downloadQR') as HTMLElement;
+    a.click();
+    a.parentNode.removeChild(a);
+  }
 }
