@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CompaignService } from 'src/app/shared/services/compaign.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { BrandService } from "../../../shared/services/brand.service";
 
 @Component({
   selector: 'app-shared-campaign',
@@ -23,11 +24,14 @@ export class SharedCampaignComponent implements OnInit {
   errorMessage = null;
   successMessage = null;
   successUrl = null;
+  brand_logo;
+  brand_name;
 
 
   constructor(
     private activeRout: ActivatedRoute,
     private campaignService: CompaignService,
+    private brandService: BrandService,
     private formBuilder: FormBuilder,
   ) { 
 
@@ -35,7 +39,7 @@ export class SharedCampaignComponent implements OnInit {
       firstname: ["", [Validators.required]],
       lastname: ["", [Validators.required]],
       email: ["", [Validators.required, Validators.email]],
-      phone: ["", [Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
+      phone: ["", [Validators.required, Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
       members: ["", []],
     });
 
@@ -43,10 +47,17 @@ export class SharedCampaignComponent implements OnInit {
     this.campaignCode = this.activeRout.snapshot.paramMap.get('campaign_code');
     this.showLoader = true;
     this.campaignService.getСampaignByCode(this.campaignCode).subscribe(data => {
-      this.showLoader = false;
-      this.invalidCampaign = false;
       this.campaign = data['data'][0];
-      this.campaignType = this.campaign.campaign_type
+      this.brandService.getBrandName(this.campaign.brand_id).subscribe(result =>{
+        this.brand_logo = result['brand_logo'];
+        this.brand_name = result['brand_name'];
+        this.showLoader = false;
+        this.invalidCampaign = false;
+      },err =>{
+        this.showLoader = false;
+        this.invalidCampaign = true;
+      }); 
+      this.campaignType = this.campaign.campaign_type;
       this.selectCardType(this.campaignType);
     }, error=>{
       this.showLoader = false;

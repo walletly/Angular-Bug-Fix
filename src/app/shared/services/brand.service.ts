@@ -45,6 +45,10 @@ export class BrandService {
     return this.http.get(SERVER_API_URL + 'brand/' + id, { headers: httpHeaders});
   }
 
+  getBrandName(id) {
+    return this.http.get(SERVER_API_URL + 'brand/name/' + id);
+  }
+
   getUsersBrands(id) {
     const httpHeaders = new HttpHeaders ({
       'Content-Type': 'application/json',

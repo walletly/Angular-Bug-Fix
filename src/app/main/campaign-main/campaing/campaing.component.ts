@@ -155,4 +155,24 @@ export class CampaingComponent implements OnInit {
     this.showLoader = true;
     this.getCampaigns();
   }
+
+  addCampaign(){
+    this.mainService.dataCampaign = {
+      name: '',
+      description: '',
+      card_id: '',
+      discount: '',
+      startDate: '',
+      endDate: '',
+      campaign_type: '',
+      brand_id: '',
+      coupon_validity: '',
+      currency: '',
+      event_name: '',
+      venue: '',
+      time: '',
+      cardType: ''
+    };
+    this.router.navigate(['/main/campaign-main/create-campaign']);
+  }
 }

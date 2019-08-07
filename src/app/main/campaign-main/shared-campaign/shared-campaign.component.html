@@ -2,8 +2,8 @@
   <nb-layout-column class="main-wrap-outer">
     <div *ngIf="!showLoader" class="main-wrap">
       <div>
-        <div class="text-center m-b-29">
-          <img src="assets/svg-icon/logo-dark.svg" alt="" />
+        <div class="m-b-29 df ai-c" style="color: black; font-size: 25px; justify-content: center;">
+          <img [src]="brand_logo" class="m-r-10" alt="" style="height: 60px; width: 60px; border-radius: 50%;" />{{ brand_name }}
         </div>
         <nb-card class="auth-card m-b-40">
           <nb-card-body *ngIf="!invalidCampaign">
@@ -29,6 +29,9 @@
                     fieldSize="small"
                     placeholder=""
                   />
+                  <div *ngIf="myForm.controls['firstname'].invalid && !customValidation" class="error-lable">
+                    Required
+                  </div>
                 </div>
                 <div class="input-wrap full-width">
                   <div class="fs-15 m-b-5">
@@ -47,11 +50,11 @@
                     fieldSize="small"
                     placeholder=""
                   />
+                  <div *ngIf="myForm.controls['lastname'].invalid && !customValidation" class="error-lable">
+                    Required
+                  </div>
                 </div>
               </div>
-              <!-- <div class="inputs-row m-b-33">
-                
-              </div> -->
               <div class="inputs-row m-b-33">
                 <div class="input-wrap full-width">
                   <div class="fs-15 m-b-5">
@@ -70,6 +73,9 @@
                     fieldSize="medium"
                     placeholder=""
                   />
+                  <div *ngIf="myForm.controls['email'].invalid && !customValidation" class="error-lable">
+                    Required Valid Email
+                  </div>
                 </div>
               </div>
               <div *ngIf="campaignType == 8" class="inputs-row m-b-33">
@@ -90,6 +96,9 @@
                     fieldSize="medium"
                     placeholder=""
                   />
+                  <div *ngIf="myForm.controls['members'].invalid && !customValidation" class="error-lable">
+                    Required
+                  </div>
                 </div>
               </div>
               <div class="inputs-row m-b-33">
@@ -110,6 +119,9 @@
                     fieldSize="medium"
                     placeholder=""
                   />
+                  <div *ngIf="myForm.controls['phone'].invalid && !customValidation" class="error-lable">
+                    Required Valid Phone number
+                  </div>
                 </div>
               </div>
             </form>
