@@ -50,7 +50,7 @@ export class FbLoginComponent implements OnInit {
           console.log(res);
           const firstname = res.additionalUserInfo.profile['first_name'];
           const lastname = res.additionalUserInfo.profile['last_name'];
-          const email = res.user.email;
+          const email = res.user.email || res.additionalUserInfo.profile['email'];
           const uid = res.user.uid;
           const photo = res.user.photoURL || 'https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png';
           const newUser = res.additionalUserInfo.isNewUser;

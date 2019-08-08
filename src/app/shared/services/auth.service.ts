@@ -68,6 +68,7 @@ export class AuthService {
   doFacebookLogin() {
     const provider = new firebase.auth.FacebookAuthProvider();
     provider.addScope('manage_pages');
+    provider.addScope('email');
     // provider.addScope('publish_pages');
     // provider.addScope('pages_show_list');
     this.firebaseAuth.auth.signInWithRedirect(provider);
