@@ -222,7 +222,9 @@ export class FbConnectComponent implements OnInit {
       this.brandService.connectBrand(connectingBrand).subscribe(async result => {
         this.setActiveBrandAndUpdateUser(result['brand_id']);
         if(result['code'] == 602){
-          this.router.navigate(['/main/dashboard']);
+          setTimeout(() => {
+            this.router.navigate(['/main/dashboard']);
+          }, 2000);
           return;
         }
         let ibeaconData ={

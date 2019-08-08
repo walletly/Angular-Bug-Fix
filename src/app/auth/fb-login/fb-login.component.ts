@@ -37,9 +37,11 @@ export class FbLoginComponent implements OnInit {
       .then(async res => {
         console.log(res);
         if(localStorage.getItem('loggedOut') == 'true'){
-          localStorage.clear();
-          this.showLoader = false;
-          return;
+          await this.ngZone.run(() => {
+            localStorage.clear();
+            this.showLoader = false;
+            return;
+          });
         }else if(localStorage.getItem('loggedIn') == 'true'){
           this.router.navigate(['/main/dashboard']);
           return;
@@ -81,13 +83,26 @@ export class FbLoginComponent implements OnInit {
           }
           this.getUser(uid);
         } else {
-          this.showLoader = false;
+          await this.ngZone.run(() => {
+            localStorage.clear();
+            this.showLoader = false;
+            return;
+          });
         }
       }).catch( async err => {
         if(localStorage.getItem('loggedOut') == 'true'){
-          localStorage.clear();
-          this.showLoader = false;
-          return;
+          await this.ngZone.run(() => {
+            localStorage.clear();
+            this.showLoader = false;
+            return;
+          });
+        }
+        if(err.code == 'auth/user-cancelled'){
+          await this.ngZone.run(() => {
+            localStorage.clear();
+            this.showLoader = false;
+            return;
+          });
         }
 
         let user_type, user_id, tempPassword;
@@ -103,7 +118,7 @@ export class FbLoginComponent implements OnInit {
               this.businessEmail = err.email;
               this.deleteUserId = user_id;
               this.openDeleteBox();
-            })
+            });
           }
           else if (user_type ==3 && err.code == "auth/account-exists-with-different-credential"){
             localStorage.setItem('access', err.credential['accessToken']);
@@ -163,6 +178,7 @@ export class FbLoginComponent implements OnInit {
 
   loginFB() {
     if (this.terms) {
+      localStorage.clear();
       this.firebaseAuth.auth.signOut();
       this.authService.doFacebookLogin();
     } else {
@@ -177,7 +193,6 @@ export class FbLoginComponent implements OnInit {
   closeDeleteBox(){
     (document.getElementById('myModal') as HTMLDivElement).style.display = 'none';
     localStorage.clear();
-    window.location.reload();
   }
 
   deleteUser(id){
@@ -190,8 +205,10 @@ export class FbLoginComponent implements OnInit {
   }
 
   continue(){
+    (document.getElementById('myModal') as HTMLDivElement).style.display = 'none';
     localStorage.clear();
-    window.location.reload();
+    this.firebaseAuth.auth.signOut();
+    this.authService.doFacebookLogin();
   }
 
 }

@@ -57,7 +57,7 @@
   <!-- Modal content -->
   <div class="modal-content">
     <div *ngIf="!deleteSuccess">
-      <p style="pointer-events: none;">{{ businessEmail }} is already registered as a Business User. If you continue with facebook as a marketeer all your existing data will be lost.
+      <p style="pointer-events: none;">{{ businessEmail }} is already registered as a Business User. If you continue with facebook as a marketer all your existing data will be lost.
         Are you sure you want to Continue with facebook ?</p>
       <div style="margin-left: 155px; margin-top: 20px;">
         <button [disabled]="disableButton" class="modalButton" (click)="deleteUser(deleteUserId)">Yes</button>
@@ -65,9 +65,9 @@
       </div>
     </div>
     <div *ngIf="deleteSuccess">
-      <p style="pointer-events: none;">You have successfully joined walletly as a marketeer. Now Login with facebook to continue.</p>
+      <p style="pointer-events: none;">You have successfully joined walletly as a marketeer.</p>
       <div style="margin-left: 155px; margin-top: 20px;">
-        <button class="modalButton" (click)="continue()">close</button>
+        <button class="modalButton" (click)="continue()">Continue</button>
       </div>
     </div>
   </div>

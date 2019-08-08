@@ -299,6 +299,19 @@
                     </div>
                   </div>
                 </div>
+                <div class="api-wrap">
+                  <div class="fs-16 fw-600 m-r-12 api-lable">
+                    Facebook PageId
+                  </div>
+                  <div class="pos-r input-wrap">
+                    <input [(ngModel)]="campaign.brand_id" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                      placeholder="" />
+                    <div (mouseover)="mouseMove()" (click)="copyApi()" readonly ngxClipboard [cbContent]="campaign.brand_id" [container]="container"
+                      nbTooltip="{{ toolTipStatus }}" class="input-icon">
+                      <img src="assets/img/copy.png" alt="" />
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="video-wrappper">
                 <!-- <div class="video-wrap">
@@ -365,6 +378,19 @@
                     <input [(ngModel)]="campaign.campaign_code" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
                       placeholder="" />
                     <div (mouseover)="mouseMove()" (click)="copyApi()" readonly ngxClipboard [cbContent]="campaign.campaign_code" [container]="container"
+                      nbTooltip="{{ toolTipStatus }}" class="input-icon">
+                      <img src="assets/img/copy.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+                <div class="api-wrap">
+                  <div class="fs-16 fw-600 m-r-12 api-lable">
+                    Facebook PageId
+                  </div>
+                  <div class="pos-r input-wrap">
+                    <input [(ngModel)]="campaign.brand_id" class="color-dark fs-14 fw-500" [readonly]="true" type="text" nbInput fullWidth fieldSize="medium"
+                      placeholder="" />
+                    <div (mouseover)="mouseMove()" (click)="copyApi()" readonly ngxClipboard [cbContent]="campaign.brand_id" [container]="container"
                       nbTooltip="{{ toolTipStatus }}" class="input-icon">
                       <img src="assets/img/copy.png" alt="" />
                     </div>
