@@ -5,6 +5,9 @@
         <div class="m-b-29 df ai-c" style="color: black; font-size: 25px; justify-content: center;">
           <img [src]="brand_logo" class="m-r-10" alt="" style="height: 60px; width: 60px; border-radius: 50%;" />{{ brand_name }}
         </div>
+        <div class="m-b-29 df ai-c" style="color: black; font-size: 25px; justify-content: center;">
+          {{ campaign.campaign_name}}
+        </div>
         <nb-card class="auth-card m-b-40">
           <nb-card-body *ngIf="!invalidCampaign">
             <div class="fs-22 fw-400 m-b-9">
@@ -112,7 +115,7 @@
                         myForm.controls['phone'].invalid && !customValidation
                     }"
                     [(ngModel)]="data.phone"
-                    type="text"
+                    type="tel"
                     formControlName="phone"
                     nbInput
                     fullWidth
