@@ -77,7 +77,7 @@
             <div class="value">
               <div *ngIf="coupons.length" class="pos-r full-width">
                 <nb-select [ngClass]="{'error': myForm.controls['template'].invalid && !customValidation}"
-                  formControlName="template" #select size="small" placeholder="Select Template"
+                  formControlName="template" #selectTemplate size="small" placeholder="Select Template"
                   [(selected)]="dataCampaign.card_id">
                   <nb-option *ngFor="let item of coupons" [value]="item.id">
                     {{ item.template_name }}
@@ -138,7 +138,7 @@
             </div>
             <div class="value">
               <div class="pos-r full-width">
-                <nb-select selected="$" [ngClass]="{'error': myForm.controls['currency'].invalid && !customValidation}" formControlName="currency" #select [(ngModel)]="dataCampaign.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
+                <nb-select #selectCurrency [ngClass]="{'error': myForm.controls['currency'].invalid && !customValidation}" formControlName="currency" #select [(ngModel)]="dataCampaign.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
                   <nb-option value="$">USD ($)</nb-option>
                   <nb-option value="€">EUR (€)</nb-option>
                   <nb-option value="£">GBP (£)</nb-option>
@@ -289,7 +289,7 @@
             <div class="value">
               <div *ngIf="tickets.length" class="pos-r full-width">
                 <nb-select [ngClass]="{'error': ticketForm.controls['template'].invalid && !customValidation}"
-                  formControlName="template" #select size="small" placeholder="Select Template"
+                  formControlName="template" #selectTemplate size="small" placeholder="Select Template"
                   [(selected)]="dataCampaign.card_id">
                   <nb-option *ngFor="let item of tickets" [value]="item.id">
                     {{ item.template_name }}

@@ -39,7 +39,8 @@ export class CreateCampaingComponent implements OnInit {
   noTickets = true;
   limit = '';
 
-  @ViewChild('select') select;
+  @ViewChild('selectTemplate') selectTemplate;
+  @ViewChild('selectCurrency') selectCurrency;
   @ViewChild('selectNumber') selectNumber;
 
   defaultColumns = ['Coupons', 'Cards', 'Tickets'];
@@ -105,6 +106,9 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCampaign = this.mainService.dataCampaign;
       console.log(this.dataCampaign);
       this.myForm.controls['template'].setValue(this.dataCampaign.card_id);
+      if(!this.dataCampaign.currency){
+        this.dataCampaign.currency = '$';
+      }
       this.cardType = this.dataCampaign.cardType;
       if(this.cardType != ''){
         this.disable = true;
@@ -325,8 +329,11 @@ export class CreateCampaingComponent implements OnInit {
   }
 
   clear() {
-    if (!this.noCoupons || !this.noCards || !this.noTickets) {
-      this.select.reset();
+    if ((!this.noCoupons || !this.noCards || !this.noTickets) && (this.selectTemplate)) {
+      this.selectTemplate.reset();
+    }
+    if(this.selectCurrency){
+      this.selectCurrency.reset();
     }
     this.dataCampaign = {
       name: '',
@@ -339,7 +346,9 @@ export class CreateCampaingComponent implements OnInit {
       event_name: '',
       venue: '',
       time: '',
+      currency: '',
     };
+    this.selectType(this.selectedSell);
     // this.myForm.get('setLimit').setValue('');
   }
 }
