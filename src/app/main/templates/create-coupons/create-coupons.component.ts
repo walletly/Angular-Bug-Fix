@@ -237,7 +237,7 @@ export class CreateCouponsComponent implements OnInit {
       this.cardService.createCard(this.card).subscribe(result => {
         console.log(result);
         if (result['success']) {
-          this.mainService.showToastrSuccess.emit({text: 'Tempalte created'});
+          this.mainService.showToastrSuccess.emit({text: 'Template created'});
           this.route.navigate(['/main/templates/walletly-cards']);
           this.inProcces = false;
         }
@@ -284,7 +284,7 @@ export class CreateCouponsComponent implements OnInit {
       this.cardService.updateCard(this.id, this.card).subscribe(result => {
         console.log(result);
         if (result['success']) {
-          this.mainService.showToastrSuccess.emit({text: 'Tempalte updated'});
+          this.mainService.showToastrSuccess.emit({text: 'Template updated'});
           this.route.navigate(['/main/templates/walletly-cards']);
           this.inProcces = false;
         }

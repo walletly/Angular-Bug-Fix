@@ -138,7 +138,7 @@
             </div>
             <div class="value">
               <div class="pos-r full-width">
-                <nb-select [ngClass]="{'error': myForm.controls['currency'].invalid && !customValidation}" formControlName="currency" #select [(ngModel)]="dataCampaign.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
+                <nb-select selected="$" [ngClass]="{'error': myForm.controls['currency'].invalid && !customValidation}" formControlName="currency" #select [(ngModel)]="dataCampaign.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
                   <nb-option value="$">USD ($)</nb-option>
                   <nb-option value="€">EUR (€)</nb-option>
                   <nb-option value="£">GBP (£)</nb-option>
@@ -163,6 +163,7 @@
                   <nb-option value="zł">PLN (zł)</nb-option>
                   <nb-option value="kr">SEK (kr)</nb-option>
                   <nb-option value="¥">CNY (¥)</nb-option>
+                  <nb-option value="kr">NOK (kr)</nb-option>
                   <nb-option value="₹">INR (₹)</nb-option>
                   <nb-option value="$">NZD ($)</nb-option>
                   <nb-option value="RM">MYR (RM)</nb-option>
