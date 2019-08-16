@@ -5,7 +5,7 @@
 </div>
 <nb-card>
   <nb-card-body>
-    <nb-tabset class="tabs-card">
+    <nb-tabset class="tabs-card"> <!-- (changeTab)="selectedTab($event)" -->
       <nb-tab *ngIf="userAdmin" #packages tabTitle="Packages">
         <div class="input-wrapper">
           <form *ngIf="!showLoader" [formGroup]="myFormPackages">
@@ -1483,6 +1483,138 @@
             </div>
           </div>
         </div>
+      </nb-tab>
+
+      <nb-tab *ngIf="!userAdmin" #integrationTab tabTitle="Chat Bot Integrations">
+        <form [formGroup]="manyChatApiForm">
+          <div class="input-wrapper">
+              <div class="row-input">
+                <div class="lable">
+                  ManyChat API
+                </div>
+                <div class="value">
+                  <div class="pos-r full-width">
+                    <input
+                      type="text"
+                      [ngClass]="{
+                        error:
+                        manyChatApiForm.controls['manyChatApi'].invalid &&
+                          !customValidation || WrongApi
+                      }"
+                      nbInput
+                      formControlName="manyChatApi"
+                      fullWidth
+                      fieldSize="medium"
+                      placeholder="Place your ManyChat API here"
+                    />
+                    <div
+                      *ngIf="
+                      manyChatApiForm.controls['manyChatApi'].invalid &&
+                        !customValidation
+                      "
+                      class="error-lable"
+                    >
+                      Field error (must have at least 1 character)
+                    </div>
+                    <div
+                    *ngIf="WrongApi"
+                    class="error-lable"
+                  >
+                    Please Enter Valid API
+                  </div>
+                  </div>
+                </div>
+                <button
+                class="cust-button m-l-10"
+                nbButton
+                (click)="manychatAPIReceived()"
+                status="success"
+                [disabled]="inProcces"
+                style="height: 44px;"
+              >
+              <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
+                Add
+              </button>
+              </div>
+              <div *ngIf="isApi" class="row-input">
+                <div class="lable">
+                  Custom Fields
+                </div>
+                <div class="value">
+                  <div class="pos-r full-width">
+                    <nb-select
+                      formControlName="customFieldOptions" size="small" placeholder="Select Custom Fields"
+                      [ngClass]="{
+                        error:
+                        manyChatApiForm.controls['customFieldOptions'].invalid &&
+                        !customValidation
+                      }"
+                      [(selected)]="selectedCustomField"
+                      >
+                      <nb-option *ngFor="let name of customFields" [value]="name">
+                        {{name}}
+                      </nb-option>
+                    </nb-select>
+                    <div
+                    *ngIf="
+                    manyChatApiForm.controls['customFieldOptions'].invalid &&
+                      !customValidation
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have at least 1 character)
+                  </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="isApi" class="row-input">
+                <div class="lable">
+                  Select Campaign
+                </div>
+                <div class="value">
+                  <div class="pos-r full-width">
+                    <nb-select
+                      formControlName="Campaigns" size="small" placeholder="Select Campaign"
+                      [ngClass]="{
+                        error:
+                        manyChatApiForm.controls['Campaigns'].invalid &&
+                        !customValidation
+                      }"
+                      [(selected)]="selectedCampaignId"
+                      >
+                      <nb-option *ngFor="let name of campaigns" [value]="name.id">
+                        {{name.campaign_name}}
+                      </nb-option>
+                    </nb-select>
+                    <div
+                    *ngIf="
+                    manyChatApiForm.controls['Campaigns'].invalid &&
+                      !customValidation
+                    "
+                    class="error-lable"
+                  >
+                    Field error (must have at least 1 character)
+                  </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="isApi" class="row-input">
+                <div class="lable"></div>
+                <div class="value">
+                  <button
+                    (click)="integrate()"
+                    class="cust-button"
+                    nbButton
+                    status="success"
+                    [disabled]="integrateInProcces"
+                  >
+                  <i *ngIf="integrateInProcces" class="fas fa-spinner fa-pulse"></i>
+                    Integrate
+                  </button>
+                </div>
+              </div>
+          </div>
+        </form>
       </nb-tab>
     </nb-tabset>
   </nb-card-body>
