@@ -117,6 +117,7 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCampaign = this.mainService.dataCampaign;
       console.log(this.dataCampaign);
       this.myForm.controls['template'].setValue(this.dataCampaign.card_id);
+      this.ticketForm.controls['template'].setValue(this.dataCampaign.card_id);
       if(!this.dataCampaign.currency){
         this.dataCampaign.currency = '$';
       }
