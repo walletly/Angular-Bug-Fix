@@ -87,6 +87,16 @@ export class CreateCouponsComponent implements OnInit {
     if (this.id) {
       this.cardService.getCardById(this.id).subscribe(result => {
         console.log(result);
+        if(result['data'].is_delete == true){
+          this.showLoader = false;
+          this.inProcces = true;
+          setTimeout(() => {
+            if (this.accordionFront) {
+              this.accordionFront.open();
+            }
+          }, 200);
+          return;
+        }
         this.card = result['data'];
         this.typeId = this.card.card_type;
         

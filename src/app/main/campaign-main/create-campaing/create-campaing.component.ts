@@ -90,7 +90,7 @@ export class CreateCampaingComponent implements OnInit {
       // numberOfCoupon: ["", [Validators.required]],
       // setLimit: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
       currency: ["", [Validators.required]],
-      validity: ["", [Validators.required, Validators.pattern('^[0-9]*$'), Validators.min(1), Validators.max(100)]],
+      validity: ["", [Validators.required, Validators.pattern('^[0-9]*$'), Validators.min(1), Validators.max(365)]],
       startDate: ["", [Validators.required]],
       endDate: ["", [Validators.required]],
     });
