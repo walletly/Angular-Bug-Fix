@@ -1,5 +1,4 @@
 <h1 class="m-t-0">
-  <span *ngIf="!id">Create </span> <span *ngIf="id">Update </span>
   <span class="text-capitalize"> {{ type }} </span>
   Template
 </h1>
@@ -444,7 +443,7 @@
           </nb-accordion-item>
         </nb-accordion>
 
-        <div class="m-t-14">
+        <div class="m-t-15">
           <button
             (click)="clear()"
             class="cust-button m-r-15"
@@ -457,7 +456,7 @@
             *ngIf="!id"
             [disabled]="inProcces"
             (click)="create()"
-            class="cust-button"
+            class="cust-button m-r-15"
             nbButton
             status="success"
           >
@@ -468,12 +467,22 @@
             *ngIf="id"
             [disabled]="inProcces"
             (click)="update()"
-            class="cust-button"
+            class="cust-button m-r-15"
             nbButton
             status="success"
           >
-            <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
+            <i *ngIf="inUpdate" class="fas fa-spinner fa-pulse"></i>
             Update
+          </button>
+          <button
+            *ngIf="id"
+            [disabled]="inProcces"
+            (click)="delete()"
+            class="delete m-r-15"
+            nbButton
+          >
+            <i *ngIf="inDelete" class="fas fa-spinner fa-pulse"></i>
+            Delete
           </button>
         </div>
       </div>

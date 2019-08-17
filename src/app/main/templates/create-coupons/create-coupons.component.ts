@@ -32,6 +32,8 @@ export class CreateCouponsComponent implements OnInit {
 
   messError;
   inProcces = false;
+  inUpdate = false;
+  inDelete = false;
   showLogoUploader = false;
   showBrandUploader = false;
   fileImg;
@@ -110,6 +112,7 @@ export class CreateCouponsComponent implements OnInit {
       }, err => {
         // this.mainService.showLoader.emit(false);
         this.showLoader = false;
+        this.inProcces = true;
         setTimeout(() => {
           if (this.accordionFront) {
             this.accordionFront.open();
@@ -268,6 +271,7 @@ export class CreateCouponsComponent implements OnInit {
 
   update() {
     this.inProcces = true;
+    this.inUpdate = true;
     console.log(this.id);
     if (this.dataCard.brandLogo) {
       this.myFormFront.controls['brandLogo'].setErrors(null);
@@ -287,10 +291,12 @@ export class CreateCouponsComponent implements OnInit {
           this.mainService.showToastrSuccess.emit({text: 'Template updated'});
           this.route.navigate(['/main/templates/walletly-cards']);
           this.inProcces = false;
+          this.inUpdate = false;
         }
       }, err => {
         this.messError = 'Error at update';
         this.inProcces = false;
+        this.inUpdate = false;
       });
     } else {
       if (this.myFormFront.valid && this.myFormBack.invalid) {
@@ -298,18 +304,39 @@ export class CreateCouponsComponent implements OnInit {
         this.customValidationFront = true;
         this.customValidationBack = false;
         this.inProcces = false;
+        this.inUpdate = false;
       } else if (this.myFormFront.invalid && this.myFormBack.valid) {
         this.accordionFront.open();
         this.customValidationFront = false;
         this.customValidationBack = true;
         this.inProcces = false;
+        this.inUpdate = false;
       } else if (this.myFormFront.invalid && this.myFormBack.invalid) {
         this.accordionFront.open();
         this.customValidationFront = false;
         this.customValidationBack = false;
         this.inProcces = false;
+        this.inUpdate = false;
       }
     }
+  }
+
+  delete(){
+    this.inProcces = true;
+    this.inDelete = true;
+    this.cardService.updateCard(this.id, {is_delete: true, is_active: false}).subscribe(result => {
+      console.log(result);
+      if (result['success']) {
+        this.mainService.showToastrSuccess.emit({text: 'Template Deleted'});
+        this.route.navigate(['/main/templates/walletly-cards']);
+        this.inProcces = false;
+        this.inDelete = false;
+      }
+    }, err => {
+      this.messError = 'Error at delete';
+      this.inProcces = false;
+      this.inDelete = false;
+    });
   }
 
   uploadLogo(file: File) {

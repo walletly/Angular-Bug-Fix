@@ -72,3 +72,16 @@ nb-card {
   opacity: 0;
   pointer-events: none;
 }
+.delete {
+  border: none;
+  border-radius: 0;
+  outline: none;
+  height: 45px;
+  min-width: 100px;
+  color: white;
+  background: rgb(241, 115, 126);
+  min-width: 130px;
+  &:hover{
+    background: rgb(241, 115, 126);
+  }
+}
