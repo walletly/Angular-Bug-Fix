@@ -160,6 +160,7 @@ export class CampaingComponent implements OnInit {
     this.mainService.dataCampaign = {
       name: '',
       description: '',
+      selectedCustomField: '',
       card_id: '',
       discount: '',
       startDate: '',

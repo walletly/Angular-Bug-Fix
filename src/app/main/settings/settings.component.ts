@@ -6,7 +6,6 @@ import { BrandService } from 'src/app/shared/services/brand.service';
 import { UploadService } from 'src/app/shared/services/upload.service';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { ManychatService } from '../../shared/services/manychat.service';
-import { CompaignService } from '../../shared/services/compaign.service';
 
 
 @Component({
@@ -36,13 +35,7 @@ export class SettingsComponent implements OnInit {
   iconName;
   coverName;
 
-  customFields = [];
-  campaigns = [];
-  selectedCustomField;
-  selectedCampaignId;
-  isApi = false;
   WrongApi = false;
-  manychatAPI;
 
 
   showPaymentDetails;
@@ -84,7 +77,6 @@ export class SettingsComponent implements OnInit {
   fbId;
   iconImage;
   inProcces;
-  integrateInProcces;
   brandAdmins;
 
   defaultColumns = ["Name", "Icon", "Number of Campaigns", "Number of Coupons", "Pricing", "Status", "Action"];
@@ -140,14 +132,11 @@ export class SettingsComponent implements OnInit {
     private brandService: BrandService,
     private uploadService: UploadService,
     private afs: AngularFirestore,
-    private manychatService: ManychatService,
-    private campaignService: CompaignService) {
+    private manychatService: ManychatService) {
     this.getPartners();
 
     this.manyChatApiForm = formBuilder.group({
       manyChatApi: ['', [Validators.required]],
-      customFieldOptions: ['', Validators.required],
-      Campaigns: ['', Validators.required],
     });
 
     this.myForm = formBuilder.group({
@@ -372,23 +361,7 @@ export class SettingsComponent implements OnInit {
     this.myForm.controls['facebookPageID'].disable();
     this.myForm.controls['brandName'].disable();
 
-    if (this.brand['manychatAPI']) {
-      this.getmanychatCustomFields(this.brand['manychatAPI']);
-      this.getCampaigns();
-      this.manyChatApiForm.controls['manyChatApi'].setValue(this.brand['manychatAPI']);
-      setTimeout(() => {
-        this.selectedCustomField = this.brand['manychatCampaignIntegration'].customField;
-        this.selectedCampaignId = this.brand['manychatCampaignIntegration'].campaignId;
-
-        if (this.selectedCustomField && this.selectedCampaignId) {
-          this.manyChatApiForm.controls['customFieldOptions'].setValue(this.selectedCustomField);
-          this.manyChatApiForm.controls['Campaigns'].setValue(this.selectedCampaignId);
-          this.isApi = true;
-        }
-      }, 500);
-    } else {
-      this.isApi = false;
-    }
+    this.manyChatApiForm.controls['manyChatApi'].setValue(this.brand['manychatAPI']);
 
     setTimeout(() => {
       const partnerId = (this.brand['brandPartner']) ? this.brand['brandPartner'].id || 'none' : 'none';
@@ -439,96 +412,46 @@ export class SettingsComponent implements OnInit {
     })
     return partnerData;
   }
-  getmanychatCustomFields(manyChatApi) {
-    this.manychatService.getCustomFields(manyChatApi).subscribe( result => {
-      if (result) {
-        console.log(result['data']);
-        this.isApi = true;
-        result['data'].data.forEach(customField => {
-          this.customFields.push(customField.name);
-        });
-        // console.log(this.customFields);
-        this.customValidation = false;
-        this.inProcces = false;
-      }
-    }, err => {
-      if (err) {
-        console.log(err.message);
-        this.isApi = false;
-        this.customValidation = false;
-        this.inProcces = false;
-      }
-    });
-  }
-  getCampaigns() {
-    this.campaignService.getСampaignsBrands(this.brand['facebook_page_id']).subscribe( result => {
-      if  (result) {
-        console.log('campaign result', result['data']);
-        result['data'].forEach(campaign => {
-          this.campaigns.push(campaign);
-        });
-      }
-    }, err => {
-      if (err) {
-        console.log(err);
-      }
-    });
-  }
   async manychatAPIReceived() {
-    if (this.manyChatApiForm.controls['manyChatApi'].valid) {
-      this.WrongApi = false;
-      this.isApi = false;
+    if (this.manyChatApiForm.valid) {
       this.inProcces = true;
 
       const manyChatApi = this.manyChatApiForm.get('manyChatApi').value;
       const manyChatApiBrand = manyChatApi.split(':');
       // console.log(manyChatApi);
-      console.log('from API', manyChatApiBrand[0]);
-      console.log(this.brand['facebook_page_id']);
+      // console.log('from API', manyChatApiBrand[0]);
+      // console.log(this.brand['facebook_page_id']);
 
       if (manyChatApiBrand[0] === this.brand['facebook_page_id']) {
-        // ManyChat Api Call
-        this.getmanychatCustomFields(manyChatApi);
-        // Campaign API
-        this.getCampaigns();
+        this.manychatService.getCustomFields(manyChatApi).subscribe( result => {
+          if (result) {
+            console.log(result['data']);
+            this.brandService.updateBrand(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
+            {'manychatAPI': manyChatApi}).subscribe(check => {
+              console.log(check);
+              this.inProcces = false;
+              this.WrongApi = false;
+              this.mainService.showToastrSuccess.emit({text: 'Integration saved'});
+            }, err => {
+              console.log(err);
+            });
+          }
+        }, err => {
+          if (err) {
+            console.log(err.message);
+            this.inProcces = false;
+            this.WrongApi = true;
+          }
+        });
       } else {
         setTimeout(() => {
           this.inProcces = false;
           this.WrongApi = true;
-        }, 700);
+        }, 800);
       }
     } else {
-      this.isApi = false;
       this.customValidation = false;
       this.inProcces = false;
-    }
-  }
-  integrate() {
-    if (this.manyChatApiForm.valid) {
-      this.customValidation = true;
-      this.integrateInProcces = true;
-      this.manychatAPI = this.manyChatApiForm.get('manyChatApi').value;
-      this.selectedCustomField = this.manyChatApiForm.get('customFieldOptions').value;
-      this.selectedCampaignId = this.manyChatApiForm.get('Campaigns').value;
-      console.log(this.selectedCampaignId);
-
-      this.brandService.updateBrand(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],{
-      'manychatAPI': this.manychatAPI,
-      'manychatCampaignIntegration': {
-        'campaignId': this.selectedCampaignId,
-        'customField': this.selectedCustomField
-      }
-    }).subscribe(result => {
-        console.log(result);
-        this.mainService.showToastrSuccess.emit({text: 'Integration saved'});
-        this.customValidation = false;
-        this.integrateInProcces = false;
-      }, err => {
-        console.log(err);
-
-        this.customValidation = false;
-        this.integrateInProcces = false;
-      });
     }
   }
   // selectedTab(evt) {

@@ -95,6 +95,28 @@
               </div>
             </div>
           </div>
+          <div *ngIf="isApi" class="row-input">
+            <div class="lable p-t-0">
+              Manychat CustomField
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select
+                formControlName="customFields" size="small" placeholder="Select Custom Fields"
+                [ngClass]="{
+                  error:
+                  myForm.controls['customFields'].invalid &&
+                  !customValidation
+                }"
+                [(ngModel)]="dataCampaign.selectedCustomField"
+                >
+                <nb-option *ngFor="let name of customFields" [value]="name">
+                  {{name}}
+                </nb-option>
+              </nb-select>
+              </div>
+            </div>
+          </div>
           <div class="row-input">
             <div class="lable">
               Start Date
@@ -203,7 +225,7 @@
                   set maximum number of coupons that can be created
                 </div>
               </div>
-            </div>      
+            </div>
           </div> -->
           <div class="row-input">
             <div class="lable">
@@ -217,7 +239,7 @@
                   Enter Validity in days e.g. 30 (1-100)
                 </div>
               </div>
-            </div>      
+            </div>
           </div>
         </div>
       </form>
@@ -307,6 +329,28 @@
               </div>
             </div>
           </div>
+          <div *ngIf="isApi && dataCampaign.campaign_type == 8" class="row-input">
+            <div class="lable p-t-0">
+              Manychat CustomField
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select
+                formControlName="customFields" size="small" placeholder="Select Custom Fields"
+                [ngClass]="{
+                  error:
+                  myForm.controls['customFields'].invalid &&
+                  !customValidation
+                }"
+                [(ngModel)]="dataCampaign.selectedCustomField"
+                >
+                <nb-option *ngFor="let name of customFields" [value]="name">
+                  {{name}}
+                </nb-option>
+              </nb-select>
+            </div>
+          </div>
+        </div>
           <div class="row-input">
             <div class="lable">
               Start Date
@@ -376,7 +420,7 @@
                   Enter Link of Webinar
                 </div>
               </div>
-            </div>      
+            </div>
           </div>
         </div>
       </form>

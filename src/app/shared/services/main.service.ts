@@ -22,6 +22,7 @@ export class MainService {
     description: '',
     card_id: '', // template
     discount: '',
+    selectedCustomField: "",
     startDate: '',
     endDate: '',
     brand_id: '',

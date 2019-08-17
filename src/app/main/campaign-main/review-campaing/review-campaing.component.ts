@@ -75,6 +75,7 @@ export class ReviewCampaingComponent implements OnInit {
           this.mainService.dataCampaign = {
             name: '',
             description: '',
+            selectedCustomField: '',
             card_id: '',
             discount: '',
             startDate: '',
@@ -103,6 +104,7 @@ export class ReviewCampaingComponent implements OnInit {
           this.mainService.dataCampaign = {
             name: '',
             description: '',
+            selectedCustomField: '',
             card_id: '',
             discount: '',
             startDate: '',
@@ -142,6 +144,7 @@ export class ReviewCampaingComponent implements OnInit {
   createCampaign() {
     this.campaign['campaign_name'] = this.dataCampaign.name;
     this.campaign['description'] = this.dataCampaign.description;
+    this.campaign['manychat_customField'] = this.dataCampaign.selectedCustomField;
     this.campaign['campaign_type'] = parseInt(this.dataCampaign.campaign_type);
     this.campaign['currency'] = this.dataCampaign.currency;
     this.campaign['coupon_validity'] = parseInt(this.dataCampaign.coupon_validity);

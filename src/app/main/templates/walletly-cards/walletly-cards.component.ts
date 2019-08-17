@@ -36,6 +36,7 @@ export class WalletlyCardsComponent implements OnInit {
       description: '',
       card_id: cardId,
       discount: '',
+      selectedCustomField: "",
       startDate: '',
       endDate: '',
       campaign_type: '',

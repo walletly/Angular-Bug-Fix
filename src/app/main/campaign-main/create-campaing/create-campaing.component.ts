@@ -5,6 +5,8 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CompaignService } from 'src/app/shared/services/compaign.service';
 import { CardService } from 'src/app/shared/services/card.service';
+import { BrandService } from 'src/app/shared/services/brand.service';
+import { ManychatService } from 'src/app/shared/services/manychat.service';
 
 @Component({
   selector: 'app-create-campaing',
@@ -23,7 +25,10 @@ export class CreateCampaingComponent implements OnInit {
   coupons = [];
   cards = [];
   tickets = [];
+  customFields = [];
 
+  isApi = false;
+  manychatAPI;
   template;
   selectedSell;
   cardType;
@@ -70,7 +75,9 @@ export class CreateCampaingComponent implements OnInit {
     private router: Router,
     private activeRout: ActivatedRoute,
     private campaignService: CompaignService,
-    private cardService: CardService
+    private cardService: CardService,
+    private brandService: BrandService,
+    private manychatService: ManychatService
   ) {
 
     this.user = JSON.parse(localStorage.getItem('user'));
@@ -78,6 +85,7 @@ export class CreateCampaingComponent implements OnInit {
       campaignName: ["", [Validators.required]],
       description: ["", [Validators.required]],
       template: ["", [Validators.required]],
+      customFields: [""],
       discount: ["", []],
       // numberOfCoupon: ["", [Validators.required]],
       // setLimit: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -91,11 +99,14 @@ export class CreateCampaingComponent implements OnInit {
       campaignName: ["", [Validators.required]],
       description: ["", [Validators.required]],
       template: ["", [Validators.required]],
+      customFields: [""],
       startDate: ["", [Validators.required]],
       time: ["", [Validators.required, Validators.pattern("((1[0-2]|0?[1-9]):([0-5][0-9]) ?((AM)|(PM)|(am)|(pm)))")]],
       event_name: ["", [Validators.required]],
       venue: ["", [Validators.required]]
     });
+
+
 
     this.id = this.activeRout.snapshot.paramMap.get('id');
     if(this.id){
@@ -114,7 +125,7 @@ export class CreateCampaingComponent implements OnInit {
         this.disable = true;
       }
     }
-    
+
     cardService.getBrandsCards(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
       for (let i in data['data']){
         if(data['data'][i].card_type == 1){
@@ -132,6 +143,31 @@ export class CreateCampaingComponent implements OnInit {
       console.log(err);
     });
 
+    this.brandService.getBrandById(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
+      if (data) {
+        console.log(data['brand']);
+        this.manychatAPI = data['brand'].manychatAPI;
+        console.log('manychatAPI', this.manychatAPI);
+        this.manychatService.getCustomFields(this.manychatAPI).subscribe( result => {
+          if (result) {
+            console.log(result['data']);
+            this.isApi = true;
+            result['data'].data.forEach(customField => {
+              this.customFields.push(customField.name);
+            });
+            // console.log(this.customFields);
+          }
+        }, err => {
+          if (err) {
+            console.log(err.message);
+            this.isApi = false;
+          }
+        });
+      }
+    }, err => {
+      console.log(err);
+    });
+
     if (this.id) {
       // this.mainService.showLoader.emit(true);
       this.showLoader = true;
@@ -140,6 +176,9 @@ export class CreateCampaingComponent implements OnInit {
         if (result['success']) {
           this.mainService.dataCampaign.name = result['data'].campaign_name;
           this.mainService.dataCampaign.description = result['data'].description;
+
+          this.mainService.dataCampaign.selectedCustomField = result['data'].manychat_customField || '';
+
           this.mainService.dataCampaign.campaign_type = result['data'].campaign_type.toString();
           this.mainService.dataCampaign.discount = result['data'].campaign_value;
           this.mainService.dataCampaign.startDate = result['data'].startDateFormatted;
@@ -177,7 +216,7 @@ export class CreateCampaingComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+ ngOnInit() {
   }
 
   // onChange() {
@@ -219,7 +258,6 @@ export class CreateCampaingComponent implements OnInit {
   }
 
   create() {
-    
     if (!this.dataCampaign.brand_id) {
       this.dataCampaign.brand_id = JSON.parse(localStorage.getItem('currentBrand'))['brand_id'];
     }
@@ -304,7 +342,7 @@ export class CreateCampaingComponent implements OnInit {
       this.myForm.get('discount').updateValueAndValidity();
       setTimeout(() => {
         (document.getElementById('discountInput') as HTMLInputElement).style.backgroundImage = "url('assets/img/dollar.png')";
-      }, 50);    
+      }, 50);
     }else if(typeName === 'Event Tickets'){
       this.selectedSell = 'Event Tickets';
       this.dataCampaign.campaign_type = 8;
@@ -314,7 +352,7 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCampaign.coupon_validity='';
       this.ticketForm.get('venue').setValidators([Validators.required]);
       this.ticketForm.get('venue').updateValueAndValidity();
-      this.cardType = 'ticket';    
+      this.cardType = 'ticket';
     }else if(typeName === 'Webinar Event'){
       this.selectedSell = 'Webinar Event';
       this.dataCampaign.campaign_type = 9;
@@ -324,7 +362,7 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCampaign.coupon_validity='';
       this.ticketForm.get('venue').setValidators([Validators.required, Validators.pattern("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$")]);
       this.ticketForm.get('venue').updateValueAndValidity();
-      this.cardType = 'ticket';    
+      this.cardType = 'ticket';
     }
   }
 
@@ -338,6 +376,7 @@ export class CreateCampaingComponent implements OnInit {
     this.dataCampaign = {
       name: '',
       description: '',
+      selectedCustomField: '',
       template: '',
       discount: '',
       startDate: '',
