@@ -110,8 +110,8 @@
                 }"
                 [(ngModel)]="dataCampaign.selectedCustomField"
                 >
-                <nb-option *ngFor="let name of customFields" [value]="name">
-                  {{name}}
+                <nb-option *ngFor="let customField of customFields" [value]="customField.name">
+                  {{customField.name}}
                 </nb-option>
               </nb-select>
               </div>
@@ -344,8 +344,8 @@
                 }"
                 [(ngModel)]="dataCampaign.selectedCustomField"
                 >
-                <nb-option *ngFor="let name of customFields" [value]="name">
-                  {{name}}
+                <nb-option *ngFor="let customField of customFields" [value]="customField.name">
+                  {{customField.name}}
                 </nb-option>
               </nb-select>
             </div>

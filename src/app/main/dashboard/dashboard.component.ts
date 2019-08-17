@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
       this.avg_coupon_redeems = ((this.total_redeems * 100) / this.total_coupons_created).toFixed(2) + '%';
       this.brandCampaings = result['data'].campaignsStats.summary;
       this.brandCampaings.forEach(campaign => {
-        if(campaign.campaign_name){
+        if(campaign.campaign_name && campaign.coupons_created > 0){
           this.stackedChart.labels.push(campaign.campaign_name);
           this.stackedChart.data1.push(campaign.coupons_redeemed);
           this.stackedChart.data2.push(campaign.coupons_created - campaign.coupons_redeemed);
@@ -64,6 +64,10 @@ export class DashboardComponent implements OnInit {
           this.earningCampaignsChart.data.push(campaign.campaign_net_amount);
         }
       });
+      if(this.stackedChart.labels.length < 1){
+        this.showGraph = 2;
+        return;
+      }
       while(this.stackedChart.labels.length < 8){
         this.stackedChart.labels.push('');
       }

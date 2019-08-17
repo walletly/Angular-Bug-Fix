@@ -153,7 +153,9 @@ export class CreateCampaingComponent implements OnInit {
             console.log(result['data']);
             this.isApi = true;
             result['data'].data.forEach(customField => {
-              this.customFields.push(customField.name);
+              if(customField.type == 'boolean'){
+                this.customFields.push(customField);
+              }
             });
             // console.log(this.customFields);
           }
