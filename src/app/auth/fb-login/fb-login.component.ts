@@ -105,6 +105,17 @@ export class FbLoginComponent implements OnInit {
           });
         }
 
+        this.firebaseAuth.auth.signOut().then(() => {
+          localStorage.clear();
+          localStorage.setItem('loggedOut', 'true');
+          this.router.navigate(['/fb-login']);
+        }).catch(()=>{
+          localStorage.clear();
+          localStorage.setItem('loggedOut', 'true');
+          this.router.navigate(['/fb-login']);
+        });
+        return;
+
         let user_type, user_id, tempPassword;
         const userData = await this.authService.getUserByEmail(err.email).subscribe(async data => {
           user_type = data['user'].user_type;
