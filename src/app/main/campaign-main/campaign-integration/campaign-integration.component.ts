@@ -40,11 +40,11 @@ export class CampaignIntegrationComponent implements OnInit {
       this.campaign = data['data'];
 
       this.sharingUrl = SERVER_API_URL + 'campaign/shared/' + this.campaign.campaign_code;
-      if (this.campaign.campaign_type <= 1) {
+      if (this.campaign.campaign_type <= 4) {
         this.url = SERVER_API_URL + 'coupon';
       } else if (this.campaign.campaign_type <= 7) {
         this.url = SERVER_API_URL + 'card';
-      } else if (this.campaign.campaign_type >= 8) {
+      } else if (this.campaign.campaign_type <= 9) {
         this.url = SERVER_API_URL + 'ticket';
       }
       this.showLoader = false;

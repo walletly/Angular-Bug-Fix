@@ -61,7 +61,7 @@
           >
           <div
               class="ellipsis"
-              *ngIf="column !== 'Status' && column !== 'Action' && column !== 'Integrations'"
+              *ngIf="column !== 'Type' && column !== 'Status' && column !== 'Action' && column !== 'Integrations'"
         >
 
               <span *ngIf="column !== 'Issue' && column !== 'Redeem'">{{
@@ -89,7 +89,7 @@
               </div>
             </div>
 
-             <div class="">
+             <div>
               <span *ngIf="column === 'Integrations'">
                 <div class="row">
                 <span *ngFor="let bots of row.data[column].name">
@@ -103,6 +103,11 @@
                       <div><img src="assets/svg-icon/template-icons/platform/newspaper.svg" alt=""></div>
                     </div>
                   </span>
+                </div>
+              </span>
+              <span *ngIf="column === 'Type'">
+                <div>
+                  <img [src]="row.data[column].name" alt="">
                 </div>
               </span>
             </div>
@@ -204,7 +209,7 @@
                         <img src="assets/svg-icon/edit.svg" alt="" />
                         Edit
                       </div>
-                      <div
+                      <div *ngIf="!row.data['Type'].name.includes('LoyaltyCard') "
                         (click)="
                           delete(
                             row.data['Id'].name,

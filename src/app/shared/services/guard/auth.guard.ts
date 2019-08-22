@@ -41,7 +41,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         event_name: '',
         venue: '',
         time: '',
-        cardType: ''
+        cardType: '',
+        points: ''
       };
     }
 

@@ -1,4 +1,4 @@
-<h1 class="m-t-0">
+<h1 class="m-t-0" *ngIf="dataCard">
   <span class="text-capitalize"> {{ type }} </span>
   Template
 </h1>
@@ -476,7 +476,7 @@
             Update
           </button>
           <button
-            *ngIf="id"
+            *ngIf="id && dataCard.cardType != 4"
             [disabled]="inProcces"
             (click)="delete()"
             class="delete m-r-15"
@@ -494,7 +494,7 @@
         >
           <div class="flip-card-inner">
             <div [ngClass]="{'smart-hidden': accordionFront.collapsedValue}" class="flip-card-front">
-              <div [ngClass]="{'coupon': dataCard.cardType === 1, 'card': dataCard.cardType === 2, 'ticket': dataCard.cardType === 3}">
+              <div [ngClass]="{'coupon': dataCard.cardType === 1, 'card': dataCard.cardType === 2 || dataCard.cardType === 4, 'ticket': dataCard.cardType === 3}">
                 <div class="head m-b-15">
                   <div class="df ai-c">
                     <div class="coupon-brand m-r-8">
@@ -515,7 +515,7 @@
                       30
                     </div>
                   </div>
-                  <div *ngIf="dataCard.cardType === 2" class="text-right">
+                  <div *ngIf="dataCard.cardType === 2 || dataCard.cardType === 4" class="text-right">
                     <div class="fs-10 fw-400">
                       Point
                     </div>

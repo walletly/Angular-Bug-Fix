@@ -187,6 +187,52 @@
           Tickets
         </div>
       </div>
+      <div class="m-r-30">
+        <div class="coupon small-size" style="background-image: url('assets/svg-icon/card-bg.svg');">
+          <div class="hover-couon">
+            <button (click)="getType('loyalty')" class="cust-button" nbButton status="success"
+              [ngStyle]="{'pointer-events': isLoyalty ? 'none' : 'auto'}">
+              <img *ngIf="isLoyalty" src="assets/img/lockIcon.png"
+                style="filter: invert(92%) sepia(94%) saturate(20%) hue-rotate(321deg) brightness(105%) contrast(100%);">
+              Use Template
+            </button>
+          </div>
+          <div class="head m-b-3" style="font-size: 10px; justify-content: left;">
+            <img style="border-radius: 100px;" width="25px" src="assets/svg-icon/walletly-circle.svg" alt="">Loyalty Card
+            <div class="text-right" style="margin-left: auto">
+              <div class="fs-6 fw-400">
+                Point
+              </div>
+              <div class="fs-8 fw-600">
+                100
+              </div>
+            </div>
+          </div>
+          <div class="m-b-4">
+            <img class="full-width" src="assets/img/coupon-2.png" alt="">
+          </div>
+          <div class="df jc-b color-white fs-6 fw-400 p-l-5 p-r-5">
+            <div>
+              CUSTOMER
+            </div>
+          </div>
+          <div class="df jc-b color-white fs-9 fw-600 m-b-28 p-l-5 p-r-5">
+            <div>
+              {{'{Dynamic}'}}
+            </div>
+          </div>
+          <div class="text-center">
+            <img width="71px" class="m-b-20" src="assets/img/QR_code.png" alt="">
+          </div>
+          <div class="combined">
+            <img width="13px" src="assets/svg-icon/Combined_Shape.svg" alt="">
+          </div>
+        </div>
+        <div class="text-center m-t-16 fs-16 fw-600">
+          <img *ngIf="isLoyalty" src="assets/img/lockIcon.png">
+          Loyalty
+        </div>
+      </div>
     </div>
   </nb-card-body>
 </nb-card>

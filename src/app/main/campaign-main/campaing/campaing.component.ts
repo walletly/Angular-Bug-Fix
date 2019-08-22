@@ -10,7 +10,7 @@ import { MainService } from 'src/app/shared/services/main.service';
 })
 export class CampaingComponent implements OnInit {
   showActions;
-  defaultColumns = ['Type', 'Campaign', 'Integrations', 'Template', 'Issued', 'Redeemed', 'Start Date', 'End Date', 'Status', 'Action'];
+  defaultColumns = ['Type', 'Campaign', 'Integrations', 'Issued', 'Redeemed', 'Start Date', 'End Date', 'Status', 'Action'];
   //  defaultColumns = ['Campaign Name', 'Description', 'Template', 'Issued', 'Redeemed', 'Start Date', 'End Date', 'Status', 'Action'];
   allColumns = this.defaultColumns;
   campaigns;
@@ -61,23 +61,41 @@ export class CampaingComponent implements OnInit {
         //   default:
         //     break;
         // }
-
-        this.data.push({
-          data: {
-            'Type': { name: element.campaign_type_formatted },
-            'Campaign': { name: element.campaign_name },
-            'Integrations': { name: element.integrations },
-            'Template': { name: element.campaign_type_formatted },
-            'Issued': { name: element.coupons_created },
-            'Redeemed': { name: element.total_redeems },
-            'Start Date': { name: element.startDateFormatted },
-            'End Date': { name: element.endDateFormatted },
-            'Status': { name: element.is_active },
-            'Action': { name: '' },
-            'Id': { name: element.id },
-            'Brand_Id': { name: element.brand_id }
-          }
-        });
+        if(element.campaign_type == 5){
+          this.data.unshift({
+            data: {
+              'Type': { name: this.getTypeImage(element.campaign_type) },
+              'Campaign': { name: element.campaign_name },
+              'Integrations': { name: element.integrations },
+              // 'Template': { name: element.campaign_type_formatted },
+              'Issued': { name: element.coupons_created },
+              'Redeemed': { name: element.total_redeems },
+              'Start Date': { name: element.startDateFormatted },
+              'End Date': { name: element.endDateFormatted },
+              'Status': { name: element.is_active },
+              'Action': { name: '' },
+              'Id': { name: element.id },
+              'Brand_Id': { name: element.brand_id }
+            }
+          });
+        }else{
+          this.data.push({
+            data: {
+              'Type': { name: this.getTypeImage(element.campaign_type) },
+              'Campaign': { name: element.campaign_name },
+              'Integrations': { name: element.integrations },
+              // 'Template': { name: element.campaign_type_formatted },
+              'Issued': { name: element.coupons_created },
+              'Redeemed': { name: element.total_redeems },
+              'Start Date': { name: element.startDateFormatted },
+              'End Date': { name: element.endDateFormatted },
+              'Status': { name: element.is_active },
+              'Action': { name: '' },
+              'Id': { name: element.id },
+              'Brand_Id': { name: element.brand_id }
+            }
+          });
+        }
         console.log(this.data);
       });
 
@@ -172,8 +190,41 @@ export class CampaingComponent implements OnInit {
       event_name: '',
       venue: '',
       time: '',
-      cardType: ''
+      cardType: '',
+      points: ''
     };
     this.router.navigate(['/main/campaign-main/create-campaign']);
+  }
+
+  getTypeImage(type){
+    switch (type){
+      case 1:{
+        return 'assets/img/Coupon.png';
+      }
+      case 2:{
+        return 'assets/img/Coupon-in-$.png';
+      }
+      case 3:{
+        return 'assets/img/Birthday-Coupon.png';
+      }
+      case 4:{
+        return 'assets/img/Referral-Coupon.png';
+      }
+      case 5:{
+        return 'assets/img/LoyaltyCard.png';
+      }
+      case 6:{
+        return 'assets/img/stampCard.png';
+      }
+      case 7:{
+        return 'assets/img/membershipCard.png';
+      }
+      case 8:{
+        return 'assets/img/eventTickets.png';
+      }
+      case 9:{
+        return 'assets/img/webinarIcon.png';
+      }
+    }
   }
 }

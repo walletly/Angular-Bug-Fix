@@ -95,28 +95,6 @@
               </div>
             </div>
           </div>
-          <div *ngIf="isApi" class="row-input">
-            <div class="lable p-t-0">
-              Manychat CustomField
-            </div>
-            <div class="value">
-              <div class="pos-r full-width">
-                <nb-select
-                formControlName="customFields" size="small" placeholder="Select Custom Fields"
-                [ngClass]="{
-                  error:
-                  myForm.controls['customFields'].invalid &&
-                  !customValidation
-                }"
-                [(ngModel)]="dataCampaign.selectedCustomField"
-                >
-                <nb-option *ngFor="let customField of customFields" [value]="customField.name">
-                  {{customField.name}}
-                </nb-option>
-              </nb-select>
-              </div>
-            </div>
-          </div>
           <div class="row-input">
             <div class="lable">
               Start Date
@@ -160,7 +138,7 @@
             </div>
             <div class="value">
               <div class="pos-r full-width">
-                <nb-select #selectCurrency [ngClass]="{'error': myForm.controls['currency'].invalid && !customValidation}" formControlName="currency" #select [(ngModel)]="dataCampaign.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
+                <nb-select #selectCurrency [ngClass]="{'error': myForm.controls['currency'].invalid && !customValidation}" formControlName="currency" [(ngModel)]="dataCampaign.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
                   <nb-option value="$">USD ($)</nb-option>
                   <nb-option value="€">EUR (€)</nb-option>
                   <nb-option value="£">GBP (£)</nb-option>
@@ -242,6 +220,37 @@
             </div>
           </div>
         </div>
+        <div *ngIf="isApi" class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
+          Redemption
+          <div style="font-size: small; padding-top: 5px;">
+            (custom field triggers redemption flow)
+          </div>
+        </div>
+        <div *ngIf="isApi" class="p-l-60">
+          <div class="row-input">
+            <div class="lable p-t-0">
+              Manychat CustomField
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select
+                formControlName="customFields" size="small" placeholder="Select Custom Fields"
+                [ngClass]="{
+                  error:
+                  myForm.controls['customFields'].invalid &&
+                  !customValidation
+                }"
+                [(ngModel)]="dataCampaign.selectedCustomField"
+                #selectCustomField
+                >
+                <nb-option *ngFor="let customField of customFields" [value]="customField.name">
+                  {{customField.name}}
+                </nb-option>
+              </nb-select>
+              </div>
+            </div>
+          </div>
+        </div>
       </form>
       <!-- <div *ngIf="myForm.invalid && !customValidation" class="row-input">
         <div class="lable">
@@ -259,6 +268,187 @@
               Clear
             </button>
             <button *ngIf="!id && !noCoupons" (click)="create()" class="cust-button" nbButton status="success">
+              Create
+            </button>
+            <button *ngIf="id" (click)="create()" class="cust-button" nbButton status="success">
+              Update
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="cardType === 'loyalty' && selectedSell">
+      <form [formGroup]="loyaltyForm">
+        <div class="p-l-30 m-b-30" style="font-size: 25px">
+          Campaign
+        </div>
+        <div class="p-l-60">
+          <div class="row-input">
+            <div class="lable">
+              Campaign Name
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <input [ngClass]="{'error': loyaltyForm.controls['campaignName'].invalid && !customValidation}"
+                  formControlName="campaignName" type="text" [(ngModel)]="dataCampaign.name" nbInput fullWidth
+                  fieldSize="small" placeholder="">
+                <div *ngIf="loyaltyForm.controls['campaignName'].invalid && !customValidation" class="error-lable">
+                  Field error (must have at least 1 character)
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row-input">
+            <div class="lable">
+              Description
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <textarea [ngClass]="{'error': loyaltyForm.controls['description'].invalid && !customValidation}"
+                  formControlName="description" [(ngModel)]="dataCampaign.description" nbInput fullWidth
+                  placeholder="Textarea"></textarea>
+                <div *ngIf="loyaltyForm.controls['description'].invalid && !customValidation" class="error-lable">
+                  Field error (must have at least 1 character)
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row-input">
+            <div class="lable">
+              Template
+            </div>
+            <div class="value">
+              <div *ngIf="loyalty.length" class="pos-r full-width">
+                <nb-select [ngClass]="{'error': loyaltyForm.controls['template'].invalid && !customValidation}"
+                  formControlName="template" #selectTemplate size="small" placeholder="Select Template"
+                  [(selected)]="dataCampaign.card_id">
+                  <nb-option *ngFor="let item of loyalty" [value]="item.id">
+                    {{ item.template_name }}
+                  </nb-option>
+                </nb-select>
+              </div>
+              <div *ngIf="loyaltyForm.controls['template'].invalid && !customValidation" class="error-lable">
+                Field error (make your choice)
+              </div>
+              <div *ngIf="noLoyalty" class="error-lable fs-16">
+                Please create Loyalty Template First
+                <a [routerLink]="[ '/main/templates/create-cards' ]" class="c-p">
+                  (click here)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
+          Loyalty
+        </div>
+        <div class="p-l-60">
+          <div class="row-input">
+            <div class="lable">
+              Select Currency
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select #selectCurrency [ngClass]="{'error': loyaltyForm.controls['currency'].invalid && !customValidation}" formControlName="currency" [(ngModel)]="dataCampaign.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
+                  <nb-option value="$">USD ($)</nb-option>
+                  <nb-option value="€">EUR (€)</nb-option>
+                  <nb-option value="£">GBP (£)</nb-option>
+                  <nb-option value="$">AUD ($)</nb-option>
+                  <nb-option value="$">CAD ($)</nb-option>
+                  <nb-option value="R$">BRL (R$)</nb-option>
+                  <nb-option value="HK$">HKD (HK$)</nb-option>
+                  <nb-option value="лв">BGN (лв)</nb-option>
+                  <nb-option value="₺">TRY (₺)</nb-option>
+                  <nb-option value="د.إ">AED (د.إ)</nb-option>
+                  <nb-option value="CHF">CHF (CHF)</nb-option>
+                  <nb-option value="kr">SEK (kr)</nb-option>
+                  <nb-option value="NT$">NT (NT$)</nb-option>
+                  <nb-option value="R">ZAR (R)</nb-option>
+                  <nb-option value="$">SGD ($)</nb-option>
+                  <nb-option value="₩">KRW (₩)</nb-option>
+                  <nb-option value="Rs">LKR (Rs)</nb-option>
+                  <nb-option value="kr">DKK (kr)</nb-option>
+                  <nb-option value="Rs">PKR (Rs)</nb-option>
+                  <nb-option value="₾">GEL (₾)</nb-option>
+                  <nb-option value="₽">RUB (₽)</nb-option>
+                  <nb-option value="zł">PLN (zł)</nb-option>
+                  <nb-option value="kr">SEK (kr)</nb-option>
+                  <nb-option value="¥">CNY (¥)</nb-option>
+                  <nb-option value="kr">NOK (kr)</nb-option>
+                  <nb-option value="₹">INR (₹)</nb-option>
+                  <nb-option value="$">NZD ($)</nb-option>
+                  <nb-option value="RM">MYR (RM)</nb-option>
+                  <nb-option value="฿">THB (฿)</nb-option>
+                  <nb-option value="₫">VND (₫)</nb-option>
+                </nb-select>
+              </div>
+            </div>
+          </div>
+          <div class="row-input">
+            <div class="lable">
+              Points
+              <div style="font-size: small">(Per Unit Currency)</div>
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <input [ngClass]="{'error': loyaltyForm.controls['points'].invalid && !customValidation}"
+                  formControlName="points" [(ngModel)]="dataCampaign.points"
+                  class="small p-r-25" type="number" nbInput fullWidth fieldSize="small">
+                <div *ngIf="loyaltyForm.controls['points'].invalid && !customValidation" class="error-lable">
+                  set points
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isApi" class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
+          Redemption
+          <div style="font-size: small; padding-top: 5px;">
+            (custom field triggers redemption flow)
+          </div>
+        </div>
+        <div *ngIf="isApi" class="p-l-60">
+          <div class="row-input">
+            <div class="lable p-t-0">
+              Manychat CustomField
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select
+                formControlName="customFields" size="small" placeholder="Select Custom Fields"
+                [ngClass]="{
+                  error:
+                  loyaltyForm.controls['customFields'].invalid &&
+                  !customValidation
+                }"
+                [(ngModel)]="dataCampaign.selectedCustomField"
+                #selectCustomField
+                >
+                <nb-option *ngFor="let customField of customFields" [value]="customField.name">
+                  {{customField.name}}
+                </nb-option>
+              </nb-select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <!-- <div *ngIf="myForm.invalid && !customValidation" class="row-input">
+        <div class="lable">
+        </div>
+        <div class="value message-error" style="text-align: left;">
+          Validation Error
+        </div>
+      </div> -->
+      <div class="row-input">
+        <div class="lable">
+        </div>
+        <div class="value">
+          <div class="pos-r full-width">
+            <button (click)="clear()" class="cust-button m-r-15" nbButton status="gray">
+              Clear
+            </button>
+            <button *ngIf="!id && !noLoyalty" (click)="create()" class="cust-button" nbButton status="success">
               Create
             </button>
             <button *ngIf="id" (click)="create()" class="cust-button" nbButton status="success">
@@ -329,28 +519,6 @@
               </div>
             </div>
           </div>
-          <div *ngIf="isApi && dataCampaign.campaign_type == 8" class="row-input">
-            <div class="lable p-t-0">
-              Manychat CustomField
-            </div>
-            <div class="value">
-              <div class="pos-r full-width">
-                <nb-select
-                formControlName="customFields" size="small" placeholder="Select Custom Fields"
-                [ngClass]="{
-                  error:
-                  myForm.controls['customFields'].invalid &&
-                  !customValidation
-                }"
-                [(ngModel)]="dataCampaign.selectedCustomField"
-                >
-                <nb-option *ngFor="let customField of customFields" [value]="customField.name">
-                  {{customField.name}}
-                </nb-option>
-              </nb-select>
-            </div>
-          </div>
-        </div>
           <div class="row-input">
             <div class="lable">
               Start Date
@@ -419,6 +587,37 @@
                 <div *ngIf="dataCampaign.campaign_type == 9 && ticketForm.controls['venue'].invalid && !customValidation" class="error-lable">
                   Enter Link of Webinar
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isApi && dataCampaign.campaign_type == 8" class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
+          Redemption
+          <div style="font-size: small; padding-top: 5px;">
+            (custom field triggers redemption flow)
+          </div>
+        </div>
+        <div *ngIf="isApi && dataCampaign.campaign_type == 8" class="p-l-60">
+          <div class="row-input">
+            <div class="lable p-t-0">
+              Manychat CustomField
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select
+                formControlName="customFields" size="small" placeholder="Select Custom Fields"
+                [ngClass]="{
+                  error:
+                  myForm.controls['customFields'].invalid &&
+                  !customValidation
+                }"
+                [(ngModel)]="dataCampaign.selectedCustomField"
+                #selectCustomField
+                >
+                <nb-option *ngFor="let customField of customFields" [value]="customField.name">
+                  {{customField.name}}
+                </nb-option>
+              </nb-select>
               </div>
             </div>
           </div>

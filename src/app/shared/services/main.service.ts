@@ -32,7 +32,8 @@ export class MainService {
     event_name: '',
     venue: '',
     time: '',
-    cardType: ''
+    cardType: '',
+    points: ''
   };
 
   addBusiness(item) {

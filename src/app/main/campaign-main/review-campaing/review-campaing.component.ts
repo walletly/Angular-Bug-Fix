@@ -87,7 +87,8 @@ export class ReviewCampaingComponent implements OnInit {
             event_name: '',
             venue: '',
             time: '',
-            cardType: ''
+            cardType: '',
+            points: ''
           };
           this.router.navigate(['/main/campaign-main/details/' + this.id]);
           this.mainService.showToastrSuccess.emit({text: 'Campaign updated'});
@@ -116,7 +117,8 @@ export class ReviewCampaingComponent implements OnInit {
             event_name: '',
             venue: '',
             time: '',
-            cardType: ''
+            cardType: '',
+            points: ''
           };
           this.router.navigate(['/main/campaign-main/campaign-integration/' + result['campaign']]);
           this.mainService.showToastrSuccess.emit({text: 'Campaign created'});
@@ -156,6 +158,7 @@ export class ReviewCampaingComponent implements OnInit {
     this.campaign['event_name'] = this.dataCampaign.event_name;
     this.campaign['time'] = this.dataCampaign.time;
     this.campaign['venue'] = this.dataCampaign.venue;
+    this.campaign['points'] = this.dataCampaign.points;
   }
 
   changeSide(){

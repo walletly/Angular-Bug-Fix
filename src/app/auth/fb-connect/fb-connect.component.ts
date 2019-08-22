@@ -76,6 +76,7 @@ export class FbConnectComponent implements OnInit {
     brand_cover: '',
     description: '',
     facebook_page_id: '',
+    currency: '',
     more_info: '',
     email: '',
     website: '',
@@ -108,6 +109,11 @@ export class FbConnectComponent implements OnInit {
       facebookPageID: ['www.facebook.com/'],
       fakeData: ['', [Validators.required]]
     });
+
+    // this.myFormStep1 = formBuilder.group({
+    //   facebookPageID: ['www.facebook.com/'],
+    //   fakeData: ['', []]
+    // });
      
     this.myFormStep2 = formBuilder.group({
       facebookPageID: [this.myFormStep1.get('facebookPageID').value, [Validators.required, Validators.pattern("((http|https):\/\/|)(www\.|)facebook\.com\/[a-zA-Z0-9.]{1,}")]],
@@ -117,15 +123,12 @@ export class FbConnectComponent implements OnInit {
       description: ["", [Validators.required]],
       moreInfo: ["", []],
       location: ["", []],
+      currency: ["", [Validators.required]],
       phone: ["", [Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
       email: ["", [Validators.required, Validators.email]],
       website: ["", [Validators.required]],
     });
 
-    // this.myFormStep1 = formBuilder.group({
-    //   facebookPageID: ['www.facebook.com/'],
-    //   fakeData: ['', []]
-    // });
      
     // this.myFormStep2 = formBuilder.group({
     //   facebookPageID: [this.myFormStep1.get('facebookPageID').value, []],
@@ -385,6 +388,7 @@ export class FbConnectComponent implements OnInit {
     this.brand.brand_logo = this.photoLogo;
     this.brand.brand_name = this.myFormStep2.get('brandName').value;
     this.brand.description = this.myFormStep2.get('description').value;
+    this.brand.currency = this.myFormStep2.get('currency').value;
     this.brand.email = this.myFormStep2.get('email').value;
     const fbId = this.myFormStep2.get('facebookPageID').value.split('/');
     this.brand.facebook_page_id = fbId[fbId.length - 1];

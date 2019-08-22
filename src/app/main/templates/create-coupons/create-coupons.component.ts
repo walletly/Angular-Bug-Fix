@@ -102,7 +102,7 @@ export class CreateCouponsComponent implements OnInit {
         
         if(this.typeId == 1){
           this.type = 'coupons';
-        }else if(this.typeId == 2){
+        }else if(this.typeId == 2 || this.typeId == 4){
           this.type = 'cards';
         }else if(this.typeId == 3){
           this.type = 'tickets';

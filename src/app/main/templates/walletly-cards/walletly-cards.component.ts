@@ -46,7 +46,8 @@ export class WalletlyCardsComponent implements OnInit {
       event_name: '',
       venue: '',
       time: '',
-      cardType: cardType
+      cardType: cardType,
+      points: ''
     };
     this.router.navigate(['/main/campaign-main/create-campaign']);
   }
