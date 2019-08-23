@@ -116,7 +116,7 @@ export class CreateCampaingComponent implements OnInit {
       template: ["", [Validators.required]],
       customFields: [""],
       currency: ["", [Validators.required]],
-      points: ["", [Validators.required]],
+      points: ["", [Validators.required, Validators.min(0)]],
     });
 
 

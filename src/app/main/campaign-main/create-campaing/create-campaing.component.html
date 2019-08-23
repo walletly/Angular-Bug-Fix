@@ -340,10 +340,10 @@
           </div>
         </div>
         <div class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
-          Loyalty
+          Loyalty Points
         </div>
         <div class="p-l-60">
-          <div class="row-input">
+          <div class="row-input" style="display: none !important;">
             <div class="lable">
               Select Currency
             </div>
@@ -385,15 +385,16 @@
             </div>
           </div>
           <div class="row-input">
-            <div class="lable">
-              Points
-              <div style="font-size: small">(Per Unit Currency)</div>
+            <div class="lable" style="min-width: 100px !important; width: 100px !important;">
+              1 <span class="p-l-5 p-r-5">{{ dataCampaign.currency }}</span> equals
             </div>
             <div class="value">
               <div class="pos-r full-width">
                 <input [ngClass]="{'error': loyaltyForm.controls['points'].invalid && !customValidation}"
-                  formControlName="points" [(ngModel)]="dataCampaign.points"
-                  class="small p-r-25" type="number" nbInput fullWidth fieldSize="small">
+                  formControlName="points" [(ngModel)]="dataCampaign.points" placeholder="0.01"
+                  class="small m-r-5" type="number" nbInput fullWidth fieldSize="small"
+                  style="width: 120px !important; padding: 10px !important;">
+                Points
                 <div *ngIf="loyaltyForm.controls['points'].invalid && !customValidation" class="error-lable">
                   set points
                 </div>
