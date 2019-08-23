@@ -34,6 +34,7 @@ export class CreateCampaingComponent implements OnInit {
   template;
   selectedSell;
   cardType;
+  brand_currency = '$';
   dateStart = new Date();
   dateEnd = new Date();
   dataCampaign;
@@ -93,7 +94,7 @@ export class CreateCampaingComponent implements OnInit {
       discount: ["", []],
       // numberOfCoupon: ["", [Validators.required]],
       // setLimit: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
-      currency: ["", [Validators.required]],
+      currency: ["", []],
       validity: ["", [Validators.required, Validators.pattern('^[0-9]*$'), Validators.min(1), Validators.max(365)]],
       startDate: ["", [Validators.required]],
       endDate: ["", [Validators.required]],
@@ -171,12 +172,9 @@ export class CreateCampaingComponent implements OnInit {
 
     this.brandService.getBrandById(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
       if (data) {
-        if(!this.dataCampaign.currency){
-          if(data['brand'].currency){
-            this.dataCampaign.currency = data['brand'].currency;
-          }else{
-            this.dataCampaign.currency = '$';
-          }
+        if(data['brand'].currency){
+          this.brand_currency = data['brand'].currency;
+          this.mainService.dataCampaign.currency = this.brand_currency;
         }
         console.log(data['brand']);
         this.manychatAPI = data['brand'].manychatAPI;
@@ -221,7 +219,7 @@ export class CreateCampaingComponent implements OnInit {
           this.mainService.dataCampaign.brand_id = result['data'].brand_id;
           this.mainService.dataCampaign.card_id = result['data'].card_id;
           this.mainService.dataCampaign.coupon_validity = (result['data'].coupon_validity) ? String(result['data'].coupon_validity) : '';
-          this.mainService.dataCampaign.currency = result['data'].currency;
+          this.mainService.dataCampaign.currency = this.brand_currency;
           this.mainService.dataCampaign.event_name = result['data'].event_name;
           this.mainService.dataCampaign.venue = result['data'].venue;
           this.mainService.dataCampaign.time = result['data'].time;
@@ -307,6 +305,7 @@ export class CreateCampaingComponent implements OnInit {
     if (this.myForm.valid) {
       this.dataCampaign.cardType = this.cardType;
       this.mainService.dataCampaign = this.dataCampaign;
+      this.mainService.dataCampaign.currency = this.brand_currency;
 
       if (this.id) {
         this.router.navigate(['/main/campaign-main/review-campaign/' + this.id]);
@@ -325,6 +324,7 @@ export class CreateCampaingComponent implements OnInit {
     }if (this.loyaltyForm.valid) {
       this.dataCampaign.cardType = this.cardType;
       this.mainService.dataCampaign = this.dataCampaign;
+      this.mainService.dataCampaign.currency = this.brand_currency;
 
       if (this.id) {
         this.router.navigate(['/main/campaign-main/review-campaign/' + this.id]);
@@ -381,9 +381,9 @@ export class CreateCampaingComponent implements OnInit {
       this.cardType = 'coupon';
       this.myForm.get('discount').setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       this.myForm.get('discount').updateValueAndValidity();
-      setTimeout(() => {
-        (document.getElementById('discountInput') as HTMLInputElement).style.backgroundImage = "url('assets/img/percent.png')";
-      }, 50);
+      // setTimeout(() => {
+      //   (document.getElementById('discountInput') as HTMLInputElement).style.backgroundImage = "url('assets/img/percent.png')";
+      // }, 50);
     }else if(typeName === 'Coupon in $'){
       this.selectedSell = 'Coupon in $';
       this.dataCampaign.campaign_type = 2;
@@ -394,9 +394,9 @@ export class CreateCampaingComponent implements OnInit {
       this.cardType = 'coupon';
       this.myForm.get('discount').setValidators([Validators.required, Validators.min(0)]);
       this.myForm.get('discount').updateValueAndValidity();
-      setTimeout(() => {
-        (document.getElementById('discountInput') as HTMLInputElement).style.backgroundImage = "url('assets/img/dollar.png')";
-      }, 50);
+      // setTimeout(() => {
+      //   (document.getElementById('discountInput') as HTMLInputElement).style.backgroundImage = "url('assets/img/dollar.png')";
+      // }, 50);
     }else if(typeName === 'Loyalty Card'){
       this.selectedSell = 'Loyalty Card';
       this.dataCampaign.campaign_type = 5;
@@ -434,11 +434,8 @@ export class CreateCampaingComponent implements OnInit {
   }
 
   clear() {
-    if ((!this.noCoupons || !this.noCards || !this.noTickets) && (this.selectTemplate)) {
+    if ((!this.noCoupons || !this.noCards || !this.noLoyalty || !this.noTickets) && (this.selectTemplate)) {
       this.selectTemplate.reset();
-    }
-    if(this.selectCurrency){
-      this.selectCurrency.reset();
     }
     if(this.selectCustomField){
       this.selectCustomField.reset();
@@ -455,6 +452,7 @@ export class CreateCampaingComponent implements OnInit {
       event_name: '',
       venue: '',
       time: '',
+      points: '',
       currency: '',
     };
     this.selectType(this.selectedSell);

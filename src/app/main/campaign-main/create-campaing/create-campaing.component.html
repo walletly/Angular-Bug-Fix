@@ -132,13 +132,13 @@
           Coupon
         </div>
         <div class="p-l-60">
-          <div class="row-input">
+          <div class="row-input" style="display: none !important;">
             <div class="lable">
               Select Currency
             </div>
             <div class="value">
               <div class="pos-r full-width">
-                <nb-select #selectCurrency [ngClass]="{'error': myForm.controls['currency'].invalid && !customValidation}" formControlName="currency" [(ngModel)]="dataCampaign.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
+                <nb-select [ngClass]="{'error': myForm.controls['currency'].invalid && !customValidation}" formControlName="currency" [(ngModel)]="brand_currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
                   <nb-option value="$">USD ($)</nb-option>
                   <nb-option value="€">EUR (€)</nb-option>
                   <nb-option value="£">GBP (£)</nb-option>
@@ -349,7 +349,7 @@
             </div>
             <div class="value">
               <div class="pos-r full-width">
-                <nb-select #selectCurrency [ngClass]="{'error': loyaltyForm.controls['currency'].invalid && !customValidation}" formControlName="currency" [(ngModel)]="dataCampaign.currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
+                <nb-select [ngClass]="{'error': loyaltyForm.controls['currency'].invalid && !customValidation}" formControlName="currency" [(ngModel)]="brand_currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
                   <nb-option value="$">USD ($)</nb-option>
                   <nb-option value="€">EUR (€)</nb-option>
                   <nb-option value="£">GBP (£)</nb-option>
@@ -386,7 +386,7 @@
           </div>
           <div class="row-input">
             <div class="lable" style="min-width: 100px !important; width: 100px !important;">
-              1 <span class="p-l-5 p-r-5">{{ dataCampaign.currency }}</span> equals
+              1 <span class="p-l-5 p-r-5">{{ brand_currency }}</span> equals
             </div>
             <div class="value">
               <div class="pos-r full-width">
