@@ -52,8 +52,12 @@ export class CampaignDetailsComponent implements OnInit {
         this.sharingUrl = SERVER_API_URL + 'campaign/shared/' + this.campaign.campaign_code;
         if (this.card.card_type == 1) {
           this.url = SERVER_API_URL + 'coupon';
+        } else if (this.card.card_type == 2) {
+          this.url = SERVER_API_URL + 'card';
         } else if (this.card.card_type == 3) {
           this.url = SERVER_API_URL + 'ticket';
+        } else if (this.card.card_type == 4) {
+          this.url = SERVER_API_URL + 'loyaltyCard';
         }
         this.showLoader = false;
       });
