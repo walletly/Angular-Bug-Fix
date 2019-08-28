@@ -18,6 +18,7 @@ export class CreateCampaingComponent implements OnInit {
   myForm: FormGroup;
   ticketForm: FormGroup;
   loyaltyForm: FormGroup;
+  stampForm: FormGroup;
   customValidation = true;
   campaign = {};
   id;
@@ -64,7 +65,7 @@ export class CreateCampaingComponent implements OnInit {
       data: { 'Coupons': { name: 'Coupon in %', icon: 'assets/img/Coupon.png', type: 'coupon', locked: false }, 'Cards': { name: 'Loyalty Card', icon: 'assets/img/LoyaltyCard.png', type: 'loyalty', locked: false }, 'Tickets': { name: 'Event Tickets', icon: 'assets/img/eventTickets.png', type: 'ticket', locked: false } },
     },
     {
-      data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', type: 'coupon', locked: false }, 'Cards': { name: 'Stamp Card', icon: 'assets/img/stampCard.png', type: 'card', locked: true }, 'Tickets': { name: 'Webinar Event', icon: 'assets/img/webinarIcon.png', type: 'ticket', locked: false } },
+      data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', type: 'coupon', locked: false }, 'Cards': { name: 'Stamp Card', icon: 'assets/img/stampCard.png', type: 'card', locked: false }, 'Tickets': { name: 'Webinar Event', icon: 'assets/img/webinarIcon.png', type: 'ticket', locked: false } },
     },
     {
       data: { 'Coupons': { name: 'Birthday Coupon', icon: 'assets/img/Birthday-Coupon.png', type: 'coupon', locked: true }, 'Cards': { name: 'Membership Card', icon: 'assets/img/membershipCard.png', type: 'card', locked: true }, 'Tickets': { name: '', icon: '' } },
@@ -120,6 +121,13 @@ export class CreateCampaingComponent implements OnInit {
       points: ["", [Validators.required, Validators.min(0)]],
     });
 
+    this.stampForm = formBuilder.group({
+      campaignName: ["", [Validators.required]],
+      description: ["", [Validators.required]],
+      template: ["", [Validators.required]],
+      customFields: [""],
+    });
+
 
 
     this.id = this.activeRout.snapshot.paramMap.get('id');
@@ -144,6 +152,7 @@ export class CreateCampaingComponent implements OnInit {
       this.myForm.controls['template'].setValue(this.dataCampaign.card_id);
       this.ticketForm.controls['template'].setValue(this.dataCampaign.card_id);
       this.loyaltyForm.controls['template'].setValue(this.dataCampaign.card_id);
+      this.stampForm.controls['template'].setValue(this.dataCampaign.card_id);
       this.cardType = this.dataCampaign.cardType;
       if(this.cardType != ''){
         this.disable = true;
@@ -233,6 +242,7 @@ export class CreateCampaingComponent implements OnInit {
           this.myForm.controls['template'].setValue(this.dataCampaign.card_id);
           this.ticketForm.controls['template'].setValue(this.dataCampaign.card_id);
           this.loyaltyForm.controls['template'].setValue(this.dataCampaign.card_id);
+          this.stampForm.controls['template'].setValue(this.dataCampaign.card_id);
 
           // need for all template
           if (this.dataCampaign.campaign_type === '1') {
@@ -241,6 +251,8 @@ export class CreateCampaingComponent implements OnInit {
             this.selectType('Coupon in $');
           }else if(this.dataCampaign.campaign_type === '5'){
             this.selectType('Loyalty Card');
+          }else if(this.dataCampaign.campaign_type === '6'){
+            this.selectType('Stamp Card');
           }else if(this.dataCampaign.campaign_type === '8'){
             this.selectType('Event Tickets');
           }else if(this.dataCampaign.campaign_type === '9'){
@@ -331,6 +343,15 @@ export class CreateCampaingComponent implements OnInit {
       } else {
         this.router.navigate(['/main/campaign-main/review-campaign']);
       }
+    }if (this.stampForm.valid) {
+      this.dataCampaign.cardType = this.cardType;
+      this.mainService.dataCampaign = this.dataCampaign;
+
+      if (this.id) {
+        this.router.navigate(['/main/campaign-main/review-campaign/' + this.id]);
+      } else {
+        this.router.navigate(['/main/campaign-main/review-campaign']);
+      }
     } else {
       this.customValidation = false;
     }
@@ -408,6 +429,19 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCampaign.event_name = '';
       this.dataCampaign.time='';
       this.cardType = 'loyalty';
+    }else if(typeName === 'Stamp Card'){
+      this.selectedSell = 'Stamp Card';
+      this.dataCampaign.campaign_type = 6;
+      this.dataCampaign.endDate = '';
+      this.dataCampaign.startDate = '';
+      this.dataCampaign.discount='';
+      this.dataCampaign.currency = '';
+      this.dataCampaign.coupon_validity='';
+      this.dataCampaign.venue = '';
+      this.dataCampaign.event_name = '';
+      this.dataCampaign.time='';
+      this.dataCampaign.points = '';
+      this.cardType = 'card';
     }else if(typeName === 'Event Tickets'){
       this.selectedSell = 'Event Tickets';
       this.dataCampaign.campaign_type = 8;

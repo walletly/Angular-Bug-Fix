@@ -152,8 +152,8 @@ export class CampaingComponent implements OnInit {
   filterCampaigns() {
     this.filteredData = this.data.filter(element => {
       console.log(element);
-      console.log(element.data['Campaign Name']);
-      if (element.data['Campaign Name'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+      console.log(element.data['Campaign']);
+      if (element.data['Campaign'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
         return true;
       }
     });
