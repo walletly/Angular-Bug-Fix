@@ -18,7 +18,7 @@
 
       <ng-container *ngFor="let column of defaultColumns" [nbTreeGridColumnDef]="column">
         <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{column}}</th>
-        <td (click)="selectType(row.data[column].name)"
+        <td [id]="row.data[column].name" (click)="selectType(row.data[column].name)"
           [ngClass]="{'active-sell': (selectedSell === row.data[column].name && row.data[column].name), 'c-p': row.data[column].name, 'pe-n': !row.data[column].name,
                        'disable': (disable && row.data[column].type != cardType) }"
           nbTreeGridCell *nbTreeGridCellDef="let row" [ngStyle]="{'pointer-events': row.data[column].locked ? 'none' : 'auto'}">
@@ -279,7 +279,7 @@
       </div>
     </div>
     <div *ngIf="cardType === 'loyalty' && selectedSell">
-      <form [formGroup]="loyaltyForm">
+      <form *ngIf="dataCampaign.campaign_type == 5 && !data[0].data.Cards.locked" [formGroup]="loyaltyForm">
         <div class="p-l-30 m-b-30" style="font-size: 25px">
           Campaign
         </div>
@@ -332,7 +332,7 @@
                 Field error (make your choice)
               </div>
               <div *ngIf="noLoyalty" class="error-lable fs-16">
-                Please create Loyalty Template First
+                Please create Loyalty/Stamp Template First
                 <a [routerLink]="[ '/main/templates/create-cards' ]" class="c-p">
                   (click here)
                 </a>
@@ -436,33 +436,7 @@
           </div>
         </div> -->
       </form>
-      <!-- <div *ngIf="myForm.invalid && !customValidation" class="row-input">
-        <div class="lable">
-        </div>
-        <div class="value message-error" style="text-align: left;">
-          Validation Error
-        </div>
-      </div> -->
-      <div class="row-input">
-        <div class="lable">
-        </div>
-        <div class="value">
-          <div class="pos-r full-width">
-            <button (click)="clear()" class="cust-button m-r-15" nbButton status="gray">
-              Clear
-            </button>
-            <button *ngIf="!id && !noLoyalty" (click)="create()" class="cust-button" nbButton status="success">
-              Create
-            </button>
-            <button *ngIf="id" (click)="create()" class="cust-button" nbButton status="success">
-              Update
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="cardType === 'card' && selectedSell">
-      <form *ngIf="dataCampaign.campaign_type == 6" [formGroup]="stampForm">
+      <form *ngIf="dataCampaign.campaign_type == 6 && !data[1].data.Cards.locked" [formGroup]="stampForm">
         <div class="p-l-30 m-b-30" style="font-size: 25px">
           Campaign
         </div>
@@ -506,7 +480,7 @@
                 <nb-select [ngClass]="{'error': stampForm.controls['template'].invalid && !customValidation}"
                   formControlName="template" #selectTemplate size="small" placeholder="Select Template"
                   [(selected)]="dataCampaign.card_id">
-                  <nb-option *ngFor="let item of cards" [value]="item.id">
+                  <nb-option *ngFor="let item of loyalty" [value]="item.id">
                     {{ item.template_name }}
                   </nb-option>
                 </nb-select>
@@ -515,7 +489,7 @@
                 Field error (make your choice)
               </div>
               <div *ngIf="noCards" class="error-lable fs-16">
-                Please create cards Template First
+                Please create Loyalty/Stamp Template First
                 <a [routerLink]="[ '/main/templates/create-cards' ]" class="c-p">
                   (click here)
                 </a>
@@ -562,13 +536,6 @@
           </div>
         </div> -->
       </form>
-      <!-- <div *ngIf="myForm.invalid && !customValidation" class="row-input">
-        <div class="lable">
-        </div>
-        <div class="value message-error" style="text-align: left;">
-          Validation Error
-        </div>
-      </div> -->
       <div class="row-input">
         <div class="lable">
         </div>
@@ -577,7 +544,7 @@
             <button (click)="clear()" class="cust-button m-r-15" nbButton status="gray">
               Clear
             </button>
-            <button *ngIf="!id && !noCards" (click)="create()" class="cust-button" nbButton status="success">
+            <button *ngIf="!id && !noLoyalty" (click)="create()" class="cust-button" nbButton status="success">
               Create
             </button>
             <button *ngIf="id" (click)="create()" class="cust-button" nbButton status="success">
@@ -587,6 +554,7 @@
         </div>
       </div>
     </div>
+      
     <div *ngIf="cardType === 'ticket'  && selectedSell">
       <form [formGroup]="ticketForm">
         <div class="p-l-30 m-b-30" style="font-size: 25px">

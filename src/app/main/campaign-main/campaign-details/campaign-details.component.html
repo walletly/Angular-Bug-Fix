@@ -205,7 +205,7 @@
           <div class="button-wrap">
             <button [routerLink]="['/main/campaign-main/campaign']" class="back">BACK</button>
             <button (click)="edit()" class="edit">Edit</button>
-            <button *ngIf="campaign.campaign_type != 5" [disabled]="inProcces" (click)="delete()" class="delete" nbButton>
+            <button *ngIf="campaign.campaign_type != 5 && campaign.campaign_type != 6" [disabled]="inProcces" (click)="delete()" class="delete" nbButton>
               <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
               Delete
             </button>

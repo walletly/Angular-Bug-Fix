@@ -209,7 +209,7 @@
                         <img src="assets/svg-icon/edit.svg" alt="" />
                         Edit
                       </div>
-                      <div *ngIf="!row.data['Type'].name.includes('LoyaltyCard') "
+                      <div *ngIf="!row.data['Type'].name.includes('LoyaltyCard') && !row.data['Type'].name.includes('stampCard')"
                         (click)="
                           delete(
                             row.data['Id'].name,

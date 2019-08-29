@@ -554,12 +554,20 @@
                         {{ data.brand_name }}
                       </div>
                     </div>
-                    <div class="text-right">
+                    <div *ngIf="dataCampaign.campaign_type == 5" class="text-right">
                       <div class="fs-10 fw-400">
                         Points
                       </div>
                       <div class="fs-15 fw-600">
                         {{ dataCampaign.points }}
+                      </div>
+                    </div>
+                    <div *ngIf="dataCampaign.campaign_type == 6" class="text-right">
+                      <div class="fs-10 fw-400">
+                        Stamps
+                      </div>
+                      <div class="fs-15 fw-600">
+                        0
                       </div>
                     </div>
                   </div>
@@ -602,8 +610,11 @@
                         <img src="assets/svg-icon/coupon-back-icon.svg" alt="" />
                       </div>
                       <div>
-                        <div class="color-dark fs-17 fw-700">
+                        <div *ngIf="dataCampaign.campaign_type == 5" class="color-dark fs-17 fw-700">
                           loyalty
+                        </div>
+                        <div *ngIf="dataCampaign.campaign_type == 6" class="color-dark fs-17 fw-700">
+                          stamp
                         </div>
                         <div class="color-secondary fs-11">
                           Update 1 min ago
@@ -693,6 +704,9 @@
             <div *ngIf="dataCampaign.campaign_type == 5" class="value">
               Loyalty Card
             </div>
+            <div *ngIf="dataCampaign.campaign_type == 6" class="value">
+              Stamp Card
+            </div>
           </div>
           <div class="row-info">
             <div class="lable">
@@ -718,7 +732,7 @@
               {{ data?.template_name }}
             </div>
           </div>
-          <div class="row-info">
+          <div *ngIf="dataCampaign.campaign_type == 5" class="row-info">
             <div class="lable">
               Points
             </div>

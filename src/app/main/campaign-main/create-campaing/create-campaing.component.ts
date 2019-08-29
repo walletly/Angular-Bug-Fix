@@ -65,7 +65,7 @@ export class CreateCampaingComponent implements OnInit {
       data: { 'Coupons': { name: 'Coupon in %', icon: 'assets/img/Coupon.png', type: 'coupon', locked: false }, 'Cards': { name: 'Loyalty Card', icon: 'assets/img/LoyaltyCard.png', type: 'loyalty', locked: false }, 'Tickets': { name: 'Event Tickets', icon: 'assets/img/eventTickets.png', type: 'ticket', locked: false } },
     },
     {
-      data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', type: 'coupon', locked: false }, 'Cards': { name: 'Stamp Card', icon: 'assets/img/stampCard.png', type: 'card', locked: false }, 'Tickets': { name: 'Webinar Event', icon: 'assets/img/webinarIcon.png', type: 'ticket', locked: false } },
+      data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', type: 'coupon', locked: false }, 'Cards': { name: 'Stamp Card', icon: 'assets/img/stampCard.png', type: 'loyalty', locked: false }, 'Tickets': { name: 'Webinar Event', icon: 'assets/img/webinarIcon.png', type: 'ticket', locked: false } },
     },
     {
       data: { 'Coupons': { name: 'Birthday Coupon', icon: 'assets/img/Birthday-Coupon.png', type: 'coupon', locked: true }, 'Cards': { name: 'Membership Card', icon: 'assets/img/membershipCard.png', type: 'card', locked: true }, 'Tickets': { name: '', icon: '' } },
@@ -139,6 +139,9 @@ export class CreateCampaingComponent implements OnInit {
         for (let i in result['data']){
           if(result['data'][i].campaign_type == 5){
             this.data[0].data.Cards.locked = true;
+          }
+          if(result['data'][i].campaign_type == 6){
+            this.data[1].data.Cards.locked = true;
           }
         }
       }, err => {
@@ -234,7 +237,7 @@ export class CreateCampaingComponent implements OnInit {
           this.mainService.dataCampaign.time = result['data'].time;
           this.mainService.dataCampaign.points = result['data'].points;
           this.mainService.dataCampaign.cardType = (result['data'].campaign_type <= 4) ? 'coupon'
-                                                    : (result['data'].campaign_type <= 5) ? 'loyalty'
+                                                    : (result['data'].campaign_type <= 6) ? 'loyalty'
                                                     : (result['data'].campaign_type <= 7) ? 'card'
                                                     : (result['data'].campaign_type <= 9) ? 'ticket'
                                                     : '';
@@ -251,8 +254,14 @@ export class CreateCampaingComponent implements OnInit {
             this.selectType('Coupon in $');
           }else if(this.dataCampaign.campaign_type === '5'){
             this.selectType('Loyalty Card');
+            setTimeout(() => {
+              (document.getElementById('Stamp Card') as HTMLElement).classList.add('disable');
+            }, 200);
           }else if(this.dataCampaign.campaign_type === '6'){
             this.selectType('Stamp Card');
+            setTimeout(() => {
+              (document.getElementById('Loyalty Card') as HTMLElement).classList.add('disable');
+            }, 200);
           }else if(this.dataCampaign.campaign_type === '8'){
             this.selectType('Event Tickets');
           }else if(this.dataCampaign.campaign_type === '9'){
@@ -402,9 +411,6 @@ export class CreateCampaingComponent implements OnInit {
       this.cardType = 'coupon';
       this.myForm.get('discount').setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       this.myForm.get('discount').updateValueAndValidity();
-      // setTimeout(() => {
-      //   (document.getElementById('discountInput') as HTMLInputElement).style.backgroundImage = "url('assets/img/percent.png')";
-      // }, 50);
     }else if(typeName === 'Coupon in $'){
       this.selectedSell = 'Coupon in $';
       this.dataCampaign.campaign_type = 2;
@@ -415,9 +421,6 @@ export class CreateCampaingComponent implements OnInit {
       this.cardType = 'coupon';
       this.myForm.get('discount').setValidators([Validators.required, Validators.min(0)]);
       this.myForm.get('discount').updateValueAndValidity();
-      // setTimeout(() => {
-      //   (document.getElementById('discountInput') as HTMLInputElement).style.backgroundImage = "url('assets/img/dollar.png')";
-      // }, 50);
     }else if(typeName === 'Loyalty Card'){
       this.selectedSell = 'Loyalty Card';
       this.dataCampaign.campaign_type = 5;
@@ -441,7 +444,7 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCampaign.event_name = '';
       this.dataCampaign.time='';
       this.dataCampaign.points = '';
-      this.cardType = 'card';
+      this.cardType = 'loyalty';
     }else if(typeName === 'Event Tickets'){
       this.selectedSell = 'Event Tickets';
       this.dataCampaign.campaign_type = 8;

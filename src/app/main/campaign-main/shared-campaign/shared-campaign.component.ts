@@ -83,6 +83,8 @@ export class SharedCampaignComponent implements OnInit {
       this.cardType = 'coupon';
     }else if(type <= 5){
       this.cardType = 'loyaltyCard';
+    }else if(type <= 6){
+      this.cardType = 'stampCard';
     }else if(type <= 7){
       this.cardType = 'card';
     }else if(type <= 9){
@@ -104,18 +106,18 @@ export class SharedCampaignComponent implements OnInit {
         this.inProcess = false;
         if (result['success']){
           this.successMessage = result['message'];
-          this.successUrl = result['data'].coupon_url || result['data'].card_url || result['data'].ticket_url || result['data'].loyaltyCard_url;
+          this.successUrl = result['data'].coupon_url || result['data'].card_url || result['data'].ticket_url || result['data'].loyaltyCard_url || result['data'].stampCard_url;
           window.location.href = this.successUrl;
           this.inProcess = false;
         }else{
           this.errorMessage = result['message'];
-          this.errorUrl = result['data'].coupon_url || result['data'].card_url || result['data'].ticket_url || result['data'].loyaltyCard_url;
+          this.errorUrl = result['data'].coupon_url || result['data'].card_url || result['data'].ticket_url || result['data'].loyaltyCard_url || result['data'].stampCard_url;
           window.location.href = this.errorUrl;
           this.inProcess = false;
         }
       }, error => {
         this.errorMessage = error['error'].error;
-        this.errorUrl = error['data'].coupon_url || error['data'].card_url || error['data'].ticket_url || error['data'].loyaltyCard_url;
+        this.errorUrl = error['data'].coupon_url || error['data'].card_url || error['data'].ticket_url || error['data'].loyaltyCard_url || error['data'].stampCard_url;
         window.location.href = this.errorUrl;
         this.inProcess = false;
       });

@@ -57,7 +57,11 @@ export class CampaignDetailsComponent implements OnInit {
         } else if (this.card.card_type == 3) {
           this.url = SERVER_API_URL + 'ticket';
         } else if (this.card.card_type == 4) {
-          this.url = SERVER_API_URL + 'loyaltyCard';
+          if (this.campaign.campaign_type == 5){
+            this.url = SERVER_API_URL + 'loyaltyCard';
+          } else if (this.campaign.campaign_type == 6){
+            this.url = SERVER_API_URL + 'stampCard';
+          }
         }
         this.showLoader = false;
       });

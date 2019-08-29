@@ -61,7 +61,7 @@ export class CampaingComponent implements OnInit {
         //   default:
         //     break;
         // }
-        if(element.campaign_type == 5){
+        if(element.campaign_type == 5 || element.campaign_type == 6){
           this.data.unshift({
             data: {
               'Type': { name: this.getTypeImage(element.campaign_type) },
