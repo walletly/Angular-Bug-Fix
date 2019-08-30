@@ -3,7 +3,6 @@
     top: calc(50% - 9.5px);
     display: flex;
 }
-
 th {
     color: #afafb9;
     font-family: Poppins;
@@ -12,25 +11,24 @@ th {
     font-weight: 400;
     border-right: none !important;
     border-left: none !important;
-    &:last-child {
-        width: 100px;
-        padding-left: 0;
+    &:first-child {
+      padding: 0 !important;
+      width: 40px;
     }
-    &:nth-child(7) {
-        width: 100px;
-        padding-left: 0;
-    }
-    &:nth-child(6) {
-        width: 100px;
-        padding-left: 0;
-    }
-    &:nth-child(1) {
-        width: 110px;
-        padding-right: 0;
-    }
+    // &:nth-child(7) {
+    //     width: 100px;
+    //     padding-left: 0;
+    // }
+    // &:nth-child(6) {
+    //     width: 100px;
+    //     padding-left: 0;
+    // }
+    // &:nth-child(1) {
+    //     width: 110px;
+    //     padding-right: 0;
+    // }
     &:nth-child(2) {
-        width: 110px;
-        padding-right: 0;
+        padding-left: 0;
     }
 }
 
@@ -43,25 +41,32 @@ td {
     border-right: none !important;
     border-left: none !important;
     overflow: visible;
-    &:last-child {
-        width: 100px;
-        padding-left: 0;
+    &:first-child {
+      padding: 0 !important;
+      width: 40px;
     }
-    &:nth-child(7) {
-        width: 100px;
-        padding-left: 0;
-    }
-    &:nth-child(6) {
-        width: 100px;
-        padding-left: 0;
-    }
-    &:nth-child(1) {
-        width: 110px;
-        padding-right: 0;
-    }
+    // &:last-child {
+    //     width: 100px;
+    //     padding-left: 0;
+    // }
+    // &:nth-child(7) {
+    //     width: 100px;
+    //     padding-left: 0;
+    // }
+    // &:nth-child(6) {
+    //     width: 100px;
+    //     padding-left: 0;
+    // }
+    // &:nth-child(1) {
+    //     width: 110px;
+    //     padding-right: 0;
+    // }
+    // &:nth-child(2) {
+    //     width: 110px;
+    //     padding-right: 0;
+    // }
     &:nth-child(2) {
-        width: 110px;
-        padding-right: 0;
+      padding-left: 0;
     }
 }
 
@@ -117,6 +122,8 @@ nb-card {
 
 table {
     width: auto;
+    border-left: 1px solid #ebeef2;
+    border-right: 1px solid #ebeef2;
 }
 
 .box-container {
@@ -130,4 +137,26 @@ table {
         min-height: calc(100vh - 360px);
         padding: 40px;
     }
+}
+.download{
+  width: 160px;
+  background-color: #11ca6d;
+  padding: 8px;
+}
+.circle-active{
+  width:  20px;
+  height: 20px;
+  margin: auto;
+  border-radius: 50px;
+  background-color: #11ca6d;
+}
+.circle-inactive{
+  width:  20px;
+  height: 20px;
+  margin: auto;
+  border-radius: 50px;
+  background-color: #ebeef2;
+}
+.check-row-bg {
+  background-color: #f4fdf8;
 }

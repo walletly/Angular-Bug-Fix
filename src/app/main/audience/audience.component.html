@@ -23,72 +23,383 @@
   </div>
 </div>
 <nb-card>
-  <nb-card-body class="p-0">
-    <div *ngIf="showLoader" class="loader-table m-t-50">
-      <img width="70px" src="assets/img/Loader2x.gif" alt="">
-    </div>
-    <div *ngIf="data.length && !showLoader" class="check-all-wrap">
-      <div (click)="refresh()" class="refresh m-t-10 m-b-10 m-r-10">
-        <img src="assets/svg-icon/refresh-Btn.svg" alt="">
-        Refresh
-      </div>
-    </div>
+  <nb-card-body class="p-t-24 p-b-36 p-l-18 p-r-18">
+    <nb-tabset class="tabs-card" (changeTab)="onChangeTab($event)">
+        <nb-tab tabTitle="Coupons">
+          <div *ngIf="showLoader" class="loader-table m-t-50">
+            <img width="70px" src="assets/img/Loader2x.gif" alt="">
+          </div>
+          <div *ngIf="CouponAudience.length && !showLoader" class="check-all-wrap">
+              <div class="all m-t-14 m-b-12">
+                <nb-checkbox [(ngModel)]="checkAllcoupons">All</nb-checkbox>
+              </div>
+              <div (click)=downloadCoupons() class="invite download m-t-14 m-b-12">
+                <img src="assets/img/d-icon.png" width="14px" alt="">
+                Download CSV
+              </div>
+            <div (click)="refreshCoupons()" class="refresh m-t-14 m-b-12">
+              <img src="assets/svg-icon/refresh-Btn.svg" alt="">
+              Refresh
+            </div>
+          </div>
+          <div class="box-container" *ngIf="!showLoader">
+            <table *ngIf="CouponAudience.length" class="m-b-40 full-width" [nbTreeGrid]="CouponAudience">
+              <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allCouponColumns"></tr>
+              <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allCouponColumns"></tr>
 
-    <div class="box-container" *ngIf="!showLoader">
-      <table *ngIf="data.length" class="m-b-40 full-width" [nbTreeGrid]="data">
-        <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
-        <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
-  
-        <ng-container
-          *ngFor="let column of defaultColumns"
-          [nbTreeGridColumnDef]="column"
-        >
-          <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{ column }}</th>
-          <td
-            (click)="selectedSell = row.data[column].name"
-            [ngClass]="{ 'active-sell': selectedSell === row.data[column].name }"
-            nbTreeGridCell
-            *nbTreeGridCellDef="let row"
-          >
-            <div class="df ai-c">
-              <div class="df ai-c m-r-4">
-                <span *ngIf="column === 'Type'">
-                  <img class="m-r-8" [src]="row.data[column].icon" alt="" />
-                </span>
-              </div>
-              <div class="ellipsis" *ngIf="column !== 'Status'">
-                <span>{{ row.data[column].name }}</span>
-              </div>
-            </div>
-            <div *ngIf="column === 'Status'">
-              <span
-                class="status"
-                [ngClass]="{
-                  used: row.data[column].name === 'Used',
-                  unused: row.data[column].name === 'Unused',
-                  expired: row.data[column].name === 'Expired'
-                }"
+              <ng-container
+                *ngFor="let column of couponColumns"
+                [nbTreeGridColumnDef]="column"
               >
-                <img
-                  class="m-r-3"
-                  width="12px"
-                  *ngIf="row.data[column].name === 'Used'"
-                  src="assets/img/success-white.png"
-                  alt=""
-                />
-                {{ row.data[column].name }}
-              </span>
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                  <span *ngIf="column !== 'Check'">
+                    {{column}}
+                  </span>
+                </th>
+                <td
+                  [ngClass]="{'check-row-bg': checkAllcoupons}"
+                  nbTreeGridCell
+                  *nbTreeGridCellDef="let row"
+                >
+                  <span *ngIf="column === 'Check'">
+                    <div *ngIf="checkAllcoupons" class="check-row m-auto">
+                      <img src="assets/img/success-white.png" alt="">
+                    </div>
+                  </span>
+                  <div class="df ai-c">
+                    <div class="df ai-c m-r-4">
+                      <span *ngIf="column === 'Type'">
+                        <img class="m-r-8" [src]="row.data[column].icon" alt="" />
+                      </span>
+                    </div>
+                    <div class="ellipsis" *ngIf="column !== 'Status' &&  column !== 'Check'">
+                      <span>{{ row.data[column].name }}</span>
+                    </div>
+                  </div>
+                  <div *ngIf="column === 'Status'">
+                    <span
+                      class="status"
+                      [ngClass]="{
+                        used: row.data[column].name === 'Used',
+                        unused: row.data[column].name === 'Unused',
+                        expired: row.data[column].name === 'Expired'
+                      }"
+                    >
+                      <img
+                        class="m-r-3"
+                        width="12px"
+                        *ngIf="row.data[column].name === 'Used'"
+                        src="assets/img/success-white.png"
+                        alt=""
+                      />
+                      {{ row.data[column].name }}
+                    </span>
+                  </div>
+                </td>
+              </ng-container>
+            </table>
+            <div *ngIf="!CouponAudience.length" class="create-btn-wrap">
+              <img class="m-b-16 m-t-40" src="assets/svg-icon/noAudience.svg" alt="">
+              <div class="m-b-25 fs-22">
+                No Audience!
+              </div>
             </div>
-          </td>
-        </ng-container>
-      </table>
-      <div *ngIf="!data.length" class="create-btn-wrap">
-        <img class="m-b-16 m-t-40" src="assets/svg-icon/noAudience.svg" alt="">
-        <div class="m-b-25 fs-22">
-          No Audience!
-        </div>
-      </div>
-    </div>
+          </div>
+        </nb-tab>
+        <!-- <nb-tab tabTitle="Cards">
+          <div *ngIf="showLoader" class="loader-table m-t-50">
+            <img width="70px" src="assets/img/Loader2x.gif" alt="">
+          </div>
+          <div *ngIf="stampCardAudience.length && !showLoader" class="check-all-wrap">
+              <div class="all m-t-14 m-b-12">
+                <nb-checkbox [(ngModel)]="checkAllStampCards">All</nb-checkbox>
+              </div>
+              <div  class="invite download m-t-14 m-b-12">
+                <img src="assets/img/d-icon.png" width="14px" alt="">
+                Download CSV
+              </div>
+            <div (click)="refreshCards()" class="refresh m-t-14 m-b-12">
+              <img src="assets/svg-icon/refresh-Btn.svg" alt="">
+              Refresh
+            </div>
+          </div>
+          <div class="box-container" *ngIf="!showLoader">
+            <table *ngIf="CardAudience.length" class="m-b-40 full-width" [nbTreeGrid]="CardAudience">
+              <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allCardColumns"></tr>
+              <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allCardColumns"></tr>
+
+              <ng-container
+                *ngFor="let column of cardColumns"
+                [nbTreeGridColumnDef]="column"
+              >
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                  <span *ngIf="column !== 'Check'">
+                    {{column}}
+                  </span>
+                </th>
+                <td
+                  [ngClass]="{'check-row-bg': checkAllStampCards}"
+                  nbTreeGridCell
+                  *nbTreeGridCellDef="let row"
+                >
+                  <span *ngIf="column === 'Check'">
+                    <div *ngIf="checkAllStampCards" class="check-row m-auto">
+                      <img src="assets/img/success-white.png" alt="">
+                    </div>
+                  </span>
+                  <div class="df ai-c">
+                    <div class="ellipsis">
+                      <span>{{ row.data[column].name }}</span>
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+            </table>
+            <div *ngIf="!CardAudience.length" class="create-btn-wrap">
+              <img class="m-b-16 m-t-40" src="assets/svg-icon/noAudience.svg" alt="">
+              <div class="m-b-25 fs-22">
+                No Audience!
+              </div>
+            </div>
+          </div>
+        </nb-tab> -->
+        <nb-tab tabTitle="Stamp Cards">
+          <div *ngIf="showLoader" class="loader-table m-t-50">
+            <img width="70px" src="assets/img/Loader2x.gif" alt="">
+          </div>
+          <div *ngIf="stampCardAudience.length && !showLoader" class="check-all-wrap">
+              <div class="all m-t-14 m-b-12">
+                <nb-checkbox [(ngModel)]="checkAllStampCards">All</nb-checkbox>
+              </div>
+              <div (click)=downloadStampCards() class="invite download m-t-14 m-b-12">
+                <img src="assets/img/d-icon.png" width="14px" alt="">
+                Download CSV
+              </div>
+            <div (click)="refreshStampCards()" class="refresh m-t-14 m-b-12">
+              <img src="assets/svg-icon/refresh-Btn.svg" alt="">
+              Refresh
+            </div>
+          </div>
+          <div class="box-container" *ngIf="!showLoader">
+            <table *ngIf="stampCardAudience.length" class="m-b-40 full-width" [nbTreeGrid]="stampCardAudience">
+              <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allstampCardColumns"></tr>
+              <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allstampCardColumns"></tr>
+
+              <ng-container
+                *ngFor="let column of stampCardColumns"
+                [nbTreeGridColumnDef]="column"
+              >
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                  <span *ngIf="column !== 'Check'">
+                    {{column}}
+                  </span>
+                </th>
+                <td
+                  [ngClass]="{'check-row-bg': checkAllStampCards}"
+                  nbTreeGridCell
+                  *nbTreeGridCellDef="let row"
+                >
+                  <span *ngIf="column === 'Check'">
+                    <div *ngIf="checkAllStampCards" class="check-row m-auto">
+                      <img src="assets/img/success-white.png" alt="">
+                    </div>
+                  </span>
+                  <div class="df ai-c">
+                    <div class="ellipsis">
+                      <span>{{ row.data[column].name }}</span>
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+            </table>
+            <div *ngIf="!stampCardAudience.length" class="create-btn-wrap">
+              <img class="m-b-16 m-t-40" src="assets/svg-icon/noAudience.svg" alt="">
+              <div class="m-b-25 fs-22">
+                No Audience!
+              </div>
+            </div>
+          </div>
+        </nb-tab>
+        <nb-tab tabTitle="Tickets">
+          <div *ngIf="showLoader" class="loader-table m-t-50">
+            <img width="70px" src="assets/img/Loader2x.gif" alt="">
+          </div>
+          <div *ngIf="TicketAudience.length && !showLoader" class="check-all-wrap">
+              <div class="all m-t-14 m-b-12">
+                <nb-checkbox [(ngModel)]="checkAlltickets">All</nb-checkbox>
+              </div>
+              <div (click)=downloadTickets() class="invite download m-t-14 m-b-12">
+                <img src="assets/img/d-icon.png" width="14px" alt="">
+                Download CSV
+              </div>
+            <div (click)="refreshTickets()" class="refresh m-t-14 m-b-12">
+              <img src="assets/svg-icon/refresh-Btn.svg" alt="">
+              Refresh
+            </div>
+          </div>
+          <div class="box-container" *ngIf="!showLoader">
+            <table *ngIf="TicketAudience.length" class="m-b-40 full-width" [nbTreeGrid]="TicketAudience">
+              <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="alleventColumns"></tr>
+              <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: alleventColumns"></tr>
+
+              <ng-container
+                *ngFor="let column of eventColumns"
+                [nbTreeGridColumnDef]="column"
+              >
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                  <span *ngIf="column !== 'Check'">
+                    {{column}}
+                  </span>
+                </th>
+                <td
+                  [ngClass]="{'check-row-bg': checkAlltickets}"
+                  nbTreeGridCell
+                  *nbTreeGridCellDef="let row"
+                >
+                  <span *ngIf="column === 'Check'">
+                    <div *ngIf="checkAlltickets" class="check-row m-auto">
+                      <img src="assets/img/success-white.png" alt="">
+                    </div>
+                  </span>
+                  <div class="df ai-c">
+                    <div class="df ai-c m-r-4">
+                      <span *ngIf="column === 'Type'">
+                        <img class="m-r-8" [src]="row.data[column].icon" alt="" />
+                      </span>
+                    </div>
+                    <div class="ellipsis">
+                      <span *ngIf="column !== 'Members' && column !== 'Check in' && column !== 'Check'">{{ row.data[column].name }}</span>
+                    </div>
+                  </div>
+                  <div *ngIf="column === 'Check in'">
+                      <span *ngIf="row.data[column].name === true">
+                        <div class=circle-active></div>
+                      </span>
+                      <span *ngIf="row.data[column].name === false">
+                        <div class=circle-inactive></div>
+                      </span>
+                    </div>
+                  <div class=text-center>
+                    <span *ngIf="column === 'Members'">{{ row.data[column].name }}</span>
+                  </div>
+                </td>
+              </ng-container>
+            </table>
+            <div *ngIf="!TicketAudience.length" class="create-btn-wrap">
+              <img class="m-b-16 m-t-40" src="assets/svg-icon/noAudience.svg" alt="">
+              <div class="m-b-25 fs-22">
+                No Audience!
+              </div>
+            </div>
+          </div>
+        </nb-tab>
+        <nb-tab tabTitle="Loyalty Cards">
+          <div *ngIf="showLoader" class="loader-table m-t-50">
+            <img width="70px" src="assets/img/Loader2x.gif" alt="">
+          </div>
+          <div *ngIf="loyaltyCardAudience.length && !showLoader" class="check-all-wrap">
+              <div class="all m-t-14 m-b-12">
+                <nb-checkbox [(ngModel)]="checkAllLoyaltyCards">All</nb-checkbox>
+              </div>
+              <div (click)=downloadLoyaltyCards() class="invite download m-t-14 m-b-12">
+                <img src="assets/img/d-icon.png" width="14px" alt="">
+                Download CSV
+              </div>
+            <div (click)="refreshLoyaltyCards()" class="refresh m-t-14 m-b-12">
+              <img src="assets/svg-icon/refresh-Btn.svg" alt="">
+              Refresh
+            </div>
+          </div>
+          <div class="box-container" *ngIf="!showLoader">
+            <table *ngIf="loyaltyCardAudience.length" class="m-b-40 full-width" [nbTreeGrid]="loyaltyCardAudience">
+              <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allLoyaltyCardColumns"></tr>
+              <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allLoyaltyCardColumns"></tr>
+
+              <ng-container
+                *ngFor="let column of loyaltyCardColumns"
+                [nbTreeGridColumnDef]="column"
+              >
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                  <span *ngIf="column !== 'Check'">
+                    {{column}}
+                  </span>
+                </th>
+                <td
+                  [ngClass]="{'check-row-bg': checkAllLoyaltyCards}"
+                  nbTreeGridCell
+                  *nbTreeGridCellDef="let row"
+                >
+                  <span *ngIf="column === 'Check'">
+                    <div *ngIf="checkAllLoyaltyCards" class="check-row m-auto">
+                      <img src="assets/img/success-white.png" alt="">
+                    </div>
+                  </span>
+                  <div class="df ai-c">
+                    <div class="ellipsis">
+                      <span>{{ row.data[column].name }}</span>
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+            </table>
+            <div *ngIf="!loyaltyCardAudience.length" class="create-btn-wrap">
+              <img class="m-b-16 m-t-40" src="assets/svg-icon/noAudience.svg" alt="">
+              <div class="m-b-25 fs-22">
+                No Audience!
+              </div>
+            </div>
+          </div>
+        </nb-tab>
+    </nb-tabset>
+
   </nb-card-body>
 </nb-card>
 <div *ngIf="showActions" (click)="showActions = null" class="close-bg"></div>
+
+<!-- <table *ngIf="data.length" class="m-b-40 full-width" [nbTreeGrid]="data">
+              <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allCouponColumns"></tr>
+              <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allCouponColumns"></tr>
+
+              <ng-container
+                *ngFor="let column of couponColumns"
+                [nbTreeGridColumnDef]="column"
+              >
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{ column }}</th>
+                <td
+                  (click)="selectedSell = row.data[column].name"
+                  [ngClass]="{ 'active-sell': selectedSell === row.data[column].name }"
+                  nbTreeGridCell
+                  *nbTreeGridCellDef="let row"
+                >
+                  <div class="df ai-c">
+                    <div class="df ai-c m-r-4">
+                      <span *ngIf="column === 'Type'">
+                        <img class="m-r-8" [src]="row.data[column].icon" alt="" />
+                      </span>
+                    </div>
+                    <div class="ellipsis" *ngIf="column !== 'Status'">
+                      <span>{{ row.data[column].name }}</span>
+                    </div>
+                  </div>
+                  <div *ngIf="column === 'Status'">
+                    <span
+                      class="status"
+                      [ngClass]="{
+                        used: row.data[column].name === 'Used',
+                        unused: row.data[column].name === 'Unused',
+                        expired: row.data[column].name === 'Expired'
+                      }"
+                    >
+                      <img
+                        class="m-r-3"
+                        width="12px"
+                        *ngIf="row.data[column].name === 'Used'"
+                        src="assets/img/success-white.png"
+                        alt=""
+                      />
+                      {{ row.data[column].name }}
+                    </span>
+                  </div>
+                </td>
+              </ng-container>
+            </table> -->

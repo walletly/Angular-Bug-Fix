@@ -67,12 +67,36 @@ export class BrandService {
     return this.http.post(SERVER_API_URL + 'brand/associate', body, { headers: httpHeaders});
   }
 
-  getBrandAudience(brand_id) {
+  getBrandCouponAudience(brand_id) {
     const httpHeaders = new HttpHeaders ({
       'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
       'x-auth-user': localStorage.getItem('userID')
     });
     return this.http.get(SERVER_API_URL + 'coupon/audience/' + brand_id, { headers: httpHeaders});
+  }
+
+  getBrandStampCardAudience(brand_id) {
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'stampCard/audience/' + brand_id, { headers: httpHeaders});
+  }
+
+  getBrandTicketAudience(brand_id) {
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'ticket/audience/' + brand_id, { headers: httpHeaders});
+  }
+
+  getBrandLoyaltyCardAudience(brand_id) {
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'loyaltyCard/audience/' + brand_id, { headers: httpHeaders});
   }
 
   addIbeacon(brand_id, body){

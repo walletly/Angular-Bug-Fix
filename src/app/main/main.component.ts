@@ -64,11 +64,11 @@ export class MainComponent implements OnInit, AfterViewInit {
           title: "Bots Store",
           link: ["bots-store/bots-list"]
         },
-        {
-          icon: "icon-menu qr",
-          title: "Chat Bot QR",
-          link: ["bot-qr"]
-        },
+        // {
+        //   icon: "icon-menu qr",
+        //   title: "Chat Bot QR",
+        //   link: ["bot-qr"]
+        // },
         {
           icon: "icon-menu settings",
           title: "Settings",
