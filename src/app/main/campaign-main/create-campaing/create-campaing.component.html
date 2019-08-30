@@ -476,7 +476,7 @@
               Template
             </div>
             <div class="value">
-              <div *ngIf="cards.length" class="pos-r full-width">
+              <div *ngIf="loyalty.length" class="pos-r full-width">
                 <nb-select [ngClass]="{'error': stampForm.controls['template'].invalid && !customValidation}"
                   formControlName="template" #selectTemplate size="small" placeholder="Select Template"
                   [(selected)]="dataCampaign.card_id">
@@ -488,7 +488,7 @@
               <div *ngIf="stampForm.controls['template'].invalid && !customValidation" class="error-lable">
                 Field error (make your choice)
               </div>
-              <div *ngIf="noCards" class="error-lable fs-16">
+              <div *ngIf="noLoyalty" class="error-lable fs-16">
                 Please create Loyalty/Stamp Template First
                 <a [routerLink]="[ '/main/templates/create-cards' ]" class="c-p">
                   (click here)
