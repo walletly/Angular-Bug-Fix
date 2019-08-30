@@ -336,6 +336,7 @@ export class CreateCampaingComponent implements OnInit {
     }if (this.ticketForm.valid) {
       this.dataCampaign.cardType = this.cardType;
       this.mainService.dataCampaign = this.dataCampaign;
+      this.mainService.dataCampaign.currency = this.brand_currency;
 
       if (this.id) {
         this.router.navigate(['/main/campaign-main/review-campaign/' + this.id]);
@@ -355,6 +356,7 @@ export class CreateCampaingComponent implements OnInit {
     }if (this.stampForm.valid) {
       this.dataCampaign.cardType = this.cardType;
       this.mainService.dataCampaign = this.dataCampaign;
+      this.mainService.dataCampaign.currency = this.brand_currency;
 
       if (this.id) {
         this.router.navigate(['/main/campaign-main/review-campaign/' + this.id]);
@@ -438,7 +440,6 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCampaign.endDate = '';
       this.dataCampaign.startDate = '';
       this.dataCampaign.discount='';
-      this.dataCampaign.currency = '';
       this.dataCampaign.coupon_validity='';
       this.dataCampaign.venue = '';
       this.dataCampaign.event_name = '';
@@ -449,7 +450,6 @@ export class CreateCampaingComponent implements OnInit {
       this.selectedSell = 'Event Tickets';
       this.dataCampaign.campaign_type = 8;
       this.dataCampaign.endDate = '';
-      this.dataCampaign.currency = '';
       this.dataCampaign.discount='';
       this.dataCampaign.coupon_validity='';
       this.dataCampaign.points = '';
@@ -460,7 +460,6 @@ export class CreateCampaingComponent implements OnInit {
       this.selectedSell = 'Webinar Event';
       this.dataCampaign.campaign_type = 9;
       this.dataCampaign.endDate = '';
-      this.dataCampaign.currency = '';
       this.dataCampaign.discount='';
       this.dataCampaign.coupon_validity='';
       this.dataCampaign.points = '';
