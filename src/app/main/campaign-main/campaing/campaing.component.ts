@@ -10,15 +10,24 @@ import { MainService } from 'src/app/shared/services/main.service';
 })
 export class CampaingComponent implements OnInit {
   showActions;
-  defaultColumns = ['Type', 'Campaign', 'Integrations', 'Issued', 'Redeemed', 'Start Date', 'End Date', 'Status', 'Action'];
+  couponColumns = ['Type', 'Campaign', 'Integrations', 'Issued', 'Redeemed', 'Start Date', 'End Date', 'Status', 'Action'];
+  cardColumns = ['Type', 'Campaign', 'Integrations', 'Issued', 'Status', 'Action'];
+  ticketColumns = ['Type', 'Campaign', 'Integrations', 'Issued', 'Redeemed', 'Start Date', 'Time', 'Status', 'Action'];
   //  defaultColumns = ['Campaign Name', 'Description', 'Template', 'Issued', 'Redeemed', 'Start Date', 'End Date', 'Status', 'Action'];
-  allColumns = this.defaultColumns;
+  allCouponColumns = this.couponColumns;
+  allCardColumns = this.cardColumns;
+  allTicketColumns = this.ticketColumns;
   campaigns;
   inChangeStatus = '';
   searchText;
 
-  data;
-  filteredData = [];
+  type = 'Coupons';
+  dataCoupon;
+  dataCard;
+  dataTicket;
+  filteredDataCoupon = [];
+  filteredDataCard = [];
+  filteredDataTicket = [];
   showLoader;
 
   constructor(private campaignService: CompaignService, private router: Router, private mainService: MainService) {
@@ -35,7 +44,10 @@ export class CampaingComponent implements OnInit {
     // this.mainService.showLoader.emit(true);
 
     this.campaignService.getСampaignsBrands(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
-      this.data = [];
+      this.dataCoupon = [];
+      this.dataCard = [];
+      this.dataTicket = [];
+
       console.log(data);
       this.campaigns = data['data'];
 
@@ -61,8 +73,26 @@ export class CampaingComponent implements OnInit {
         //   default:
         //     break;
         // }
-        if(element.campaign_type == 5 || element.campaign_type == 6){
-          this.data.unshift({
+        // if(element.campaign_type == 5 || element.campaign_type == 6){
+        //   this.data.unshift({
+        //     data: {
+        //       'Type': { name: this.getTypeImage(element.campaign_type) },
+        //       'Campaign': { name: element.campaign_name },
+        //       'Integrations': { name: element.integrations },
+        //       // 'Template': { name: element.campaign_type_formatted },
+        //       'Issued': { name: element.coupons_created },
+        //       'Redeemed': { name: element.total_redeems },
+        //       'Start Date': { name: element.startDateFormatted },
+        //       'End Date': { name: element.endDateFormatted },
+        //       'Status': { name: element.is_active },
+        //       'Action': { name: '' },
+        //       'Id': { name: element.id },
+        //       'Brand_Id': { name: element.brand_id }
+        //     }
+        //   });
+        // }else{
+        if (element.campaign_type <= 4) {
+          this.dataCoupon.push({
             data: {
               'Type': { name: this.getTypeImage(element.campaign_type) },
               'Campaign': { name: element.campaign_name },
@@ -78,17 +108,31 @@ export class CampaingComponent implements OnInit {
               'Brand_Id': { name: element.brand_id }
             }
           });
-        }else{
-          this.data.push({
+        } else if (element.campaign_type <= 7) {
+          this.dataCard.push({
             data: {
               'Type': { name: this.getTypeImage(element.campaign_type) },
               'Campaign': { name: element.campaign_name },
               'Integrations': { name: element.integrations },
               // 'Template': { name: element.campaign_type_formatted },
-              'Issued': { name: element.coupons_created },
+              'Issued': { name: element.cards_created },
+              'Status': { name: element.is_active },
+              'Action': { name: '' },
+              'Id': { name: element.id },
+              'Brand_Id': { name: element.brand_id }
+            }
+          });
+        } else if (element.campaign_type <= 9) {
+          this.dataTicket.push({
+            data: {
+              'Type': { name: this.getTypeImage(element.campaign_type) },
+              'Campaign': { name: element.campaign_name },
+              'Integrations': { name: element.integrations },
+              // 'Template': { name: element.campaign_type_formatted },
+              'Issued': { name: element.tickets_created },
               'Redeemed': { name: element.total_redeems },
               'Start Date': { name: element.startDateFormatted },
-              'End Date': { name: element.endDateFormatted },
+              'Time': { name: element.time },
               'Status': { name: element.is_active },
               'Action': { name: '' },
               'Id': { name: element.id },
@@ -96,17 +140,24 @@ export class CampaingComponent implements OnInit {
             }
           });
         }
-        console.log(this.data);
+        // console.log(this.dataCoupon);
       });
 
-      this.filteredData = this.data;
+      this.filteredDataCoupon = this.dataCoupon;
+      this.filteredDataCard = this.dataCard;
+      this.filteredDataTicket = this.dataTicket;
+
       // this.mainService.showLoader.emit(false);
       this.showLoader = false;
     }, err => {
       console.log(err);
-      this.data = [];
+      this.dataCoupon = [];
+      this.dataCard = [];
+      this.dataTicket = [];
       // this.mainService.showLoader.emit(false);
-      this.filteredData = [];
+      this.filteredDataCoupon = [];
+      this.filteredDataCard = [];
+      this.filteredDataTicket = [];
       this.showLoader = false;
     });
   }
@@ -149,15 +200,35 @@ export class CampaingComponent implements OnInit {
     });
   }
 
-  filterCampaigns() {
-    this.filteredData = this.data.filter(element => {
-      console.log(element);
-      console.log(element.data['Campaign']);
-      if (element.data['Campaign'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
-        return true;
-      }
-    });
-    console.log(this.filteredData);
+  filterCampaigns(type) {
+    if (type === 'Coupons') {
+      this.filteredDataCoupon = this.dataCoupon.filter(element => {
+        console.log(element);
+        console.log(element.data['Campaign']);
+        if (element.data['Campaign'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+          return true;
+        }
+      });
+      console.log(this.filteredDataCoupon);
+    } else if (type === 'Cards') {
+      this.filteredDataCard = this.dataCard.filter(element => {
+        console.log(element);
+        console.log(element.data['Campaign']);
+        if (element.data['Campaign'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+          return true;
+        }
+      });
+      console.log(this.filteredDataCard);
+    } else if (type === 'Tickets') {
+      this.filteredDataTicket = this.dataTicket.filter(element => {
+        console.log(element);
+        console.log(element.data['Campaign']);
+        if (element.data['Campaign'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+          return true;
+        }
+      });
+      console.log(this.filteredDataTicket);
+    }
   }
 
   goToDetails(id) {
@@ -174,7 +245,7 @@ export class CampaingComponent implements OnInit {
     this.getCampaigns();
   }
 
-  addCampaign(){
+  addCampaign() {
     this.mainService.dataCampaign = {
       name: '',
       description: '',
@@ -194,6 +265,16 @@ export class CampaingComponent implements OnInit {
       points: ''
     };
     this.router.navigate(['/main/campaign-main/create-campaign']);
+  }
+
+  onChangeTab(evt) {
+    if (evt.tabTitle === 'Coupons') {
+      this.type = 'Coupons';
+    } else if (evt.tabTitle === 'Cards') {
+      this.type = 'Cards';
+    } else if (evt.tabTitle === 'Tickets') {
+      this.type = 'Tickets';
+    }
   }
 
   getTypeImage(type){

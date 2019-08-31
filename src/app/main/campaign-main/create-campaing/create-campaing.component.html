@@ -212,7 +212,7 @@
             <div class="value">
               <div class="pos-r">
                 <input [ngClass]="{'error': myForm.controls['validity'].invalid && !customValidation}" (input)="checkValidity($event.target.value)"
-                formControlName="validity" [(ngModel)]="dataCampaign.coupon_validity" type="text" class="small" nbInput fullWidth fieldSize="small" placeholder="">
+                formControlName="validity" [(ngModel)]="dataCampaign.coupon_validity" type="text" class="small" nbInput fullWidth fieldSize="small" placeholder="days">
                 <div *ngIf="myForm.controls['validity'].invalid && !customValidation" class="error-lable">
                   Enter Validity in days e.g. 30 (1-365)
                 </div>

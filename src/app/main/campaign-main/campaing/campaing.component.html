@@ -6,7 +6,7 @@
     <div class="pos-r" style="top: -5px;">
       <input
         [(ngModel)]="searchText"
-        (ngModelChange)="filterCampaigns()"
+        (ngModelChange)="filterCampaigns(type)"
         style="width: 235px;"
         placeholder="Search"
         class="small"
@@ -33,214 +33,638 @@
 </div>
 <nb-card>
   <nb-card-body style="overflow: unset !important;" class="p-0">
-    <div *ngIf="!showLoader" class="check-all-wrap">
-      <div *ngIf="data.length" (click)="refresh()" class="refresh m-t-10 m-b-10 m-r-10">
-        <img src="assets/svg-icon/refresh-Btn.svg" alt="">
-        Refresh
-      </div>
-    </div>
-    <div class="box-container" *ngIf="!showLoader">
-      <table *ngIf="data.length" class="m-b-40 campaign-table" [nbTreeGrid]="filteredData">
-        <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
-        <tr
-          (click)="goToDetails(row.data['Id'].name)"
-          nbTreeGridRow
-          *nbTreeGridRowDef="let row; columns: allColumns"
-        ></tr>
+    <nb-tabset (changeTab)="onChangeTab($event)">
+      <nb-tab tabTitle="Coupons">
+        <div *ngIf="!showLoader" class="check-all-wrap">
+          <div *ngIf="dataCoupon.length" (click)="refresh()" class="refresh m-t-10 m-b-10 m-r-10">
+            <img src="assets/svg-icon/refresh-Btn.svg" alt="">
+            Refresh
+          </div>
+        </div>
+        <div class="box-container" *ngIf="!showLoader">
+          <table *ngIf="dataCoupon.length" class="m-b-40 campaign-table" [nbTreeGrid]="filteredDataCoupon">
+            <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allCouponColumns"></tr>
+            <tr
+              (click)="goToDetails(row.data['Id'].name)"
+              nbTreeGridRow
+              *nbTreeGridRowDef="let row; columns: allCouponColumns"
+            ></tr>
 
-        <ng-container
-          *ngFor="let column of defaultColumns"
-          [nbTreeGridColumnDef]="column"
-        >
-          <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{ column }}</th>
-          <td
-            (click)="selectedSell = row.data[column].name"
-            [ngClass]="{ 'active-sell': selectedSell === row.data[column].name }"
-            nbTreeGridCell
-            *nbTreeGridCellDef="let row"
-          >
-          <div
-              class="ellipsis"
-              *ngIf="column !== 'Type' && column !== 'Status' && column !== 'Action' && column !== 'Integrations'"
-        >
-
-              <span *ngIf="column !== 'Issue' && column !== 'Redeem'">{{
-                row.data[column].name
-              }}</span>
-              <div *ngIf="column === 'Issue'" class="chip-wrap">
-                <div>
-                  <span>{{ row.data[column].name }}</span>
-                </div>
-                <div class="chip free">FREE</div>
-              </div>
-              <div
-                *ngIf="column === 'Redeem'"
-                [ngStyle]="{
-                  color: row.data[column].name === '100' ? 'red' : 'black'
-                }"
-                class="chip-wrap"
+            <ng-container
+              *ngFor="let column of couponColumns"
+              [nbTreeGridColumnDef]="column"
+            >
+              <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{ column }}</th>
+              <td
+                (click)="selectedSell = row.data[column].name"
+                [ngClass]="{ 'active-sell': selectedSell === row.data[column].name }"
+                nbTreeGridCell
+                *nbTreeGridCellDef="let row"
               >
-                <div>
-                  {{ row.data[column].name }}
-                </div>
-                <div *ngIf="row.data[column].name === 100" class="chip upgrade">
-                  Upgrade
-                </div>
-              </div>
-            </div>
+              <div
+                  class="ellipsis"
+                  *ngIf="column !== 'Type' && column !== 'Status' && column !== 'Action' && column !== 'Integrations'"
+            >
 
-             <div>
-              <span *ngIf="column === 'Integrations'">
-                <div class="row">
-                <span *ngFor="let bots of row.data[column].name">
-                    <div *ngIf="bots === 'ManyChat'">
-                      <div><img src="assets/svg-icon/template-icons/platform/manychat.svg" alt=""></div>
+                  <span *ngIf="column !== 'Issue' && column !== 'Redeem'">{{
+                    row.data[column].name
+                  }}</span>
+                  <div *ngIf="column === 'Issue'" class="chip-wrap">
+                    <div>
+                      <span>{{ row.data[column].name }}</span>
                     </div>
-                    <div *ngIf="bots === 'ActiveChat'">
-                      <div><img src="assets/svg-icon/template-icons/platform/activechat.svg" alt=""></div>
+                    <div class="chip free">FREE</div>
+                  </div>
+                  <div
+                    *ngIf="column === 'Redeem'"
+                    [ngStyle]="{
+                      color: row.data[column].name === '100' ? 'red' : 'black'
+                    }"
+                    class="chip-wrap"
+                  >
+                    <div>
+                      {{ row.data[column].name }}
                     </div>
-                    <div *ngIf="bots === 'Offline'">
-                      <div><img src="assets/svg-icon/template-icons/platform/newspaper.svg" alt=""></div>
+                    <div *ngIf="row.data[column].name === 100" class="chip upgrade">
+                      Upgrade
+                    </div>
+                  </div>
+                </div>
+
+                 <div>
+                  <span *ngIf="column === 'Integrations'">
+                    <div class="row">
+                    <span *ngFor="let bots of row.data[column].name">
+                        <div *ngIf="bots === 'ManyChat'">
+                          <div><img src="assets/svg-icon/template-icons/platform/manychat.svg" alt=""></div>
+                        </div>
+                        <div *ngIf="bots === 'ActiveChat'">
+                          <div><img src="assets/svg-icon/template-icons/platform/activechat.svg" alt=""></div>
+                        </div>
+                        <div *ngIf="bots === 'Offline'">
+                          <div><img src="assets/svg-icon/template-icons/platform/newspaper.svg" alt=""></div>
+                        </div>
+                      </span>
+                    </div>
+                  </span>
+                  <span *ngIf="column === 'Type'">
+                    <div>
+                      <img [src]="row.data[column].name" alt="">
                     </div>
                   </span>
                 </div>
-              </span>
-              <span *ngIf="column === 'Type'">
-                <div>
-                  <img [src]="row.data[column].name" alt="">
-                </div>
-              </span>
-            </div>
 
-            <div class="df ai-c">
-              <span *ngIf="column === 'Status'">
-                <!-- <label class="campaignSwitch"
-                  (click)="changeStatus(
-                    $event.target,
-                    'check-' + row.data['Id'].name,
-                    row.data['Id'].name,
-                    row.data['Status'].name,
-                    $event)">
-                  <input *ngIf="row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" checked disabled>
-                  <input *ngIf="!row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" disabled>
-                  <div class="campaignSlider campaignRound">
-                    <span class="on disable">
-                      <i *ngIf="inChangeStatus == row.data['Id'].name" class="fas fa-spinner fa-pulse"></i>
-                      <span *ngIf="inChangeStatus != row.data['Id'].name">Active</span>
+                <div class="df ai-c">
+                  <span *ngIf="column === 'Status'">
+                    <!-- <label class="campaignSwitch"
+                      (click)="changeStatus(
+                        $event.target,
+                        'check-' + row.data['Id'].name,
+                        row.data['Id'].name,
+                        row.data['Status'].name,
+                        $event)">
+                      <input *ngIf="row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" checked disabled>
+                      <input *ngIf="!row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" disabled>
+                      <div class="campaignSlider campaignRound">
+                        <span class="on disable">
+                          <i *ngIf="inChangeStatus == row.data['Id'].name" class="fas fa-spinner fa-pulse"></i>
+                          <span *ngIf="inChangeStatus != row.data['Id'].name">Active</span>
+                        </span>
+                        <span class="off disable">
+                          <span *ngIf="inChangeStatus != row.data['Id'].name">Inactive</span>
+                          <i *ngIf="inChangeStatus == row.data['Id'].name" class="fas fa-spinner fa-pulse"></i>
+                        </span>
+                      </div>
+                    </label> -->
+                    <label class="switch"
+                      (click)="changeStatus(
+                      $event.target,
+                      'check-' + row.data['Id'].name,
+                      row.data['Id'].name,
+                      row.data['Status'].name,
+                      $event)">
+                      <input *ngIf="row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" checked disabled>
+                      <input *ngIf="!row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" disabled>
+                      <span class="slider round"></span>
+                    </label>
+                    <!-- <span
+                      *ngIf="row.data[column].name === true"
+                      (click)="
+                        changeStatus(
+                          row.data['Id'].name,
+                          row.data['Status'].name,
+                          $event
+                        )
+                      "
+                      class="active c-p"
+                    >
+                      <span class="circle"></span>
+                      <span>Active</span>
                     </span>
-                    <span class="off disable">
-                      <span *ngIf="inChangeStatus != row.data['Id'].name">Inactive</span>
-                      <i *ngIf="inChangeStatus == row.data['Id'].name" class="fas fa-spinner fa-pulse"></i>
+                    <span
+                      *ngIf="row.data[column].name === false"
+                      (click)="changeStatus(row.data['Id'].name, row.data['Status'].name, $event)"
+                      class="expired c-p"
+                    >
+                    <span class="circle"></span>
+                      <span>Expired</span>
+                    </span>
+                    <span
+                      *ngIf="row.data[column].name === false"
+                      (click)="
+                        changeStatus(
+                          row.data['Id'].name,
+                          row.data['Status'].name,
+                          $event
+                        )
+                      "
+                      class="expired c-p"
+                    >
+                      <span class="circle"></span>
+                      <span>Inactive</span>
+                    </span> -->
+                  </span>
+                  <div class="df jc-e full-width">
+                    <span *ngIf="column === 'Action'">
+                      <div class="pos-r text-right">
+                        <img
+                          (click)="showShared(row.data[column], $event)"
+                          class="c-p"
+                          src="assets/svg-icon/shared.svg"
+                          alt=""
+                        />
+                        <div
+                          *ngIf="showActions === row.data[column]"
+                          class="action-drb"
+                        >
+                          <div
+                            (click)="showActions = null;"
+                            class="item"
+                          >
+                            <img src="assets/svg-icon/view.svg" alt="" />
+                            View
+                          </div>
+                          <div
+                            (click)="showActions = null; edit(row.data.Id, $event)"
+                            class="item"
+                          >
+                            <img src="assets/svg-icon/edit.svg" alt="" />
+                            Edit
+                          </div>
+                          <div *ngIf="!row.data['Type'].name.includes('LoyaltyCard') && !row.data['Type'].name.includes('stampCard')"
+                            (click)="
+                              delete(
+                                row.data['Id'].name,
+                                row.data['Brand_Id'].name,
+                                $event
+                              );
+                              showActions = null
+                            "
+                            class="item"
+                          >
+                            <img src="assets/svg-icon/delete.svg" alt="" />
+                            Delete
+                          </div>
+                        </div>
+                      </div>
                     </span>
                   </div>
-                </label> -->
-                <label class="switch"
-                  (click)="changeStatus(
-                  $event.target,
-                  'check-' + row.data['Id'].name,
-                  row.data['Id'].name,
-                  row.data['Status'].name,
-                  $event)">
-                  <input *ngIf="row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" checked disabled>
-                  <input *ngIf="!row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" disabled>
-                  <span class="slider round"></span>
-                </label>
-                <!-- <span
-                  *ngIf="row.data[column].name === true"
-                  (click)="
-                    changeStatus(
-                      row.data['Id'].name,
-                      row.data['Status'].name,
-                      $event
-                    )
-                  "
-                  class="active c-p"
-                >
-                  <span class="circle"></span>
-                  <span>Active</span>
-                </span>
-                <span
-                  *ngIf="row.data[column].name === false"
-                  (click)="changeStatus(row.data['Id'].name, row.data['Status'].name, $event)"
-                  class="expired c-p"
-                >
-                <span class="circle"></span>
-                  <span>Expired</span>
-                </span>
-                <span
-                  *ngIf="row.data[column].name === false"
-                  (click)="
-                    changeStatus(
-                      row.data['Id'].name,
-                      row.data['Status'].name,
-                      $event
-                    )
-                  "
-                  class="expired c-p"
-                >
-                  <span class="circle"></span>
-                  <span>Inactive</span>
-                </span> -->
-              </span>
-              <div class="df jc-e full-width">
-                <span *ngIf="column === 'Action'">
-                  <div class="pos-r text-right">
-                    <img
-                      (click)="showShared(row.data[column], $event)"
-                      class="c-p"
-                      src="assets/svg-icon/shared.svg"
-                      alt=""
-                    />
-                    <div
-                      *ngIf="showActions === row.data[column]"
-                      class="action-drb"
-                    >
-                      <div
-                        (click)="showActions = null;"
-                        class="item"
-                      >
-                        <img src="assets/svg-icon/view.svg" alt="" />
-                        View
-                      </div>
-                      <div
-                        (click)="showActions = null; edit(row.data.Id, $event)"
-                        class="item"
-                      >
-                        <img src="assets/svg-icon/edit.svg" alt="" />
-                        Edit
-                      </div>
-                      <div *ngIf="!row.data['Type'].name.includes('LoyaltyCard') && !row.data['Type'].name.includes('stampCard')"
-                        (click)="
-                          delete(
-                            row.data['Id'].name,
-                            row.data['Brand_Id'].name,
-                            $event
-                          );
-                          showActions = null
-                        "
-                        class="item"
-                      >
-                        <img src="assets/svg-icon/delete.svg" alt="" />
-                        Delete
-                      </div>
+                </div>
+              </td>
+            </ng-container>
+          </table>
+          <div *ngIf="!dataCoupon.length" class="create-btn-wrap">
+            <img class="m-b-16 m-t-40" src="assets/svg-icon/noCampaign.svg" alt="">
+            <div class="m-b-25 fs-22">
+              No Campaign Created!
+            </div>
+          </div>
+        </div>
+        <div *ngIf="showLoader" class="loader-table m-t-50">
+          <img width="70px" src="assets/img/Loader2x.gif" alt="" />
+        </div>
+      </nb-tab>
+      <nb-tab tabTitle="Cards">
+        <div *ngIf="!showLoader" class="check-all-wrap">
+          <div *ngIf="dataCard.length" (click)="refresh()" class="refresh m-t-10 m-b-10 m-r-10">
+            <img src="assets/svg-icon/refresh-Btn.svg" alt="">
+            Refresh
+          </div>
+        </div>
+        <div class="box-container" *ngIf="!showLoader">
+          <table *ngIf="dataCard.length" class="m-b-40 campaign-table" [nbTreeGrid]="filteredDataCard">
+            <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allCardColumns"></tr>
+            <tr
+              (click)="goToDetails(row.data['Id'].name)"
+              nbTreeGridRow
+              *nbTreeGridRowDef="let row; columns: allCardColumns"
+            ></tr>
+
+            <ng-container
+              *ngFor="let column of cardColumns"
+              [nbTreeGridColumnDef]="column"
+            >
+              <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{ column }}</th>
+              <td
+                (click)="selectedSell = row.data[column].name"
+                [ngClass]="{ 'active-sell': selectedSell === row.data[column].name }"
+                nbTreeGridCell
+                *nbTreeGridCellDef="let row"
+              >
+              <div
+                  class="ellipsis"
+                  *ngIf="column !== 'Type' && column !== 'Status' && column !== 'Action' && column !== 'Integrations'"
+            >
+
+                  <span *ngIf="column !== 'Issue' && column !== 'Redeem'">{{
+                    row.data[column].name
+                  }}</span>
+                  <div *ngIf="column === 'Issue'" class="chip-wrap">
+                    <div>
+                      <span>{{ row.data[column].name }}</span>
+                    </div>
+                    <div class="chip free">FREE</div>
+                  </div>
+                  <div
+                    *ngIf="column === 'Redeem'"
+                    [ngStyle]="{
+                      color: row.data[column].name === '100' ? 'red' : 'black'
+                    }"
+                    class="chip-wrap"
+                  >
+                    <div>
+                      {{ row.data[column].name }}
+                    </div>
+                    <div *ngIf="row.data[column].name === 100" class="chip upgrade">
+                      Upgrade
                     </div>
                   </div>
-                </span>
-              </div>
+                </div>
+
+                 <div>
+                  <span *ngIf="column === 'Integrations'">
+                    <div class="row">
+                    <span *ngFor="let bots of row.data[column].name">
+                        <div *ngIf="bots === 'ManyChat'">
+                          <div><img src="assets/svg-icon/template-icons/platform/manychat.svg" alt=""></div>
+                        </div>
+                        <div *ngIf="bots === 'ActiveChat'">
+                          <div><img src="assets/svg-icon/template-icons/platform/activechat.svg" alt=""></div>
+                        </div>
+                        <div *ngIf="bots === 'Offline'">
+                          <div><img src="assets/svg-icon/template-icons/platform/newspaper.svg" alt=""></div>
+                        </div>
+                      </span>
+                    </div>
+                  </span>
+                  <span *ngIf="column === 'Type'">
+                    <div>
+                      <img [src]="row.data[column].name" alt="">
+                    </div>
+                  </span>
+                </div>
+
+                <div class="df ai-c">
+                  <span *ngIf="column === 'Status'">
+                    <!-- <label class="campaignSwitch"
+                      (click)="changeStatus(
+                        $event.target,
+                        'check-' + row.data['Id'].name,
+                        row.data['Id'].name,
+                        row.data['Status'].name,
+                        $event)">
+                      <input *ngIf="row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" checked disabled>
+                      <input *ngIf="!row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" disabled>
+                      <div class="campaignSlider campaignRound">
+                        <span class="on disable">
+                          <i *ngIf="inChangeStatus == row.data['Id'].name" class="fas fa-spinner fa-pulse"></i>
+                          <span *ngIf="inChangeStatus != row.data['Id'].name">Active</span>
+                        </span>
+                        <span class="off disable">
+                          <span *ngIf="inChangeStatus != row.data['Id'].name">Inactive</span>
+                          <i *ngIf="inChangeStatus == row.data['Id'].name" class="fas fa-spinner fa-pulse"></i>
+                        </span>
+                      </div>
+                    </label> -->
+                    <label class="switch"
+                      (click)="changeStatus(
+                      $event.target,
+                      'check-' + row.data['Id'].name,
+                      row.data['Id'].name,
+                      row.data['Status'].name,
+                      $event)">
+                      <input *ngIf="row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" checked disabled>
+                      <input *ngIf="!row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" disabled>
+                      <span class="slider round"></span>
+                    </label>
+                    <!-- <span
+                      *ngIf="row.data[column].name === true"
+                      (click)="
+                        changeStatus(
+                          row.data['Id'].name,
+                          row.data['Status'].name,
+                          $event
+                        )
+                      "
+                      class="active c-p"
+                    >
+                      <span class="circle"></span>
+                      <span>Active</span>
+                    </span>
+                    <span
+                      *ngIf="row.data[column].name === false"
+                      (click)="changeStatus(row.data['Id'].name, row.data['Status'].name, $event)"
+                      class="expired c-p"
+                    >
+                    <span class="circle"></span>
+                      <span>Expired</span>
+                    </span>
+                    <span
+                      *ngIf="row.data[column].name === false"
+                      (click)="
+                        changeStatus(
+                          row.data['Id'].name,
+                          row.data['Status'].name,
+                          $event
+                        )
+                      "
+                      class="expired c-p"
+                    >
+                      <span class="circle"></span>
+                      <span>Inactive</span>
+                    </span> -->
+                  </span>
+                  <div class="df jc-e full-width">
+                    <span *ngIf="column === 'Action'">
+                      <div class="pos-r text-right">
+                        <img
+                          (click)="showShared(row.data[column], $event)"
+                          class="c-p"
+                          src="assets/svg-icon/shared.svg"
+                          alt=""
+                        />
+                        <div
+                          *ngIf="showActions === row.data[column]"
+                          class="action-drb"
+                        >
+                          <div
+                            (click)="showActions = null;"
+                            class="item"
+                          >
+                            <img src="assets/svg-icon/view.svg" alt="" />
+                            View
+                          </div>
+                          <div
+                            (click)="showActions = null; edit(row.data.Id, $event)"
+                            class="item"
+                          >
+                            <img src="assets/svg-icon/edit.svg" alt="" />
+                            Edit
+                          </div>
+                          <div *ngIf="!row.data['Type'].name.includes('LoyaltyCard') && !row.data['Type'].name.includes('stampCard')"
+                            (click)="
+                              delete(
+                                row.data['Id'].name,
+                                row.data['Brand_Id'].name,
+                                $event
+                              );
+                              showActions = null
+                            "
+                            class="item"
+                          >
+                            <img src="assets/svg-icon/delete.svg" alt="" />
+                            Delete
+                          </div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+          </table>
+          <div *ngIf="!dataCard.length" class="create-btn-wrap">
+            <img class="m-b-16 m-t-40" src="assets/svg-icon/noCampaign.svg" alt="">
+            <div class="m-b-25 fs-22">
+              No Campaign Created!
             </div>
-          </td>
-        </ng-container>
-      </table>
-      <div *ngIf="!data.length" class="create-btn-wrap">
-        <img class="m-b-16 m-t-40" src="assets/svg-icon/noCampaign.svg" alt="">
-        <div class="m-b-25 fs-22">
-          No Campaign Created!
+          </div>
         </div>
-      </div>
-    </div>
-    <div *ngIf="showLoader" class="loader-table m-t-50">
-      <img width="70px" src="assets/img/Loader2x.gif" alt="" />
-    </div>
+        <div *ngIf="showLoader" class="loader-table m-t-50">
+          <img width="70px" src="assets/img/Loader2x.gif" alt="" />
+        </div>
+      </nb-tab>
+      <nb-tab tabTitle="Tickets">
+        <div *ngIf="!showLoader" class="check-all-wrap">
+          <div *ngIf="dataTicket.length" (click)="refresh()" class="refresh m-t-10 m-b-10 m-r-10">
+            <img src="assets/svg-icon/refresh-Btn.svg" alt="">
+            Refresh
+          </div>
+        </div>
+        <div class="box-container" *ngIf="!showLoader">
+          <table *ngIf="dataTicket.length" class="m-b-40 campaign-table" [nbTreeGrid]="filteredDataTicket">
+            <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allTicketColumns"></tr>
+            <tr
+              (click)="goToDetails(row.data['Id'].name)"
+              nbTreeGridRow
+              *nbTreeGridRowDef="let row; columns: allTicketColumns"
+            ></tr>
+
+            <ng-container
+              *ngFor="let column of ticketColumns"
+              [nbTreeGridColumnDef]="column"
+            >
+              <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{ column }}</th>
+              <td
+                (click)="selectedSell = row.data[column].name"
+                [ngClass]="{ 'active-sell': selectedSell === row.data[column].name }"
+                nbTreeGridCell
+                *nbTreeGridCellDef="let row"
+              >
+              <div
+                  class="ellipsis"
+                  *ngIf="column !== 'Type' && column !== 'Status' && column !== 'Action' && column !== 'Integrations'"
+            >
+
+                  <span *ngIf="column !== 'Issue' && column !== 'Redeem'">{{
+                    row.data[column].name
+                  }}</span>
+                  <div *ngIf="column === 'Issue'" class="chip-wrap">
+                    <div>
+                      <span>{{ row.data[column].name }}</span>
+                    </div>
+                    <div class="chip free">FREE</div>
+                  </div>
+                  <div
+                    *ngIf="column === 'Redeem'"
+                    [ngStyle]="{
+                      color: row.data[column].name === '100' ? 'red' : 'black'
+                    }"
+                    class="chip-wrap"
+                  >
+                    <div>
+                      {{ row.data[column].name }}
+                    </div>
+                    <div *ngIf="row.data[column].name === 100" class="chip upgrade">
+                      Upgrade
+                    </div>
+                  </div>
+                </div>
+
+                 <div>
+                  <span *ngIf="column === 'Integrations'">
+                    <div class="row">
+                    <span *ngFor="let bots of row.data[column].name">
+                        <div *ngIf="bots === 'ManyChat'">
+                          <div><img src="assets/svg-icon/template-icons/platform/manychat.svg" alt=""></div>
+                        </div>
+                        <div *ngIf="bots === 'ActiveChat'">
+                          <div><img src="assets/svg-icon/template-icons/platform/activechat.svg" alt=""></div>
+                        </div>
+                        <div *ngIf="bots === 'Offline'">
+                          <div><img src="assets/svg-icon/template-icons/platform/newspaper.svg" alt=""></div>
+                        </div>
+                      </span>
+                    </div>
+                  </span>
+                  <span *ngIf="column === 'Type'">
+                    <div>
+                      <img [src]="row.data[column].name" alt="">
+                    </div>
+                  </span>
+                </div>
+
+                <div class="df ai-c">
+                  <span *ngIf="column === 'Status'">
+                    <!-- <label class="campaignSwitch"
+                      (click)="changeStatus(
+                        $event.target,
+                        'check-' + row.data['Id'].name,
+                        row.data['Id'].name,
+                        row.data['Status'].name,
+                        $event)">
+                      <input *ngIf="row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" checked disabled>
+                      <input *ngIf="!row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" disabled>
+                      <div class="campaignSlider campaignRound">
+                        <span class="on disable">
+                          <i *ngIf="inChangeStatus == row.data['Id'].name" class="fas fa-spinner fa-pulse"></i>
+                          <span *ngIf="inChangeStatus != row.data['Id'].name">Active</span>
+                        </span>
+                        <span class="off disable">
+                          <span *ngIf="inChangeStatus != row.data['Id'].name">Inactive</span>
+                          <i *ngIf="inChangeStatus == row.data['Id'].name" class="fas fa-spinner fa-pulse"></i>
+                        </span>
+                      </div>
+                    </label> -->
+                    <label class="switch"
+                      (click)="changeStatus(
+                      $event.target,
+                      'check-' + row.data['Id'].name,
+                      row.data['Id'].name,
+                      row.data['Status'].name,
+                      $event)">
+                      <input *ngIf="row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" checked disabled>
+                      <input *ngIf="!row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" disabled>
+                      <span class="slider round"></span>
+                    </label>
+                    <!-- <span
+                      *ngIf="row.data[column].name === true"
+                      (click)="
+                        changeStatus(
+                          row.data['Id'].name,
+                          row.data['Status'].name,
+                          $event
+                        )
+                      "
+                      class="active c-p"
+                    >
+                      <span class="circle"></span>
+                      <span>Active</span>
+                    </span>
+                    <span
+                      *ngIf="row.data[column].name === false"
+                      (click)="changeStatus(row.data['Id'].name, row.data['Status'].name, $event)"
+                      class="expired c-p"
+                    >
+                    <span class="circle"></span>
+                      <span>Expired</span>
+                    </span>
+                    <span
+                      *ngIf="row.data[column].name === false"
+                      (click)="
+                        changeStatus(
+                          row.data['Id'].name,
+                          row.data['Status'].name,
+                          $event
+                        )
+                      "
+                      class="expired c-p"
+                    >
+                      <span class="circle"></span>
+                      <span>Inactive</span>
+                    </span> -->
+                  </span>
+                  <div class="df jc-e full-width">
+                    <span *ngIf="column === 'Action'">
+                      <div class="pos-r text-right">
+                        <img
+                          (click)="showShared(row.data[column], $event)"
+                          class="c-p"
+                          src="assets/svg-icon/shared.svg"
+                          alt=""
+                        />
+                        <div
+                          *ngIf="showActions === row.data[column]"
+                          class="action-drb"
+                        >
+                          <div
+                            (click)="showActions = null;"
+                            class="item"
+                          >
+                            <img src="assets/svg-icon/view.svg" alt="" />
+                            View
+                          </div>
+                          <div
+                            (click)="showActions = null; edit(row.data.Id, $event)"
+                            class="item"
+                          >
+                            <img src="assets/svg-icon/edit.svg" alt="" />
+                            Edit
+                          </div>
+                          <div *ngIf="!row.data['Type'].name.includes('LoyaltyCard') && !row.data['Type'].name.includes('stampCard')"
+                            (click)="
+                              delete(
+                                row.data['Id'].name,
+                                row.data['Brand_Id'].name,
+                                $event
+                              );
+                              showActions = null
+                            "
+                            class="item"
+                          >
+                            <img src="assets/svg-icon/delete.svg" alt="" />
+                            Delete
+                          </div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+          </table>
+          <div *ngIf="!dataTicket.length" class="create-btn-wrap">
+            <img class="m-b-16 m-t-40" src="assets/svg-icon/noCampaign.svg" alt="">
+            <div class="m-b-25 fs-22">
+              No Campaign Created!
+            </div>
+          </div>
+        </div>
+        <div *ngIf="showLoader" class="loader-table m-t-50">
+          <img width="70px" src="assets/img/Loader2x.gif" alt="" />
+        </div>
+      </nb-tab>
+    </nb-tabset>
   </nb-card-body>
 </nb-card>
 <div *ngIf="showActions" (click)="showActions = null" class="close-bg"></div>
