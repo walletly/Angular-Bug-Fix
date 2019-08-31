@@ -56,43 +56,49 @@ const routes: Routes = [
       {
         path: "dashboard",
         component: DashboardComponent,
-        canActivate: [PageGuard],
+        canActivate: [AuthGuard, PageGuard],
         data: { breadcrumb: "hiddenBreadcrumb" }
       },
       {
         path: "dashboard-info-admin",
         component: DashboardInfoAdminComponent,
-        canActivate: [PageGuard],
+        canActivate: [AuthGuard, PageGuard],
         data: { breadcrumb: "hiddenBreadcrumb" }
       },
       {
         path: "bot-qr",
         component: BotQrComponent,
+        canActivate: [AuthGuard],
         data: { breadcrumb: "Chat Bot QR" }
       },
       {
         path: "push-notification",
         component: PushNotificationComponent,
+        canActivate: [AuthGuard],
         data: { breadcrumb: "Push Notification" }
       },
       {
         path: "settings",
         component: SettingsComponent,
+        canActivate: [AuthGuard],
         data: { breadcrumb: "settings" }
       },
       {
         path: "brands",
         component: PagesComponent,
+        canActivate: [AuthGuard],
         data: { breadcrumb: "brands" }
       },
       {
         path: "marketers",
         component: MarketersComponent,
+        canActivate: [AuthGuard],
         data: { breadcrumb: "marketers" }
       },
       {
         path: "templates",
         component: TemplatesComponent,
+        canActivate: [AuthGuard],
         data: { breadcrumb: "Templates" },
         children: [
           {
@@ -122,17 +128,20 @@ const routes: Routes = [
       },
       {
         path: "create-templates",
+        canActivate: [AuthGuard],
         component: CampaignTemplatesComponent,
         data: { breadcrumb: "templates" }
       },
       {
         path: "campaign-type",
         component: CampaignTypeComponent,
+        canActivate: [AuthGuard],
         data: { breadcrumb: "campaign" }
       },
       {
         path: "campaign-main",
         component: TemplatesComponent,
+        canActivate: [AuthGuard],
         data: { breadcrumb: "campaign" },
         children: [
           {
@@ -179,6 +188,7 @@ const routes: Routes = [
       {
         path: "business",
         component: BusinessComponent,
+        canActivate: [AuthGuard],
         data: { breadcrumb: "Business" },
         children: [
           {
@@ -203,6 +213,7 @@ const routes: Routes = [
       {
         path: "bots-store",
         component: BotsStoreComponent,
+        canActivate: [AuthGuard],
         data: { breadcrumb: "Bots Store" },
         children: [
           {
@@ -224,9 +235,10 @@ const routes: Routes = [
       {
         path: "audience",
         component: AudienceComponent,
+        canActivate: [AuthGuard],
         data: { breadcrumb: "audience" },
       },
-      { path: "help", component: HelpComponent, data: { breadcrumb: "help" } },
+      { path: "help", component: HelpComponent, canActivate: [AuthGuard], data: { breadcrumb: "help" } },
     ]
   },
   { path: "profile", component: ProfileComponent, canActivate: [AuthGuard] },

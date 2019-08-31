@@ -31,21 +31,23 @@
             />
             <i class="nb-search input-icon"></i>
           </div>
-          <div *ngFor="let item of filteredBrands">
-            <div (click)="changeBrand(item.brand_id)">
-              <div class="menu-item">
-                <div class="icon">
-                  <img width="100%" [src]="item.brand_logo" alt="" />
+          <div style="max-height: calc(100vh - 350px); overflow-y: auto;">
+            <div *ngFor="let item of filteredBrands">
+              <div (click)="changeBrand(item.brand_id)">
+                <div class="menu-item">
+                  <div class="icon">
+                    <img width="100%" [src]="item.brand_logo" alt="" />
+                  </div>
+                  {{ item.brand_name }}
                 </div>
-                {{ item.brand_name }}
               </div>
             </div>
-          </div>
-          <div [routerLink]="['/fb-connect']" class="menu-item add-page">
-            <div class="icon">
-              <i class="nb-plus"></i>
+            <div [routerLink]="['/fb-connect']" class="menu-item add-page">
+              <div class="icon">
+                <i class="nb-plus"></i>
+              </div>
+              Add New Page
             </div>
-            Add New Page
           </div>
         </div>
       </div>
