@@ -1383,3 +1383,10 @@ nb-menu.admin-type > ul > li > a{
 div.top > nb-menu.admin-type{
   margin-bottom: 0 !important;  
 }
+::-webkit-scrollbar {
+  width: 0px !important;  /* Remove scrollbar space */
+  background: transparent !important;  /* Optional: just make scrollbar invisible */
+}
+::-webkit-scrollbar-thumb {
+  background: transparent !important;
+}
