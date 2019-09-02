@@ -134,7 +134,7 @@ export class CreateCampaingComponent implements OnInit {
     if(this.id){
       this.disable = true;
     }else{
-      this.campaignService.getСampaignsBrands(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+      this.campaignService.getСampaignsBrands(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],{}).subscribe(result => {
         console.log(result);
         for (let i in result['data']){
           if(result['data'][i].campaign_type == 5){

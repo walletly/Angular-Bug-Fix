@@ -59,12 +59,13 @@ export class CompaignService {
     return this.http.post(SERVER_API_URL + card_type, body, { headers: httpHeadersWithCT });
   }
 
-  getСampaignsBrands(id) {
-    const httpHeaders = new HttpHeaders ({
+  getСampaignsBrands(id, body) {
+    const httpHeadersWithCT = new HttpHeaders ({
+      'Content-Type': 'application/json',
       'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
       'x-auth-user': localStorage.getItem('userID')
     });
-    return this.http.get(SERVER_API_URL + 'campaign/all/' + id, { headers: httpHeaders });
+    return this.http.post(SERVER_API_URL + 'campaign/all/' + id, body, { headers: httpHeadersWithCT });
   }
 
   sendCampaignNotification(campaign_id, body){

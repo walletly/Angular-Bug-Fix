@@ -143,61 +143,6 @@ export class AudienceComponent implements OnInit {
   }
   }
 
-  // getCardAudience() {
-  //   if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
-  //     this.brandService.getBrandLoyaltyCardAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
-  //       console.log(result);
-  //       this.CardAudience = [];
-  //       let audiences;
-  //       if (result['success']) {
-  //         audiences = result['data']['loyaltyCards'];
-
-  //         audiences.forEach(element => {
-  //           this.CardAudience.push({
-  //             data: {
-  //             'Check' : { name: '' },
-  //             'Campaign Name': { name: element.campaign_name },
-  //             'Type': { name: element.campaign_type_formated },
-  //             'Issue Date': { name: element.createDateFormatted },
-  //             'Stamps/Points': { name: element.points },
-  //             'Email Address': { name: element.email },
-  //             'Redeem Count': { name: element.redeem_count }
-  //             }
-  //           });
-  //         });
-  //       }
-  //     }, err => {
-  //       console.log(err);
-  //     });
-  //     this.brandService.getBrandStampCardAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
-  //       console.log(result);
-  //       let audiences;
-  //       if (result['success']) {
-  //         audiences = result['data']['stampCards'];
-
-  //         audiences.forEach(element => {
-  //           this.CardAudience.push({
-  //             data: {
-  //             'Check' : { name: '' },
-  //             'Campaign Name': { name: element.campaign_name },
-  //             'Type': { name: element.campaign_type_formated },
-  //             'Issue Date': { name: element.createDateFormatted },
-  //             'Stamps/Points': { name: element.stamps },
-  //             'Email Address': { name: element.email },
-  //             'Redeem Count': { name: element.redeem_count }
-  //             }
-  //           });
-  //         });
-  //       }
-  //       this.showLoader = false;
-  //     }, err => {
-  //       console.log(err);
-  //       this.showLoader = false;
-  //     });
-  //   }
-  //   this.CardAudience = [];
-  // }
-
   getStampCardAudience() {
     if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
       this.brandService.getBrandStampCardAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
@@ -254,7 +199,7 @@ export class AudienceComponent implements OnInit {
                 icon:
                 (element.campaign_type_formatted == 'Event Tickets') ?
                 'assets/img/eventTickets.png' :
-                (element.campaign_type == 'Webinar Event') ?
+                (element.campaign_type_formatted == 'Webinar Event') ?
                 'assets/img/webinarIcon.png' :
                 ''
               },

@@ -22,12 +22,16 @@ export class CampaingComponent implements OnInit {
   searchText;
 
   type = 'Coupons';
-  dataCoupon;
-  dataCard;
-  dataTicket;
+  noCampaigns = true;
+  disableLoadMore = false;
+  dataCoupon = [];
+  dataCard = [];
+  dataTicket = [];
   filteredDataCoupon = [];
   filteredDataCard = [];
   filteredDataTicket = [];
+  limit = 20;
+  timeInSecs;
   showLoader;
 
   constructor(private campaignService: CompaignService, private router: Router, private mainService: MainService) {
@@ -43,54 +47,20 @@ export class CampaingComponent implements OnInit {
   getCampaigns() {
     // this.mainService.showLoader.emit(true);
 
-    this.campaignService.getСampaignsBrands(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
-      this.dataCoupon = [];
-      this.dataCard = [];
-      this.dataTicket = [];
+    const body = {
+      limit: this.limit,
+      timeInSecs: this.timeInSecs
+    }
+    this.showLoader = true;
+
+    this.campaignService.getСampaignsBrands(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'], body).subscribe(data => {
 
       console.log(data);
       this.campaigns = data['data'];
-
+      
       this.campaigns.forEach(element => {
-        // let type;
-        // switch (element.campaign_type) {
-        //   case 1:
-        //     type = 'Coupon in %';
-        //     break;
-
-        //   case 2:
-        //     type = 'Coupon in $';
-        //     break;
-
-        //   case 3:
-        //     type = 'Birthday Coupon';
-        //     break;
-
-        //   case 4:
-        //     type = 'Referral Coupon';
-        //     break;
-
-        //   default:
-        //     break;
-        // }
-        // if(element.campaign_type == 5 || element.campaign_type == 6){
-        //   this.data.unshift({
-        //     data: {
-        //       'Type': { name: this.getTypeImage(element.campaign_type) },
-        //       'Campaign': { name: element.campaign_name },
-        //       'Integrations': { name: element.integrations },
-        //       // 'Template': { name: element.campaign_type_formatted },
-        //       'Issued': { name: element.coupons_created },
-        //       'Redeemed': { name: element.total_redeems },
-        //       'Start Date': { name: element.startDateFormatted },
-        //       'End Date': { name: element.endDateFormatted },
-        //       'Status': { name: element.is_active },
-        //       'Action': { name: '' },
-        //       'Id': { name: element.id },
-        //       'Brand_Id': { name: element.brand_id }
-        //     }
-        //   });
-        // }else{
+        this.noCampaigns = false;
+        this.timeInSecs = element.created_at._seconds;
         if (element.campaign_type <= 4) {
           this.dataCoupon.push({
             data: {
@@ -151,13 +121,18 @@ export class CampaingComponent implements OnInit {
       this.showLoader = false;
     }, err => {
       console.log(err);
-      this.dataCoupon = [];
-      this.dataCard = [];
-      this.dataTicket = [];
-      // this.mainService.showLoader.emit(false);
-      this.filteredDataCoupon = [];
-      this.filteredDataCard = [];
-      this.filteredDataTicket = [];
+
+      if(this.noCampaigns){
+        this.dataCoupon = [];
+        this.dataCard = [];
+        this.dataTicket = [];
+        this.filteredDataCoupon = [];
+        this.filteredDataCard = [];
+        this.filteredDataTicket = [];
+      }else{
+        this.disableLoadMore = true;
+      }
+
       this.showLoader = false;
     });
   }
@@ -242,6 +217,12 @@ export class CampaingComponent implements OnInit {
 
   refresh() {
     this.showLoader = true;
+    this.timeInSecs = undefined;
+    this.dataCoupon = [];
+    this.dataTicket = [];
+    this.dataCard = [];
+    this.noCampaigns = true;
+    this.disableLoadMore = false;
     this.getCampaigns();
   }
 
