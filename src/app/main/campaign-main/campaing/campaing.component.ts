@@ -48,10 +48,9 @@ export class CampaingComponent implements OnInit {
     // this.mainService.showLoader.emit(true);
 
     const body = {
-      limit: this.limit,
-      timeInSecs: this.timeInSecs
+      // limit: this.limit,
+      // timeInSecs: this.timeInSecs
     }
-    this.showLoader = true;
 
     this.campaignService.getСampaignsBrands(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'], body).subscribe(data => {
 
@@ -110,14 +109,14 @@ export class CampaingComponent implements OnInit {
             }
           });
         }
-        // console.log(this.dataCoupon);
       });
 
       this.filteredDataCoupon = this.dataCoupon;
       this.filteredDataCard = this.dataCard;
       this.filteredDataTicket = this.dataTicket;
+      // this.searchText = '';
+      // this.filterCampaigns(this.type);
 
-      // this.mainService.showLoader.emit(false);
       this.showLoader = false;
     }, err => {
       console.log(err);
@@ -256,6 +255,8 @@ export class CampaingComponent implements OnInit {
     } else if (evt.tabTitle === 'Tickets') {
       this.type = 'Tickets';
     }
+    // this.searchText = '';
+    // this.filterCampaigns(this.type);
   }
 
   getTypeImage(type){

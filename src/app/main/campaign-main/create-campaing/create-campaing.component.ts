@@ -28,7 +28,9 @@ export class CreateCampaingComponent implements OnInit {
   cards = [];
   tickets = [];
   loyalty = [];
-  customFields = [];
+  customFieldsText = [];
+  customFieldsNumber = [];
+  customFieldsBoolean = [];
 
   isApi = false;
   manychatAPI;
@@ -196,9 +198,13 @@ export class CreateCampaingComponent implements OnInit {
             console.log(result['data']);
             this.isApi = true;
             result['data'].data.forEach(customField => {
-              if(customField.type == 'boolean'){
-                this.customFields.push(customField);
-              }
+                if(customField.type === 'boolean') {
+                  this.customFieldsBoolean.push(customField);
+                } else if (customField.type === 'number') {
+                  this.customFieldsNumber.push(customField);
+                } else if (customField.type === 'Text') {
+                  this.customFieldsText.push(customField);
+                }
             });
             // console.log(this.customFields);
           }

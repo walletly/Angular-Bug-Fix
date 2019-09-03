@@ -212,7 +212,7 @@
             <div class="value">
               <div class="pos-r">
                 <input [ngClass]="{'error': myForm.controls['validity'].invalid && !customValidation}" (input)="checkValidity($event.target.value)"
-                formControlName="validity" [(ngModel)]="dataCampaign.coupon_validity" type="text" class="small" nbInput fullWidth fieldSize="small" placeholder="days">
+                formControlName="validity" [(ngModel)]="dataCampaign.coupon_validity" type="text" class="small" nbInput fullWidth fieldSize="small" placeholder="">
                 <div *ngIf="myForm.controls['validity'].invalid && !customValidation" class="error-lable">
                   Enter Validity in days e.g. 30 (1-365)
                 </div>
@@ -244,7 +244,7 @@
                 #selectCustomField
                 >
                 <nb-option value="">--Select Custom Fields--</nb-option>
-                <nb-option *ngFor="let customField of customFields" [value]="customField.name">
+                <nb-option *ngFor="let customField of customFieldsBoolean" [value]="customField.name">
                   {{customField.name}}
                 </nb-option>
               </nb-select>
@@ -403,7 +403,7 @@
             </div>
           </div>
         </div>
-        <!-- <div *ngIf="isApi" class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
+        <div *ngIf="isApi" class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
           Redemption
           <div style="font-size: small; padding-top: 5px;">
             (custom field triggers redemption flow)
@@ -427,14 +427,14 @@
                 #selectCustomField
                 >
                 <nb-option value="">--Select Custom Fields--</nb-option>
-                <nb-option *ngFor="let customField of customFields" [value]="customField.name">
+                <nb-option *ngFor="let customField of customFieldsNumber" [value]="customField.name">
                   {{customField.name}}
                 </nb-option>
               </nb-select>
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </form>
       <form *ngIf="dataCampaign.campaign_type == 6 && !data[1].data.Cards.locked" [formGroup]="stampForm">
         <div class="p-l-30 m-b-30" style="font-size: 25px">
@@ -501,9 +501,9 @@
           Stamp Card
         </div>
         <div class="p-l-60">
-          
+
         </div> -->
-        <!-- <div *ngIf="isApi" class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
+        <div *ngIf="isApi" class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
           Redemption
           <div style="font-size: small; padding-top: 5px;">
             (custom field triggers redemption flow)
@@ -527,14 +527,14 @@
                 #selectCustomField
                 >
                 <nb-option value="">--Select Custom Fields--</nb-option>
-                <nb-option *ngFor="let customField of customFields" [value]="customField.name">
+                <nb-option *ngFor="let customField of customFieldsNumber" [value]="customField.name">
                   {{customField.name}}
                 </nb-option>
               </nb-select>
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </form>
       <div class="row-input">
         <div class="lable">
@@ -554,7 +554,7 @@
         </div>
       </div>
     </div>
-      
+
     <div *ngIf="cardType === 'ticket'  && selectedSell">
       <form [formGroup]="ticketForm">
         <div class="p-l-30 m-b-30" style="font-size: 25px">
@@ -712,7 +712,7 @@
                 #selectCustomField
                 >
                 <nb-option value="">--Select Custom Fields--</nb-option>
-                <nb-option *ngFor="let customField of customFields" [value]="customField.name">
+                <nb-option *ngFor="let customField of customFieldsBoolean" [value]="customField.name">
                   {{customField.name}}
                 </nb-option>
               </nb-select>

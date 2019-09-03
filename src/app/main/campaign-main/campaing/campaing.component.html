@@ -233,10 +233,10 @@
               </td>
             </ng-container>
           </table>
-          <button *ngIf="!noCampaigns" (click)="getCampaigns()" [disabled]="disableLoadMore" class="loadMore m-auto m-b-10 p-0"
+          <!-- <button *ngIf="dataCoupon.length" (click)="getCampaigns()" [disabled]="disableLoadMore" class="loadMore m-auto m-b-10 p-0"
             [ngStyle]="{'opacity': disableLoadMore ? '0.5' : '1'}">
             Load More . .
-          </button>
+          </button> -->
           <div *ngIf="!dataCoupon.length" class="create-btn-wrap">
             <img class="m-b-16 m-t-40" src="assets/svg-icon/noCampaign.svg" alt="">
             <div class="m-b-25 fs-22">
@@ -447,10 +447,10 @@
               </td>
             </ng-container>
           </table>
-          <button *ngIf="!noCampaigns" (click)="getCampaigns()" [disabled]="disableLoadMore" class="loadMore m-auto m-b-10 p-0"
+          <!-- <button *ngIf="dataCard.length" (click)="getCampaigns()" [disabled]="disableLoadMore" class="loadMore m-auto m-b-10 p-0"
             [ngStyle]="{'opacity': disableLoadMore ? '0.5' : '1'}">
             Load More . .
-          </button>
+          </button> -->
           <div *ngIf="!dataCard.length" class="create-btn-wrap">
             <img class="m-b-16 m-t-40" src="assets/svg-icon/noCampaign.svg" alt="">
             <div class="m-b-25 fs-22">
@@ -661,10 +661,10 @@
               </td>
             </ng-container>
           </table>
-          <button *ngIf="!noCampaigns" (click)="getCampaigns()" [disabled]="disableLoadMore" class="loadMore m-auto m-b-10 p-0"
+          <!-- <button *ngIf="dataTicket.length" (click)="getCampaigns()" [disabled]="disableLoadMore" class="loadMore m-auto m-b-10 p-0"
             [ngStyle]="{'opacity': disableLoadMore ? '0.5' : '1'}">
             Load More . .
-          </button>
+          </button> -->
           <div *ngIf="!dataTicket.length" class="create-btn-wrap">
             <img class="m-b-16 m-t-40" src="assets/svg-icon/noCampaign.svg" alt="">
             <div class="m-b-25 fs-22">
