@@ -5,8 +5,10 @@
     </h1>
     <div class="pos-r m-r-9" style="top: -5px;">
       <input
+        [(ngModel)]="searchText"
+        (ngModelChange)="filterCampaigns(type)"
         style="width: 235px;"
-        placeholder="Search"
+        placeholder="Search By Campaign"
         class="small"
         type="text"
         nbInput
@@ -43,7 +45,7 @@
             </div>
           </div>
           <div class="box-container" *ngIf="!showLoader">
-            <table *ngIf="CouponAudience.length" class="m-b-40 full-width" [nbTreeGrid]="CouponAudience">
+            <table *ngIf="CouponAudience.length" class="m-b-40 full-width" [nbTreeGrid]="filterCouponAudience">
               <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allCouponColumns"></tr>
               <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allCouponColumns"></tr>
 
@@ -59,11 +61,14 @@
                 <td
                   [ngClass]="{'check-row-bg': checkAllcoupons}"
                   nbTreeGridCell
-                  *nbTreeGridCellDef="let row"
+                  *nbTreeGridCellDef="let row; index as i"
                 >
                   <span *ngIf="column === 'Check'">
                     <div *ngIf="checkAllcoupons" class="check-row m-auto">
                       <img src="assets/img/success-white.png" alt="">
+                    </div>
+                    <div *ngIf="!checkAllcoupons" style="background-color: transparent !important; border: none !important" class="check-row m-auto">
+                      {{ i + 1 }}
                     </div>
                   </span>
                   <div class="df ai-c">
@@ -181,7 +186,7 @@
             </div>
           </div>
           <div class="box-container" *ngIf="!showLoader">
-            <table *ngIf="stampCardAudience.length" class="m-b-40 full-width" [nbTreeGrid]="stampCardAudience">
+            <table *ngIf="stampCardAudience.length" class="m-b-40 full-width" [nbTreeGrid]="filterstampCardAudience">
               <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allstampCardColumns"></tr>
               <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allstampCardColumns"></tr>
 
@@ -197,11 +202,14 @@
                 <td
                   [ngClass]="{'check-row-bg': checkAllStampCards}"
                   nbTreeGridCell
-                  *nbTreeGridCellDef="let row"
+                  *nbTreeGridCellDef="let row; index as i"
                 >
                   <span *ngIf="column === 'Check'">
                     <div *ngIf="checkAllStampCards" class="check-row m-auto">
                       <img src="assets/img/success-white.png" alt="">
+                    </div>
+                    <div *ngIf="!checkAllStampCards" style="background-color: transparent !important; border: none !important" class="check-row m-auto">
+                      {{ i + 1 }}
                     </div>
                   </span>
                   <div class="df ai-c">
@@ -238,7 +246,7 @@
             </div>
           </div>
           <div class="box-container" *ngIf="!showLoader">
-            <table *ngIf="TicketAudience.length" class="m-b-40 full-width" [nbTreeGrid]="TicketAudience">
+            <table *ngIf="TicketAudience.length" class="m-b-40 full-width" [nbTreeGrid]="filterTicketAudience">
               <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="alleventColumns"></tr>
               <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: alleventColumns"></tr>
 
@@ -254,11 +262,14 @@
                 <td
                   [ngClass]="{'check-row-bg': checkAlltickets}"
                   nbTreeGridCell
-                  *nbTreeGridCellDef="let row"
+                  *nbTreeGridCellDef="let row; index as i"
                 >
                   <span *ngIf="column === 'Check'">
                     <div *ngIf="checkAlltickets" class="check-row m-auto">
                       <img src="assets/img/success-white.png" alt="">
+                    </div>
+                    <div *ngIf="!checkAlltickets" style="background-color: transparent !important; border: none !important" class="check-row m-auto">
+                      {{ i + 1 }}
                     </div>
                   </span>
                   <div class="df ai-c">
@@ -311,7 +322,7 @@
             </div>
           </div>
           <div class="box-container" *ngIf="!showLoader">
-            <table *ngIf="loyaltyCardAudience.length" class="m-b-40 full-width" [nbTreeGrid]="loyaltyCardAudience">
+            <table *ngIf="loyaltyCardAudience.length" class="m-b-40 full-width" [nbTreeGrid]="filterloyaltyCardAudience">
               <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allLoyaltyCardColumns"></tr>
               <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allLoyaltyCardColumns"></tr>
 
@@ -327,11 +338,14 @@
                 <td
                   [ngClass]="{'check-row-bg': checkAllLoyaltyCards}"
                   nbTreeGridCell
-                  *nbTreeGridCellDef="let row"
+                  *nbTreeGridCellDef="let row; index as i"
                 >
                   <span *ngIf="column === 'Check'">
                     <div *ngIf="checkAllLoyaltyCards" class="check-row m-auto">
                       <img src="assets/img/success-white.png" alt="">
+                    </div>
+                    <div *ngIf="!checkAllLoyaltyCards" style="background-color: transparent !important; border: none !important" class="check-row m-auto">
+                      {{ i + 1 }}
                     </div>
                   </span>
                   <div class="df ai-c">

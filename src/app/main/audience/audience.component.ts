@@ -28,11 +28,16 @@ export class AudienceComponent implements OnInit {
   alleventColumns = this.eventColumns;
 
   data = [];
+  type;
+  searchText;
   CouponAudience = [];
-  // CardAudience = [];
   TicketAudience = [];
   loyaltyCardAudience = [];
   stampCardAudience = [];
+  filterCouponAudience = [];
+  filterTicketAudience = [];
+  filterloyaltyCardAudience = [];
+  filterstampCardAudience = [];
 
   // data = [
   //   {
@@ -57,7 +62,6 @@ export class AudienceComponent implements OnInit {
     if (JSON.parse(localStorage.getItem("user"))["user_type"] !== 4) {
       this.brandService.getBrandCouponAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
         console.log(result);
-        this.CouponAudience = [];
         let audiences;
 
         if (result['success']) {
@@ -130,7 +134,9 @@ export class AudienceComponent implements OnInit {
               'Check in' : { name: '' }
             }
           });
+
         });
+        this.filterCouponAudience = this.CouponAudience;
       }
       this.showLoader = false;
     }, err => {
@@ -147,7 +153,6 @@ export class AudienceComponent implements OnInit {
     if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
       this.brandService.getBrandStampCardAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
         console.log(result);
-        this.stampCardAudience = [];
         let audiences;
         if (result['success']) {
           audiences = result['data']['stampCards'];
@@ -164,6 +169,7 @@ export class AudienceComponent implements OnInit {
               }
             });
           });
+          this.filterstampCardAudience = this.stampCardAudience;
         }
         this.showLoader = false;
       }, err => {
@@ -178,7 +184,6 @@ export class AudienceComponent implements OnInit {
     if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
       this.brandService.getBrandTicketAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result =>{
         console.log(result);
-        this.TicketAudience = [];
         let audiences;
         if (result['success']) {
           audiences = result['data']['tickets'];
@@ -215,6 +220,7 @@ export class AudienceComponent implements OnInit {
               }
             });
           });
+          this.filterTicketAudience = this.TicketAudience;
         }
         this.showLoader = false;
       }, err => {
@@ -229,7 +235,6 @@ export class AudienceComponent implements OnInit {
     if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
       this.brandService.getBrandLoyaltyCardAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
         console.log(result);
-        this.loyaltyCardAudience = [];
         let audiences;
         if (result['success']) {
           audiences = result['data']['loyaltyCards'];
@@ -246,6 +251,7 @@ export class AudienceComponent implements OnInit {
               }
             });
           });
+          this.filterloyaltyCardAudience = this.loyaltyCardAudience;
         }
         this.showLoader = false;
       }, err => {
@@ -258,6 +264,7 @@ export class AudienceComponent implements OnInit {
 
   refreshCoupons() {
     this.showLoader = true;
+    this.CouponAudience = [];
     this.getCouponAudience();
   }
   // refreshCards() {
@@ -266,35 +273,92 @@ export class AudienceComponent implements OnInit {
   // }
   refreshTickets() {
     this.showLoader = true;
+    this.TicketAudience = [];
     this.getTicketAudience();
   }
   refreshStampCards() {
     this.showLoader = true;
+    this.stampCardAudience = [];
     this.getStampCardAudience();
   }
 
   refreshLoyaltyCards() {
     this.showLoader = true;
+    this.loyaltyCardAudience = [];
     this.getLoyaltyCardAudience();
   }
 
   onChangeTab(event) {
     console.log(event);
     if (event.tabTitle === 'Coupons') {
-      this.showLoader = true;
-      this.getCouponAudience();
+      this.type = 'Coupons';
+      if(this.CouponAudience.length == 0){
+        this.showLoader = true;
+        this.getCouponAudience();
+      }
     } else if (event.tabTitle === 'Tickets') {
-      this.showLoader = true;
-      this.getTicketAudience();
+      this.type = 'Tickets';
+      if(this.TicketAudience.length == 0){
+        this.showLoader = true;
+        this.getTicketAudience();
+      }
     } else if (event.tabTitle === 'Loyalty Cards') {
-      this.showLoader = true;
-      this.getLoyaltyCardAudience();
+      this.type = 'Loyalty Cards';
+      if(this.loyaltyCardAudience.length == 0){
+        this.showLoader = true;
+        this.getLoyaltyCardAudience();
+      }
     } else if (event.tabTitle === 'Stamp Cards') {
-      this.showLoader = true;
-      this.getStampCardAudience();
+      this.type = 'Stamp Cards';
+      if(this.stampCardAudience.length == 0){
+        this.showLoader = true;
+        this.getStampCardAudience();
+      }
     }
 
   }
+
+  filterCampaigns(type) {
+    if (type === 'Coupons') {
+      this.filterCouponAudience = this.CouponAudience.filter(element => {
+        console.log(element);
+        console.log(element.data['Campaign Name']);
+        if (element.data['Campaign Name'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+          return true;
+        }
+      });
+      console.log(this.filterCouponAudience);
+    } else if (type === 'Tickets') {
+      this.filterTicketAudience = this.TicketAudience.filter(element => {
+        console.log(element);
+        console.log(element.data['Campaign Name']);
+        if (element.data['Campaign Name'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+          return true;
+        }
+      });
+      console.log(this.filterTicketAudience);
+    } else if (type === 'Loyalty Cards') {
+      this.filterloyaltyCardAudience = this.loyaltyCardAudience.filter(element => {
+        console.log(element);
+        console.log(element.data['Campaign Name']);
+        if (element.data['Campaign Name'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+          return true;
+        }
+      });
+      console.log(this.filterloyaltyCardAudience);
+    } else if (type === 'Stamp Cards') {
+      this.filterstampCardAudience = this.stampCardAudience.filter(element => {
+        console.log(element);
+        console.log(element.data['Campaign Name']);
+        if (element.data['Campaign Name'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+          return true;
+        }
+      });
+      console.log(this.filterstampCardAudience);
+    }
+  }
+
+
   downloadCoupons() {
     const options = {
       fieldSeparator: ',',
@@ -308,7 +372,7 @@ export class AudienceComponent implements OnInit {
       headers: ['Campaign Name', 'Type', 'Issue Date', 'Expiry', 'Email Address']
     };
     const coupons = [];
-    this.CouponAudience.forEach(result => {
+    this.filterCouponAudience.forEach(result => {
       coupons.push({
         'Campaign Name':  result['data']['Campaign Name'].name,
         'Type': result['data']['Type'].name,
@@ -335,7 +399,7 @@ export class AudienceComponent implements OnInit {
       headers: ['Campaign Name', 'Issue Date', 'Stamps', 'Email Address', 'Redeem Count']
     };
     const check = [];
-    this.stampCardAudience.forEach(result => {
+    this.filterstampCardAudience.forEach(result => {
       check.push({
         'Campaign Name':  result['data']['Campaign Name'].name,
         'Issue Date': result['data']['Issue Date'].name,
@@ -360,7 +424,7 @@ export class AudienceComponent implements OnInit {
       headers: ['Campaign Name', 'Issue Date', 'Points', 'Email Address', 'Redeem Count']
     };
     const check = [];
-    this.loyaltyCardAudience.forEach(result => {
+    this.filterloyaltyCardAudience.forEach(result => {
       check.push({
         'Campaign Name':  result['data']['Campaign Name'].name,
         'Issue Date': result['data']['Issue Date'].name,
@@ -385,7 +449,7 @@ export class AudienceComponent implements OnInit {
       headers: ['Campaign Name', 'Type', 'Start Date', 'Members', 'Email Address']
     };
     const check = [];
-    this.TicketAudience.forEach(result => {
+    this.filterTicketAudience.forEach(result => {
       check.push({
         'Campaign Name':  result['data']['Campaign Name'].name,
         'Type': result['data']['Type'].name,

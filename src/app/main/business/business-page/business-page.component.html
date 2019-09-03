@@ -55,7 +55,7 @@
                   {{column}}
                 </span>
               </th>
-              <td [ngClass]="{'check-row-bg': checkAll}" nbTreeGridCell *nbTreeGridCellDef="let row">
+              <td [ngClass]="{'check-row-bg': checkAll}" nbTreeGridCell *nbTreeGridCellDef="let row; index as i">
 
                 <div class="df ai-c">
                   <span *ngIf="column === 'Permission'" (click)="changePermission(row.data.id, row.data[column])">
@@ -69,6 +69,9 @@
                 <span *ngIf="column === 'Check'">
                   <div *ngIf="checkAll" class="check-row m-auto">
                     <img src="assets/img/success-white.png" alt="">
+                  </div>
+                  <div *ngIf="!checkAll" style="background-color: transparent !important; border: none !important" class="check-row m-auto">
+                    {{ i + 1 }}
                   </div>
                 </span>
                 <div *ngIf="column === 'Invite'">
