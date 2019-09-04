@@ -49,6 +49,8 @@ export class CreateCampaingComponent implements OnInit {
   noCards = true;
   noTickets = true;
   noLoyalty = true;
+  loyaltyCampaignId;
+  stampCampaignId;
   limit = '';
 
   @ViewChild('selectTemplate') selectTemplate;
@@ -135,15 +137,15 @@ export class CreateCampaingComponent implements OnInit {
     this.id = this.activeRout.snapshot.paramMap.get('id');
     if(this.id){
       this.disable = true;
-    }else{
+    } else{
       this.campaignService.getСampaignsBrands(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],{}).subscribe(result => {
         console.log(result);
         for (let i in result['data']){
           if(result['data'][i].campaign_type == 5){
-            this.data[0].data.Cards.locked = true;
+            this.loyaltyCampaignId = result['data'][i].id;
           }
           if(result['data'][i].campaign_type == 6){
-            this.data[1].data.Cards.locked = true;
+            this.stampCampaignId = result['data'][i].id;
           }
         }
       }, err => {

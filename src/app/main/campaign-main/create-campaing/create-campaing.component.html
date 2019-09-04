@@ -279,7 +279,7 @@
       </div>
     </div>
     <div *ngIf="cardType === 'loyalty' && selectedSell">
-      <form *ngIf="dataCampaign.campaign_type == 5 && !data[0].data.Cards.locked" [formGroup]="loyaltyForm">
+      <form *ngIf="dataCampaign.campaign_type == 5 && !loyaltyCampaignId" [formGroup]="loyaltyForm">
         <div class="p-l-30 m-b-30" style="font-size: 25px">
           Campaign
         </div>
@@ -404,9 +404,9 @@
           </div>
         </div>
         <div *ngIf="isApi" class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
-          Redemption
+          Points field
           <div style="font-size: small; padding-top: 5px;">
-            (custom field triggers redemption flow)
+            (custom field triggers update to points)
           </div>
         </div>
         <div *ngIf="isApi" class="p-l-60">
@@ -436,7 +436,7 @@
           </div>
         </div>
       </form>
-      <form *ngIf="dataCampaign.campaign_type == 6 && !data[1].data.Cards.locked" [formGroup]="stampForm">
+      <form *ngIf="dataCampaign.campaign_type == 6 && !stampCampaignId" [formGroup]="stampForm">
         <div class="p-l-30 m-b-30" style="font-size: 25px">
           Campaign
         </div>
@@ -504,9 +504,9 @@
 
         </div> -->
         <div *ngIf="isApi" class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
-          Redemption
+          Stamp field
           <div style="font-size: small; padding-top: 5px;">
-            (custom field triggers redemption flow)
+            (custom field triggers update to stamps)
           </div>
         </div>
         <div *ngIf="isApi" class="p-l-60">
@@ -540,7 +540,7 @@
         <div class="lable">
         </div>
         <div class="value">
-          <div class="pos-r full-width">
+          <div *ngIf="dataCampaign.campaign_type == 5 && !loyaltyCampaignId" class="pos-r full-width">
             <button (click)="clear()" class="cust-button m-r-15" nbButton status="gray">
               Clear
             </button>
@@ -550,6 +550,33 @@
             <button *ngIf="id" (click)="create()" class="cust-button" nbButton status="success">
               Update
             </button>
+          </div>
+          <div *ngIf="dataCampaign.campaign_type == 5 && loyaltyCampaignId" class="pos-r full-width">
+            <div class="error-lable fs-16">
+              You have already created loyalty card campaign
+              <a [routerLink]="[ '/main/campaign-main/details/' + loyaltyCampaignId]" class="c-p">
+                (click here)
+              </a>
+            </div>
+          </div>
+          <div *ngIf="dataCampaign.campaign_type == 6 && !stampCampaignId" class="pos-r full-width">
+            <button (click)="clear()" class="cust-button m-r-15" nbButton status="gray">
+              Clear
+            </button>
+            <button *ngIf="!id && !noLoyalty" (click)="create()" class="cust-button" nbButton status="success">
+              Create
+            </button>
+            <button *ngIf="id" (click)="create()" class="cust-button" nbButton status="success">
+              Update
+            </button>
+          </div>
+          <div *ngIf="dataCampaign.campaign_type == 6 && stampCampaignId" class="pos-r full-width">
+            <div class="error-lable fs-16">
+              You have already created stamp card campaign
+              <a [routerLink]="[ '/main/campaign-main/details/' + stampCampaignId]" class="c-p">
+                (click here)
+              </a>
+            </div>
           </div>
         </div>
       </div>

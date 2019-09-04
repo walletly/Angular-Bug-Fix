@@ -10,22 +10,8 @@ import { Router } from '@angular/router';
 })
 export class CreateCardsComponent implements OnInit {
 
-  isLoyalty = false;
-
   constructor(private mainServise: MainService, private cardService: CardService, private router: Router) { 
 
-    this.cardService.getBrandsCards(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
-      console.log(result);
-      // this.mainService.showLoader.emit(false);
-      for (let i in result['data']){
-        if(result['data'][i].card_type == 4){
-          this.isLoyalty = true;
-        }
-      }
-    }, err => {
-      console.log(err);
-      // this.mainService.showLoader.emit(false);
-    });
   }
 
   ngOnInit() {
@@ -43,7 +29,7 @@ export class CreateCardsComponent implements OnInit {
       case 'tickets':
         this.mainServise.cardTypeId = 3;
         break;
-      case 'loyalty':
+      case 'Loyalty/Stamp':
           this.mainServise.cardTypeId = 4;
           break;
       default:

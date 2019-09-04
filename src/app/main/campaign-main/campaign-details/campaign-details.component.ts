@@ -20,6 +20,7 @@ export class CampaignDetailsComponent implements OnInit {
   id;
   campaign;
   campaignType;
+  campaignTypeImage;
   card;
   discount;
   platform = { 'ManyChat': false, 'ActiveChat': false, 'Offline': false };
@@ -68,6 +69,7 @@ export class CampaignDetailsComponent implements OnInit {
 
       if (this.campaign.campaign_type) {
         this.campaignType = this.campaign.campaign_type_formatted;
+        this.campaignTypeImage = this.getTypeImage(this.campaign.campaign_type);
       }
       this.integrations = this.campaign.integrations;
       if (this.campaign.integrations) {
@@ -150,5 +152,37 @@ export class CampaignDetailsComponent implements OnInit {
     const a = document.getElementById('downloadQR') as HTMLElement;
     a.click();
     a.parentNode.removeChild(a);
+  }
+
+  getTypeImage(type){
+    switch (type){
+      case 1:{
+        return 'assets/img/Coupon.png';
+      }
+      case 2:{
+        return 'assets/img/Coupon-in-$.png';
+      }
+      case 3:{
+        return 'assets/img/Birthday-Coupon.png';
+      }
+      case 4:{
+        return 'assets/img/Referral-Coupon.png';
+      }
+      case 5:{
+        return 'assets/img/LoyaltyCard.png';
+      }
+      case 6:{
+        return 'assets/img/stampCard.png';
+      }
+      case 7:{
+        return 'assets/img/membershipCard.png';
+      }
+      case 8:{
+        return 'assets/img/eventTickets.png';
+      }
+      case 9:{
+        return 'assets/img/webinarIcon.png';
+      }
+    }
   }
 }

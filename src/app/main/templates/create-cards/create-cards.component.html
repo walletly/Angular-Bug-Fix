@@ -190,10 +190,7 @@
       <div class="m-r-30">
         <div class="coupon small-size" style="background-image: url('assets/svg-icon/card-bg.svg');">
           <div class="hover-couon">
-            <button (click)="getType('loyalty')" class="cust-button" nbButton status="success"
-              [ngStyle]="{'pointer-events': isLoyalty ? 'none' : 'auto'}">
-              <img *ngIf="isLoyalty" src="assets/img/lockIcon.png"
-                style="filter: invert(92%) sepia(94%) saturate(20%) hue-rotate(321deg) brightness(105%) contrast(100%);">
+            <button (click)="getType('Loyalty/Stamp')" class="cust-button" nbButton status="success">
               Use Template
             </button>
           </div>
@@ -229,7 +226,6 @@
           </div>
         </div>
         <div class="text-center m-t-16 fs-16 fw-600">
-          <img *ngIf="isLoyalty" src="assets/img/lockIcon.png">
           Loyalty/Stamp
         </div>
       </div>

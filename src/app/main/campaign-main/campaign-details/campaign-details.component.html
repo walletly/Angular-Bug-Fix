@@ -39,10 +39,11 @@
           <div class="df m-b-60">
             <div class="row-wrap">
               <div class="row">
-                <div class="label">
+                <div class="label p-t-5">
                   Campaign Type
                 </div>
-                <div class="value">
+                <div class="df ai-c value">
+                  <img class="m-r-5"  [src]="campaignTypeImage">
                   {{campaignType}}
                 </div>
               </div>
@@ -85,7 +86,7 @@
                   {{campaign?.description}}
                 </div>
               </div>
-              <div class="row">
+              <div class="row" *ngIf="campaign.campaign_type != 5 && campaign.campaign_type != 6">
                 <div class="df">
                   <div class="label">
                     Start Date
@@ -94,7 +95,7 @@
                     {{campaign?.startDateFormatted}}
                   </div>
                 </div>
-                <div class="df">
+                <div class="df" *ngIf="campaign.campaign_type != 8 && campaign.campaign_type != 9">
                   <div class="label small">
                     End Date
                   </div>
@@ -102,8 +103,16 @@
                     {{campaign?.endDateFormatted}}
                   </div>
                 </div>
+                <div class="df" *ngIf="campaign.campaign_type == 8 || campaign.campaign_type == 9">
+                  <div class="label small">
+                    Time
+                  </div>
+                  <div class="value">
+                    {{campaign?.time}}
+                  </div>
+                </div>
               </div>
-              <div class="row">
+              <div class="row" *ngIf="campaign.campaign_type <= 4">
                 <div class="label">
                   Discount
                 </div>
@@ -111,7 +120,7 @@
                   {{ discount }}
                 </div>
               </div>
-              <div class="row">
+              <div class="row" *ngIf="campaign.campaign_type <= 4">
                 <div class="label">
                   Coupon Validity
                 </div>
@@ -119,27 +128,40 @@
                   {{campaign?.coupon_validity}}
                 </div>
               </div>
-
-              <!-- <div class="row">
-                <div class="df">
-                  <div class="label">
-                    Number of Coupons
-                  </div>
-                  <div class="value">
-                    {{campaign?.coupons_created}}
-                  </div>
+              <div class="row" *ngIf="campaign.campaign_type == 5">
+                <div class="label">
+                  Points
                 </div>
-                <div class="df">
-                  <div class="label small">
-                    Set Limit
-                  </div>
-                  <div class="value">
-                    {{campaign?.coupons_limit}}
-                  </div>
+                <div class="value">
+                  {{campaign?.points}}
                 </div>
-              </div> -->
+              </div>
+              <div class="row" *ngIf="campaign.campaign_type == 6">
+                <div class="label">
+                  Stamp
+                </div>
+                <div class="value">
+                  10
+                </div>
+              </div>
+              <div class="row" *ngIf="campaign.campaign_type >= 8">
+                <div class="label">
+                  Event
+                </div>
+                <div class="value">
+                  {{campaign?.event_name}}
+                </div>
+              </div>
+              <div class="row" *ngIf="campaign.campaign_type >= 8">
+                <div class="label">
+                  Venue
+                </div>
+                <div class="value">
+                  {{campaign?.venue}}
+                </div>
+              </div>
             </div>
-            <div class="coupon">
+            <div [ngClass]="(campaign.campaign_type <= 4) ? 'coupon' : (campaign.campaign_type <= 7) ? 'card' : 'ticket'">
               <div class="head m-b-15">
                 <div class="df ai-c">
                   <div class="coupon-brand m-r-8">
@@ -149,7 +171,7 @@
                     {{card?.brand_name}}
                   </div>
                 </div>
-                <div *ngIf="card?.card_type === 1" class="text-right">
+                <div *ngIf="campaign.campaign_type <= 4" class="text-right">
                   <div class="fs-10 fw-400">
                     Days left
                   </div>
@@ -157,20 +179,28 @@
                     {{campaign?.coupon_validity}}
                   </div>
                 </div>
-                <div *ngIf="card?.card_type === 2" class="text-right">
+                <div *ngIf="campaign.campaign_type == 5" class="text-right">
                   <div class="fs-10 fw-400">
                     Point
                   </div>
                   <div class="fs-15 fw-600">
-                    100
+                    {{campaign?.points}}
                   </div>
                 </div>
-                <div *ngIf="card?.card_type === 3" class="text-right">
+                <div *ngIf="campaign.campaign_type == 6" class="text-right">
                   <div class="fs-10 fw-400">
                     Stamp
                   </div>
                   <div class="fs-15 fw-600">
-                    4
+                    10
+                  </div>
+                </div>
+                <div *ngIf="campaign.campaign_type >= 8" class="text-right">
+                  <div class="fs-10 fw-400">
+                    {{campaign?.time}}
+                  </div>
+                  <div class="fs-15 fw-600">
+                    {{campaign?.startDateFormatted}}
                   </div>
                 </div>
               </div>
@@ -189,11 +219,8 @@
                 <div>
                   {{ "{Dynamic}" }}
                 </div>
-                <!-- <div *ngIf="dataCard.cardType === 'coupons'">
-                {{ "{Dynamic}" }}
-              </div> -->
               </div>
-              <div class="text-center">
+              <div class="text-center" *ngIf="(campaign.campaign_type != 9)">
                 <img width="133px" class="m-b-20" src="assets/img/QR_code.png" alt="" />
               </div>
               <div class="combined">
