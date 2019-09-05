@@ -86,7 +86,7 @@
                   {{campaign?.description}}
                 </div>
               </div>
-              <div class="row" *ngIf="campaign.campaign_type != 5 && campaign.campaign_type != 6">
+              <div class="row" *ngIf="campaign.campaign_type != 5 && campaign.campaign_type != 6 && campaign.campaign_type != 7">
                 <div class="df">
                   <div class="label">
                     Start Date
@@ -195,6 +195,14 @@
                     10
                   </div>
                 </div>
+                <div *ngIf="campaign.campaign_type == 7" class="text-right">
+                  <div class="fs-10 fw-400">
+                    Status
+                  </div>
+                  <div class="fs-15 fw-600">
+                    Active
+                  </div>
+                </div>
                 <div *ngIf="campaign.campaign_type >= 8" class="text-right">
                   <div class="fs-10 fw-400">
                     {{campaign?.time}}
@@ -232,7 +240,7 @@
           <div class="button-wrap">
             <button [routerLink]="['/main/campaign-main/campaign']" class="back">BACK</button>
             <button (click)="edit()" class="edit">Edit</button>
-            <button *ngIf="campaign.campaign_type != 5 && campaign.campaign_type != 6" [disabled]="inProcces" (click)="delete()" class="delete" nbButton>
+            <button *ngIf="campaign.campaign_type != 5 && campaign.campaign_type != 6 && campaign.campaign_type != 7" [disabled]="inProcces" (click)="delete()" class="delete" nbButton>
               <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
               Delete
             </button>

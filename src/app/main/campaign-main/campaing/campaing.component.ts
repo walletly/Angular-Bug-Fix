@@ -54,6 +54,9 @@ export class CampaingComponent implements OnInit {
 
     this.campaignService.getСampaignsBrands(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'], body).subscribe(data => {
 
+      this.dataCoupon = [];
+      this.dataCard = [];
+      this.dataTicket = [];
       console.log(data);
       this.campaigns = data['data'];
       

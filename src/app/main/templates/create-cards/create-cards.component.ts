@@ -23,8 +23,9 @@ export class CreateCardsComponent implements OnInit {
       case 'coupons':
         this.mainServise.cardTypeId = 1;
         break;
-      case 'cards':
+      case 'membership':
         this.mainServise.cardTypeId = 2;
+        return;
         break;
       case 'tickets':
         this.mainServise.cardTypeId = 3;

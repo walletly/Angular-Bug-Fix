@@ -103,7 +103,7 @@ export class CreateCouponsComponent implements OnInit {
         if(this.typeId == 1){
           this.type = 'coupons';
         }else if(this.typeId == 2){
-          this.type = 'cards';
+          this.type = 'membership';
         }else if(this.typeId == 3){
           this.type = 'tickets';
         } else if (this.typeId == 4){
@@ -137,17 +137,22 @@ export class CreateCouponsComponent implements OnInit {
       if (this.mainService.cardType) {
         this.type = this.mainService.cardType;
         this.typeId = this.mainService.cardTypeId;
-        if(this.typeId == 4){
+        if(this.typeId == 4 || this.typeId == 2){
           this.showLoader = true;
           this.cardService.getBrandsCards(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
             this.showLoader = true;
             for (let i in result['data']){
               this.showLoader = true;
-              if(result['data'][i].card_type == 4){
+              if(this.typeId == 4 && result['data'][i].card_type == 4){
+                this.showLoader = false;
+                this.route.navigate(['/main/templates/create-coupon/' + result['data'][i].id]);
+              }
+              if(this.typeId == 2 && result['data'][i].card_type == 2){
                 this.showLoader = false;
                 this.route.navigate(['/main/templates/create-coupon/' + result['data'][i].id]);
               }
             }
+            this.showLoader = false;
           }, err => {
             console.log(err);
           });

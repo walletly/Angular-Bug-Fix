@@ -476,7 +476,7 @@
             Update
           </button>
           <button
-            *ngIf="id && dataCard.cardType != 4"
+            *ngIf="id && dataCard.cardType != 4 && dataCard.cardType != 2"
             [disabled]="inProcces"
             (click)="delete()"
             class="delete m-r-15"
@@ -515,12 +515,20 @@
                       30
                     </div>
                   </div>
-                  <div *ngIf="dataCard.cardType === 2 || dataCard.cardType === 4" class="text-right">
+                  <div *ngIf="dataCard.cardType === 4" class="text-right">
                     <div class="fs-10 fw-400">
                       Point / Stamp
                     </div>
                     <div class="fs-15 fw-600">
                       100
+                    </div>
+                  </div>
+                  <div *ngIf="dataCard.cardType === 2" class="text-right">
+                    <div class="fs-10 fw-400">
+                      Status
+                    </div>
+                    <div class="fs-15 fw-600">
+                      Active
                     </div>
                   </div>
                   <div

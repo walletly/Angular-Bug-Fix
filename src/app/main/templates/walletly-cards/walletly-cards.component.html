@@ -91,12 +91,12 @@
           </div>
         </div>
       </nb-tab>
-      <nb-tab tabTitle="Card" style="overflow-y: hidden;">
+      <nb-tab tabTitle="Membership" style="overflow-y: hidden;">
         <div class="df wrap p-t-20">
           <div *ngFor="let coupon of data">
             <div *ngIf="coupon.card_type === 2" class="card small-size m-t-16 m-r-30">
               <div class="hover-couon">
-                <button (click)="addToCampaign(coupon.brand_id, coupon.id, 'card')" class="cust-button m-b-10" nbButton
+                <button (click)="addToCampaign(coupon.brand_id, coupon.id, 'membership')" class="cust-button m-b-10" nbButton
                   status="success">
                   Add to Campaign
                 </button>
@@ -123,10 +123,10 @@
                 </div>
                 <div *ngIf="coupon.card_type === 2" class="text-right">
                   <div class="fs-10 fw-400">
-                    Point
+                    Status
                   </div>
                   <div class="fs-8 fw-600">
-                    100
+                    Active
                   </div>
                 </div>
                 <div *ngIf="coupon.card_type === 3" class="text-right">

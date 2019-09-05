@@ -19,13 +19,14 @@ export class CreateCampaingComponent implements OnInit {
   ticketForm: FormGroup;
   loyaltyForm: FormGroup;
   stampForm: FormGroup;
+  membershipForm: FormGroup;
   customValidation = true;
   campaign = {};
   id;
   disable;
   // numberOfCoupon;
   coupons = [];
-  cards = [];
+  membership = [];
   tickets = [];
   loyalty = [];
   customFieldsText = [];
@@ -46,11 +47,12 @@ export class CreateCampaingComponent implements OnInit {
   showDatePicker;
   showLoader;
   noCoupons = true;
-  noCards = true;
+  noMembership = true;
   noTickets = true;
   noLoyalty = true;
   loyaltyCampaignId;
   stampCampaignId;
+  membershipCampaignId;
   limit = '';
 
   @ViewChild('selectTemplate') selectTemplate;
@@ -72,7 +74,7 @@ export class CreateCampaingComponent implements OnInit {
       data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', type: 'coupon', locked: false }, 'Cards': { name: 'Stamp Card', icon: 'assets/img/stampCard.png', type: 'loyalty', locked: false }, 'Tickets': { name: 'Webinar Event', icon: 'assets/img/webinarIcon.png', type: 'ticket', locked: false } },
     },
     {
-      data: { 'Coupons': { name: 'Birthday Coupon', icon: 'assets/img/Birthday-Coupon.png', type: 'coupon', locked: true }, 'Cards': { name: 'Membership Card', icon: 'assets/img/membershipCard.png', type: 'card', locked: true }, 'Tickets': { name: '', icon: '' } },
+      data: { 'Coupons': { name: 'Birthday Coupon', icon: 'assets/img/Birthday-Coupon.png', type: 'coupon', locked: true }, 'Cards': { name: 'Membership Card', icon: 'assets/img/membershipCard.png', type: 'membership', locked: true }, 'Tickets': { name: '', icon: '' } },
     },
     {
       data: { 'Coupons': { name: 'Referral Coupon', icon: 'assets/img/Referral-Coupon.png', type: 'coupon', locked: true }, 'Cards': { name: '', icon: '' }, 'Tickets': { name: '', icon: '' } },
@@ -132,6 +134,13 @@ export class CreateCampaingComponent implements OnInit {
       customFields: [""],
     });
 
+    this.membershipForm = formBuilder.group({
+      campaignName: ["", [Validators.required]],
+      description: ["", [Validators.required]],
+      template: ["", [Validators.required]],
+      customFields: [""],
+    });
+
 
 
     this.id = this.activeRout.snapshot.paramMap.get('id');
@@ -147,6 +156,9 @@ export class CreateCampaingComponent implements OnInit {
           if(result['data'][i].campaign_type == 6){
             this.stampCampaignId = result['data'][i].id;
           }
+          if(result['data'][i].campaign_type == 7){
+            this.membershipCampaignId = result['data'][i].id;
+          }
         }
       }, err => {
         console.log(err);
@@ -160,6 +172,7 @@ export class CreateCampaingComponent implements OnInit {
       this.ticketForm.controls['template'].setValue(this.dataCampaign.card_id);
       this.loyaltyForm.controls['template'].setValue(this.dataCampaign.card_id);
       this.stampForm.controls['template'].setValue(this.dataCampaign.card_id);
+      this.membershipForm.controls['template'].setValue(this.dataCampaign.card_id);
       this.cardType = this.dataCampaign.cardType;
       if(this.cardType != ''){
         this.disable = true;
@@ -172,8 +185,8 @@ export class CreateCampaingComponent implements OnInit {
           this.coupons.push(data['data'][i]);
           this.noCoupons = false;
         }else if(data['data'][i].card_type == 2){
-          this.cards.push(data['data'][i]);
-          this.noCards = false;
+          this.membership.push(data['data'][i]);
+          this.noMembership = false;
         }else if(data['data'][i].card_type == 3){
           this.tickets.push(data['data'][i]);
           this.noTickets = false;
@@ -246,7 +259,7 @@ export class CreateCampaingComponent implements OnInit {
           this.mainService.dataCampaign.points = result['data'].points;
           this.mainService.dataCampaign.cardType = (result['data'].campaign_type <= 4) ? 'coupon'
                                                     : (result['data'].campaign_type <= 6) ? 'loyalty'
-                                                    : (result['data'].campaign_type <= 7) ? 'card'
+                                                    : (result['data'].campaign_type <= 7) ? 'membership'
                                                     : (result['data'].campaign_type <= 9) ? 'ticket'
                                                     : '';
           this.dataCampaign = this.mainService.dataCampaign;
@@ -254,6 +267,7 @@ export class CreateCampaingComponent implements OnInit {
           this.ticketForm.controls['template'].setValue(this.dataCampaign.card_id);
           this.loyaltyForm.controls['template'].setValue(this.dataCampaign.card_id);
           this.stampForm.controls['template'].setValue(this.dataCampaign.card_id);
+          this.membershipForm.controls['template'].setValue(this.dataCampaign.card_id);
 
           // need for all template
           if (this.dataCampaign.campaign_type === '1') {
@@ -270,6 +284,8 @@ export class CreateCampaingComponent implements OnInit {
             setTimeout(() => {
               (document.getElementById('Loyalty Card') as HTMLElement).classList.add('disable');
             }, 200);
+          }else if(this.dataCampaign.campaign_type === '7'){
+            this.selectType('Membership Card');
           }else if(this.dataCampaign.campaign_type === '8'){
             this.selectType('Event Tickets');
           }else if(this.dataCampaign.campaign_type === '9'){
@@ -288,28 +304,6 @@ export class CreateCampaingComponent implements OnInit {
 
  ngOnInit() {
   }
-
-  // onChange() {
-  //   console.log(this.numberOfCoupon);
-  //   // const userType = JSON.parse(localStorage.getItem('user')).account_type;
-  //   let validationRegex;
-
-  //   switch (this.numberOfCoupon) {
-  //     case 'Up to 100':
-  //       validationRegex = /^(100|([1-9]{1}[0-9]?))$/g;
-  //       break;
-  //     case '100-10k':
-  //       validationRegex = /^(10000|([1-9]{1}[0-9]{0,3}))$/g;
-  //       break;
-  //     default:
-  //       validationRegex = /^(100|([1-9]{1}[0-9]?))$/g;
-  //       break;
-  //   }
-
-  //   if (!validationRegex.exec(this.limit)) {
-  //     this.limit = '';
-  //   }
-  // }
 
   changeDiscount(event) {
     this.dataCampaign.discount = event;
@@ -362,6 +356,16 @@ export class CreateCampaingComponent implements OnInit {
         this.router.navigate(['/main/campaign-main/review-campaign']);
       }
     }if (this.stampForm.valid) {
+      this.dataCampaign.cardType = this.cardType;
+      this.mainService.dataCampaign = this.dataCampaign;
+      this.mainService.dataCampaign.currency = this.brand_currency;
+
+      if (this.id) {
+        this.router.navigate(['/main/campaign-main/review-campaign/' + this.id]);
+      } else {
+        this.router.navigate(['/main/campaign-main/review-campaign']);
+      }
+    }if (this.membershipForm.valid) {
       this.dataCampaign.cardType = this.cardType;
       this.mainService.dataCampaign = this.dataCampaign;
       this.mainService.dataCampaign.currency = this.brand_currency;
@@ -454,6 +458,18 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCampaign.time='';
       this.dataCampaign.points = '';
       this.cardType = 'loyalty';
+    }else if(typeName === 'Membership Card'){
+      this.selectedSell = 'Membership Card';
+      this.dataCampaign.campaign_type = 7;
+      this.dataCampaign.endDate = '';
+      this.dataCampaign.startDate = '';
+      this.dataCampaign.discount='';
+      this.dataCampaign.coupon_validity='';
+      this.dataCampaign.venue = '';
+      this.dataCampaign.event_name = '';
+      this.dataCampaign.time='';
+      this.dataCampaign.points = '';
+      this.cardType = 'membership';
     }else if(typeName === 'Event Tickets'){
       this.selectedSell = 'Event Tickets';
       this.dataCampaign.campaign_type = 8;
@@ -478,7 +494,7 @@ export class CreateCampaingComponent implements OnInit {
   }
 
   clear() {
-    if ((!this.noCoupons || !this.noCards || !this.noLoyalty || !this.noTickets) && (this.selectTemplate)) {
+    if ((!this.noCoupons || !this.noMembership || !this.noLoyalty || !this.noTickets) && (this.selectTemplate)) {
       this.selectTemplate.reset();
     }
     if(this.selectCustomField){
