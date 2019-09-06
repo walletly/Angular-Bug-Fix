@@ -77,6 +77,7 @@ export class FbConnectComponent implements OnInit {
     description: '',
     facebook_page_id: '',
     currency: '',
+    currency_code:'',
     more_info: '',
     email: '',
     website: '',
@@ -388,7 +389,8 @@ export class FbConnectComponent implements OnInit {
     this.brand.brand_logo = this.photoLogo;
     this.brand.brand_name = this.myFormStep2.get('brandName').value;
     this.brand.description = this.myFormStep2.get('description').value;
-    this.brand.currency = this.myFormStep2.get('currency').value;
+    this.brand.currency_code = this.myFormStep2.get('currency').value;
+    this.brand.currency = this.getCurrency(this.brand.currency_code);
     this.brand.email = this.myFormStep2.get('email').value;
     const fbId = this.myFormStep2.get('facebookPageID').value.split('/');
     this.brand.facebook_page_id = fbId[fbId.length - 1];
@@ -420,6 +422,11 @@ export class FbConnectComponent implements OnInit {
       this.inProcces = false;
       this.messError = err;
     });
+  }
+
+  getCurrency(currency){
+    currency = currency.slice(0, -1);
+    return currency.split('(')[1];
   }
 
   deleteImg(name) {

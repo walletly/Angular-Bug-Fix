@@ -359,7 +359,7 @@ export class SettingsComponent implements OnInit {
     this.myForm.controls['moreInfo'].setValue(this.brand['more_info']);
     this.myForm.controls['phone'].setValue(this.brand['phone']);
     this.myForm.controls['website'].setValue(this.brand['website']);
-    this.myForm.controls['currency'].setValue(this.brand['currency']);
+    this.myForm.controls['currency'].setValue(this.brand['currency_code']);
     this.myForm.controls['facebookPageID'].disable();
     this.myForm.controls['brandName'].disable();
 
@@ -383,9 +383,15 @@ export class SettingsComponent implements OnInit {
     this.brand['website'] = this.myForm.get('website').value;
     this.brand['brand_cover'] = this.photoCover;
     this.brand['brand_logo'] = this.photoLogo;
-    this.brand['currency'] = this.myForm.get('currency').value;
+    this.brand['currency_code'] = this.myForm.get('currency').value;
+    this.brand['currency'] = this.getCurrency(this.brand['currency_code']);
     const partnerData = await this.getPartnerData(this.myForm.get('brandPartner').value);
     this.brand['brandPartner'] = partnerData;
+  }
+
+  getCurrency(currency){
+    currency = currency.slice(0, -1);
+    return currency.split('(')[1];
   }
 
   mouseMove() {
