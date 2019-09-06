@@ -1387,9 +1387,9 @@ div.top > nb-menu.admin-type{
 //   width: 5px !important;  /* Remove scrollbar space */
 //   background: transparent !important;  /* Optional: just make scrollbar invisible */
 // }
-// ::-webkit-scrollbar-track {
-//   background: transparent !important;
-// }
-// ::-webkit-scrollbar-thumb {
-//   background: #dee3e5 !important;
-// }
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+::-webkit-scrollbar-thumb {
+  background: #dee3e5 !important;
+}
