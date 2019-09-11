@@ -6,7 +6,7 @@
 <nb-card>
   <nb-card-body>
     <nb-tabset class="tabs-card"> <!-- (changeTab)="selectedTab($event)" -->
-      <nb-tab *ngIf="userAdmin" #packages tabTitle="Packages">
+      <!-- <nb-tab *ngIf="!userAdmin" #packages tabTitle="Packages">
         <div class="input-wrapper">
           <form *ngIf="!showLoader" [formGroup]="myFormPackages">
             <div class="row-input m-b-18">
@@ -256,14 +256,14 @@
                       <img src="assets/svg-icon/edit.svg" alt="" />
                       Edit
                     </div>
-                    <!-- (click)="
-                    delete(
-                      row.data['Id'].name,
-                      row.data['Brand_Id'].name,
-                      $event
-                    );
-                    showActions = null
-                  " -->
+                      (click)="
+                      delete(
+                        row.data['Id'].name,
+                        row.data['Brand_Id'].name,
+                        $event
+                      );
+                      showActions = null
+                    "
                     <div class="item">
                       <img src="assets/svg-icon/disable.svg" alt="" />
                       Disabled
@@ -274,7 +274,7 @@
             </td>
           </ng-container>
         </table>
-      </nb-tab>
+      </nb-tab> -->
       <nb-tab *ngIf="!userAdmin" #pageSettingsTab tabTitle="Page Setting">
         <div *ngIf="showLoader" class="loader-table">
           <img width="70px" src="assets/img/Loader2x.gif" alt="" />
@@ -1507,20 +1507,22 @@
               Status
             </div>
           </div>
-          <div *ngFor="let admin of brandAdmins" class="item">
-            <div class="user-wrap">
-              <div class="icon">
-                <img
-                  src="{{admin.avatar}}"
-                  alt=""
-                />
+          <div *ngFor="let admin of brandAdmins">
+            <div *ngIf="admin" class="item">
+              <div class="user-wrap">
+                <div class="icon">
+                  <img
+                    src="{{admin.avatar}}"
+                    alt=""
+                  />
+                </div>
+                <div>
+                  {{admin.firstname}} {{ admin.lastname }}
+                </div>
               </div>
-              <div>
-                {{admin.firstname}} {{ admin.lastname }}
+              <div class="status">
+                Admin
               </div>
-            </div>
-            <div class="status">
-              Admin
             </div>
           </div>
         </div>
