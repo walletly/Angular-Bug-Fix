@@ -364,6 +364,79 @@
             </div>
           </div>
         </nb-tab>
+
+        <nb-tab tabTitle="Membership Cards">
+            <div *ngIf="showLoader" class="loader-table m-t-50">
+              <img width="70px" src="assets/img/Loader2x.gif" alt="">
+            </div>
+            <div *ngIf="membershipCardAudience.length && !showLoader" class="check-all-wrap">
+                <div class="all m-t-14 m-b-12">
+                  <nb-checkbox [(ngModel)]="checkAllMembershipCards">All</nb-checkbox>
+                </div>
+                <div (click)=downloadMembershipCards() class="invite download m-t-14 m-b-12 ml-auto">
+                  <img src="assets/img/d-icon.png" width="14px" alt="">
+                  Download CSV
+                </div>
+              <div (click)="refreshMembershipCards()" class="refresh m-t-14 m-b-12 m-l-10">
+                <img src="assets/svg-icon/refresh-Btn.svg" alt="">
+                Refresh
+              </div>
+            </div>
+            <div class="box-container" *ngIf="!showLoader">
+              <table *ngIf="membershipCardAudience.length" class="m-b-40 full-width" [nbTreeGrid]="filterMembershipCardAudience">
+                <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allMembershipCardColumns"></tr>
+                <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allMembershipCardColumns"></tr>
+  
+                <ng-container
+                  *ngFor="let column of membershipCardColumns"
+                  [nbTreeGridColumnDef]="column"
+                >
+                  <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                    <span *ngIf="column !== 'Check'">
+                      {{column}}
+                    </span>
+                  </th>
+                  <td
+                    [ngClass]="{'check-row-bg': checkAllMembershipCards}"
+                    nbTreeGridCell
+                    *nbTreeGridCellDef="let row; index as i"
+                  >
+                    <span *ngIf="column === 'Check'">
+                      <div *ngIf="checkAllMembershipCards" class="check-row m-auto">
+                        <img src="assets/img/success-white.png" alt="">
+                      </div>
+                      <div *ngIf="!checkAllMembershipCards" style="background-color: transparent !important; border: none !important" class="check-row m-auto">
+                        {{ i + 1 }}
+                      </div>
+                    </span>
+                    <div class="df ai-c">
+                      <div class="ellipsis" *ngIf="column !== 'Status' &&  column !== 'Check'">
+                        <span>{{ row.data[column].name }}</span>
+                      </div>
+                      <span *ngIf="column === 'Status'">
+                        <label class="switch"
+                          (click)="changeMembershipCardStatus(
+                          $event.target,
+                          'check-' + row.data['Id'].name,
+                          row.data['Id'].name,
+                          $event)">
+                          <input *ngIf="row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" checked disabled>
+                          <input *ngIf="!row.data['Status'].name" id="{{ 'check-' + row.data['Id'].name  }}" type="checkbox" disabled>
+                          <span class="slider round"></span>
+                        </label>
+                      </span>
+                    </div>
+                  </td>
+                </ng-container>
+              </table>
+              <div *ngIf="!membershipCardAudience.length" class="create-btn-wrap">
+                <img class="m-b-16 m-t-40" src="assets/svg-icon/noAudience.svg" alt="">
+                <div class="m-b-25 fs-22">
+                  No Audience!
+                </div>
+              </div>
+            </div>
+          </nb-tab>
     </nb-tabset>
 
   </nb-card-body>

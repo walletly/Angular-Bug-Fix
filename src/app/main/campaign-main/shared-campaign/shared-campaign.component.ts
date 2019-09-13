@@ -49,18 +49,33 @@ export class SharedCampaignComponent implements OnInit {
     this.showLoader = true;
     this.campaignService.getСampaignByCode(this.campaignCode).subscribe(data => {
       this.campaign = data['data'][0];
+      if(this.campaign.integrations){
+        if(!this.campaign.integrations.includes('Offline')){
+          this.campaign = null;
+          this.showLoader = false;
+          this.invalidCampaign = true;
+          return;
+        }
+      }else{
+        this.campaign = null;
+        this.showLoader = false;
+        this.invalidCampaign = true;
+        return;
+      }
       this.brandService.getBrandName(this.campaign.brand_id).subscribe(result =>{
         this.brand_logo = result['brand_logo'];
         this.brand_name = result['brand_name'];
         this.showLoader = false;
         this.invalidCampaign = false;
       },err =>{
+        this.campaign = null;
         this.showLoader = false;
         this.invalidCampaign = true;
       }); 
       this.campaignType = this.campaign.campaign_type;
       this.selectCardType(this.campaignType);
     }, error=>{
+      this.campaign = null;
       this.showLoader = false;
       this.invalidCampaign = true;
     })
@@ -86,7 +101,7 @@ export class SharedCampaignComponent implements OnInit {
     }else if(type <= 6){
       this.cardType = 'stampCard';
     }else if(type <= 7){
-      this.cardType = 'card';
+      this.cardType = 'membershipCard';
     }else if(type <= 9){
       this.cardType = 'ticket'
       if(type == 8){
@@ -106,18 +121,18 @@ export class SharedCampaignComponent implements OnInit {
         this.inProcess = false;
         if (result['success']){
           this.successMessage = result['message'];
-          this.successUrl = result['data'].coupon_url || result['data'].card_url || result['data'].ticket_url || result['data'].loyaltyCard_url || result['data'].stampCard_url;
+          this.successUrl = result['data'].coupon_url || result['data'].membershipCard_url || result['data'].ticket_url || result['data'].loyaltyCard_url || result['data'].stampCard_url;
           window.location.href = this.successUrl;
           this.inProcess = false;
         }else{
           this.errorMessage = result['message'];
-          this.errorUrl = result['data'].coupon_url || result['data'].card_url || result['data'].ticket_url || result['data'].loyaltyCard_url || result['data'].stampCard_url;
+          this.errorUrl = result['data'].coupon_url || result['data'].membershipCard_url || result['data'].ticket_url || result['data'].loyaltyCard_url || result['data'].stampCard_url;
           window.location.href = this.errorUrl;
           this.inProcess = false;
         }
       }, error => {
         this.errorMessage = error['error'].error;
-        this.errorUrl = error['data'].coupon_url || error['data'].card_url || error['data'].ticket_url || error['data'].loyaltyCard_url || error['data'].stampCard_url;
+        this.errorUrl = error['data'].coupon_url || error['data'].membershipCard_url || error['data'].ticket_url || error['data'].loyaltyCard_url || error['data'].stampCard_url;
         window.location.href = this.errorUrl;
         this.inProcess = false;
       });

@@ -25,7 +25,6 @@ export class CreateCardsComponent implements OnInit {
         break;
       case 'membership':
         this.mainServise.cardTypeId = 2;
-        return;
         break;
       case 'tickets':
         this.mainServise.cardTypeId = 3;

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BrandService } from 'src/app/shared/services/brand.service';
+import { MainService } from 'src/app/shared/services/main.service';
 import { ngxCsv } from 'ngx-csv/ngx-csv';
 import { error } from 'util';
 
@@ -14,16 +15,19 @@ export class AudienceComponent implements OnInit {
   checkAlltickets;
   checkAllLoyaltyCards;
   checkAllStampCards;
+  checkAllMembershipCards;
   showLoader;
   // defaultColumns = ['First Name', 'Last Name', 'Email Address', 'Type', 'Campaign Name', 'Issue Date', 'Expiry', 'Status'];
   couponColumns = ['Check', 'Campaign Name', 'Type', 'Issue Date', 'Expiry', 'Email Address', 'Status'];
   // cardColumns = ['Check', 'Campaign Name', 'Type', 'Issue Date', 'Stamps/Points', 'Email Address', 'Redeem Count'];
   stampCardColumns = ['Check', 'Campaign Name', 'Issue Date', 'Stamps', 'Email Address', 'Redeem Count'];
   loyaltyCardColumns = ['Check', 'Campaign Name', 'Issue Date', 'Points', 'Email Address', 'Redeem Count'];
+  membershipCardColumns = ['Check', 'Campaign Name', 'Issue Date', 'Email Address', 'Redeem Count', 'Status'];
   eventColumns = ['Check', 'Campaign Name', 'Type', 'Start Date', 'Members', 'Email Address', 'Check in'];
   allCouponColumns = this.couponColumns;
   // allCardColumns = this.cardColumns;
   allLoyaltyCardColumns = this.loyaltyCardColumns;
+  allMembershipCardColumns = this.membershipCardColumns;
   allstampCardColumns = this.stampCardColumns;
   alleventColumns = this.eventColumns;
 
@@ -33,10 +37,12 @@ export class AudienceComponent implements OnInit {
   CouponAudience = [];
   TicketAudience = [];
   loyaltyCardAudience = [];
+  membershipCardAudience = [];
   stampCardAudience = [];
   filterCouponAudience = [];
   filterTicketAudience = [];
   filterloyaltyCardAudience = [];
+  filterMembershipCardAudience = [];
   filterstampCardAudience = [];
 
   // data = [
@@ -51,7 +57,7 @@ export class AudienceComponent implements OnInit {
   //   },
   // ];
 
-  constructor(private brandService: BrandService) {
+  constructor(private brandService: BrandService, private mainService: MainService) {
     this.showLoader = true;
   }
 
@@ -262,6 +268,38 @@ export class AudienceComponent implements OnInit {
     }
   }
 
+  getMembershipCardAudience() {
+    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
+      this.brandService.getBrandMembershipCardAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+        console.log(result);
+        let audiences;
+        if (result['success']) {
+          audiences = result['data']['membershipCards'];
+
+          audiences.forEach(element => {
+            this.membershipCardAudience.push({
+              data: {
+              'Check' : { name: '' },
+              'Campaign Name': { name: element.campaign_name },
+              'Issue Date': { name: element.createDateFormatted },
+              'Email Address': { name: element.email },
+              'Redeem Count': { name: element.redeem_count },
+              'Status': {name: element.is_active},
+              'Id': { name: element.id }
+              }
+            });
+          });
+          this.filterMembershipCardAudience = this.membershipCardAudience;
+        }
+        this.showLoader = false;
+      }, err => {
+        console.log(err);
+        this.membershipCardAudience = [];
+        this.showLoader = false;
+      });
+    }
+  }
+
   refreshCoupons() {
     this.showLoader = true;
     this.CouponAudience = [];
@@ -286,6 +324,12 @@ export class AudienceComponent implements OnInit {
     this.showLoader = true;
     this.loyaltyCardAudience = [];
     this.getLoyaltyCardAudience();
+  }
+
+  refreshMembershipCards() {
+    this.showLoader = true;
+    this.membershipCardAudience = [];
+    this.getMembershipCardAudience();
   }
 
   onChangeTab(event) {
@@ -313,6 +357,12 @@ export class AudienceComponent implements OnInit {
       if(this.stampCardAudience.length == 0){
         this.showLoader = true;
         this.getStampCardAudience();
+      }
+    }else if (event.tabTitle === 'Membership Cards') {
+      this.type = 'Membership Cards';
+      if(this.membershipCardAudience.length == 0){
+        this.showLoader = true;
+        this.getMembershipCardAudience();
       }
     }
 
@@ -355,7 +405,16 @@ export class AudienceComponent implements OnInit {
         }
       });
       console.log(this.filterstampCardAudience);
-    }
+    } else if (type === 'Membership Cards') {
+      this.filterMembershipCardAudience = this.membershipCardAudience.filter(element => {
+        console.log(element);
+        console.log(element.data['Campaign Name']);
+        if (element.data['Campaign Name'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+          return true;
+        }
+      });
+      console.log(this.filterloyaltyCardAudience);
+    } 
   }
 
 
@@ -436,6 +495,31 @@ export class AudienceComponent implements OnInit {
     new ngxCsv(check, 'Loyalty Cards Audience', options);
   }
 
+  downloadMembershipCards() {
+    const options = {
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalseparator: '.',
+      showLabels: true,
+      showTitle: true,
+      title: 'Membership Cards Audience',
+      useBom: false,
+      noDownload: false,
+      headers: ['Campaign Name', 'Issue Date', 'Email Address', 'Redeem Count', 'Status']
+    };
+    const check = [];
+    this.filterMembershipCardAudience.forEach(result => {
+      check.push({
+        'Campaign Name':  result['data']['Campaign Name'].name,
+        'Issue Date': result['data']['Issue Date'].name,
+        'Email Address': result['data']['Email Address'].name,
+        'Redeem Count': result['data']['Redeem Count'].name,
+        'Status': result['data']['Status'].name ? 'Active' : 'Inactive',
+      });
+    });
+    new ngxCsv(check, 'Membership Cards Audience', options);
+  }
+
   downloadTickets() {
     const options = {
       fieldSeparator: ',',
@@ -469,6 +553,20 @@ export class AudienceComponent implements OnInit {
     // ];
     // tslint:disable-next-line: no-unused-expression
     new ngxCsv(check, 'Tickets Audience', options);
+  }
+
+  changeMembershipCardStatus(label, input, id, event) {
+    event.stopPropagation();
+    label.classList.add('disable');
+    this.brandService.changeMembershipCardStatus(id).subscribe(result => {
+      this.mainService.showToastrSuccess.emit({text: `Membership Card is now ${result['data'].updated_status}`});
+      this.getMembershipCardAudience();
+      (document.getElementById(input) as HTMLInputElement).checked = !((document.getElementById(input) as HTMLInputElement).checked);
+      label.classList.remove('disable');
+    }, err => {
+      console.log(err);
+      label.classList.remove('disable');
+    });
   }
 
 }

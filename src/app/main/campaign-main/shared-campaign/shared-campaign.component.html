@@ -1,15 +1,15 @@
 <nb-layout>
-  <nb-layout-column class="main-wrap-outer">
+  <nb-layout-column>
     <div *ngIf="!showLoader" class="main-wrap">
       <div>
-        <div class="m-b-29 df ai-c" style="color: black; font-size: 25px; justify-content: center;">
+        <div *ngIf="!invalidCampaign" class="m-b-29 df ai-c" style="color: black; font-size: 25px; justify-content: center;">
           <img [src]="brand_logo" class="m-r-10" alt="" style="height: 60px; width: 60px; border-radius: 50%;" />{{ brand_name }}
         </div>
-        <div class="m-b-29 df ai-c" style="color: black; font-size: 25px; justify-content: center;">
+        <div *ngIf="!invalidCampaign" class="m-b-29 df ai-c" style="color: black; font-size: 25px; justify-content: center;">
           {{ campaign.campaign_name}}
         </div>
-        <nb-card class="auth-card m-b-40">
-          <nb-card-body *ngIf="!invalidCampaign">
+        <nb-card *ngIf="!invalidCampaign" class="auth-card m-b-40">
+          <nb-card-body>
             <div class="fs-22 fw-400 m-b-9">
                 Enter User Details
             </div>
@@ -149,9 +149,14 @@
               </div>
             </div>
           </nb-card-body>
-          <nb-card-body *ngIf="invalidCampaign">
-            <div>
-              Campaign Not Found (Invalid Campaign)
+        </nb-card>
+        <nb-card *ngIf="invalidCampaign" class="m-b-40 m-t-70">
+          <nb-card-body>
+            <div class="text-center" style="padding: 50px;">
+              <div class="m-b-20">
+                404 Not Found (Broken Link)
+              </div>
+              <img src="assets/img/brokenlink.png" style="max-width: 500px;">
             </div>
           </nb-card-body>
         </nb-card>

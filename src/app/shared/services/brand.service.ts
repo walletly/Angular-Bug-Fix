@@ -99,6 +99,22 @@ export class BrandService {
     return this.http.get(SERVER_API_URL + 'loyaltyCard/audience/' + brand_id, { headers: httpHeaders});
   }
 
+  getBrandMembershipCardAudience(brand_id) {
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'membershipCard/audience/' + brand_id, { headers: httpHeaders});
+  }
+
+  changeMembershipCardStatus(membershipCard_id) {
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.post(SERVER_API_URL + 'membershipCard/changeStatus/' + membershipCard_id, { headers: httpHeaders});
+  }
+
   addIbeacon(brand_id, body){
     const httpHeaders = new HttpHeaders ({
       'Content-Type': 'application/json',
