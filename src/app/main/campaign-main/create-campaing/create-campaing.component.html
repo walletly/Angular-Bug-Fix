@@ -387,7 +387,7 @@
             <button (click)="clear()" class="cust-button m-r-15" nbButton status="gray">
               Clear
             </button>
-            <button *ngIf="!id && !noLoyalty" (click)="create()" class="cust-button" nbButton status="success">
+            <button *ngIf="!id && !noMembership" (click)="create()" class="cust-button" nbButton status="success">
               Create
             </button>
             <button *ngIf="id" (click)="create()" class="cust-button" nbButton status="success">
