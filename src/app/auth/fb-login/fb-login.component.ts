@@ -189,9 +189,13 @@ export class FbLoginComponent implements OnInit {
 
   loginFB() {
     if (this.terms) {
-      localStorage.clear();
-      this.firebaseAuth.auth.signOut();
-      this.authService.doFacebookLogin();
+      if(localStorage.getItem('loggedIn') == 'true'){
+        this.ngZone.run(() => this.router.navigate(['/main/dashboard']));
+      }else{
+        localStorage.clear();
+        this.firebaseAuth.auth.signOut();
+        this.authService.doFacebookLogin();
+      }
     } else {
       this.termsError = true;
     }

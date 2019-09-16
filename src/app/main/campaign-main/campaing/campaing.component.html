@@ -33,7 +33,7 @@
 </div>
 <nb-card>
   <nb-card-body style="overflow: unset !important;" class="p-0">
-    <nb-tabset (changeTab)="onChangeTab($event)">
+    <nb-tabset class="tabs-container" (changeTab)="onChangeTab($event)">
       <nb-tab tabTitle="Coupons">
         <div *ngIf="!showLoader" class="check-all-wrap">
           <div *ngIf="dataCoupon.length" (click)="refresh()" class="refresh m-t-10 m-b-10 m-r-10 ml-auto">

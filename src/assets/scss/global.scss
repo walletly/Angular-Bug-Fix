@@ -730,6 +730,9 @@ div.menu-inside > nb-menu > ul > li > ul > li.menu-item > a {
   width: calc(100% + 2.5rem) !important;
   margin-top: -1.25rem !important;
 }
+.tabs-container .tabset{
+  padding: 0px !important;
+}
 .nb-theme-default nb-tabset .tabset .tab.active a {
   font-weight: 400 !important;
   color: #323232 !important;
