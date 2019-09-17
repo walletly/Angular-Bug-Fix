@@ -36,10 +36,10 @@
                   <img [src]="newPhoto" alt="">
                 </div>
               </div>
-              <label class="fs-12 color-secondary c-p">
+              <!-- <label class="fs-12 color-secondary c-p">
                 <input hidden type="file" (change)="uploadCover($event)" accept="image/*">
                 Change
-              </label>
+              </label> -->
             </div>
             <div class="m-b-5 fs-14 fw-400">
               Name
@@ -52,7 +52,7 @@
               <!-- <span class="color-warning"> (Not verified)</span> -->
             </div>
             <div class="m-b-20 input-email">
-              <input [(ngModel)]="user.email" type="text" nbInput fullWidth fieldSize="medium" placeholder="">
+              <input [(ngModel)]="user.email" type="text" nbInput fullWidth fieldSize="medium" placeholder="" readonly disabled>
               <button (click)="save()" class="cust-button" nbButton status="success">
                 Save
               </button>

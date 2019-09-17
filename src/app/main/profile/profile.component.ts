@@ -114,13 +114,20 @@ export class ProfileComponent implements OnInit {
   }
 
   save() {
-    const name = this.newName.split(' ');
-    console.log(name);
-    this.authService.updateUser(this.user.user_id, { firstname: name[0], lastname: name[1] ? name[1] : '', avatar: this.newPhoto }).subscribe(result => {
+    let firstName, lastName;
+    if (this.newName.includes(' ')){
+      firstName = this.newName.split(' ').slice(0, -1).join(' ');
+      lastName = this.newName.split(' ').slice(-1).join(' ');
+    }else{
+      firstName = this.newName;
+      lastName = '';
+    }
+    this.authService.updateUser(this.user.user_id, { firstname: firstName, lastname: lastName }).subscribe(result => {
       console.log(result);
       if (result['success']) {
-        this.user = result['data'];
-        this.fullname = `${this.user['firstname']} ${this.user['lastname']}`;
+        this.user['firstname'] = firstName;
+        this.user['lastname'] = lastName;
+        this.fullname = `${firstName} ${lastName}`;
         this.newName = this.fullname;
         if (this.newPhoto) {
           this.photo = this.newPhoto;
