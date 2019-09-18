@@ -117,8 +117,9 @@ export class CampaingComponent implements OnInit {
       this.filteredDataCoupon = this.dataCoupon;
       this.filteredDataCard = this.dataCard;
       this.filteredDataTicket = this.dataTicket;
-      // this.searchText = '';
-      // this.filterCampaigns(this.type);
+      if(this.searchText && this.searchText != ''){
+        this.filterCampaigns(this.type);
+      }
 
       this.showLoader = false;
     }, err => {
@@ -218,6 +219,7 @@ export class CampaingComponent implements OnInit {
   }
 
   refresh() {
+    this.searchText = '';
     this.showLoader = true;
     this.timeInSecs = undefined;
     this.dataCoupon = [];

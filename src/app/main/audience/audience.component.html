@@ -369,7 +369,7 @@
             <div *ngIf="showLoader" class="loader-table m-t-50">
               <img width="70px" src="assets/img/Loader2x.gif" alt="">
             </div>
-            <div *ngIf="membershipCardAudience.length && !showLoader" class="check-all-wrap">
+            <div *ngIf="(membershipCardAudience.length || filterMembershipCardAudience.length)  && !showLoader" class="check-all-wrap">
                 <div class="all m-t-14 m-b-12">
                   <nb-checkbox [(ngModel)]="checkAllMembershipCards">All</nb-checkbox>
                 </div>
@@ -429,7 +429,7 @@
                   </td>
                 </ng-container>
               </table>
-              <div *ngIf="!membershipCardAudience.length" class="create-btn-wrap">
+              <div *ngIf="!membershipCardAudience.length && !filterMembershipCardAudience.length" class="create-btn-wrap">
                 <img class="m-b-16 m-t-40" src="assets/svg-icon/noAudience.svg" alt="">
                 <div class="m-b-25 fs-22">
                   No Audience!

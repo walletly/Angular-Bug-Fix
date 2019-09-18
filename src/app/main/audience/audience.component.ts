@@ -271,6 +271,7 @@ export class AudienceComponent implements OnInit {
   getMembershipCardAudience() {
     if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
       this.brandService.getBrandMembershipCardAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+        this.membershipCardAudience = [];
         console.log(result);
         let audiences;
         if (result['success']) {
@@ -290,6 +291,9 @@ export class AudienceComponent implements OnInit {
             });
           });
           this.filterMembershipCardAudience = this.membershipCardAudience;
+          if(this.searchText && this.searchText != ''){
+            this.filterCampaigns(this.type);
+          }
         }
         this.showLoader = false;
       }, err => {
@@ -302,38 +306,39 @@ export class AudienceComponent implements OnInit {
 
   refreshCoupons() {
     this.showLoader = true;
+    this.searchText = '';
     this.CouponAudience = [];
     this.getCouponAudience();
   }
-  // refreshCards() {
-  //   this.showLoader = true;
-  //   this.getCardAudience();
-  // }
   refreshTickets() {
     this.showLoader = true;
+    this.searchText = '';
     this.TicketAudience = [];
     this.getTicketAudience();
   }
   refreshStampCards() {
     this.showLoader = true;
+    this.searchText = '';
     this.stampCardAudience = [];
     this.getStampCardAudience();
   }
-
   refreshLoyaltyCards() {
     this.showLoader = true;
+    this.searchText = '';
     this.loyaltyCardAudience = [];
     this.getLoyaltyCardAudience();
   }
-
   refreshMembershipCards() {
     this.showLoader = true;
+    this.searchText = '';
     this.membershipCardAudience = [];
     this.getMembershipCardAudience();
   }
 
   onChangeTab(event) {
     console.log(event);
+    this.searchText = '';
+    this.filterCampaigns(this.type);
     if (event.tabTitle === 'Coupons') {
       this.type = 'Coupons';
       if(this.CouponAudience.length == 0){
