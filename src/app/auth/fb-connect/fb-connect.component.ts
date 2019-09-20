@@ -214,7 +214,12 @@ export class FbConnectComponent implements OnInit {
       } else {
         this.loader = false;
       }
-
+      if(this.fbResponse['profile_logo']){
+        this.getPhoto(this.fbResponse['profile_logo'], `${this.fbResponse['brand_name']}Logo.png`, 'logo');
+      }
+      if(this.fbResponse['cover_image']){
+        this.getPhoto(this.fbResponse['cover_image'], `${this.fbResponse['brand_name']}Cover.png`, 'cover');
+      }
       const connectingBrand = {
         brand_id: this.fbResponse['brand_id'],
         user_admin_id: localStorage.getItem('userID'),
@@ -250,8 +255,8 @@ export class FbConnectComponent implements OnInit {
             this.setActiveBrandAndUpdateUser(id);
             this.stepper.next();
             this.setForm2();
-            this.photoCover = this.fbResponse['cover_image'];
-            this.photoLogo = this.fbResponse['profile_logo'];
+            // this.photoCover = this.fbResponse['cover_image'];
+            // this.photoLogo = this.fbResponse['profile_logo'];
             this.myFormStep2.controls['facebookPageID'].setValue('www.facebook.com/' + this.fbResponse.brand_id);
           }
 
@@ -524,6 +529,62 @@ export class FbConnectComponent implements OnInit {
       this.partners = items;
     });
   }
+
+  getPhoto(image_url, image_name, image_type){
+    let image;
+    this.http.get(image_url, {
+      responseType: 'arraybuffer'
+    }).subscribe(response => {
+      image = this._arrayBufferToBase64(response);
+      image = 'data:image/png;base64,' + image;
+      var blob = this.dataURItoBlob(image);
+      var file = new File([blob], image_name, {
+        type: "'image/png'"
+      });
+      const formData = new FormData();
+      formData.append('image', file, image_name);
+      this.uploadService.uploadPhoto(formData, 'brandLogoFolder').subscribe(result => {
+        if(image_type == 'logo'){
+          this.photoLogo = result['data'].url;
+        }else if(image_type == 'cover'){
+          this.photoCover = result['data'].url;
+        }
+      }, err => {
+        console.log(err);
+      })
+    })
+  }
+
+  _arrayBufferToBase64(buffer) {
+    var binary = '';
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  }
+
+  dataURItoBlob(dataURI) {
+
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+    else
+        byteString = unescape(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], {type:mimeString});
+}
 
   // getPartnerPicture(image){
   //   return this._sanitizer.bypassSecurityTrustStyle(`url(${image})`);

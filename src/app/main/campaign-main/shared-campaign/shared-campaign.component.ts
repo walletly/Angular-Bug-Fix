@@ -49,19 +49,19 @@ export class SharedCampaignComponent implements OnInit {
     this.showLoader = true;
     this.campaignService.getСampaignByCode(this.campaignCode).subscribe(data => {
       this.campaign = data['data'][0];
-      if(this.campaign.integrations){
-        if(!this.campaign.integrations.includes('Offline')){
-          this.campaign = null;
-          this.showLoader = false;
-          this.invalidCampaign = true;
-          return;
-        }
-      }else{
-        this.campaign = null;
-        this.showLoader = false;
-        this.invalidCampaign = true;
-        return;
-      }
+      // if(this.campaign.integrations){
+      //   if(!this.campaign.integrations.includes('Offline')){
+      //     this.campaign = null;
+      //     this.showLoader = false;
+      //     this.invalidCampaign = true;
+      //     return;
+      //   }
+      // }else{
+      //   this.campaign = null;
+      //   this.showLoader = false;
+      //   this.invalidCampaign = true;
+      //   return;
+      // }
       this.brandService.getBrandName(this.campaign.brand_id).subscribe(result =>{
         this.brand_logo = result['brand_logo'];
         this.brand_name = result['brand_name'];
