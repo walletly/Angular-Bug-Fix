@@ -280,12 +280,27 @@
                       <div class="pos-r full-width">
                         <input [ngClass]="{'error': myFormStep2.controls['location'].invalid && !customValidationStep2}"
                           formControlName="location" class="color-link" type="text" nbInput fullWidth fieldSize="medium"
-                          placeholder="">
+                          placeholder="Search Location" #location id='location' (keydown.enter)="$event.preventDefault()"
+                          autocorrect="off" autocapitalize="off" spellcheck="off">
                         <div *ngIf="myFormStep2.controls['location'].invalid && !customValidationStep2"
                           class="error-lable">
                           Field error (must have location info)
                         </div>
                       </div>
+                    </div>
+                  </div>
+                  <div class="row-input">
+                    <div class="lable">
+                    </div>
+                    <div class="value">
+                      <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+                        <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
+                          (dragEnd)="markerDragEnd($event)"></agm-marker>
+                      </agm-map>
+                      
+                      <!-- <h5>Address: {{address}}</h5>
+                      <div>Latitude: {{latitude}}</div>
+                      <div>Longitude: {{longitude}}</div> -->
                     </div>
                   </div>
                   <div class="row-input">

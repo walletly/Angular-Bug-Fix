@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, TemplateRef, NgZone } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
@@ -12,6 +12,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { forkJoin } from 'rxjs';
 import { NbDialogService } from '@nebular/theme';
+import { MapsAPILoader, MouseEvent } from '@agm/core';
 
 @Component({
   selector: 'app-fb-connect',
@@ -21,6 +22,7 @@ import { NbDialogService } from '@nebular/theme';
 export class FbConnectComponent implements OnInit {
   @ViewChild('stepper') stepper;
   @ViewChild('dialog') public templateref: TemplateRef<any>;
+  @ViewChild('location') searchElementRef;
 
   loader = false;
   platform;
@@ -71,6 +73,7 @@ export class FbConnectComponent implements OnInit {
     brand_name: '',
     phone: '',
     location: [],
+    location_coordinates: { lat: null, lng: null},
     is_facebook: true,
     brand_logo: '',
     brand_cover: '',
@@ -82,6 +85,12 @@ export class FbConnectComponent implements OnInit {
     email: '',
     website: '',
   };
+
+  latitude: number;
+  longitude: number;
+  zoom: number;
+  address: string;
+  private geoCoder;
 
   terms;
   messError;
@@ -100,7 +109,9 @@ export class FbConnectComponent implements OnInit {
     private firebaseAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private _sanitizer: DomSanitizer,
-    private dialogService: NbDialogService
+    private dialogService: NbDialogService,
+    private mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone
   ) {
 
     this.getPartners();
@@ -123,7 +134,7 @@ export class FbConnectComponent implements OnInit {
       coverImage: ["", [Validators.required]],
       description: ["", [Validators.required]],
       moreInfo: ["", []],
-      location: ["", []],
+      location: ["", [Validators.required]],
       currency: ["", [Validators.required]],
       phone: ["", [Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
       email: ["", [Validators.required, Validators.email]],
@@ -258,6 +269,9 @@ export class FbConnectComponent implements OnInit {
             // this.photoCover = this.fbResponse['cover_image'];
             // this.photoLogo = this.fbResponse['profile_logo'];
             this.myFormStep2.controls['facebookPageID'].setValue('www.facebook.com/' + this.fbResponse.brand_id);
+            setTimeout(() => {
+              this.loadAutoComplete();
+            }, 500);
           }
 
         }
@@ -400,6 +414,9 @@ export class FbConnectComponent implements OnInit {
     const fbId = this.myFormStep2.get('facebookPageID').value.split('/');
     this.brand.facebook_page_id = fbId[fbId.length - 1];
     this.brand.location = this.myFormStep2.get('location').value;
+    let lat = parseFloat(this.latitude.toFixed(4));
+    let lng = parseFloat(this.longitude.toFixed(4));
+    this.brand['location_coordinates'] = { 'lat': lat, 'lng': lng};
     this.brand.more_info = this.myFormStep2.get('moreInfo').value;
     this.brand.phone = this.myFormStep2.get('phone').value;
     this.brand.user_admin_id = localStorage.getItem('userID');
@@ -584,7 +601,69 @@ export class FbConnectComponent implements OnInit {
     }
 
     return new Blob([ia], {type:mimeString});
-}
+  }
+
+  loadAutoComplete(){
+    //load Places Autocomplete
+    this.latitude = 54.94341;
+    this.longitude = -2.65362;
+    this.zoom = 2;
+    this.mapsAPILoader.load().then(() => {
+      // this.setCurrentLocation();
+      this.geoCoder = new google.maps.Geocoder;
+      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+        types: ["address"]
+      });
+      autocomplete.addListener("place_changed", () => {
+        this.ngZone.run(() => {
+          //get the place result
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          
+          this.myFormStep2.controls['location'].setValue((document.getElementById('location') as HTMLInputElement).value);
+
+          //verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+
+          //set latitude, longitude and zoom
+          this.latitude = place.geometry.location.lat();
+          this.longitude = place.geometry.location.lng();
+          this.zoom = 12;
+          this.getAddress(this.latitude, this.longitude, false);
+        });
+      });
+    });
+  }
+
+
+  markerDragEnd($event: MouseEvent) {
+    console.log($event);
+    this.latitude = $event.coords.lat;
+    this.longitude = $event.coords.lng;
+    this.getAddress(this.latitude, this.longitude, true);
+  }
+
+  getAddress(latitude, longitude, marker) {
+    this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
+      console.log(results);
+      console.log(status);
+      if (status === 'OK') {
+        if (results[0]) {
+          this.zoom = 12;
+          this.address = results[0].formatted_address;
+          if(marker){
+            this.myFormStep2.controls['location'].setValue(this.address);
+          }
+        } else {
+          window.alert('No results found');
+        }
+      } else {
+        window.alert('Geocoder failed due to: ' + status);
+      }
+
+    });
+  }
 
   // getPartnerPicture(image){
   //   return this._sanitizer.bypassSecurityTrustStyle(`url(${image})`);

@@ -63,6 +63,8 @@ import { HelpComponent } from './main/help/help.component';
 import { CampaignIntegrationComponent } from './main/campaign-main/campaign-integration/campaign-integration.component';
 import { SharedCampaignComponent } from './main/campaign-main/shared-campaign/shared-campaign.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import { AgmCoreModule } from '@agm/core';
+import { googleMapsApiKey } from '../environments/environment';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB_f_r3DPfN5tZ6x0olJaGCjSogT9rWapM",
@@ -157,7 +159,11 @@ export const firebaseConfig = {
     BreadcrumbModule,
     NbCalendarRangeModule,
     NbDialogModule.forRoot(),
-    QRCodeModule
+    QRCodeModule,
+    AgmCoreModule.forRoot({
+      apiKey: googleMapsApiKey,
+      libraries: ['places']
+    })
   ],
   providers: [
     AuthService,

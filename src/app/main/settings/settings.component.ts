@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MainService } from 'src/app/shared/services/main.service';
@@ -6,6 +6,7 @@ import { BrandService } from 'src/app/shared/services/brand.service';
 import { UploadService } from 'src/app/shared/services/upload.service';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { ManychatService } from '../../shared/services/manychat.service';
+import { MapsAPILoader, MouseEvent } from '@agm/core';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class SettingsComponent implements OnInit {
   @ViewChild('tabsetPaymantTab') tabsetPaymantTab;
   @ViewChild('customDataTab') customDataTab;
   @ViewChild('integrationsTab') integrationTab;
-
+  @ViewChild('location') searchElementRef;
+  
   dataCard = {
     brandLogo: '',
     coverImage: ''
@@ -78,6 +80,12 @@ export class SettingsComponent implements OnInit {
   iconImage;
   inProcces;
   brandAdmins;
+  latitude: number;
+  longitude: number;
+  zoom: number;
+  address: string;
+  private geoCoder;
+
 
   defaultColumns = ["Name", "Icon", "Number of Campaigns", "Number of Coupons", "Pricing", "Status", "Action"];
 
@@ -132,7 +140,9 @@ export class SettingsComponent implements OnInit {
     private brandService: BrandService,
     private uploadService: UploadService,
     private afs: AngularFirestore,
-    private manychatService: ManychatService) {
+    private manychatService: ManychatService,
+    private mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone) {
     this.getPartners();
 
     this.manyChatApiForm = formBuilder.group({
@@ -146,7 +156,7 @@ export class SettingsComponent implements OnInit {
       coverImage: [""],
       description: ["", [Validators.required]],
       moreInfo: ["", []],
-      location: ["", []],
+      location: ["", [Validators.required]],
       phone: ["", [Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
       email: ["", [Validators.required, Validators.email]],
       website: ["", [Validators.required]],
@@ -193,9 +203,8 @@ export class SettingsComponent implements OnInit {
     this.brandService.getBrandAdmins((JSON.parse(localStorage.getItem('currentBrand'))['brand_id'])).subscribe((result) => {
       this.brandAdmins = result['brand_admins'];
     });
-
-
   }
+
   showShared(row, event) {
     console.log(row);
     event.stopPropagation();
@@ -220,11 +229,12 @@ export class SettingsComponent implements OnInit {
       this.api = this.brand.apikey;
       console.log(this.brand);
       this.getData();
-      // this.mainService.showLoader.emit(false);
       this.showLoader = false;
       this.goPayment();
+      setTimeout(() => {
+        this.loadAutoComplete();
+      }, 500);
     }, err => {
-      // this.mainService.showLoader.emit(false);
       this.showLoader = false;
       this.goPayment();
     });
@@ -385,6 +395,9 @@ export class SettingsComponent implements OnInit {
     this.brand['brand_logo'] = this.photoLogo;
     this.brand['currency_code'] = this.myForm.get('currency').value;
     this.brand['currency'] = this.getCurrency(this.brand['currency_code']);
+    let lat = parseFloat(this.latitude.toFixed(4));
+    let lng = parseFloat(this.longitude.toFixed(4));
+    this.brand['location_coordinates'] = { 'lat': lat, 'lng': lng};
     const partnerData = await this.getPartnerData(this.myForm.get('brandPartner').value);
     this.brand['brandPartner'] = partnerData;
   }
@@ -469,4 +482,84 @@ export class SettingsComponent implements OnInit {
   //     console.log('run');
   //   }
   // }
+
+  // Get Current Location Coordinates
+  // private setCurrentLocation() {
+  //   if ('geolocation' in navigator) {
+  //     navigator.geolocation.getCurrentPosition((position) => {
+  //       this.latitude = position.coords.latitude;
+  //       this.longitude = position.coords.longitude;
+  //       this.zoom = 8;
+  //       this.getAddress(this.latitude, this.longitude);
+  //     });
+  //   }
+  // }
+
+
+  loadAutoComplete(){
+    //load Places Autocomplete
+    this.latitude = 54.94341;
+    this.longitude = -2.65362;
+    this.zoom = 2;
+    this.mapsAPILoader.load().then(() => {
+      // this.setCurrentLocation();
+      if(this.brand['location_coordinates']){
+        this.latitude = this.brand['location_coordinates'].lat;
+        this.longitude = this.brand['location_coordinates'].lng;
+        this.zoom = 12;
+      }
+      this.geoCoder = new google.maps.Geocoder;
+      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+        types: ["address"]
+      });
+      autocomplete.addListener("place_changed", () => {
+        this.ngZone.run(() => {
+          //get the place result
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          
+          this.myForm.controls['location'].setValue((document.getElementById('location') as HTMLInputElement).value);
+
+          //verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+
+          //set latitude, longitude and zoom
+          this.latitude = place.geometry.location.lat();
+          this.longitude = place.geometry.location.lng();
+          this.zoom = 12;
+          this.getAddress(this.latitude, this.longitude, false);
+        });
+      });
+    });
+  }
+
+
+  markerDragEnd($event: MouseEvent) {
+    console.log($event);
+    this.latitude = $event.coords.lat;
+    this.longitude = $event.coords.lng;
+    this.getAddress(this.latitude, this.longitude, true);
+  }
+
+  getAddress(latitude, longitude, marker) {
+    this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
+      console.log(results);
+      console.log(status);
+      if (status === 'OK') {
+        if (results[0]) {
+          this.zoom = 12;
+          this.address = results[0].formatted_address;
+          if(marker){
+            this.myForm.controls['location'].setValue(this.address);
+          }
+        } else {
+          window.alert('No results found');
+        }
+      } else {
+        window.alert('Geocoder failed due to: ' + status);
+      }
+
+    });
+  }
 }
