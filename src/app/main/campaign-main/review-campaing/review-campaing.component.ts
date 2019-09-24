@@ -164,6 +164,9 @@ export class ReviewCampaingComponent implements OnInit {
     this.campaign['venue'] = this.dataCampaign.venue;
     this.campaign['venue_coordinates'] = this.dataCampaign.venue_coordinates;
     this.campaign['points'] = this.dataCampaign.points;
+    let date = new Date();
+    let offset = date.getTimezoneOffset();
+    this.campaign['offset'] = offset;
   }
 
   changeSide(){
