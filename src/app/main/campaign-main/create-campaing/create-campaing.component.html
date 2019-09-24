@@ -355,22 +355,46 @@
         <div *ngIf="isApi" class="p-l-60">
           <div class="row-input">
             <div class="lable p-t-0">
-              Manychat CustomField
+              Manychat CustomField Redeem
             </div>
             <div class="value">
               <div class="pos-r full-width">
                 <nb-select
-                formControlName="customFields" size="small" placeholder="Select Custom Fields"
+                formControlName="customFields_redeem" size="small" placeholder="Select Custom Fields"
                 [ngClass]="{
                   error:
-                  membershipForm.controls['customFields'].invalid &&
+                  membershipForm.controls['customFields_redeem'].invalid &&
                   !customValidation
                 }"
                 [(ngModel)]="dataCampaign.selectedCustomField"
                 #selectCustomField
                 >
                 <nb-option value="">--Select Custom Fields--</nb-option>
-                <nb-option *ngFor="let customField of customFieldsNumber" [value]="customField.name">
+                <nb-option *ngFor="let customField of customFieldsBoolean" [value]="customField.name">
+                  {{customField.name}}
+                </nb-option>
+              </nb-select>
+              </div>
+            </div>
+          </div>
+          <div class="row-input">
+            <div class="lable p-t-0">
+              Manychat CustomField Status
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+              <nb-select
+                formControlName="customFields_status" size="small" placeholder="Select Custom Fields"
+                [ngClass]="{
+                  error:
+                  membershipForm.controls['customFields_status'].invalid &&
+                  !customValidation
+                }"
+                [(ngModel)]="dataCampaign.memCard_status_customField"
+                #selectCustomField
+                >
+                <nb-option value="">--Select Custom Fields--</nb-option>
+                <nb-option *ngFor="let customField of customFieldsBoolean" [value]="customField.name">
                   {{customField.name}}
                 </nb-option>
               </nb-select>
@@ -831,15 +855,32 @@
             </div>
             <div class="value">
               <div class="pos-r">
-                <input [ngClass]="{'error': ticketForm.controls['venue'].invalid && !customValidation}"
-                formControlName="venue" [(ngModel)]="dataCampaign.venue" type="text" nbInput fullWidth fieldSize="small" placeholder="">
+                <input *ngIf="dataCampaign.campaign_type == 8" [ngClass]="{'error': ticketForm.controls['venue'].invalid && !customValidation}"
+                formControlName="venue" [(ngModel)]="dataCampaign.venue" class="color-link" type="text" nbInput fullWidth fieldSize="small" placeholder="Search Location"
+                #location id='location' (keydown.enter)="$event.preventDefault()" autocorrect="off" autocapitalize="off" spellcheck="off">
                 <div *ngIf="dataCampaign.campaign_type == 8 && ticketForm.controls['venue'].invalid && !customValidation" class="error-lable">
                   Enter Venue of Event
                 </div>
+                <input *ngIf="dataCampaign.campaign_type == 9" [ngClass]="{'error': ticketForm.controls['venue'].invalid && !customValidation}"
+                formControlName="venue" [(ngModel)]="dataCampaign.venue" class="color-link" type="text" nbInput fullWidth fieldSize="small" placeholder="">
                 <div *ngIf="dataCampaign.campaign_type == 9 && ticketForm.controls['venue'].invalid && !customValidation" class="error-lable">
                   Enter Link of Webinar
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="row-input" *ngIf="dataCampaign.campaign_type == 8">
+            <div class="lable">
+            </div>
+            <div class="value">
+              <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+                <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
+                  (dragEnd)="markerDragEnd($event)"></agm-marker>
+              </agm-map>
+              
+              <!-- <h5>Address: {{address}}</h5>
+              <div>Latitude: {{latitude}}</div>
+              <div>Longitude: {{longitude}}</div> -->
             </div>
           </div>
         </div>

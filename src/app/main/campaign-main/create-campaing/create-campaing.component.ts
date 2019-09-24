@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import * as moment from 'moment';
 import { MainService } from 'src/app/shared/services/main.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -7,6 +7,7 @@ import { CompaignService } from 'src/app/shared/services/compaign.service';
 import { CardService } from 'src/app/shared/services/card.service';
 import { BrandService } from 'src/app/shared/services/brand.service';
 import { ManychatService } from 'src/app/shared/services/manychat.service';
+import { MapsAPILoader, MouseEvent } from '@agm/core';
 
 @Component({
   selector: 'app-create-campaing',
@@ -59,6 +60,13 @@ export class CreateCampaingComponent implements OnInit {
   @ViewChild('selectCurrency') selectCurrency;
   @ViewChild('selectCustomField') selectCustomField;
   @ViewChild('selectNumber') selectNumber;
+  @ViewChild('location') searchElementRef;
+
+  latitude: number;
+  longitude: number;
+  zoom: number;
+  address: string;
+  private geoCoder;
 
   defaultColumns = ['Coupons', 'Cards', 'Tickets'];
   allColumns = this.defaultColumns;
@@ -89,7 +97,9 @@ export class CreateCampaingComponent implements OnInit {
     private campaignService: CompaignService,
     private cardService: CardService,
     private brandService: BrandService,
-    private manychatService: ManychatService
+    private manychatService: ManychatService,
+    private mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone
   ) {
 
     this.user = JSON.parse(localStorage.getItem('user'));
@@ -138,7 +148,8 @@ export class CreateCampaingComponent implements OnInit {
       campaignName: ["", [Validators.required]],
       description: ["", [Validators.required]],
       template: ["", [Validators.required]],
-      customFields: [""],
+      customFields_redeem: [""],
+      customFields_status: [""]
     });
 
 
@@ -244,7 +255,7 @@ export class CreateCampaingComponent implements OnInit {
           this.mainService.dataCampaign.description = result['data'].description;
 
           this.mainService.dataCampaign.selectedCustomField = result['data'].manychat_customField || '';
-
+          this.mainService.dataCampaign.memCard_status_customField = result['data'].manychat_CF_memCard_status || '',
           this.mainService.dataCampaign.campaign_type = result['data'].campaign_type.toString();
           this.mainService.dataCampaign.discount = result['data'].campaign_value;
           this.mainService.dataCampaign.startDate = result['data'].startDateFormatted;
@@ -255,6 +266,7 @@ export class CreateCampaingComponent implements OnInit {
           this.mainService.dataCampaign.currency = this.brand_currency;
           this.mainService.dataCampaign.event_name = result['data'].event_name;
           this.mainService.dataCampaign.venue = result['data'].venue;
+          this.mainService.dataCampaign.venue_coordinates = result['data'].venue_coordinates ? result['data'].venue_coordinates : null;
           this.mainService.dataCampaign.time = result['data'].time;
           this.mainService.dataCampaign.points = result['data'].points;
           this.mainService.dataCampaign.cardType = (result['data'].campaign_type <= 4) ? 'coupon'
@@ -327,6 +339,7 @@ export class CreateCampaingComponent implements OnInit {
     }
     if (this.myForm.valid) {
       this.dataCampaign.cardType = this.cardType;
+      this.dataCampaign['venue_coordinates'] = null;
       this.mainService.dataCampaign = this.dataCampaign;
       this.mainService.dataCampaign.currency = this.brand_currency;
 
@@ -337,6 +350,13 @@ export class CreateCampaingComponent implements OnInit {
       }
     }if (this.ticketForm.valid) {
       this.dataCampaign.cardType = this.cardType;
+      if(this.dataCampaign.campaign_type == 8){
+        let lat = parseFloat(this.latitude.toFixed(4));
+        let lng = parseFloat(this.longitude.toFixed(4));
+        this.dataCampaign['venue_coordinates'] = { 'lat': lat, 'lng': lng};
+      }else if(this.dataCampaign.campaign_type == 9){
+        this.dataCampaign['venue_coordinates'] = null;
+      }
       this.mainService.dataCampaign = this.dataCampaign;
       this.mainService.dataCampaign.currency = this.brand_currency;
 
@@ -347,6 +367,7 @@ export class CreateCampaingComponent implements OnInit {
       }
     }if (this.loyaltyForm.valid) {
       this.dataCampaign.cardType = this.cardType;
+      this.dataCampaign['venue_coordinates'] = null;
       this.mainService.dataCampaign = this.dataCampaign;
       this.mainService.dataCampaign.currency = this.brand_currency;
 
@@ -357,6 +378,7 @@ export class CreateCampaingComponent implements OnInit {
       }
     }if (this.stampForm.valid) {
       this.dataCampaign.cardType = this.cardType;
+      this.dataCampaign['venue_coordinates'] = null;
       this.mainService.dataCampaign = this.dataCampaign;
       this.mainService.dataCampaign.currency = this.brand_currency;
 
@@ -367,6 +389,7 @@ export class CreateCampaingComponent implements OnInit {
       }
     }if (this.membershipForm.valid) {
       this.dataCampaign.cardType = this.cardType;
+      this.dataCampaign['venue_coordinates'] = null;
       this.mainService.dataCampaign = this.dataCampaign;
       this.mainService.dataCampaign.currency = this.brand_currency;
 
@@ -477,9 +500,13 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCampaign.discount='';
       this.dataCampaign.coupon_validity='';
       this.dataCampaign.points = '';
+      this.ticketForm.controls['venue'].setValue('');
       this.ticketForm.get('venue').setValidators([Validators.required]);
       this.ticketForm.get('venue').updateValueAndValidity();
       this.cardType = 'ticket';
+      setTimeout(() => {
+        this.loadAutoComplete();
+      }, 500);
     }else if(typeName === 'Webinar Event'){
       this.selectedSell = 'Webinar Event';
       this.dataCampaign.campaign_type = 9;
@@ -487,6 +514,7 @@ export class CreateCampaingComponent implements OnInit {
       this.dataCampaign.discount='';
       this.dataCampaign.coupon_validity='';
       this.dataCampaign.points = '';
+      this.ticketForm.controls['venue'].setValue('');
       this.ticketForm.get('venue').setValidators([Validators.required, Validators.pattern("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$")]);
       this.ticketForm.get('venue').updateValueAndValidity();
       this.cardType = 'ticket';
@@ -517,5 +545,72 @@ export class CreateCampaingComponent implements OnInit {
     };
     this.selectType(this.selectedSell);
     // this.myForm.get('setLimit').setValue('');
+  }
+
+  loadAutoComplete(){
+    //load Places Autocomplete
+    this.latitude = 54.94341;
+    this.longitude = -2.65362;
+    this.zoom = 2;
+    this.mapsAPILoader.load().then(() => {
+      // this.setCurrentLocation();
+      if(this.dataCampaign['venue_coordinates']){
+        this.latitude = this.dataCampaign['venue_coordinates'].lat;
+        this.longitude = this.dataCampaign['venue_coordinates'].lng;
+        this.zoom = 12;
+      }
+      this.geoCoder = new google.maps.Geocoder;
+      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+        types: ["address"]
+      });
+      autocomplete.addListener("place_changed", () => {
+        this.ngZone.run(() => {
+          //get the place result
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          
+          this.ticketForm.controls['venue'].setValue((document.getElementById('location') as HTMLInputElement).value);
+
+          //verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+
+          //set latitude, longitude and zoom
+          this.latitude = place.geometry.location.lat();
+          this.longitude = place.geometry.location.lng();
+          this.zoom = 12;
+          this.getAddress(this.latitude, this.longitude, false);
+        });
+      });
+    });
+  }
+
+
+  markerDragEnd($event: MouseEvent) {
+    console.log($event);
+    this.latitude = $event.coords.lat;
+    this.longitude = $event.coords.lng;
+    this.getAddress(this.latitude, this.longitude, true);
+  }
+
+  getAddress(latitude, longitude, marker) {
+    this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
+      console.log(results);
+      console.log(status);
+      if (status === 'OK') {
+        if (results[0]) {
+          this.zoom = 12;
+          this.address = results[0].formatted_address;
+          if(marker){
+            this.ticketForm.controls['venue'].setValue(this.address);
+          }
+        } else {
+          window.alert('No results found');
+        }
+      } else {
+        window.alert('Geocoder failed due to: ' + status);
+      }
+
+    });
   }
 }

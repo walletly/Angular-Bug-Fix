@@ -84,8 +84,10 @@ export class ReviewCampaingComponent implements OnInit {
             brand_id: '',
             coupon_validity: '',
             currency: '',
+            memCard_status_customField: '',
             event_name: '',
             venue: '',
+            venue_coordinates: null,
             time: '',
             cardType: '',
             points: ''
@@ -114,8 +116,10 @@ export class ReviewCampaingComponent implements OnInit {
             brand_id: '',
             coupon_validity: '',
             currency: '',
+            memCard_status_customField: '',
             event_name: '',
             venue: '',
+            venue_coordinates: null,
             time: '',
             cardType: '',
             points: ''
@@ -158,6 +162,7 @@ export class ReviewCampaingComponent implements OnInit {
     this.campaign['event_name'] = this.dataCampaign.event_name;
     this.campaign['time'] = this.dataCampaign.time;
     this.campaign['venue'] = this.dataCampaign.venue;
+    this.campaign['venue_coordinates'] = this.dataCampaign.venue_coordinates;
     this.campaign['points'] = this.dataCampaign.points;
   }
 

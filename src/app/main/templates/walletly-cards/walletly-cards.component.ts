@@ -43,8 +43,10 @@ export class WalletlyCardsComponent implements OnInit {
       brand_id: brandId,
       coupon_validity: '',
       currency: '',
+      memCard_status_customField: '',
       event_name: '',
       venue: '',
+      venue_coordinates: null,
       time: '',
       cardType: cardType,
       points: ''

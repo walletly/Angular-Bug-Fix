@@ -56,7 +56,7 @@ export class MainComponent implements OnInit, AfterViewInit {
         },
         {
           icon: "icon-menu pushnotification",
-          title: "Push Notification",
+          title: "Notification Center",
           link: ["push-notification"]
         },
         {

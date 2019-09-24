@@ -243,8 +243,10 @@ export class CampaingComponent implements OnInit {
       brand_id: '',
       coupon_validity: '',
       currency: '',
+      memCard_status_customField: '',
       event_name: '',
       venue: '',
+      venue_coordinates: null,
       time: '',
       cardType: '',
       points: ''

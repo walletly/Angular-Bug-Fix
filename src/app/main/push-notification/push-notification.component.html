@@ -1,52 +1,236 @@
 <div class="df jc-b m-b-15">
     <h1 class="m-t-0 m-b-0 fs-24 fw-600">
-      Push Notification
+      Notification Center
     </h1>
   </div>
   <nb-card class="m-b-0">
     <nb-card-body>
-      <div class="df jc-b">
-        <div class="full-width">
-          <form [formGroup]="myForm">
-            <div class="input-wrap">
-              <div class="lable">
-                Campaign
+      <nb-tabset class="tabs-container">
+        <nb-tab tabTitle="Push Notification">
+          <div class="df jc-b p-t-50 p-l-55">
+              <div class="full-width">
+                <form [formGroup]="myForm">
+                  <div class="input-wrap">
+                    <div class="lable">
+                      Campaign
+                    </div>
+                    <div class="value">
+                      <nb-select #select (selectedChange)="checkSubs($event)" [ngClass]="{'error': myForm.controls['campaign'].invalid && !customValidation}"
+                        formControlName="campaign" size="small" placeholder="Select Campaign">
+                        <nb-option *ngFor="let campaign of campaigns" [value]="campaign.id">{{campaign.campaign_name}}</nb-option>
+                      </nb-select>
+                    </div>
+                    <div class="p-l-15" style="width: 120px;">Total Subscribers</div>
+                    <input [(ngModel)]="totalSubscriber" [ngModelOptions]="{standalone: true}"  nbInput class="p-r-10" fieldSize="small" type="text">
+                  </div>
+                  <div class="input-wrap">
+                    <div class="lable">
+                      Message
+                    </div>
+                    <div class="value">
+                      <textarea [ngClass]="{'error': myForm.controls['message'].invalid && !customValidation}"
+                        formControlName="message" style="height: 100px;" class="small" type="text" nbInput
+                        fullWidth fieldSize="small" placeholder="Your offer will be expired in { 30 days }"></textarea>
+                      <div *ngIf="notificationError" style="color: red;">
+                        {{ notificationErrorMessage }}
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="input-wrap">
+                  <div class="lable">
+                  </div>
+                  <div class="value">
+                    <button (click)="send()" [disabled]="inProcces" class="cust-button" nbButton status="success">
+                      <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
+                      Send
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div class="value">
-                <nb-select #select [ngClass]="{'error': myForm.controls['campaign'].invalid && !customValidation}"
-                  formControlName="campaign" size="small" placeholder="Select Campaign">
-                  <nb-option *ngFor="let campaign of campaigns" [value]="campaign.id">{{campaign.campaign_name}}</nb-option>
-                </nb-select>
-              </div>
-            </div>
-            <div class="input-wrap">
-              <div class="lable">
-                Message
-              </div>
-              <div class="value">
-                <textarea [ngClass]="{'error': myForm.controls['message'].invalid && !customValidation}"
-                  formControlName="message" style="height: 100px;" class="small" type="text" nbInput
-                  fullWidth fieldSize="small" placeholder="Your offer will be expired in { 30 days }"></textarea>
-                <div *ngIf="notificationError" style="color: red;">
-                  {{ notificationErrorMessage }}
+              <!-- <div>
+                <img src="assets/img/pushnotificationPhone.png" style="height: 450px;">
+              </div> -->
+          </div>
+          <div class="History">
+            <div class="fw-600 m-b-30 fs-24">History</div>
+            <table *ngIf="history.length" class="m-b-40 full-width" [nbTreeGrid]="history">
+              <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allHistoryColumns"></tr>
+              <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allHistoryColumns"></tr>
+
+              <ng-container
+                *ngFor="let column of historyColumns"
+                [nbTreeGridColumnDef]="column"
+              >
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{column}}</th>
+                <td
+                  nbTreeGridCell
+                  *nbTreeGridCellDef="let row; index as i"
+                >
+                  <div class="df ai-c">
+                    <div *ngIf="column == 'Post' || column == 'Processed'" class="ellipsis">
+                      <span>{{ row.data[column].name }}</span>
+                    </div>
+                    <div *ngIf="column != 'Post' && column != 'Processed'" class="ellipsis mx-auto">
+                      <span>{{ row.data[column].name }}</span>
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+            </table>
+          </div>
+        </nb-tab>
+        <nb-tab tabTitle="iBeacon">
+          <div class="df jc-b p-t-50 p-l-35 p-r-45 p-b-30">
+            <div class="full-width">
+              <form>
+                <div class="input-wrap">
+                  <div class="lable">
+                    Message
+                  </div>
+                  <div class="value">
+                    <textarea  style="height: 140px;" class="small" type="text" nbInput
+                      fullWidth fieldSize="small" placeholder="Your offer will be expired in { 30 days }"></textarea>
+                    <div *ngIf="notificationError" style="color: red;">
+                      {{ notificationErrorMessage }}
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <div class="input-wrap">
+                <div class="lable">
+                </div>
+                <div class="value">
+                  <button class="clear">Clear</button>
+
+                  <button [disabled]="inProcces" class="cust-button" nbButton status="success">
+                    <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
+                    Save
+                  </button>
                 </div>
               </div>
             </div>
-          </form>
-          <div class="input-wrap">
-            <div class="lable">
-            </div>
-            <div class="value">
-              <button (click)="send()" [disabled]="inProcces" class="cust-button" nbButton status="success">
-                <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
-                Send
-              </button>
+            <div>
+              <img src="assets/img/mobileibeacon.png" style="height: 450px;">
             </div>
           </div>
-        </div>
-        <div>
-          <img src="assets/img/pushnotificationPhone.png" style="height: 450px;">
-        </div>
-      </div>
+          <div class="History Log-table">
+            <div class="fw-600 m-b-30 fs-24">Logs</div>
+            <table *ngIf="logiBeacon.length" class="m-b-40 full-width" [nbTreeGrid]="logiBeacon">
+              <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allLogiBeaconColumns"></tr>
+              <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allLogiBeaconColumns"></tr>
+
+              <ng-container
+                *ngFor="let column of logiBeaconColumns"
+                [nbTreeGridColumnDef]="column"
+              >
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{column}}</th>
+                <td
+                  nbTreeGridCell
+                  *nbTreeGridCellDef="let row; index as i"
+                >
+                  <div class="df ai-c">
+                    <div class="ellipsis">
+                      <span>{{ row.data[column].name }}</span>
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+            </table>
+          </div>
+        </nb-tab>
+        <nb-tab tabTitle="Location Base">
+            <div class="df jc-b p-t-50 p-l-35 p-b-20 p-r-25">
+                <div style="width: 50%;">
+                  <form>
+                    <div class="input-wrap">
+                      <div class="lable">
+                        Location
+                      </div>
+                      <div class="value">
+                        <input  nbInput fullWidth fieldSize="small" type="text" placeholder="50 Wakefield St Woombye QLD 4559">
+                      </div>
+                    </div>
+                    <div class="input-wrap">
+                      <div class="lable">
+                        Message
+                      </div>
+                      <div class="value">
+                        <textarea style="height: 100px;" class="small" type="text" nbInput
+                          fullWidth fieldSize="small" placeholder="Your offer will be expired in { 30 days }"></textarea>
+                        <div *ngIf="notificationError" style="color: red;">
+                          {{ notificationErrorMessage }}
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="input-wrap">
+                    <div class="lable">
+                    </div>
+                    <div class="value">
+                      <button [disabled]="inProcces" class="cust-button" nbButton status="success">
+                        <i *ngIf="inProcces" class="fas fa-spinner fa-pulse"></i>
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <img src="assets/img/map.png">
+                </div>
+            </div>
+            <div class="History Log-table">
+              <div class="fw-600 m-b-30 fs-24">Logs</div>
+              <table *ngIf="logLocation.length" class="m-b-40 full-width" [nbTreeGrid]="logLocation">
+                <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allLogLocationColumns"></tr>
+                <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allLogLocationColumns"></tr>
+
+                <ng-container
+                  *ngFor="let column of logLocationColumns"
+                  [nbTreeGridColumnDef]="column"
+                >
+                  <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{column}}</th>
+                  <td
+                    nbTreeGridCell
+                    *nbTreeGridCellDef="let row; index as i"
+                  >
+                    <div class="df ai-c">
+                      <div class="ellipsis">
+                        <span>{{ row.data[column].name }}</span>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+              </table>
+            </div>
+            <div class="History">
+              <div class="fw-600 m-b-30 fs-24">Location Triggers</div>
+              <table *ngIf="location.length" class="m-b-40 full-width" [nbTreeGrid]="location">
+                <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allLocationColumns"></tr>
+                <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allLocationColumns"></tr>
+
+                <ng-container
+                  *ngFor="let column of locationColumns"
+                  [nbTreeGridColumnDef]="column"
+                >
+                  <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{column}}</th>
+                  <td
+                    nbTreeGridCell
+                    *nbTreeGridCellDef="let row; index as i"
+                  >
+                    <div class="df ai-c">
+                      <div *ngIf="column == 'PASS TYPE' || column == 'AVAILABLE TRIGGERS' || column == 'LOCATION RADIUS'" class="ellipsis">
+                        <span>{{ row.data[column].name }}</span>
+                      </div>
+                      <div *ngIf="column != 'PASS TYPE' && column != 'AVAILABLE TRIGGERS' && column != 'LOCATION RADIUS'" class="ellipsis mx-auto">
+                        <span *ngIf="row.data[column].name == true" ><img src="assets/img/check.svg"></span>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+              </table>
+            </div>
+        </nb-tab>
+      </nb-tabset>
     </nb-card-body>
   </nb-card>
