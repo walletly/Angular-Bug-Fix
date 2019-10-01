@@ -35,6 +35,7 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
   showActions;
   showLoader;
   deleteId;
+  inProcces = false;
 
   ibeacon;
   customValidationiBeacon = true;
@@ -52,7 +53,7 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
       ibeacon_minor: [""],
       ibeacon_notificationtext: ["", [Validators.required]]
     });
-    this.ibeacon = (this.currentbrand['ibeacon'].ibeacon == 1) ? 'yes' : 'no';
+    this.ibeacon = (this.currentbrand['ibeacon'].ibeacon == 1) ? 'no' : 'yes';
     this.myFormiBeacon.controls['ibeacon_uuid'].setValue(this.currentbrand['ibeacon'].ibeacon_uuid);
     this.myFormiBeacon.controls['ibeacon_minor'].setValue(this.currentbrand['ibeacon'].ibeacon_minor);
     this.myFormiBeacon.controls['ibeacon_major'].setValue(this.currentbrand['ibeacon'].ibeacon_major);
@@ -139,7 +140,8 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
   updateiBeacon(){
     if (this.myFormiBeacon.valid) {
       let data;
-      if(this.ibeacon=='yes'){
+      this.inProcces = true;
+      if(this.ibeacon=='no'){
         data={
           'ibeacon': 1,
           'ibeacon_uuid': this.myFormiBeacon.get('ibeacon_uuid').value,
@@ -162,7 +164,8 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
         console.log(result);
         this.brandService.getBrandById(brand_id).subscribe(data => {
           localStorage.setItem('currentBrand', JSON.stringify(data['brand']));
-          this.mainService.showToastrSuccess.emit({text: 'Settings updated'});
+          this.inProcces = false;
+          this.mainService.showToastrSuccess.emit({text: 'iBeacon settings updated'});
         });
       });
     } else {
