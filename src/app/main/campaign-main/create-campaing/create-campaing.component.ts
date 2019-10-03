@@ -532,6 +532,7 @@ export class CreateCampaingComponent implements OnInit {
       name: '',
       description: '',
       selectedCustomField: '',
+      memCard_status_customField: '',
       template: '',
       discount: '',
       startDate: '',

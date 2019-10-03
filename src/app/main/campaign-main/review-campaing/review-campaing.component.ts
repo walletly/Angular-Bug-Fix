@@ -151,6 +151,7 @@ export class ReviewCampaingComponent implements OnInit {
     this.campaign['campaign_name'] = this.dataCampaign.name;
     this.campaign['description'] = this.dataCampaign.description;
     this.campaign['manychat_customField'] = this.dataCampaign.selectedCustomField;
+    this.campaign['manychat_CF_memCard_status'] = this.dataCampaign.memCard_status_customField;
     this.campaign['campaign_type'] = parseInt(this.dataCampaign.campaign_type);
     this.campaign['currency'] = this.dataCampaign.currency;
     this.campaign['coupon_validity'] = parseInt(this.dataCampaign.coupon_validity);
