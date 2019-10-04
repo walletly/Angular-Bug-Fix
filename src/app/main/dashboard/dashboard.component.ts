@@ -15,9 +15,9 @@ export class DashboardComponent implements OnInit {
 
   selectedItem;
 
-  total_coupons_created;
-  total_redeems;
-  unredeemed;
+  coupon_created;
+  coupon_redeemed;
+  coupon_unredeemed;
   avg_coupon_redeems;
 
   colors = [ 'rgb(255,99,132)', 'rgb(54,162,235)', 'rgb(255,206,86)', 'rgb(153,102,255)', 'rgb(75,192,192)',
@@ -50,10 +50,10 @@ export class DashboardComponent implements OnInit {
         return;
       }
       this.showGraph = 3;
-      this.total_coupons_created = result['data'].brandData.total_coupons_created;
-      this.total_redeems = result['data'].brandData.total_redeems;
-      this.unredeemed = result['data'].brandData.unredeemed;
-      this.avg_coupon_redeems = ((this.total_redeems * 100) / this.total_coupons_created).toFixed(2) + '%';
+      this.coupon_created = result['data'].brandData.coupon_created;
+      this.coupon_redeemed = result['data'].brandData.coupon_redeemed;
+      this.coupon_unredeemed = result['data'].brandData.coupon_unredeemed;
+      this.avg_coupon_redeems = ((this.coupon_redeemed * 100) / this.coupon_created).toFixed(2) + '%';
       this.brandCampaings = result['data'].campaignsStats.summary;
       this.brandCampaings.forEach(campaign => {
         if(campaign.campaign_name && campaign.coupons_created > 0){
@@ -148,7 +148,7 @@ export class DashboardComponent implements OnInit {
         labels: ['Redeemed', 'Unredeemed'],
         datasets: [{
           label: 'No. of Coupons',
-          data: [this.total_redeems, this.unredeemed],
+          data: [this.coupon_redeemed, this.coupon_unredeemed],
           backgroundColor: [
             '#9966ff',
             '#ff6384'
