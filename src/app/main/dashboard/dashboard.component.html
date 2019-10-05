@@ -110,12 +110,12 @@
   <nb-card>
     <nb-card-body>
       <div class="m-b-20 fs-18">
-        COUPONS INFORMATION
+        BRAND PASSES INFORMATION
       </div>
       <div class="df wrap jc-b">
         <div class="card-info">
           <div class="label">
-            Total Coupons Created
+            Coupons Created
           </div>
           <div class="value">
             {{coupon_created}}
@@ -123,7 +123,7 @@
         </div>
         <div class="card-info">
           <div class="label">
-            Total Redeemed
+            Coupons Redeemed
           </div>
           <div class="value">
             {{coupon_redeemed}}
@@ -131,7 +131,7 @@
         </div>
         <div class="card-info">
           <div class="label">
-            Total Unredeemed
+            Coupons Unredeemed
           </div>
           <div class="value">
             {{coupon_unredeemed}}
@@ -146,10 +146,78 @@
           </div>
         </div>
       </div>
+      <div class="df wrap jc-b p-t-20">
+        <div class="card-info">
+          <div class="label">
+            EventTickets Created
+          </div>
+          <div class="value">
+            {{eventTicket_created}}
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="label">
+            EventTickets CheckedIn
+          </div>
+          <div class="value">
+            {{eventTicket_redeemed}}
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="label">
+            EventTickets UnCheckedIn
+          </div>
+          <div class="value">
+            {{eventTicket_unredeemed}}
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="label">
+            Avg. EventTickets CheckedIn
+          </div>
+          <div class="value">
+            {{avg_eventTicket_redeems}}
+          </div>
+        </div>
+      </div>
+      <div class="df wrap jc-b p-t-20">
+        <div class="card-info">
+          <div class="label">
+            WebinarTickets Created
+          </div>
+          <div class="value">
+            {{webinarTicket_created}}
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="label">
+            LoyaltyCards Created
+          </div>
+          <div class="value">
+            {{loyaltyCard_created}}
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="label">
+            StampCards Created
+          </div>
+          <div class="value">
+            {{stampCard_created}}
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="label">
+            MembershipCards Created
+          </div>
+          <div class="value">
+            {{membershipCard_created}}
+          </div>
+        </div>
+      </div>
     </nb-card-body>
   </nb-card>
   <div class="row">
-    <div class="col-12 col-md-12">
+    <div class="col-12 col-md-12" *ngIf="showCouponGraph == 3">
       <nb-card>
         <nb-card-body>
           <div class="m-b-20 fs-18">
@@ -159,23 +227,33 @@
         </nb-card-body>
       </nb-card>
     </div>
-    <div class="col-12 col-md-6">
-      <nb-card>
-        <nb-card-body >
-          <div class="m-b-20 fs-18">
-            Redeemed vs Unredeemed Coupons Of Brand
-          </div>
-          <canvas id="myChart2" width="400" height="200"></canvas>
-        </nb-card-body>
-      </nb-card>
-    </div>
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-12" *ngIf="showTicketsGraph == 3">
       <nb-card>
         <nb-card-body>
           <div class="m-b-20 fs-18">
-            Earning By Campaigns
+            Tickets By Campaigns
+          </div>
+          <canvas id="myChart2" width="400" height="100"></canvas>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-12 col-md-6" *ngIf="showCouponGraph == 3">
+      <nb-card>
+        <nb-card-body>
+          <div class="m-b-20 fs-18">
+            Earning By Coupon Campaigns
           </div>
           <canvas id="myChart3" width="400" height="200"></canvas>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-12 col-md-6" *ngIf="showCardsGraph == 3">
+      <nb-card>
+        <nb-card-body >
+          <div class="m-b-20 fs-18">
+            Earning By Cards Campaigns
+          </div>
+          <canvas id="myChart4" width="400" height="200"></canvas>
         </nb-card-body>
       </nb-card>
     </div>

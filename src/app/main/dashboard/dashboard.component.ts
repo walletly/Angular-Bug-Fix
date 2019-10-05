@@ -11,27 +11,44 @@ import {Chart} from 'chart.js';
 })
 export class DashboardComponent implements OnInit {
 
-  showGraph;
+  showGraph = 1;
+  showCouponGraph = 1;
+  showTicketsGraph = 1;
+  showCardsGraph = 1;
 
   selectedItem;
 
-  coupon_created;
-  coupon_redeemed;
-  coupon_unredeemed;
-  avg_coupon_redeems;
+  coupon_created = 0;
+  coupon_redeemed = 0;
+  coupon_unredeemed = 0;
+  avg_coupon_redeems = '0' ;
+  ticket_created = 0 ;
+  eventTicket_created = 0 ;
+  eventTicket_redeemed = 0 ;
+  eventTicket_unredeemed = 0 ;
+  avg_eventTicket_redeems = '0' ;
+  webinarTicket_created = 0 ;
+  loyaltyCard_created = 0 ;
+  stampCard_created = 0 ;
+  membershipCard_created = 0 ;
 
   colors = [ 'rgb(255,99,132)', 'rgb(54,162,235)', 'rgb(255,206,86)', 'rgb(153,102,255)', 'rgb(75,192,192)',
              'rgb(255,159,188)', 'rgb(255,159,64)', 'rgb(3,252,188)', 'rgb(226,197,255)', 'rgb(0,128,59)'];
   blurColors = [ 'rgb(255,99,132, 0.5)', 'rgb(54,162,235, 0.5)', 'rgb(255,206,86, 0.5)', 'rgb(153,102,255, 0.5)', 'rgb(75,192,192, 0.5)',
                  'rgb(255,159,188, 0.5)', 'rgb(255,159,64, 0.5)', 'rgb(3,252,188, 0.5)', 'rgb(226,197,255, 0.5)', 'rgb(0,128,59, 0.5)'];
 
-  brandCampaings;
-  stackedChart = { labels: [], data1: [], data2: [], backgroundColor1: this.colors, backgroundColor2: this.blurColors };
-  earningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors }
+  couponCampaings;
+  ticketCampaings;
+  loyaltyCardCampaings;
+  stampCardCampaings;
+  membershipCardCampaings;
+  cardsCampaigns;
+
+  couponsByCampaignsChart = { labels: [], data1: [], data2: [], backgroundColor1: this.colors, backgroundColor2: this.blurColors };
+  ticketsByCampaignsChart = { labels: [], data1: [], data2: [], backgroundColor1: this.colors, backgroundColor2: this.blurColors };
+  couponsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors }
+  cardsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors }
   
-
-  campign
-
   dateStart = new Date();
   dateEnd = new Date();
   startDate;
@@ -40,52 +57,123 @@ export class DashboardComponent implements OnInit {
   showDatePickerEnd;
 
   constructor(private mainService: MainService, private reportService: ReportService) {
-    this.showGraph = 1;
     if (mainService.changeBrandBool) {
       window.location.reload();
     }
     this.reportService.reportBrand(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe( result =>{
-      if (!result['data'].campaignsStats.summary){
-        this.showGraph = 2;
-        return;
-      }
       this.showGraph = 3;
-      this.coupon_created = result['data'].brandData.coupon_created;
-      this.coupon_redeemed = result['data'].brandData.coupon_redeemed;
-      this.coupon_unredeemed = result['data'].brandData.coupon_unredeemed;
-      this.avg_coupon_redeems = ((this.coupon_redeemed * 100) / this.coupon_created).toFixed(2) + '%';
-      this.brandCampaings = result['data'].campaignsStats.summary;
-      this.brandCampaings.forEach(campaign => {
-        if(campaign.campaign_name && campaign.coupons_created > 0){
-          this.stackedChart.labels.push(campaign.campaign_name);
-          this.stackedChart.data1.push(campaign.coupons_redeemed);
-          this.stackedChart.data2.push(campaign.coupons_created - campaign.coupons_redeemed);
-          this.earningCampaignsChart.labels.push(campaign.campaign_name),
-          this.earningCampaignsChart.data.push(campaign.campaign_net_amount);
-        }
-      });
-      if(this.stackedChart.labels.length < 1){
-        this.showGraph = 2;
-        return;
+      this.coupon_created = result['data'].brandData.coupon_created || 0;
+      this.coupon_redeemed = result['data'].brandData.coupon_redeemed || 0;
+      this.coupon_unredeemed = result['data'].brandData.coupon_unredeemed || 0;
+      this.avg_coupon_redeems = ((this.coupon_redeemed * 100) / this.coupon_created).toFixed(2) + '%' || '0';
+      this.ticket_created = result['data'].brandData.ticket_created || 0;
+      this.loyaltyCard_created = result['data'].brandData.loyaltyCard_created || 0;
+      this.stampCard_created = result['data'].brandData.stampCard_created || 0;
+      this.membershipCard_created = result['data'].brandData.membershipCard_created || 0;
+
+      if (result['data'].campaignsStats.couponCampaignsSummary.length > 0){
+        this.showCouponGraph = 3;
+      }else{
+        this.showCouponGraph = 2;
       }
-      while(this.stackedChart.labels.length < 8){
-        this.stackedChart.labels.push('');
+      if (result['data'].campaignsStats.ticketCampaignsSummary.length > 0){
+        this.showTicketsGraph = 3;
+      }else{
+        this.showTicketsGraph = 2;
+      }
+      if (result['data'].campaignsStats.loyaltyCardCampaignsSummary.length > 0 || 
+          // result['data'].campaignsStats.membershipCardCampaignsSummary.length > 0 ||
+          result['data'].campaignsStats.stampCardCampaignsSummary.length > 0){
+        this.showCardsGraph = 3;
+      }else{
+        this.showCardsGraph = 2;
       }
       
-      const len = this.earningCampaignsChart.backgroundColor.length;
-      for (var i = len; i < this.earningCampaignsChart.data.length; i++){
+      this.couponCampaings = result['data'].campaignsStats.couponCampaignsSummary;
+      this.couponCampaings.forEach(campaign => {
+        if(campaign.campaign_name && campaign.coupons_created > 0){
+          this.couponsByCampaignsChart.labels.push(campaign.campaign_name);
+          this.couponsByCampaignsChart.data1.push(campaign.coupons_redeemed);
+          this.couponsByCampaignsChart.data2.push(campaign.coupons_created - campaign.coupons_redeemed);
+          this.couponsEarningCampaignsChart.labels.push(campaign.campaign_name);
+          this.couponsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
+        }
+      });
+      this.ticketCampaings = result['data'].campaignsStats.ticketCampaignsSummary;
+      this.ticketCampaings.forEach(campaign => {
+        if(campaign.campaign_name && campaign.coupons_created > 0){
+          this.ticketsByCampaignsChart.labels.push(campaign.campaign_name);
+          this.ticketsByCampaignsChart.data1.push(campaign.coupons_redeemed);
+          this.ticketsByCampaignsChart.data2.push(campaign.coupons_created - campaign.coupons_redeemed);
+          if(campaign.campaign_type == 8){
+            this.eventTicket_created = this.eventTicket_created + campaign.coupons_created;
+            this.eventTicket_redeemed = this.eventTicket_redeemed + campaign.coupons_redeemed;
+            this.eventTicket_unredeemed = this.eventTicket_created - this.eventTicket_redeemed;
+            this.avg_eventTicket_redeems = ((this.eventTicket_redeemed * 100) / this.eventTicket_created).toFixed(2) + '%' || '0';
+          }else if(campaign.campaign_type == 9){
+            this.webinarTicket_created = this.webinarTicket_created + campaign.coupons_created;
+          }
+        }
+      });
+      this.loyaltyCardCampaings = result['data'].campaignsStats.loyaltyCardCampaignsSummary;
+      this.stampCardCampaings = result['data'].campaignsStats.stampCardCampaignsSummary;
+      this.membershipCardCampaings = result['data'].campaignsStats.membershipCardCampaignsSummary;
+
+      this.cardsCampaigns = this.loyaltyCardCampaings.concat(this.stampCardCampaings);
+      this.cardsCampaigns.forEach(campaign => {
+        if(campaign.campaign_name && campaign.coupons_created > 0){
+          this.cardsEarningCampaignsChart.labels.push(campaign.campaign_name);
+          this.cardsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
+        }
+      });
+      if(this.couponsByCampaignsChart.labels.length < 1){
+        this.showCouponGraph = 2;
+      }else{
+        while(this.couponsByCampaignsChart.labels.length < 8){
+          this.couponsByCampaignsChart.labels.push('');
+        }
+      }
+      if(this.ticketsByCampaignsChart.labels.length < 1){
+        this.showTicketsGraph = 2;
+      }else{
+        while(this.ticketsByCampaignsChart.labels.length < 8){
+          this.ticketsByCampaignsChart.labels.push('');
+        }
+      }
+      if(this.cardsEarningCampaignsChart.labels.length < 1){
+        this.showCardsGraph = 2;
+      }
+      
+      const couponlen = this.couponsEarningCampaignsChart.backgroundColor.length;
+      for (var i = couponlen; i < this.couponsEarningCampaignsChart.data.length; i++){
         const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
           return String(Math.floor(Math.random() * 255));
         });
         const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
-        this.earningCampaignsChart.backgroundColor[i] = randomColor1;
-        this.stackedChart.backgroundColor1[i] = randomColor1;        
-        this.stackedChart.backgroundColor2[i] = randomColor2;
+        this.couponsEarningCampaignsChart.backgroundColor[i] = randomColor1;
+        this.couponsByCampaignsChart.backgroundColor1[i] = randomColor1;        
+        this.couponsByCampaignsChart.backgroundColor2[i] = randomColor2;
+      }
+      const ticketlen = this.ticketsByCampaignsChart.backgroundColor1.length;
+      for (var i = ticketlen; i < this.ticketsByCampaignsChart.data1.length; i++){
+        const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
+          return String(Math.floor(Math.random() * 255));
+        });
+        const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
+        this.ticketsByCampaignsChart.backgroundColor1[i] = randomColor1;        
+        this.ticketsByCampaignsChart.backgroundColor2[i] = randomColor2;
+      }
+      const cardslen = this.cardsEarningCampaignsChart.backgroundColor.length;
+      for (var i = cardslen; i < this.cardsEarningCampaignsChart.data.length; i++){
+        const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
+          return String(Math.floor(Math.random() * 255));
+        });
+        this.cardsEarningCampaignsChart.backgroundColor[i] = randomColor1;        
       }
 
       setTimeout(() => {
         this.generateGraphs();
-      }, 50);
+      }, 200);
     }, error =>{
       this.showGraph = 2;
     });
@@ -98,92 +186,163 @@ export class DashboardComponent implements OnInit {
     var ctx1 = document.getElementById('myChart1');
     var ctx2 = document.getElementById('myChart2');
     var ctx3 = document.getElementById('myChart3');
-    
-    var stackedChart = new Chart(ctx1, {
-      type: 'bar',
-      data: {
-        labels: this.stackedChart.labels,
-        datasets: [{
-          type: 'bar',
-          label: 'Total Redeems',
-          backgroundColor: this.stackedChart.backgroundColor1,
-          borderColor: this.stackedChart.backgroundColor1,
-          data: this.stackedChart.data1,
-          borderWidth: 1
+    var ctx4 = document.getElementById('myChart4');
+
+    if(this.showCouponGraph == 3){
+      var couponsByCampaignsChart = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: this.couponsByCampaignsChart.labels,
+          datasets: [{
+            type: 'bar',
+            label: 'Total Redeems',
+            backgroundColor: this.couponsByCampaignsChart.backgroundColor1,
+            borderColor: this.couponsByCampaignsChart.backgroundColor1,
+            data: this.couponsByCampaignsChart.data1,
+            borderWidth: 1
+          },
+          {
+            type: 'bar',
+            label: 'Total Unredeemed',
+            backgroundColor: this.couponsByCampaignsChart.backgroundColor2,
+            borderColor: this.couponsByCampaignsChart.backgroundColor1,
+            data: this.couponsByCampaignsChart.data2,
+            borderWidth: 1,
+          }
+        ]
         },
-        {
-          type: 'bar',
-          label: 'Total Unredeemed',
-          backgroundColor: this.stackedChart.backgroundColor2,
-          borderColor: this.stackedChart.backgroundColor1,
-          data: this.stackedChart.data2,
-          borderWidth: 1,
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                display: false
+              },
+              stacked: true,
+            }],
+            xAxes: [{
+              maxBarThickness: 50,
+              gridLines: {
+                display: false
+              },
+              stacked: true,
+            }]
+          },
+          legend: {
+            display: false
+          },
         }
-      ]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              display: false
-            },
-            stacked: true,
-          }],
-          xAxes: [{
-            maxBarThickness: 50,
-            gridLines: {
-              display: false
-            },
-            stacked: true,
+      });
+      var couponsEarningCampaignsChart = new Chart(ctx3, {
+        type: 'pie',
+        data: {
+          labels: this.couponsEarningCampaignsChart.labels,
+          datasets: [{
+            label: 'spendings',
+            data: this.couponsEarningCampaignsChart.data,
+            backgroundColor: this.couponsEarningCampaignsChart.backgroundColor,
+            borderColor: this.couponsEarningCampaignsChart.backgroundColor,
+            borderWidth: 1
           }]
         },
-        legend: {
-          display: false
+        options: {
+          legend: {
+            display: false
+          },
+        }
+      });
+    }
+
+    if(this.showTicketsGraph == 3){
+      var ticketsByCampaignsChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: this.ticketsByCampaignsChart.labels,
+          datasets: [{
+            type: 'bar',
+            label: 'Total Redeems',
+            backgroundColor: this.ticketsByCampaignsChart.backgroundColor1,
+            borderColor: this.ticketsByCampaignsChart.backgroundColor1,
+            data: this.ticketsByCampaignsChart.data1,
+            borderWidth: 1
+          },
+          {
+            type: 'bar',
+            label: 'Total Unredeemed',
+            backgroundColor: this.ticketsByCampaignsChart.backgroundColor2,
+            borderColor: this.ticketsByCampaignsChart.backgroundColor1,
+            data: this.ticketsByCampaignsChart.data2,
+            borderWidth: 1,
+          }
+        ]
         },
-      }
-    });
-    var redeemedChart = new Chart(ctx2, {
-      type: 'doughnut',
-      data: {
-        labels: ['Redeemed', 'Unredeemed'],
-        datasets: [{
-          label: 'No. of Coupons',
-          data: [this.coupon_redeemed, this.coupon_unredeemed],
-          backgroundColor: [
-            '#9966ff',
-            '#ff6384'
-          ],
-          borderColor: [
-            '#9966ff',
-            '#ff6384'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        legend: {
-          display: false
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                display: false
+              },
+              stacked: true,
+            }],
+            xAxes: [{
+              maxBarThickness: 50,
+              gridLines: {
+                display: false
+              },
+              stacked: true,
+            }]
+          },
+          legend: {
+            display: false
+          },
+        }
+      });
+    }
+
+    if(this.showCardsGraph == 3){
+      var cardsEarningCampaignsChart = new Chart(ctx4, {
+        type: 'pie',
+        data: {
+          labels: this.cardsEarningCampaignsChart.labels,
+          datasets: [{
+            label: 'spendings',
+            data: this.cardsEarningCampaignsChart.data,
+            backgroundColor: this.cardsEarningCampaignsChart.backgroundColor,
+            borderColor: this.cardsEarningCampaignsChart.backgroundColor,
+            borderWidth: 1
+          }]
         },
-      }
-    });
-    var earningCampaignsChart = new Chart(ctx3, {
-      type: 'pie',
-      data: {
-        labels: this.earningCampaignsChart.labels,
-        datasets: [{
-          label: 'spendings',
-          data: this.earningCampaignsChart.data,
-          backgroundColor: this.earningCampaignsChart.backgroundColor,
-          borderColor: this.earningCampaignsChart.backgroundColor,
-          borderWidth: 1
-        }]
-      },
-      options: {
-        legend: {
-          display: false
-        },
-      }
-    });
+        options: {
+          legend: {
+            display: false
+          },
+        }
+      });
+    }
+    
+    // var redeemedChart = new Chart(ctx2, {
+    //   type: 'doughnut',
+    //   data: {
+    //     labels: ['Redeemed', 'Unredeemed'],
+    //     datasets: [{
+    //       label: 'No. of Coupons',
+    //       data: [this.coupon_redeemed, this.coupon_unredeemed],
+    //       backgroundColor: [
+    //         '#9966ff',
+    //         '#ff6384'
+    //       ],
+    //       borderColor: [
+    //         '#9966ff',
+    //         '#ff6384'
+    //       ],
+    //       borderWidth: 1
+    //     }]
+    //   },
+    //   options: {
+    //     legend: {
+    //       display: false
+    //     },
+    //   }
+    // });
    
   }
 

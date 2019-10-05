@@ -148,6 +148,7 @@ export class ReviewCampaingComponent implements OnInit {
   }
 
   createCampaign() {
+    this.campaign['brand_id'] = this.data.brand_id;
     this.campaign['campaign_name'] = this.dataCampaign.name;
     this.campaign['description'] = this.dataCampaign.description;
     this.campaign['manychat_customField'] = this.dataCampaign.selectedCustomField;
