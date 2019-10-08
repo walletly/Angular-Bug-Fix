@@ -16,4 +16,12 @@ export class ReportService {
     });
     return this.http.get(SERVER_API_URL + 'report/brand/' + id, { headers: httpHeaders});
   }
+
+  reportBrandSubscribers(id) {
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'report/brand/subscribers/' + id, { headers: httpHeaders});
+  }
 }

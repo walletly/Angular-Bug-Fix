@@ -18,6 +18,8 @@ export class DashboardComponent implements OnInit {
 
   selectedItem;
 
+  brandSubscribers;
+
   coupon_created = 0;
   coupon_redeemed = 0;
   coupon_unredeemed = 0;
@@ -60,6 +62,11 @@ export class DashboardComponent implements OnInit {
     if (mainService.changeBrandBool) {
       window.location.reload();
     }
+    this.reportService.reportBrandSubscribers(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe(result => {
+      this.brandSubscribers = result['data'].brand_subscribers;
+    }, err => {
+      console.log('subscribers error',err);
+    })
     this.reportService.reportBrand(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe( result =>{
       this.showGraph = 3;
       this.coupon_created = result['data'].brandData.coupon_created || 0;
@@ -87,6 +94,10 @@ export class DashboardComponent implements OnInit {
         this.showCardsGraph = 3;
       }else{
         this.showCardsGraph = 2;
+      }
+
+      if(this.showCouponGraph == 2 && this.showTicketsGraph == 2 && this.showCardsGraph == 2){
+        this.showGraph = 2;
       }
       
       this.couponCampaings = result['data'].campaignsStats.couponCampaignsSummary;

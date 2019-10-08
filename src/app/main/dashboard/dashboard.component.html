@@ -107,6 +107,7 @@
       </div>
     </div> -->
   </div>
+
   <nb-card>
     <nb-card-body>
       <div class="m-b-20 fs-18">
@@ -213,6 +214,12 @@
             {{membershipCard_created}}
           </div>
         </div>
+      </div>
+      <div class="m-t-20 m-b-20 fs-18" *ngIf="brandSubscribers > 0">
+        TOTAL SUBSCRIBERS
+      </div>
+      <div style="font-size: 64px; margin-left: 50px;" *ngIf="brandSubscribers > 0">
+        {{brandSubscribers}}
       </div>
     </nb-card-body>
   </nb-card>
