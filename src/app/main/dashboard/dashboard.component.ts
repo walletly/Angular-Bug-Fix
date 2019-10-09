@@ -15,6 +15,7 @@ export class DashboardComponent implements OnInit {
   showCouponGraph = 1;
   showTicketsGraph = 1;
   showCardsGraph = 1;
+  showPassesGraph = 1;
 
   selectedItem;
 
@@ -50,6 +51,8 @@ export class DashboardComponent implements OnInit {
   ticketsByCampaignsChart = { labels: [], data1: [], data2: [], backgroundColor1: this.colors, backgroundColor2: this.blurColors };
   couponsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors }
   cardsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors }
+  applePassesChart = { labels: ['Coupons', 'LoyatyCards', 'StampCards', 'MembershipCards', 'Tickets'], data: [], backgroundColor: this.colors }
+  androidPassesChart = { labels: ['Coupons', 'LoyatyCards', 'StampCards', 'MembershipCards', 'Tickets'], data: [], backgroundColor: this.colors }
   
   dateStart = new Date();
   dateEnd = new Date();
@@ -64,8 +67,26 @@ export class DashboardComponent implements OnInit {
     }
     this.reportService.reportBrandSubscribers(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe(result => {
       this.brandSubscribers = result['data'].brand_subscribers;
+      this.applePassesChart.data.push(result['data'].appleCoupons);
+      this.applePassesChart.data.push(result['data'].appleLoyaltyCards);
+      this.applePassesChart.data.push(result['data'].appleStampCards);
+      this.applePassesChart.data.push(result['data'].appleMembershipCards);
+      this.applePassesChart.data.push(result['data'].appleTickets);
+      this.androidPassesChart.data.push(result['data'].androidCoupons);
+      this.androidPassesChart.data.push(result['data'].androidLoyaltyCards);
+      this.androidPassesChart.data.push(result['data'].androidStampCards);
+      this.androidPassesChart.data.push(result['data'].androidMembershipCards);
+      this.androidPassesChart.data.push(result['data'].androidTickets);
+      if(result['data'].appleCoupons > 0 || result['data'].appleLoyaltyCards > 0 || result['data'].appleStampCards > 0 || result['data'].appleMembershipCards > 0 || result['data'].appleTickets > 0 ||
+        result['data'].androidCoupons > 0 || result['data'].androidLoyaltyCards > 0 || result['data'].androidStampCards > 0 || result['data'].androidMembershipCards > 0 || result['data'].androidTickets > 0){
+        this.showPassesGraph = 3;
+      }else{
+        this.showPassesGraph = 2;
+      }
     }, err => {
       console.log('subscribers error',err);
+      this.showPassesGraph = 2;
+      this.brandSubscribers = 0;
     })
     this.reportService.reportBrand(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe( result =>{
       this.showGraph = 3;
@@ -198,6 +219,8 @@ export class DashboardComponent implements OnInit {
     var ctx2 = document.getElementById('myChart2');
     var ctx3 = document.getElementById('myChart3');
     var ctx4 = document.getElementById('myChart4');
+    var ctx5 = document.getElementById('myChart5');
+    var ctx6 = document.getElementById('myChart6');
 
     if(this.showCouponGraph == 3){
       var couponsByCampaignsChart = new Chart(ctx1, {
@@ -226,7 +249,7 @@ export class DashboardComponent implements OnInit {
           scales: {
             yAxes: [{
               ticks: {
-                display: false
+                display: true
               },
               stacked: true,
             }],
@@ -244,15 +267,14 @@ export class DashboardComponent implements OnInit {
         }
       });
       var couponsEarningCampaignsChart = new Chart(ctx3, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
           labels: this.couponsEarningCampaignsChart.labels,
           datasets: [{
             label: 'spendings',
             data: this.couponsEarningCampaignsChart.data,
             backgroundColor: this.couponsEarningCampaignsChart.backgroundColor,
-            borderColor: this.couponsEarningCampaignsChart.backgroundColor,
-            borderWidth: 1
+            borderWidth: 2
           }]
         },
         options: {
@@ -290,7 +312,7 @@ export class DashboardComponent implements OnInit {
           scales: {
             yAxes: [{
               ticks: {
-                display: false
+                display: true
               },
               stacked: true,
             }],
@@ -311,18 +333,91 @@ export class DashboardComponent implements OnInit {
 
     if(this.showCardsGraph == 3){
       var cardsEarningCampaignsChart = new Chart(ctx4, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
           labels: this.cardsEarningCampaignsChart.labels,
           datasets: [{
             label: 'spendings',
             data: this.cardsEarningCampaignsChart.data,
             backgroundColor: this.cardsEarningCampaignsChart.backgroundColor,
-            borderColor: this.cardsEarningCampaignsChart.backgroundColor,
-            borderWidth: 1
+            borderWidth: 2,
           }]
         },
         options: {
+          legend: {
+            display: false
+          },
+        }
+      });
+    }
+
+    if(this.showPassesGraph == 3){
+      var applePassesChart = new Chart(ctx5, {
+        type: 'bar',
+        data: {
+          labels: this.applePassesChart.labels,
+          datasets: [{
+            type: 'bar',
+            label: 'Apple Wallet Passes',
+            backgroundColor: this.applePassesChart.backgroundColor,
+            borderColor: this.applePassesChart.backgroundColor,
+            data: this.applePassesChart.data,
+            borderWidth: 1
+          }
+        ]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                display: true
+              },
+              stacked: false,
+            }],
+            xAxes: [{
+              maxBarThickness: 50,
+              gridLines: {
+                display: false
+              },
+              stacked: false,
+            }]
+          },
+          legend: {
+            display: false
+          },
+        }
+      });
+
+      var androidPassesChart = new Chart(ctx6, {
+        type: 'bar',
+        data: {
+          labels: this.androidPassesChart.labels,
+          datasets: [{
+            type: 'bar',
+            label: 'Android Wallet Passes',
+            backgroundColor: this.androidPassesChart.backgroundColor,
+            borderColor: this.androidPassesChart.backgroundColor,
+            data: this.androidPassesChart.data,
+            borderWidth: 1
+          }
+        ]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                display: true
+              },
+              stacked: false,
+            }],
+            xAxes: [{
+              maxBarThickness: 50,
+              gridLines: {
+                display: false
+              },
+              stacked: false,
+            }]
+          },
           legend: {
             display: false
           },

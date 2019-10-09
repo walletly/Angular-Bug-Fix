@@ -224,6 +224,26 @@
     </nb-card-body>
   </nb-card>
   <div class="row">
+    <div class="col-12 col-md-6" *ngIf="showPassesGraph == 3">
+      <nb-card>
+        <nb-card-body>
+          <div class="m-b-20 fs-18">
+            Passes in Apple Wallet
+          </div>
+          <canvas id="myChart5" width="400" height="200"></canvas>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-12 col-md-6" *ngIf="showPassesGraph == 3">
+      <nb-card>
+        <nb-card-body >
+          <div class="m-b-20 fs-18">
+            Passes in Android Wallet
+          </div>
+          <canvas id="myChart6" width="400" height="200"></canvas>
+        </nb-card-body>
+      </nb-card>
+    </div>
     <div class="col-12 col-md-12" *ngIf="showCouponGraph == 3">
       <nb-card>
         <nb-card-body>
