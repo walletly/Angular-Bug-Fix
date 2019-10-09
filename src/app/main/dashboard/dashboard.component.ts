@@ -161,14 +161,14 @@ export class DashboardComponent implements OnInit {
       if(this.couponsByCampaignsChart.labels.length < 1){
         this.showCouponGraph = 2;
       }else{
-        while(this.couponsByCampaignsChart.labels.length < 8){
+        while(this.couponsByCampaignsChart.labels.length < 5){
           this.couponsByCampaignsChart.labels.push('');
         }
       }
       if(this.ticketsByCampaignsChart.labels.length < 1){
         this.showTicketsGraph = 2;
       }else{
-        while(this.ticketsByCampaignsChart.labels.length < 8){
+        while(this.ticketsByCampaignsChart.labels.length < 5){
           this.ticketsByCampaignsChart.labels.push('');
         }
       }
@@ -292,7 +292,7 @@ export class DashboardComponent implements OnInit {
           labels: this.ticketsByCampaignsChart.labels,
           datasets: [{
             type: 'bar',
-            label: 'Total Redeems',
+            label: 'Total CheckedIn',
             backgroundColor: this.ticketsByCampaignsChart.backgroundColor1,
             borderColor: this.ticketsByCampaignsChart.backgroundColor1,
             data: this.ticketsByCampaignsChart.data1,
@@ -300,7 +300,7 @@ export class DashboardComponent implements OnInit {
           },
           {
             type: 'bar',
-            label: 'Total Unredeemed',
+            label: 'Total UnCheckedIn',
             backgroundColor: this.ticketsByCampaignsChart.backgroundColor2,
             borderColor: this.ticketsByCampaignsChart.backgroundColor1,
             data: this.ticketsByCampaignsChart.data2,
