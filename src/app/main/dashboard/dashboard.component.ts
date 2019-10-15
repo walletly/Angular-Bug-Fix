@@ -19,7 +19,9 @@ export class DashboardComponent implements OnInit {
 
   selectedItem;
 
-  brandSubscribers;
+  brandSubscribers = 0;
+  brandEarning = 0;
+  brandCurrency;
 
   coupon_created = 0;
   coupon_redeemed = 0;
@@ -65,6 +67,9 @@ export class DashboardComponent implements OnInit {
     if (mainService.changeBrandBool) {
       window.location.reload();
     }
+
+    this.brandCurrency = JSON.parse(localStorage.currentBrand)['currency'] || '$';
+
     this.reportService.reportBrandSubscribers(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe(result => {
       this.brandSubscribers = result['data'].brand_subscribers;
       this.applePassesChart.data.push(result['data'].appleCoupons);
@@ -129,6 +134,7 @@ export class DashboardComponent implements OnInit {
           this.couponsByCampaignsChart.data2.push(campaign.coupons_created - campaign.coupons_redeemed);
           this.couponsEarningCampaignsChart.labels.push(campaign.campaign_name);
           this.couponsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
+          this.brandEarning = this.brandEarning + campaign.campaign_net_amount;
         }
       });
       this.ticketCampaings = result['data'].campaignsStats.ticketCampaignsSummary;
@@ -156,6 +162,7 @@ export class DashboardComponent implements OnInit {
         if(campaign.campaign_name && campaign.coupons_created > 0){
           this.cardsEarningCampaignsChart.labels.push(campaign.campaign_name);
           this.cardsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
+          this.brandEarning = this.brandEarning + campaign.campaign_net_amount;
         }
       });
       if(this.couponsByCampaignsChart.labels.length < 1){
