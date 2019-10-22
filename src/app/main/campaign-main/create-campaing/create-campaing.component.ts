@@ -82,11 +82,14 @@ export class CreateCampaingComponent implements OnInit {
       data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', type: 'coupon', locked: false }, 'Cards': { name: 'Stamp Card', icon: 'assets/img/stampCard.png', type: 'loyalty', locked: false }, 'Tickets': { name: 'Webinar Event', icon: 'assets/img/webinarIcon.png', type: 'ticket', locked: false } },
     },
     {
-      data: { 'Coupons': { name: 'Birthday Coupon', icon: 'assets/img/Birthday-Coupon.png', type: 'coupon', locked: true }, 'Cards': { name: 'Membership Card', icon: 'assets/img/membershipCard.png', type: 'membership', locked: false }, 'Tickets': { name: '', icon: '' } },
+      data: { 'Coupons': { name: '', icon: '' }, 'Cards': { name: 'Membership Card', icon: 'assets/img/membershipCard.png', type: 'membership', locked: false }, 'Tickets': { name: '', icon: '' } },
     },
-    {
-      data: { 'Coupons': { name: 'Referral Coupon', icon: 'assets/img/Referral-Coupon.png', type: 'coupon', locked: true }, 'Cards': { name: '', icon: '' }, 'Tickets': { name: '', icon: '' } },
-    },
+    // {
+    //   data: { 'Coupons': { name: 'Birthday Coupon', icon: 'assets/img/Birthday-Coupon.png', type: 'coupon', locked: true }, 'Cards': { name: 'Membership Card', icon: 'assets/img/membershipCard.png', type: 'membership', locked: false }, 'Tickets': { name: '', icon: '' } },
+    // },
+    // {
+    //   data: { 'Coupons': { name: 'Referral Coupon', icon: 'assets/img/Referral-Coupon.png', type: 'coupon', locked: true }, 'Cards': { name: '', icon: '' }, 'Tickets': { name: '', icon: '' } },
+    // },
   ];
 
   constructor(
