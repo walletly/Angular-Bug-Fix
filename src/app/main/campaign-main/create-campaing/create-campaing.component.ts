@@ -68,7 +68,7 @@ export class CreateCampaingComponent implements OnInit {
   address: string;
   private geoCoder;
 
-  defaultColumns = ['Coupons', 'Cards', 'Tickets'];
+  defaultColumns = [ 'Cards', 'Coupons', 'Tickets'];
   allColumns = this.defaultColumns;
   user;
 
@@ -76,13 +76,13 @@ export class CreateCampaingComponent implements OnInit {
 
   data = [
     {
-      data: { 'Coupons': { name: 'Coupon in %', icon: 'assets/img/Coupon.png', type: 'coupon', locked: false }, 'Cards': { name: 'Loyalty Card', icon: 'assets/img/LoyaltyCard.png', type: 'loyalty', locked: false }, 'Tickets': { name: 'Event Tickets', icon: 'assets/img/eventTickets.png', type: 'ticket', locked: false } },
+      data: { 'Cards': { name: 'Loyalty Card', icon: 'assets/img/LoyaltyCard.png', type: 'loyalty', locked: false }, 'Coupons': { name: 'Coupon in %', icon: 'assets/img/Coupon.png', type: 'coupon', locked: false }, 'Tickets': { name: 'Event Tickets', icon: 'assets/img/eventTickets.png', type: 'ticket', locked: false } },
     },
     {
-      data: { 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', type: 'coupon', locked: false }, 'Cards': { name: 'Stamp Card', icon: 'assets/img/stampCard.png', type: 'loyalty', locked: false }, 'Tickets': { name: 'Webinar Event', icon: 'assets/img/webinarIcon.png', type: 'ticket', locked: false } },
+      data: { 'Cards': { name: 'Stamp Card', icon: 'assets/img/stampCard.png', type: 'loyalty', locked: false }, 'Coupons': { name: 'Coupon in $', icon: 'assets/img/Coupon-in-$.png', type: 'coupon', locked: false }, 'Tickets': { name: 'Webinar Event', icon: 'assets/img/webinarIcon.png', type: 'ticket', locked: false } },
     },
     {
-      data: { 'Coupons': { name: '', icon: '' }, 'Cards': { name: 'Membership Card', icon: 'assets/img/membershipCard.png', type: 'membership', locked: false }, 'Tickets': { name: '', icon: '' } },
+      data: { 'Cards': { name: 'Membership Card', icon: 'assets/img/membershipCard.png', type: 'membership', locked: false }, 'Coupons': { name: '', icon: '' }, 'Tickets': { name: '', icon: '' } },
     },
     // {
     //   data: { 'Coupons': { name: 'Birthday Coupon', icon: 'assets/img/Birthday-Coupon.png', type: 'coupon', locked: true }, 'Cards': { name: 'Membership Card', icon: 'assets/img/membershipCard.png', type: 'membership', locked: false }, 'Tickets': { name: '', icon: '' } },
