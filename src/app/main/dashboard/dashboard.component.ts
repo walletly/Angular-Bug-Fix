@@ -13,29 +13,30 @@ export class DashboardComponent implements OnInit {
 
   showGraph = 1;
   showCouponGraph = 1;
+  showCouponEarningGraph = 1;
   showTicketsGraph = 1;
   showCardsGraph = 1;
   showPassesGraph = 1;
 
   selectedItem;
 
-  brandSubscribers = 0;
-  brandEarning = 0;
   brandCurrency;
+  brandSubscribers;
+  brandEarning;
 
-  coupon_created = 0;
-  coupon_redeemed = 0;
-  coupon_unredeemed = 0;
-  avg_coupon_redeems = '0' ;
-  ticket_created = 0 ;
-  eventTicket_created = 0 ;
-  eventTicket_redeemed = 0 ;
-  eventTicket_unredeemed = 0 ;
-  avg_eventTicket_redeems = '0' ;
-  webinarTicket_created = 0 ;
-  loyaltyCard_created = 0 ;
-  stampCard_created = 0 ;
-  membershipCard_created = 0 ;
+  coupon_created;
+  coupon_redeemed;
+  coupon_unredeemed;
+  avg_coupon_redeems;
+  ticket_created;
+  eventTicket_created;
+  eventTicket_redeemed;
+  eventTicket_unredeemed;
+  avg_eventTicket_redeems;
+  webinarTicket_created;
+  loyaltyCard_created;
+  stampCard_created;
+  membershipCard_created;
 
   colors = [ 'rgb(255,99,132)', 'rgb(54,162,235)', 'rgb(255,206,86)', 'rgb(153,102,255)', 'rgb(75,192,192)', 'rgb(255,159,188)',
              'rgb(47, 216, 229)', 'rgb(255,159,64)', 'rgb(3,252,188)', 'rgb(226,197,255)', 'rgb(0,128,59)', 'rgb(255, 108, 214)'];
@@ -49,19 +50,21 @@ export class DashboardComponent implements OnInit {
   membershipCardCampaings;
   cardsCampaigns;
 
-  couponsByCampaignsChart = { labels: [], data1: [], data2: [], backgroundColor1: this.colors, backgroundColor2: this.blurColors };
-  ticketsByCampaignsChart = { labels: [], data1: [], data2: [], backgroundColor1: this.colors, backgroundColor2: this.blurColors };
-  couponsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors }
-  cardsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors }
-  applePassesChart = { labels: ['Coupons', 'LoyatyCards', 'StampCards', 'MembershipCards', 'Tickets'], data: [], backgroundColor: this.colors }
-  androidPassesChart = { labels: ['Coupons', 'LoyatyCards', 'StampCards', 'MembershipCards', 'Tickets'], data: [], backgroundColor: this.colors }
+  couponsByCampaignsChart;
+  ticketsByCampaignsChart;
+  couponsEarningCampaignsChart;
+  cardsEarningCampaignsChart;
+  applePassesChart;
+  androidPassesChart;
   
   dateStart = new Date();
   dateEnd = new Date();
-  startDate;
-  endDate;
+  startDate = null;
+  endDate = null;
   showDatePickerStart;
   showDatePickerEnd;
+  showDateCancel = false;
+  datesDataError = false;
 
   constructor(private mainService: MainService, private reportService: ReportService) {
     if (mainService.changeBrandBool) {
@@ -69,153 +72,7 @@ export class DashboardComponent implements OnInit {
     }
 
     this.brandCurrency = JSON.parse(localStorage.currentBrand)['currency'] || '$';
-
-    this.reportService.reportBrandSubscribers(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe(result => {
-      this.brandSubscribers = result['data'].brand_subscribers;
-      this.applePassesChart.data.push(result['data'].appleCoupons);
-      this.applePassesChart.data.push(result['data'].appleLoyaltyCards);
-      this.applePassesChart.data.push(result['data'].appleStampCards);
-      this.applePassesChart.data.push(result['data'].appleMembershipCards);
-      this.applePassesChart.data.push(result['data'].appleTickets);
-      this.androidPassesChart.data.push(result['data'].androidCoupons);
-      this.androidPassesChart.data.push(result['data'].androidLoyaltyCards);
-      this.androidPassesChart.data.push(result['data'].androidStampCards);
-      this.androidPassesChart.data.push(result['data'].androidMembershipCards);
-      this.androidPassesChart.data.push(result['data'].androidTickets);
-      if(result['data'].appleCoupons > 0 || result['data'].appleLoyaltyCards > 0 || result['data'].appleStampCards > 0 || result['data'].appleMembershipCards > 0 || result['data'].appleTickets > 0 ||
-        result['data'].androidCoupons > 0 || result['data'].androidLoyaltyCards > 0 || result['data'].androidStampCards > 0 || result['data'].androidMembershipCards > 0 || result['data'].androidTickets > 0){
-        this.showPassesGraph = 3;
-      }else{
-        this.showPassesGraph = 2;
-      }
-    }, err => {
-      console.log('subscribers error',err);
-      this.showPassesGraph = 2;
-      this.brandSubscribers = 0;
-    })
-    this.reportService.reportBrand(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe( result =>{
-      this.showGraph = 3;
-      this.coupon_created = result['data'].brandData.coupon_created || 0;
-      this.coupon_redeemed = result['data'].brandData.coupon_redeemed || 0;
-      this.coupon_unredeemed = result['data'].brandData.coupon_unredeemed || 0;
-      this.avg_coupon_redeems = ((this.coupon_redeemed * 100) / this.coupon_created).toFixed(2) + '%' || '0';
-      this.ticket_created = result['data'].brandData.ticket_created || 0;
-      this.loyaltyCard_created = result['data'].brandData.loyaltyCard_created || 0;
-      this.stampCard_created = result['data'].brandData.stampCard_created || 0;
-      this.membershipCard_created = result['data'].brandData.membershipCard_created || 0;
-
-      if (result['data'].campaignsStats.couponCampaignsSummary.length > 0){
-        this.showCouponGraph = 3;
-      }else{
-        this.showCouponGraph = 2;
-      }
-      if (result['data'].campaignsStats.ticketCampaignsSummary.length > 0){
-        this.showTicketsGraph = 3;
-      }else{
-        this.showTicketsGraph = 2;
-      }
-      if (result['data'].campaignsStats.loyaltyCardCampaignsSummary.length > 0 || 
-          // result['data'].campaignsStats.membershipCardCampaignsSummary.length > 0 ||
-          result['data'].campaignsStats.stampCardCampaignsSummary.length > 0){
-        this.showCardsGraph = 3;
-      }else{
-        this.showCardsGraph = 2;
-      }
-
-      if(this.showCouponGraph == 2 && this.showTicketsGraph == 2 && this.showCardsGraph == 2){
-        this.showGraph = 2;
-      }
-      
-      this.couponCampaings = result['data'].campaignsStats.couponCampaignsSummary;
-      this.couponCampaings.forEach(campaign => {
-        if(campaign.campaign_name && campaign.coupons_created > 0){
-          this.couponsByCampaignsChart.labels.push(campaign.campaign_name);
-          this.couponsByCampaignsChart.data1.push(campaign.coupons_redeemed);
-          this.couponsByCampaignsChart.data2.push(campaign.coupons_created - campaign.coupons_redeemed);
-          this.couponsEarningCampaignsChart.labels.push(campaign.campaign_name);
-          this.couponsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
-          this.brandEarning = this.brandEarning + campaign.campaign_net_amount;
-        }
-      });
-      this.ticketCampaings = result['data'].campaignsStats.ticketCampaignsSummary;
-      this.ticketCampaings.forEach(campaign => {
-        if(campaign.campaign_name && campaign.coupons_created > 0){
-          this.ticketsByCampaignsChart.labels.push(campaign.campaign_name);
-          this.ticketsByCampaignsChart.data1.push(campaign.coupons_redeemed);
-          this.ticketsByCampaignsChart.data2.push(campaign.coupons_created - campaign.coupons_redeemed);
-          if(campaign.campaign_type == 8){
-            this.eventTicket_created = this.eventTicket_created + campaign.coupons_created;
-            this.eventTicket_redeemed = this.eventTicket_redeemed + campaign.coupons_redeemed;
-            this.eventTicket_unredeemed = this.eventTicket_created - this.eventTicket_redeemed;
-            this.avg_eventTicket_redeems = ((this.eventTicket_redeemed * 100) / this.eventTicket_created).toFixed(2) + '%' || '0';
-          }else if(campaign.campaign_type == 9){
-            this.webinarTicket_created = this.webinarTicket_created + campaign.coupons_created;
-          }
-        }
-      });
-      this.loyaltyCardCampaings = result['data'].campaignsStats.loyaltyCardCampaignsSummary;
-      this.stampCardCampaings = result['data'].campaignsStats.stampCardCampaignsSummary;
-      this.membershipCardCampaings = result['data'].campaignsStats.membershipCardCampaignsSummary;
-
-      this.cardsCampaigns = this.loyaltyCardCampaings.concat(this.stampCardCampaings);
-      this.cardsCampaigns.forEach(campaign => {
-        if(campaign.campaign_name && campaign.coupons_created > 0){
-          this.cardsEarningCampaignsChart.labels.push(campaign.campaign_name);
-          this.cardsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
-          this.brandEarning = this.brandEarning + campaign.campaign_net_amount;
-        }
-      });
-      if(this.couponsByCampaignsChart.labels.length < 1){
-        this.showCouponGraph = 2;
-      }else{
-        while(this.couponsByCampaignsChart.labels.length < 5){
-          this.couponsByCampaignsChart.labels.push('');
-        }
-      }
-      if(this.ticketsByCampaignsChart.labels.length < 1){
-        this.showTicketsGraph = 2;
-      }else{
-        while(this.ticketsByCampaignsChart.labels.length < 5){
-          this.ticketsByCampaignsChart.labels.push('');
-        }
-      }
-      if(this.cardsEarningCampaignsChart.labels.length < 1){
-        this.showCardsGraph = 2;
-      }
-      
-      const couponlen = this.couponsEarningCampaignsChart.backgroundColor.length;
-      for (var i = couponlen; i < this.couponsEarningCampaignsChart.data.length; i++){
-        const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
-          return String(Math.floor(Math.random() * 255));
-        });
-        const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
-        this.couponsEarningCampaignsChart.backgroundColor[i] = randomColor1;
-        this.couponsByCampaignsChart.backgroundColor1[i] = randomColor1;        
-        this.couponsByCampaignsChart.backgroundColor2[i] = randomColor2;
-      }
-      const ticketlen = this.ticketsByCampaignsChart.backgroundColor1.length;
-      for (var i = ticketlen; i < this.ticketsByCampaignsChart.data1.length; i++){
-        const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
-          return String(Math.floor(Math.random() * 255));
-        });
-        const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
-        this.ticketsByCampaignsChart.backgroundColor1[i] = randomColor1;        
-        this.ticketsByCampaignsChart.backgroundColor2[i] = randomColor2;
-      }
-      const cardslen = this.cardsEarningCampaignsChart.backgroundColor.length;
-      for (var i = cardslen; i < this.cardsEarningCampaignsChart.data.length; i++){
-        const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
-          return String(Math.floor(Math.random() * 255));
-        });
-        this.cardsEarningCampaignsChart.backgroundColor[i] = randomColor1;        
-      }
-
-      setTimeout(() => {
-        this.generateGraphs();
-      }, 200);
-    }, error =>{
-      this.showGraph = 2;
-    });
+    this.getData();
   }
 
   ngOnInit() {
@@ -273,6 +130,9 @@ export class DashboardComponent implements OnInit {
           },
         }
       });
+    }
+
+    if(this.showCouponEarningGraph == 3){
       var couponsEarningCampaignsChart = new Chart(ctx3, {
         type: 'doughnut',
         data: {
@@ -459,14 +319,388 @@ export class DashboardComponent implements OnInit {
    
   }
 
+  getData(){
+    this.showGraph = 1;
+
+    this.brandSubscribers = 0;
+    this.brandEarning = 0;
+
+    this.coupon_created = 0;
+    this.coupon_redeemed = 0;
+    this.coupon_unredeemed = 0;
+    this.avg_coupon_redeems;
+    this.ticket_created = 0 ;
+    this.eventTicket_created = 0 ;
+    this.eventTicket_redeemed = 0 ;
+    this.eventTicket_unredeemed = 0 ;
+    this.avg_eventTicket_redeems;
+    this.webinarTicket_created = 0 ;
+    this.loyaltyCard_created = 0 ;
+    this.stampCard_created = 0 ;
+    this.membershipCard_created = 0 ;
+
+
+    this.couponsByCampaignsChart = { labels: [], data1: [], data2: [], backgroundColor1: this.colors, backgroundColor2: this.blurColors };
+    this.ticketsByCampaignsChart = { labels: [], data1: [], data2: [], backgroundColor1: this.colors, backgroundColor2: this.blurColors };
+    this.couponsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors };
+    this.cardsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors };
+    this.applePassesChart = { labels: ['Coupons', 'LoyatyCards', 'StampCards', 'MembershipCards', 'Tickets'], data: [], backgroundColor: this.colors };
+    this.androidPassesChart = { labels: ['Coupons', 'LoyatyCards', 'StampCards', 'MembershipCards', 'Tickets'], data: [], backgroundColor: this.colors };
+
+    this.reportService.reportBrandSubscribers(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe(result => {
+      this.brandSubscribers = result['data'].brand_subscribers;
+      this.applePassesChart.data.push(result['data'].appleCoupons);
+      this.applePassesChart.data.push(result['data'].appleLoyaltyCards);
+      this.applePassesChart.data.push(result['data'].appleStampCards);
+      this.applePassesChart.data.push(result['data'].appleMembershipCards);
+      this.applePassesChart.data.push(result['data'].appleTickets);
+      this.androidPassesChart.data.push(result['data'].androidCoupons);
+      this.androidPassesChart.data.push(result['data'].androidLoyaltyCards);
+      this.androidPassesChart.data.push(result['data'].androidStampCards);
+      this.androidPassesChart.data.push(result['data'].androidMembershipCards);
+      this.androidPassesChart.data.push(result['data'].androidTickets);
+      if(result['data'].appleCoupons > 0 || result['data'].appleLoyaltyCards > 0 || result['data'].appleStampCards > 0 || result['data'].appleMembershipCards > 0 || result['data'].appleTickets > 0 ||
+        result['data'].androidCoupons > 0 || result['data'].androidLoyaltyCards > 0 || result['data'].androidStampCards > 0 || result['data'].androidMembershipCards > 0 || result['data'].androidTickets > 0){
+        this.showPassesGraph = 3;
+      }else{
+        this.showPassesGraph = 2;
+      }
+    }, err => {
+      console.log('subscribers error',err);
+      this.showPassesGraph = 2;
+      this.brandSubscribers = 0;
+    })
+    this.reportService.reportBrand(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe( result =>{
+      this.showDateCancel = false;
+      this.coupon_created = result['data'].brandData.coupon_created || 0;
+      this.coupon_redeemed = result['data'].brandData.coupon_redeemed || 0;
+      this.coupon_unredeemed = result['data'].brandData.coupon_unredeemed || 0;
+      this.avg_coupon_redeems = (this.coupon_redeemed * 100) / this.coupon_created;
+      this.avg_coupon_redeems = !this.avg_coupon_redeems ? '0' : this.avg_coupon_redeems.toFixed(2) + '%';
+      this.ticket_created = result['data'].brandData.ticket_created || 0;
+      this.loyaltyCard_created = result['data'].brandData.loyaltyCard_created || 0;
+      this.stampCard_created = result['data'].brandData.stampCard_created || 0;
+      this.membershipCard_created = result['data'].brandData.membershipCard_created || 0;
+
+      if(this.coupon_created > 0 || this.ticket_created > 0 || this.loyaltyCard_created > 0 || this.stampCard_created > 0 || this.membershipCard_created > 0){
+        this.showGraph = 3;
+      }else{
+        this.showGraph = 2;
+      }
+
+      if (result['data'].campaignsStats.couponCampaignsSummary.length > 0){
+        this.showCouponGraph = 3;
+        
+      }else{
+        this.showCouponGraph = 2;
+      }
+      if (result['data'].campaignsStats.ticketCampaignsSummary.length > 0){
+        this.showTicketsGraph = 3;
+      }else{
+        this.showTicketsGraph = 2;
+      }
+      if (result['data'].campaignsStats.loyaltyCardCampaignsSummary.length > 0 || 
+          // result['data'].campaignsStats.membershipCardCampaignsSummary.length > 0 ||
+          result['data'].campaignsStats.stampCardCampaignsSummary.length > 0){
+        this.showCardsGraph = 3;
+      }else{
+        this.showCardsGraph = 2;
+      }
+
+      if(this.showCouponGraph == 2 && this.showTicketsGraph == 2 && this.showCardsGraph == 2){
+        this.showGraph = 2;
+      }
+      
+      this.showCouponEarningGraph = 2;
+      this.couponCampaings = result['data'].campaignsStats.couponCampaignsSummary;
+      this.couponCampaings.forEach(campaign => {
+        if(campaign.campaign_name && campaign.coupons_created > 0){
+          this.couponsByCampaignsChart.labels.push(campaign.campaign_name);
+          this.couponsByCampaignsChart.data1.push(campaign.coupons_redeemed);
+          this.couponsByCampaignsChart.data2.push(campaign.coupons_created - campaign.coupons_redeemed);
+          this.couponsEarningCampaignsChart.labels.push(campaign.campaign_name);
+          this.couponsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
+          if(campaign.campaign_net_amount > 0){
+            this.showCouponEarningGraph = 3;
+          }
+          this.brandEarning = this.brandEarning + campaign.campaign_net_amount;
+        }
+      });
+
+      if(this.couponsEarningCampaignsChart.data.length > 0){
+        this.showCouponEarningGraph =3;
+      }else{
+        this.showCouponEarningGraph =2;
+      }
+
+      this.ticketCampaings = result['data'].campaignsStats.ticketCampaignsSummary;
+      this.ticketCampaings.forEach(campaign => {
+        if(campaign.campaign_name && campaign.coupons_created > 0){
+          this.ticketsByCampaignsChart.labels.push(campaign.campaign_name);
+          this.ticketsByCampaignsChart.data1.push(campaign.coupons_redeemed);
+          this.ticketsByCampaignsChart.data2.push(campaign.coupons_created - campaign.coupons_redeemed);
+          if(campaign.campaign_type == 8){
+            this.eventTicket_created = this.eventTicket_created + campaign.coupons_created;
+            this.eventTicket_redeemed = this.eventTicket_redeemed + campaign.coupons_redeemed;
+            this.eventTicket_unredeemed = this.eventTicket_created - this.eventTicket_redeemed;
+            this.avg_eventTicket_redeems = (this.eventTicket_redeemed * 100) / this.eventTicket_created;
+            this.avg_eventTicket_redeems = !this.avg_eventTicket_redeems ? '0' : this.avg_eventTicket_redeems.toFixed(2) + '%';
+          }else if(campaign.campaign_type == 9){
+            this.webinarTicket_created = this.webinarTicket_created + campaign.coupons_created;
+          }
+        }
+      });
+      this.loyaltyCardCampaings = result['data'].campaignsStats.loyaltyCardCampaignsSummary;
+      this.stampCardCampaings = result['data'].campaignsStats.stampCardCampaignsSummary;
+      this.membershipCardCampaings = result['data'].campaignsStats.membershipCardCampaignsSummary;
+
+      this.cardsCampaigns = this.loyaltyCardCampaings.concat(this.stampCardCampaings);
+      this.cardsCampaigns.forEach(campaign => {
+        if(campaign.campaign_name && campaign.coupons_created > 0){
+          this.cardsEarningCampaignsChart.labels.push(campaign.campaign_name);
+          this.cardsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
+          this.brandEarning = this.brandEarning + campaign.campaign_net_amount;
+        }
+      });
+      if(this.couponsByCampaignsChart.labels.length < 1){
+        this.showCouponGraph = 2;
+      }else{
+        while(this.couponsByCampaignsChart.labels.length < 5){
+          this.couponsByCampaignsChart.labels.push('');
+        }
+      }
+      if(this.ticketsByCampaignsChart.labels.length < 1){
+        this.showTicketsGraph = 2;
+      }else{
+        while(this.ticketsByCampaignsChart.labels.length < 5){
+          this.ticketsByCampaignsChart.labels.push('');
+        }
+      }
+      if(this.cardsEarningCampaignsChart.labels.length < 1){
+        this.showCardsGraph = 2;
+      }
+      
+      const couponlen = this.couponsEarningCampaignsChart.backgroundColor.length;
+      for (var i = couponlen; i < this.couponsEarningCampaignsChart.data.length; i++){
+        const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
+          return String(Math.floor(Math.random() * 255));
+        });
+        const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
+        this.couponsEarningCampaignsChart.backgroundColor[i] = randomColor1;
+        this.couponsByCampaignsChart.backgroundColor1[i] = randomColor1;        
+        this.couponsByCampaignsChart.backgroundColor2[i] = randomColor2;
+      }
+      const ticketlen = this.ticketsByCampaignsChart.backgroundColor1.length;
+      for (var i = ticketlen; i < this.ticketsByCampaignsChart.data1.length; i++){
+        const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
+          return String(Math.floor(Math.random() * 255));
+        });
+        const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
+        this.ticketsByCampaignsChart.backgroundColor1[i] = randomColor1;        
+        this.ticketsByCampaignsChart.backgroundColor2[i] = randomColor2;
+      }
+      const cardslen = this.cardsEarningCampaignsChart.backgroundColor.length;
+      for (var i = cardslen; i < this.cardsEarningCampaignsChart.data.length; i++){
+        const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
+          return String(Math.floor(Math.random() * 255));
+        });
+        this.cardsEarningCampaignsChart.backgroundColor[i] = randomColor1;        
+      }
+
+      setTimeout(() => {
+        this.generateGraphs();
+      }, 200);
+    }, error =>{
+      this.showGraph = 2;
+    });
+  }
+
+  getDataWithDates(from, to){
+    this.showGraph = 4;
+    this.datesDataError = false;
+
+    this.brandSubscribers = 0;
+    this.brandEarning = 0;
+
+    this.coupon_created = 0;
+    this.coupon_redeemed = 0;
+    this.coupon_unredeemed = 0;
+    this.avg_coupon_redeems;
+    this.ticket_created = 0 ;
+    this.eventTicket_created = 0 ;
+    this.eventTicket_redeemed = 0 ;
+    this.eventTicket_unredeemed = 0 ;
+    this.avg_eventTicket_redeems;
+    this.webinarTicket_created = 0 ;
+    this.loyaltyCard_created = 0 ;
+    this.stampCard_created = 0 ;
+    this.membershipCard_created = 0 ;
+
+    this.couponsByCampaignsChart = { labels: [], data1: [], data2: [], backgroundColor1: this.colors, backgroundColor2: this.blurColors };
+    this.ticketsByCampaignsChart = { labels: [], data1: [], data2: [], backgroundColor1: this.colors, backgroundColor2: this.blurColors };
+    this.couponsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors };
+    this.cardsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors };
+
+    this.reportService.reportBrandSubscribersBetweenDates(JSON.parse(localStorage.currentBrand)['brand_id'], from, to).subscribe( result => {
+      this.brandSubscribers = result['data'].brand_subscribers ? result['data'].brand_subscribers : 0;
+    }, err => {
+      this.brandSubscribers = 0;
+    });
+
+    this.reportService.reportBrandBetweenDates(JSON.parse(localStorage.currentBrand)['brand_id'], from, to).subscribe( result => {
+      this.showDateCancel = true;
+      if(result['data']){
+        this.showGraph = 3;
+        this.coupon_created = result['data'].brandData.coupon_created || 0;
+        this.coupon_redeemed = result['data'].brandData.coupon_redeemed || 0;
+        this.coupon_unredeemed = result['data'].brandData.coupon_unredeemed || 0;
+        this.avg_coupon_redeems = (this.coupon_redeemed * 100) / this.coupon_created;
+        this.avg_coupon_redeems = !this.avg_coupon_redeems ? '0' : this.avg_coupon_redeems.toFixed(2) + '%';
+        this.eventTicket_created = result['data'].brandData.eventTicket_created || 0;
+        this.eventTicket_redeemed = result['data'].brandData.eventTicket_redeemed || 0;
+        this.eventTicket_unredeemed = result['data'].brandData.eventTicket_unredeemed || 0;
+        this.avg_eventTicket_redeems = (this.eventTicket_redeemed * 100) / this.eventTicket_created;
+        this.avg_eventTicket_redeems = !this.avg_eventTicket_redeems ? '0' : this.avg_eventTicket_redeems.toFixed(2) + '%';
+        this.webinarTicket_created = result['data'].brandData.webinarTicket_created;
+        this.loyaltyCard_created = result['data'].brandData.loyaltyCard_created || 0;
+        this.stampCard_created = result['data'].brandData.stampCard_created || 0;
+        this.membershipCard_created = result['data'].brandData.membershipCard_created || 0;
+  
+        if (result['data'].campaignsStats.couponCampaignsSummary.length > 0){
+          this.showCouponGraph = 3;
+        }else{
+          this.showCouponGraph = 2;
+        }
+        if (result['data'].campaignsStats.ticketCampaignsSummary.length > 0){
+          this.showTicketsGraph = 3;
+        }else{
+          this.showTicketsGraph = 2;
+        }
+        if (result['data'].campaignsStats.loyaltyCardCampaignsSummary.length > 0 || 
+            // result['data'].campaignsStats.membershipCardCampaignsSummary.length > 0 ||
+            result['data'].campaignsStats.stampCardCampaignsSummary.length > 0){
+          this.showCardsGraph = 3;
+        }else{
+          this.showCardsGraph = 2;
+        }
+  
+        if(this.showCouponGraph == 2 && this.showTicketsGraph == 2 && this.showCardsGraph == 2){
+          this.showGraph = 2;
+        }
+  
+        this.showCouponEarningGraph = 2;
+        this.couponCampaings = result['data'].campaignsStats.couponCampaignsSummary;
+        this.couponCampaings.forEach(campaign => {
+          if(campaign.campaign_name && campaign.coupons_created > 0){
+            this.couponsByCampaignsChart.labels.push(campaign.campaign_name);
+            this.couponsByCampaignsChart.data1.push(campaign.coupons_redeemed);
+            this.couponsByCampaignsChart.data2.push(campaign.coupons_created - campaign.coupons_redeemed);
+            this.couponsEarningCampaignsChart.labels.push(campaign.campaign_name);
+            this.couponsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
+            if(campaign.campaign_net_amount > 0){
+              this.showCouponEarningGraph = 3;
+            }
+            this.brandEarning = this.brandEarning + campaign.campaign_net_amount;
+          }
+        });
+
+
+        this.ticketCampaings = result['data'].campaignsStats.ticketCampaignsSummary;
+        this.ticketCampaings.forEach(campaign => {
+          if(campaign.campaign_name && campaign.coupons_created > 0){
+            this.ticketsByCampaignsChart.labels.push(campaign.campaign_name);
+            this.ticketsByCampaignsChart.data1.push(campaign.coupons_redeemed);
+            this.ticketsByCampaignsChart.data2.push(campaign.coupons_created - campaign.coupons_redeemed);
+            if(campaign.campaign_type == 8){
+              this.eventTicket_created = this.eventTicket_created + campaign.coupons_created;
+              this.eventTicket_redeemed = this.eventTicket_redeemed + campaign.coupons_redeemed;
+              this.eventTicket_unredeemed = this.eventTicket_created - this.eventTicket_redeemed;
+              this.avg_eventTicket_redeems = (this.eventTicket_redeemed * 100) / this.eventTicket_created;
+              this.avg_eventTicket_redeems = !this.avg_eventTicket_redeems ? '0' : this.avg_eventTicket_redeems.toFixed(2) + '%';
+            }else if(campaign.campaign_type == 9){
+              this.webinarTicket_created = this.webinarTicket_created + campaign.coupons_created;
+            }
+          }
+        });
+        this.loyaltyCardCampaings = result['data'].campaignsStats.loyaltyCardCampaignsSummary;
+        this.stampCardCampaings = result['data'].campaignsStats.stampCardCampaignsSummary;
+        this.membershipCardCampaings = result['data'].campaignsStats.membershipCardCampaignsSummary;
+  
+        this.cardsCampaigns = this.loyaltyCardCampaings.concat(this.stampCardCampaings);
+        this.cardsCampaigns.forEach(campaign => {
+          if(campaign.campaign_name && campaign.coupons_created > 0){
+            this.cardsEarningCampaignsChart.labels.push(campaign.campaign_name);
+            this.cardsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
+            this.brandEarning = this.brandEarning + campaign.campaign_net_amount;
+          }
+        });
+        if(this.couponsByCampaignsChart.labels.length < 1){
+          this.showCouponGraph = 2;
+        }else{
+          while(this.couponsByCampaignsChart.labels.length < 5){
+            this.couponsByCampaignsChart.labels.push('');
+          }
+        }
+        if(this.ticketsByCampaignsChart.labels.length < 1){
+          this.showTicketsGraph = 2;
+        }else{
+          while(this.ticketsByCampaignsChart.labels.length < 5){
+            this.ticketsByCampaignsChart.labels.push('');
+          }
+        }
+        if(this.cardsEarningCampaignsChart.labels.length < 1){
+          this.showCardsGraph = 2;
+        }
+        
+        const couponlen = this.couponsEarningCampaignsChart.backgroundColor.length;
+        for (var i = couponlen; i < this.couponsEarningCampaignsChart.data.length; i++){
+          const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
+            return String(Math.floor(Math.random() * 255));
+          });
+          const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
+          this.couponsEarningCampaignsChart.backgroundColor[i] = randomColor1;
+          this.couponsByCampaignsChart.backgroundColor1[i] = randomColor1;        
+          this.couponsByCampaignsChart.backgroundColor2[i] = randomColor2;
+        }
+        const ticketlen = this.ticketsByCampaignsChart.backgroundColor1.length;
+        for (var i = ticketlen; i < this.ticketsByCampaignsChart.data1.length; i++){
+          const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
+            return String(Math.floor(Math.random() * 255));
+          });
+          const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
+          this.ticketsByCampaignsChart.backgroundColor1[i] = randomColor1;        
+          this.ticketsByCampaignsChart.backgroundColor2[i] = randomColor2;
+        }
+        const cardslen = this.cardsEarningCampaignsChart.backgroundColor.length;
+        for (var i = cardslen; i < this.cardsEarningCampaignsChart.data.length; i++){
+          const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
+            return String(Math.floor(Math.random() * 255));
+          });
+          this.cardsEarningCampaignsChart.backgroundColor[i] = randomColor1;        
+        }
+  
+        setTimeout(() => {
+          this.generateGraphs();
+        }, 200);
+      } else{
+        this.datesDataError = true;
+      }
+    }, err => {
+      this.showDateCancel = true;
+      this.datesDataError = true;
+    });
+
+  }
+
   dateStartChange(event) {
     this.startDate = moment(event).format('YYYY-MM-DD');
     const compare = this.compare(event, this.dateEnd);
     if (compare === 1 || compare === 0) {
       this.endDate = null;
     }
-    console.log(this.compare(event, this.dateEnd));
-    console.log(this.startDate);
+    if(this.startDate != null && this.endDate != null){
+      this.getDataWithDates(this.startDate, this.endDate);
+    }
     this.showDatePickerStart = false;
   }
 
@@ -476,8 +710,9 @@ export class DashboardComponent implements OnInit {
     if (compare === 1 || (compare === 0 && this.dateStart)) {
       this.startDate = null;
     }
-    console.log(this.compare(this.dateStart, event));
-    console.log(this.endDate);
+    if(this.startDate != null && this.endDate != null){
+      this.getDataWithDates(this.startDate, this.endDate);
+    }
     this.showDatePickerEnd = false;
   }
 
@@ -487,6 +722,12 @@ export class DashboardComponent implements OnInit {
     if (momentA > momentB) return 1;
     else if (momentA < momentB) return -1;
     else return 0;
+  }
+
+  cancelDates(){
+    this.startDate = null;
+    this.endDate = null;
+    this.getData();
   }
   
 }

@@ -7,6 +7,43 @@
   </div>
 </div>
 
+<div *ngIf="showGraph == 4" class="df jc-b m-b-15">
+  <h1 class="m-t-0 m-b-0 fs-24 fw-600">
+    Dashboard
+  </h1>
+  <div class="row-input">
+    <div class="value df ai-c">
+      <div (clickOutside)="showDatePickerStart = false" class="pos-r m-r-15">
+        <input
+          class="small" (focus)="showDatePickerStart = true" [(ngModel)]="startDate" type="text" nbInput
+          fullWidth fieldSize="small" placeholder="start date" readonly>
+        <nb-calendar *ngIf="showDatePickerStart" (dateChange)="dateStartChange($event);" [(date)]="dateStart">
+        </nb-calendar>
+      </div>
+      <div class="pos-r df">
+        <div (clickOutside)="showDatePickerEnd = false" class="pos-r">
+          <input
+            class="small" (focus)="showDatePickerEnd = true" [(ngModel)]="endDate" type="text" nbInput
+            fullWidth fieldSize="small" placeholder="end date" readonly>
+          <nb-calendar *ngIf="showDatePickerEnd" (dateChange)="dateEndChange($event);" [(date)]="dateEnd">
+          </nb-calendar>
+        </div>
+      </div>
+      <img *ngIf="showDateCancel" (click)="cancelDates()" src="assets/img/cross.jpeg" alt="" 
+        style="width: 30px; margin-left: 15px; height: 30px; border-radius: 10px; cursor: pointer;">
+    </div>
+  </div>
+  <div *ngIf="!datesDataError" class="loader">
+    <img  width="100px" src="assets/img/Loader2x.gif" alt="">
+  </div>
+  <div *ngIf="datesDataError" style="position: absolute; margin-left: 30%; margin-top: 17%;">
+    <div *ngIf="datesDataError" style="text-align: center;">
+      <img width="100px" src="assets/img/errorIcon.png" alt="">
+      <h2>No Data Found!</h2>
+    </div>
+  </div>
+</div>
+
 <div *ngIf="showGraph == 2">
   <div class="df jc-b m-b-15">
     <h1 class="m-t-0 m-b-0 fs-24 fw-600">
@@ -86,9 +123,9 @@
     <h1 class="m-t-0 m-b-0 fs-24 fw-600 m-r-22">
       Dashboard
     </h1>
-    <!-- <div class="row-input">
+    <div class="row-input">
       <div class="value df ai-c">
-        <div (clickOutside)="showDatePickerStart = false" class="pos-r m-r-34">
+        <div (clickOutside)="showDatePickerStart = false" class="pos-r m-r-15">
           <input
             class="small" (focus)="showDatePickerStart = true" [(ngModel)]="startDate" type="text" nbInput
             fullWidth fieldSize="small" placeholder="start date" readonly>
@@ -104,8 +141,10 @@
             </nb-calendar>
           </div>
         </div>
+        <img *ngIf="showDateCancel" (click)="cancelDates()" src="assets/img/cross.jpeg" alt="" 
+          style="width: 30px; margin-left: 15px; height: 30px; border-radius: 10px; cursor: pointer;">
       </div>
-    </div> -->
+    </div>
   </div>
 
   <nb-card>
@@ -217,18 +256,18 @@
       </div>
       <div class="df wrap jc-b p-t-20">
         <div>
-          <div class="m-t-20 m-b-20 fs-18" *ngIf="brandSubscribers > 0">
+          <div class="m-t-20 m-b-20 fs-18">
             TOTAL SUBSCRIBERS
           </div>
-          <div style="font-size: 50px;" *ngIf="brandSubscribers > 0">
+          <div style="font-size: 50px;">
             {{brandSubscribers}}
           </div>
         </div>
         <div style="margin: 0px auto 0px 60px;">
-          <div class="m-t-20 m-b-20 fs-18" *ngIf="brandSubscribers > 0">
+          <div class="m-t-20 m-b-20 fs-18">
             TOTAL EARNING
           </div>
-          <div style="font-size: 50px;" *ngIf="brandSubscribers > 0">
+          <div style="font-size: 50px;">
             {{brandCurrency}}{{brandEarning}}
           </div>
         </div>
@@ -240,7 +279,7 @@
       <nb-card>
         <nb-card-body>
           <div class="m-b-20 fs-18">
-            Passes in Apple Wallet
+            Passes Currently in Apple Wallet
           </div>
           <canvas id="myChart5" width="400" height="200"></canvas>
         </nb-card-body>
@@ -250,7 +289,7 @@
       <nb-card>
         <nb-card-body >
           <div class="m-b-20 fs-18">
-            Passes in Android Wallet
+            Passes Currently in Android Wallet
           </div>
           <canvas id="myChart6" width="400" height="200"></canvas>
         </nb-card-body>
@@ -276,7 +315,7 @@
         </nb-card-body>
       </nb-card>
     </div>
-    <div class="col-12 col-md-6" *ngIf="showCouponGraph == 3">
+    <div class="col-12 col-md-6" *ngIf="showCouponEarningGraph == 3">
       <nb-card>
         <nb-card-body>
           <div class="m-b-20 fs-18">

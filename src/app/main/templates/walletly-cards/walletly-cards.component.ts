@@ -11,6 +11,11 @@ import { Router } from '@angular/router';
 export class WalletlyCardsComponent implements OnInit {
   data;
   showLoader;
+  noCouponCard = true;
+  noMembershipCard = true;
+  noTicketCard = true;
+  noLoyaltyStampCard = true;
+
   constructor(private mainService: MainService, private cardService: CardService, private router: Router) { }
 
   ngOnInit() {
@@ -20,6 +25,17 @@ export class WalletlyCardsComponent implements OnInit {
       this.cardService.getBrandsCards(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
         console.log(result);
         this.data = result['data'];
+        this.data.map( card => {
+          if(card.card_type == 1){
+            this.noCouponCard = false;
+          } else if (card.card_type == 2){
+            this.noMembershipCard = false;
+          } else if (card.card_type == 3){
+            this.noTicketCard = false;
+          } else if (card.card_type == 4){
+            this.noLoyaltyStampCard = false;
+          }
+        });
         // this.mainService.showLoader.emit(false);
         this.showLoader = false;
       }, err => {

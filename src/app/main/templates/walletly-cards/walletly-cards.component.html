@@ -13,6 +13,12 @@
     <nb-tabset *ngIf="data?.length && !showLoader" class="tabs-card">
       <nb-tab tabTitle="Coupon" style="overflow-y: hidden;">
         <div class="df wrap p-t-20">
+          <div *ngIf="noCouponCard" class="p-t-50 text-center" style="margin: auto;">
+            <img class="m-b-16" src="assets/svg-icon/notemplate.svg" alt="">
+            <div class="m-b-25 fs-22">
+              No Walletly Card
+            </div>
+          </div>
           <div *ngFor="let coupon of data">
             <div *ngIf="coupon.card_type === 1" class="coupon small-size m-t-16 m-r-30">
               <div class="hover-couon">
@@ -93,6 +99,12 @@
       </nb-tab>
       <nb-tab tabTitle="Membership" style="overflow-y: hidden;">
         <div class="df wrap p-t-20">
+          <div *ngIf="noMembershipCard" class="p-t-50 text-center" style="margin: auto;">
+            <img class="m-b-16" src="assets/svg-icon/notemplate.svg" alt="">
+            <div class="m-b-25 fs-22">
+              No Walletly Card
+            </div>
+          </div>
           <div *ngFor="let coupon of data">
             <div *ngIf="coupon.card_type === 2" class="card small-size m-t-16 m-r-30">
               <div class="hover-couon">
@@ -172,6 +184,12 @@
       </nb-tab>
       <nb-tab tabTitle="Tickets" style="overflow-y: hidden;">
         <div class="df wrap p-t-20">
+          <div *ngIf="noTicketCard" class="p-t-50 text-center" style="margin: auto;">
+            <img class="m-b-16" src="assets/svg-icon/notemplate.svg" alt="">
+            <div class="m-b-25 fs-22">
+              No Walletly Card
+            </div>
+          </div>
           <div *ngFor="let coupon of data">
             <div *ngIf="coupon.card_type === 3" class="ticket small-size m-t-16 m-r-30">
               <div class="hover-couon">
@@ -251,6 +269,12 @@
       </nb-tab>
       <nb-tab tabTitle="Loyalty/Stamp" style="overflow-y: hidden;">
         <div class="df wrap p-t-20">
+          <div *ngIf="noLoyaltyStampCard" class="p-t-50 text-center" style="margin: auto;">
+            <img class="m-b-16" src="assets/svg-icon/notemplate.svg" alt="">
+            <div class="m-b-25 fs-22">
+              No Walletly Card
+            </div>
+          </div>
           <div *ngFor="let coupon of data">
             <div *ngIf="coupon.card_type === 4" class="card small-size m-t-16 m-r-30">
               <div class="hover-couon">
