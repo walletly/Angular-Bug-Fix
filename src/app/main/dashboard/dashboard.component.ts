@@ -427,12 +427,6 @@ export class DashboardComponent implements OnInit {
         }
       });
 
-      if(this.couponsEarningCampaignsChart.data.length > 0){
-        this.showCouponEarningGraph =3;
-      }else{
-        this.showCouponEarningGraph =2;
-      }
-
       this.ticketCampaings = result['data'].campaignsStats.ticketCampaignsSummary;
       this.ticketCampaings.forEach(campaign => {
         if(campaign.campaign_name && campaign.coupons_created > 0){
@@ -603,7 +597,6 @@ export class DashboardComponent implements OnInit {
             this.brandEarning = this.brandEarning + campaign.campaign_net_amount;
           }
         });
-
 
         this.ticketCampaings = result['data'].campaignsStats.ticketCampaignsSummary;
         this.ticketCampaings.forEach(campaign => {
