@@ -40,4 +40,12 @@ export class ReportService {
     });
     return this.http.get(SERVER_API_URL + 'report/brand/subscribers/' + id + '/' + from + '/' + to, { headers: httpHeaders});
   }
+
+  reportBrandTransactionsBetweenDates(id, from, to) {
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'report/transactions/' + id + '/' + from + '/' + to, { headers: httpHeaders});
+  }
 }

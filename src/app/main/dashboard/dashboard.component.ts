@@ -541,6 +541,18 @@ export class DashboardComponent implements OnInit {
       this.brandSubscribers = 0;
     });
 
+    this.reportService.reportBrandTransactionsBetweenDates(JSON.parse(localStorage.currentBrand)['brand_id'], from, to).subscribe( result => {
+      if(result['data']){
+        result['data'].map(data => {
+          this.brandEarning += data.total;
+        });
+      }else{
+        this.brandEarning = 0;
+      }
+    }, err => {
+      this.brandEarning = 0;
+    });
+
     this.reportService.reportBrandBetweenDates(JSON.parse(localStorage.currentBrand)['brand_id'], from, to).subscribe( result => {
       this.showDateCancel = true;
       if(result['data']){
@@ -594,7 +606,6 @@ export class DashboardComponent implements OnInit {
             if(campaign.campaign_net_amount > 0){
               this.showCouponEarningGraph = 3;
             }
-            this.brandEarning = this.brandEarning + campaign.campaign_net_amount;
           }
         });
 
@@ -624,7 +635,6 @@ export class DashboardComponent implements OnInit {
           if(campaign.campaign_name && campaign.coupons_created > 0){
             this.cardsEarningCampaignsChart.labels.push(campaign.campaign_name);
             this.cardsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
-            this.brandEarning = this.brandEarning + campaign.campaign_net_amount;
           }
         });
         if(this.couponsByCampaignsChart.labels.length < 1){
