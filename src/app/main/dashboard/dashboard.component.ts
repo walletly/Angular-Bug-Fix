@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
   showCouponGraph = 1;
   showCouponEarningGraph = 1;
   showTicketsGraph = 1;
-  showCardsGraph = 1;
+  showCardsEarningGraph = 1;
   showPassesGraph = 1;
 
   selectedItem;
@@ -198,7 +198,7 @@ export class DashboardComponent implements OnInit {
       });
     }
 
-    if(this.showCardsGraph == 3){
+    if(this.showCardsEarningGraph == 3){
       var cardsEarningCampaignsChart = new Chart(ctx4, {
         type: 'doughnut',
         data: {
@@ -370,6 +370,7 @@ export class DashboardComponent implements OnInit {
       this.showPassesGraph = 2;
       this.brandSubscribers = 0;
     })
+
     this.reportService.reportBrand(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe( result =>{
       this.showDateCancel = false;
       this.coupon_created = result['data'].brandData.coupon_created || 0;
@@ -402,12 +403,12 @@ export class DashboardComponent implements OnInit {
       if (result['data'].campaignsStats.loyaltyCardCampaignsSummary.length > 0 || 
           // result['data'].campaignsStats.membershipCardCampaignsSummary.length > 0 ||
           result['data'].campaignsStats.stampCardCampaignsSummary.length > 0){
-        this.showCardsGraph = 3;
+        this.showCardsEarningGraph = 3;
       }else{
-        this.showCardsGraph = 2;
+        this.showCardsEarningGraph = 2;
       }
 
-      if(this.showCouponGraph == 2 && this.showTicketsGraph == 2 && this.showCardsGraph == 2){
+      if(this.showCouponGraph == 2 && this.showTicketsGraph == 2 && this.showCardsEarningGraph == 2){
         this.showGraph = 2;
       }
       
@@ -448,11 +449,15 @@ export class DashboardComponent implements OnInit {
       this.stampCardCampaings = result['data'].campaignsStats.stampCardCampaignsSummary;
       this.membershipCardCampaings = result['data'].campaignsStats.membershipCardCampaignsSummary;
 
+      this.showCardsEarningGraph = 2;
       this.cardsCampaigns = this.loyaltyCardCampaings.concat(this.stampCardCampaings);
       this.cardsCampaigns.forEach(campaign => {
         if(campaign.campaign_name && campaign.coupons_created > 0){
           this.cardsEarningCampaignsChart.labels.push(campaign.campaign_name);
           this.cardsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
+          if(campaign.campaign_net_amount > 0){
+            this.showCardsEarningGraph = 3;
+          }
           this.brandEarning = this.brandEarning + campaign.campaign_net_amount;
         }
       });
@@ -471,7 +476,7 @@ export class DashboardComponent implements OnInit {
         }
       }
       if(this.cardsEarningCampaignsChart.labels.length < 1){
-        this.showCardsGraph = 2;
+        this.showCardsEarningGraph = 2;
       }
       
       const couponlen = this.couponsEarningCampaignsChart.backgroundColor.length;
@@ -500,6 +505,8 @@ export class DashboardComponent implements OnInit {
         });
         this.cardsEarningCampaignsChart.backgroundColor[i] = randomColor1;        
       }
+
+      this.brandEarning = parseFloat(this.brandEarning.toFixed(2));
 
       setTimeout(() => {
         this.generateGraphs();
@@ -541,11 +548,26 @@ export class DashboardComponent implements OnInit {
       this.brandSubscribers = 0;
     });
 
+    this.showCouponEarningGraph = 2;
+    this.showCardsEarningGraph = 2;
     this.reportService.reportBrandTransactionsBetweenDates(JSON.parse(localStorage.currentBrand)['brand_id'], from, to).subscribe( result => {
-      if(result['data']){
-        result['data'].map(data => {
-          this.brandEarning += data.total;
-        });
+      if(result['campaignData']){
+        result['campaignData'].map(campaign => {
+          if(campaign.campaign_type <= 2){
+            this.couponsEarningCampaignsChart.labels.push(campaign.campaign_name);
+            this.couponsEarningCampaignsChart.data.push(campaign.amount);
+            if(campaign.amount > 0){
+              this.showCouponEarningGraph = 3;
+            }
+          }else if(campaign.campaign_type == 5 || campaign.campaign_type == 6){
+            this.cardsEarningCampaignsChart.labels.push(campaign.campaign_name);
+            this.cardsEarningCampaignsChart.data.push(campaign.amount);
+            if(campaign.amount > 0){
+              this.showCardsEarningGraph = 3;
+            }
+          }
+          this.brandEarning += campaign.amount;
+        })
       }else{
         this.brandEarning = 0;
       }
@@ -582,30 +604,13 @@ export class DashboardComponent implements OnInit {
         }else{
           this.showTicketsGraph = 2;
         }
-        if (result['data'].campaignsStats.loyaltyCardCampaignsSummary.length > 0 || 
-            // result['data'].campaignsStats.membershipCardCampaignsSummary.length > 0 ||
-            result['data'].campaignsStats.stampCardCampaignsSummary.length > 0){
-          this.showCardsGraph = 3;
-        }else{
-          this.showCardsGraph = 2;
-        }
   
-        if(this.showCouponGraph == 2 && this.showTicketsGraph == 2 && this.showCardsGraph == 2){
-          this.showGraph = 2;
-        }
-  
-        this.showCouponEarningGraph = 2;
         this.couponCampaings = result['data'].campaignsStats.couponCampaignsSummary;
         this.couponCampaings.forEach(campaign => {
           if(campaign.campaign_name && campaign.coupons_created > 0){
             this.couponsByCampaignsChart.labels.push(campaign.campaign_name);
             this.couponsByCampaignsChart.data1.push(campaign.coupons_redeemed);
             this.couponsByCampaignsChart.data2.push(campaign.coupons_created - campaign.coupons_redeemed);
-            this.couponsEarningCampaignsChart.labels.push(campaign.campaign_name);
-            this.couponsEarningCampaignsChart.data.push(campaign.campaign_net_amount);
-            if(campaign.campaign_net_amount > 0){
-              this.showCouponEarningGraph = 3;
-            }
           }
         });
 
@@ -651,9 +656,6 @@ export class DashboardComponent implements OnInit {
             this.ticketsByCampaignsChart.labels.push('');
           }
         }
-        if(this.cardsEarningCampaignsChart.labels.length < 1){
-          this.showCardsGraph = 2;
-        }
         
         const couponlen = this.couponsEarningCampaignsChart.backgroundColor.length;
         for (var i = couponlen; i < this.couponsEarningCampaignsChart.data.length; i++){
@@ -681,6 +683,8 @@ export class DashboardComponent implements OnInit {
           });
           this.cardsEarningCampaignsChart.backgroundColor[i] = randomColor1;        
         }
+
+        this.brandEarning = parseFloat(this.brandEarning.toFixed(2));
   
         setTimeout(() => {
           this.generateGraphs();
