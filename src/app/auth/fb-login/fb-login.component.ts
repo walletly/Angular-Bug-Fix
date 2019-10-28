@@ -37,17 +37,19 @@ export class FbLoginComponent implements OnInit {
       .then(async res => {
         console.log(res);
         if(localStorage.getItem('loggedOut') == 'true'){
+          console.log('loggedOut');
           await this.ngZone.run(() => {
             localStorage.clear();
             this.showLoader = false;
             return;
           });
         }else if(localStorage.getItem('loggedIn') == 'true'){
+          console.log('loggedIn');
           this.router.navigate(['/main/dashboard']);
           return;
         }
         if (res.user) {
-          console.log(res);
+          console.log(res.user);
           const firstname = res.additionalUserInfo.profile['first_name'];
           const lastname = res.additionalUserInfo.profile['last_name'];
           const email = res.user.email || res.additionalUserInfo.profile['email'];
@@ -76,6 +78,7 @@ export class FbLoginComponent implements OnInit {
               avatar: photo
             });
           } else{
+            console.log('oldUser');
             const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${uid}`);
             await userRef.update({
               avatar: photo
@@ -83,6 +86,7 @@ export class FbLoginComponent implements OnInit {
           }
           this.getUser(uid);
         } else {
+          console.log('no res.user');
           await this.ngZone.run(() => {
             localStorage.clear();
             this.showLoader = false;
@@ -90,6 +94,7 @@ export class FbLoginComponent implements OnInit {
           });
         }
       }).catch( async err => {
+        console.log('fb login error:',err);
         if(localStorage.getItem('loggedOut') == 'true'){
           await this.ngZone.run(() => {
             localStorage.clear();
