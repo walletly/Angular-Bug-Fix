@@ -40,6 +40,9 @@ export class AuthService {
       'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
       'x-auth-user': localStorage.getItem('userID')
     });
+    console.log('x-auth-token:', `Bearer ${localStorage.getItem('usertoken')}`);
+    console.log('x-auth-user:', localStorage.getItem('userID'));
+    console.log(id);
     return this.http.get(SERVER_API_URL + 'auth/' + id, { headers: httpHeaders});
   }
 

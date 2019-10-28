@@ -77,13 +77,17 @@ export class FbLoginComponent implements OnInit {
               user_type: 1,
               avatar: photo
             });
+            console.log('newUser added in database');
           } else{
             console.log('oldUser');
             const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${uid}`);
             await userRef.update({
               avatar: photo
             });
+            console.log('oldUser updated');            
           }
+          console.log('localStorage:',localStorage);
+          console.log('get user called for', uid); 
           this.getUser(uid);
         } else {
           console.log('no res.user');
@@ -169,26 +173,30 @@ export class FbLoginComponent implements OnInit {
   }
 
   getUser(uid){
+    console.log('getting user with uid:', uid);
     this.authService.getUser(uid).subscribe(data => {
-      console.log(data);
+      console.log('user data found',data);
       localStorage.setItem('user', JSON.stringify(data['data']));
       if (data['data']['activeBrand']) {
+        console.log('yes activeBrand', data['data']['activeBrand']);
         this.brandService.getBrandById(data['data']['activeBrand']).subscribe(res_brand => {
-          console.log(res_brand);
+          console.log('active brand found',res_brand);
           localStorage.setItem('currentBrand', JSON.stringify(res_brand['brand']));
           this.ngZone.run(() => this.router.navigate(['/main/dashboard']));
           this.showLoader = false;
         }, err => {
+          console.log('active brand error',err);
           this.ngZone.run(() => this.router.navigate(['/fb-connect']));
           this.showLoader = false;
         });
       } else {
+        console.log('no activeBrand');
         this.ngZone.run(() => this.router.navigate(['/fb-connect']));
         this.showLoader = false;
       }
     }, err => {
+      console.log('user data error',err);
       this.showLoader = false;
-      console.log(err);
     });
   }
 
