@@ -27,6 +27,14 @@ export class AuthService {
     return this.http.post(SERVER_API_URL + 'auth', body);
   }
 
+  createFbUser(body) {
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.post(SERVER_API_URL + 'auth/fbUser', body, { headers: httpHeaders});
+  }
+
   updateUser(id, body) {
     const httpHeaders = new HttpHeaders ({
       'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
