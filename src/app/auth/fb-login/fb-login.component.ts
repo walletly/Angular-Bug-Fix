@@ -43,6 +43,7 @@ export class FbLoginComponent implements OnInit {
         }else if(localStorage.getItem('loggedIn') == 'true'){
           console.log('loggedIn');
           this.router.navigate(['/main/dashboard']);
+          this.showLoader = false;
           return;
         }
         if (res.user) {
