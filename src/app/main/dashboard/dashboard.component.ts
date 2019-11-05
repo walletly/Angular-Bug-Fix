@@ -37,7 +37,6 @@ export class DashboardComponent implements OnInit {
   loyaltyCard_created;
   stampCard_created;
   membershipCard_created;
-  isPaymentDue = false;
 
   colors = [ 'rgb(255,99,132)', 'rgb(54,162,235)', 'rgb(255,206,86)', 'rgb(153,102,255)', 'rgb(75,192,192)', 'rgb(255,159,188)',
              'rgb(47, 216, 229)', 'rgb(255,159,64)', 'rgb(3,252,188)', 'rgb(226,197,255)', 'rgb(0,128,59)', 'rgb(255, 108, 214)'];
@@ -360,15 +359,7 @@ export class DashboardComponent implements OnInit {
       this.androidPassesChart.data.push(result['data'].androidStampCards);
       this.androidPassesChart.data.push(result['data'].androidMembershipCards);
       this.androidPassesChart.data.push(result['data'].androidTickets);
-      if(result['data'].last_payment){
-        const lastDate = new Date(result['data'].last_payment._seconds * 1000);
-        const currentDate = new Date();
-        const days = (currentDate.getTime() - lastDate.getTime()) / (1000 * 3600 * 24);
-
-        if (days > 30){
-          this.isPaymentDue = true;
-        }
-      }
+      
       if(result['data'].appleCoupons > 0 || result['data'].appleLoyaltyCards > 0 || result['data'].appleStampCards > 0 || result['data'].appleMembershipCards > 0 || result['data'].appleTickets > 0 ||
         result['data'].androidCoupons > 0 || result['data'].androidLoyaltyCards > 0 || result['data'].androidStampCards > 0 || result['data'].androidMembershipCards > 0 || result['data'].androidTickets > 0){
         this.showPassesGraph = 3;

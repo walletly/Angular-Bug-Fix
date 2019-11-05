@@ -26,24 +26,24 @@ export class SettingsComponent implements OnInit {
   @ViewChild('integrationsTab') integrationTab;
   @ViewChild('location') searchElementRef;
   
-  elements: Elements;
-  card: StripeElement;
+  // elements: Elements;
+  // card: StripeElement;
  
   // optional parameters
-  elementsOptions: ElementsOptions = {
-    locale: 'en'
-  };
+  // elementsOptions: ElementsOptions = {
+  //   locale: 'en'
+  // };
  
-  paymentForm: FormGroup;
-  invalidPaymentForm = false;
-  inPaymentProcces = false;
-  cardError = false;
-  cardErrorMessage = '';
-  isPaymentDue = false;
-  paymentAmount = 0;
-  paymentSuccess = false;
-  brand_subscribers = 0;
-  lastPaymentDate = '';
+  // paymentForm: FormGroup;
+  // invalidPaymentForm = false;
+  // inPaymentProcces = false;
+  // cardError = false;
+  // cardErrorMessage = '';
+  // isPaymentDue = false;
+  // paymentAmount = 0;
+  // paymentSuccess = false;
+  // brand_subscribers = 0;
+  // lastPaymentDate = '';
   
   dataCard = {
     brandLogo: '',
@@ -210,10 +210,10 @@ export class SettingsComponent implements OnInit {
       cvc: ["", [Validators.required, Validators.pattern('[0-9]{3}')]],
     });
 
-    this.paymentForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      amount: ['', [Validators.required]]
-    });
+    // this.paymentForm = this.formBuilder.group({
+    //   email: ['', [Validators.required, Validators.email]],
+    //   amount: ['', [Validators.required]]
+    // });
 
     // this.mainService.showLoader.emit(true);
     this.showLoader = true;
@@ -227,98 +227,98 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.brandService.isBrandPaymentDue((JSON.parse(localStorage.getItem('currentBrand'))['brand_id'])).subscribe(result => {
-      console.log(result);
-      this.isPaymentDue = result['isPaymentDue'];
-      this.paymentAmount = result['priceBucket'].price;
-      this.paymentForm.controls['amount'].setValue('$' + this.paymentAmount);
-      this.brand_subscribers = result['brand_subscribers'];
-      this.lastPaymentDate = new Date(result['last_payment']).toDateString();
-    }, err => {
-      console.log(err);
-    })
+    // this.brandService.isBrandPaymentDue((JSON.parse(localStorage.getItem('currentBrand'))['brand_id'])).subscribe(result => {
+    //   console.log(result);
+    //   this.isPaymentDue = result['isPaymentDue'];
+    //   this.paymentAmount = result['priceBucket'].price;
+    //   this.paymentForm.controls['amount'].setValue('$' + this.paymentAmount);
+    //   this.brand_subscribers = result['brand_subscribers'];
+    //   this.lastPaymentDate = new Date(result['last_payment']).toDateString();
+    // }, err => {
+    //   console.log(err);
+    // })
     this.brandService.getBrandAdmins((JSON.parse(localStorage.getItem('currentBrand'))['brand_id'])).subscribe((result) => {
       this.brandAdmins = result['brand_admins'];
     });
   }
 
-  onChangeTab(event) {
-    if (event.tabTitle === 'Payments') {
-      setTimeout(() => {
-        this.paymentForm.controls['email'].setValue(JSON.parse(localStorage.getItem('user'))['email']);
-        this.paymentForm.controls['amount'].setValue('$' + this.paymentAmount);
-        this.stripeService.elements(this.elementsOptions)
-        .subscribe(elements => {
-          this.elements = elements;
-          // Only mount the element the first time
-          if (!this.card) {
-            this.card = this.elements.create('card', {
-              style: {
-                base: {
-                  iconColor: '#666EE8',
-                  color: '#31325F',
-                  lineHeight: '40px',
-                  fontWeight: 300,
-                  fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                  fontSize: '18px',
-                  '::placeholder': {
-                    color: '#CFD7E0'
-                  }
-                }
-              }
-            });
-            this.card.mount('#card-element');
-          }
-        });
-      }, 200);
-    }
+  // onChangeTab(event) {
+  //   if (event.tabTitle === 'Payments') {
+  //     setTimeout(() => {
+  //       this.paymentForm.controls['email'].setValue(JSON.parse(localStorage.getItem('user'))['email']);
+  //       this.paymentForm.controls['amount'].setValue('$' + this.paymentAmount);
+  //       this.stripeService.elements(this.elementsOptions)
+  //       .subscribe(elements => {
+  //         this.elements = elements;
+  //         // Only mount the element the first time
+  //         if (!this.card) {
+  //           this.card = this.elements.create('card', {
+  //             style: {
+  //               base: {
+  //                 iconColor: '#666EE8',
+  //                 color: '#31325F',
+  //                 lineHeight: '40px',
+  //                 fontWeight: 300,
+  //                 fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+  //                 fontSize: '18px',
+  //                 '::placeholder': {
+  //                   color: '#CFD7E0'
+  //                 }
+  //               }
+  //             }
+  //           });
+  //           this.card.mount('#card-element');
+  //         }
+  //       });
+  //     }, 200);
+  //   }
 
-  }
+  // }
 
-  confirmPayment() {
-    if(this.paymentForm.valid){
-      this.invalidPaymentForm = false;
-      this.inPaymentProcces = true;
-      this.cardError = false;
-      this.cardErrorMessage = '';
-      const name = this.paymentForm.get('email').value;
-      this.stripeService
-        .createToken(this.card, { name })
-        .subscribe(result => {
-          if (result.token) {
-            // Use the token to create a charge or a customer
-            // https://stripe.com/docs/charges
-            const body ={
-              amount: this.paymentAmount,
-              email: this.paymentForm.get('email').value,
-              token: result.token.id,
-              brand_id: JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
-              user_id: localStorage.getItem('userID'),
-              brand_subscribers: this.brand_subscribers
-            }
-            this.brandService.brandPayment(body).subscribe(result => {
-              console.log('payment result',result);
-              this.mainService.showToastrSuccess.emit({text: 'Payment Confirmed'});
-              this.isPaymentDue = false;
-              this.paymentSuccess = true;
-              this.inPaymentProcces = false;
-            }, err => {
-              console.log('payment error',err);
-              this.inPaymentProcces = false;
-            });
-          } else if (result.error) {
-            // Error creating the token
-            console.log(result.error.message);
-            this.invalidPaymentForm = true;
-            this.cardError = true;
-            this.cardErrorMessage = result.error.message;
-            this.inPaymentProcces = false;
-          }
-        });
-    }else{
-      this.invalidPaymentForm = true;
-    }
-  }
+  // confirmPayment() {
+  //   if(this.paymentForm.valid){
+  //     this.invalidPaymentForm = false;
+  //     this.inPaymentProcces = true;
+  //     this.cardError = false;
+  //     this.cardErrorMessage = '';
+  //     const name = this.paymentForm.get('email').value;
+  //     this.stripeService
+  //       .createToken(this.card, { name })
+  //       .subscribe(result => {
+  //         if (result.token) {
+  //           // Use the token to create a charge or a customer
+  //           // https://stripe.com/docs/charges
+  //           const body ={
+  //             amount: this.paymentAmount,
+  //             email: this.paymentForm.get('email').value,
+  //             token: result.token.id,
+  //             brand_id: JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
+  //             user_id: localStorage.getItem('userID'),
+  //             brand_subscribers: this.brand_subscribers
+  //           }
+  //           this.brandService.brandPayment(body).subscribe(result => {
+  //             console.log('payment result',result);
+  //             this.mainService.showToastrSuccess.emit({text: 'Payment Confirmed'});
+  //             this.isPaymentDue = false;
+  //             this.paymentSuccess = true;
+  //             this.inPaymentProcces = false;
+  //           }, err => {
+  //             console.log('payment error',err);
+  //             this.inPaymentProcces = false;
+  //           });
+  //         } else if (result.error) {
+  //           // Error creating the token
+  //           console.log(result.error.message);
+  //           this.invalidPaymentForm = true;
+  //           this.cardError = true;
+  //           this.cardErrorMessage = result.error.message;
+  //           this.inPaymentProcces = false;
+  //         }
+  //       });
+  //   }else{
+  //     this.invalidPaymentForm = true;
+  //   }
+  // }
 
   showShared(row, event) {
     console.log(row);

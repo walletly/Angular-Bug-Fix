@@ -5,7 +5,7 @@
 </div>
 <nb-card>
   <nb-card-body>
-    <nb-tabset class="tabs-card" (changeTab)="onChangeTab($event)"> <!-- (changeTab)="selectedTab($event)" -->
+    <nb-tabset class="tabs-card"> <!-- (changeTab)="selectedTab($event)" -->
       <!-- <nb-tab *ngIf="!userAdmin" #packages tabTitle="Packages">
         <div class="input-wrapper">
           <form *ngIf="!showLoader" [formGroup]="myFormPackages">
@@ -1603,7 +1603,7 @@
         </form>
       </nb-tab>
 
-      <nb-tab *ngIf="!userAdmin" #paymentTab tabTitle="Payments">
+      <!-- <nb-tab *ngIf="!userAdmin" #paymentTab tabTitle="Payments">
         <form novalidate [formGroup]="paymentForm">
           <div class="input-wrapper" style="max-width: 615px !important">
             <div class="row-input">
@@ -1689,7 +1689,7 @@
             </div>
           </div>
         </form>
-      </nb-tab>
+      </nb-tab> -->
     </nb-tabset>
   </nb-card-body>
 </nb-card>
