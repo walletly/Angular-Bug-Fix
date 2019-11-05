@@ -112,7 +112,7 @@ export class BrandService {
       'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
       'x-auth-user': localStorage.getItem('userID')
     });
-    return this.http.post(SERVER_API_URL + 'membershipCard/changeStatus/' + membershipCard_id, { headers: httpHeaders});
+    return this.http.post(SERVER_API_URL + 'membershipCard/changeStatus/' + membershipCard_id, {}, { headers: httpHeaders});
   }
 
   addIbeacon(brand_id, body){
