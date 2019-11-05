@@ -79,10 +79,10 @@ export class AudienceComponent implements OnInit {
             data: {
               'First Name' : {name : element.firstName},
               'Last Name' : {name : element.lastName},
+              'Phone': {name: element.phone || ''},
               'Email Address': { name: element.email },
               'Join Date' : {name: element.createDateFormatted},
               'Source' : {name: ''},
-
               'Campaign Name': { name: element.campaign_name },
               'Type': {
                 name: element.campaign_type_formatted ||
@@ -166,6 +166,9 @@ export class AudienceComponent implements OnInit {
           audiences.forEach(element => {
             this.stampCardAudience.push({
               data: {
+              'First Name' : {name : element.firstName},
+              'Last Name' : {name : element.lastName},
+              'Phone': {name: element.phone || ''},
               'Check' : { name: '' },
               'Campaign Name': { name: element.campaign_name },
               'Issue Date': { name: element.createDateFormatted },
@@ -197,6 +200,9 @@ export class AudienceComponent implements OnInit {
           audiences.forEach(element => {
             this.TicketAudience.push({
               data: {
+              'First Name' : {name : element.firstName},
+              'Last Name' : {name : element.lastName},
+              'Phone': {name: element.phone || ''},
               'Check' : { name: '' },
               'Campaign Name': { name: element.campaign_name },
               'Type': {
@@ -248,6 +254,9 @@ export class AudienceComponent implements OnInit {
           audiences.forEach(element => {
             this.loyaltyCardAudience.push({
               data: {
+              'First Name' : {name : element.firstName},
+              'Last Name' : {name : element.lastName},
+              'Phone': {name: element.phone || ''},
               'Check' : { name: '' },
               'Campaign Name': { name: element.campaign_name },
               'Issue Date': { name: element.createDateFormatted },
@@ -280,6 +289,9 @@ export class AudienceComponent implements OnInit {
           audiences.forEach(element => {
             this.membershipCardAudience.push({
               data: {
+              'First Name' : {name : element.firstName},
+              'Last Name' : {name : element.lastName},
+              'Phone': {name: element.phone || ''},
               'Check' : { name: '' },
               'Campaign Name': { name: element.campaign_name },
               'Issue Date': { name: element.createDateFormatted },
@@ -433,11 +445,14 @@ export class AudienceComponent implements OnInit {
       title: 'Coupons Audience',
       useBom: false,
       noDownload: false,
-      headers: ['Campaign Name', 'Type', 'Issue Date', 'Expiry', 'Email Address']
+      headers: ['First Name', 'Last Name', 'Phone', 'Campaign Name', 'Type', 'Issue Date', 'Expiry', 'Email Address']
     };
     const coupons = [];
     this.filterCouponAudience.forEach(result => {
       coupons.push({
+        'First Name': result['data']['First Name'].name,
+        'Last Name': result['data']['Last Name'].name,
+        'Phone': result['data']['Phone'].name,
         'Campaign Name':  result['data']['Campaign Name'].name,
         'Type': result['data']['Type'].name,
         'Issue Date': result['data']['Issue Date'].name,
@@ -460,11 +475,14 @@ export class AudienceComponent implements OnInit {
       title: 'Stamp Cards Audience',
       useBom: false,
       noDownload: false,
-      headers: ['Campaign Name', 'Issue Date', 'Stamps', 'Email Address', 'Redeem Count']
+      headers: ['First Name', 'Last Name', 'Phone', 'Campaign Name', 'Issue Date', 'Stamps', 'Email Address', 'Redeem Count']
     };
     const check = [];
     this.filterstampCardAudience.forEach(result => {
       check.push({
+        'First Name': result['data']['First Name'].name,
+        'Last Name': result['data']['Last Name'].name,
+        'Phone': result['data']['Phone'].name,
         'Campaign Name':  result['data']['Campaign Name'].name,
         'Issue Date': result['data']['Issue Date'].name,
         'Stamps': result['data']['Stamps'].name,
@@ -485,11 +503,14 @@ export class AudienceComponent implements OnInit {
       title: 'Loyalty Cards Audience',
       useBom: false,
       noDownload: false,
-      headers: ['Campaign Name', 'Issue Date', 'Points', 'Email Address', 'Redeem Count']
+      headers: ['First Name', 'Last Name', 'Phone', 'Campaign Name', 'Issue Date', 'Points', 'Email Address', 'Redeem Count']
     };
     const check = [];
     this.filterloyaltyCardAudience.forEach(result => {
       check.push({
+        'First Name': result['data']['First Name'].name,
+        'Last Name': result['data']['Last Name'].name,
+        'Phone': result['data']['Phone'].name,
         'Campaign Name':  result['data']['Campaign Name'].name,
         'Issue Date': result['data']['Issue Date'].name,
         'Points': result['data']['Points'].name,
@@ -510,11 +531,14 @@ export class AudienceComponent implements OnInit {
       title: 'Membership Cards Audience',
       useBom: false,
       noDownload: false,
-      headers: ['Campaign Name', 'Issue Date', 'Email Address', 'Redeem Count', 'Status']
+      headers: ['First Name', 'Last Name', 'Phone', 'Campaign Name', 'Issue Date', 'Email Address', 'Redeem Count', 'Status']
     };
     const check = [];
     this.filterMembershipCardAudience.forEach(result => {
       check.push({
+        'First Name': result['data']['First Name'].name,
+        'Last Name': result['data']['Last Name'].name,
+        'Phone': result['data']['Phone'].name,
         'Campaign Name':  result['data']['Campaign Name'].name,
         'Issue Date': result['data']['Issue Date'].name,
         'Email Address': result['data']['Email Address'].name,
@@ -535,11 +559,14 @@ export class AudienceComponent implements OnInit {
       title: 'Tickets Audience',
       useBom: false,
       noDownload: false,
-      headers: ['Campaign Name', 'Type', 'Start Date', 'Members', 'Email Address']
+      headers: ['First Name', 'Last Name', 'Phone', 'Campaign Name', 'Type', 'Start Date', 'Members', 'Email Address']
     };
     const check = [];
     this.filterTicketAudience.forEach(result => {
       check.push({
+        'First Name': result['data']['First Name'].name,
+        'Last Name': result['data']['Last Name'].name,
+        'Phone': result['data']['Phone'].name,
         'Campaign Name':  result['data']['Campaign Name'].name,
         'Type': result['data']['Type'].name,
         'Start Date': result['data']['Start Date'].name,
