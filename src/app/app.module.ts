@@ -65,6 +65,9 @@ import { SharedCampaignComponent } from './main/campaign-main/shared-campaign/sh
 import { QRCodeModule } from 'angularx-qrcode';
 import { AgmCoreModule } from '@agm/core';
 import { googleMapsApiKey } from '../environments/environment';
+import { NgxStripeModule } from 'ngx-stripe';
+import { stripePublicKey } from '../environments/environment';
+
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB_f_r3DPfN5tZ6x0olJaGCjSogT9rWapM",
@@ -163,7 +166,8 @@ export const firebaseConfig = {
     AgmCoreModule.forRoot({
       apiKey: googleMapsApiKey,
       libraries: ['places']
-    })
+    }),
+    NgxStripeModule.forRoot(stripePublicKey),
   ],
   providers: [
     AuthService,
