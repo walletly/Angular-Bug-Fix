@@ -300,6 +300,51 @@ input.zip {
     }
   }
 }
+.subscription-wrap{
+  border: 1px solid #dee3e5;
+  background-color: #ffffff;
+  width: max-content;
+  border-radius: 10px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  margin-left: 20px;
+  padding-top: 20px;
+  padding-bottom: 40px;
+  .head {
+    color: #afafb9;
+    font-size: 16px;
+    font-weight: 400;
+    border-bottom: 1px solid #dee3e5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-top: 20px;
+    padding-bottom: 10px; 
+  }
+  .items{
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-top: 20px;
+  }
+  .label{
+    color: #afafb9;
+  }
+  .dot {
+    margin-left: 5px;
+    height: 8px;
+    width: 8px;
+    background-color: #4b4b4b;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .error-lable{
+    padding-right: 40px;
+    padding-left: 40px;
+    margin: 0px;
+  }
+}
 table {
   border: 1px solid #dee3e5;
   background-color: #ffffff;

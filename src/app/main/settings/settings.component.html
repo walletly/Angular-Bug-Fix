@@ -5,7 +5,7 @@
 </div>
 <nb-card>
   <nb-card-body>
-    <nb-tabset class="tabs-card"> <!-- (changeTab)="selectedTab($event)" -->
+    <nb-tabset class="tabs-card" (changeTab)="onChangeTab($event)"> <!-- (changeTab)="selectedTab($event)" -->
       <!-- <nb-tab *ngIf="!userAdmin" #packages tabTitle="Packages">
         <div class="input-wrapper">
           <form *ngIf="!showLoader" [formGroup]="myFormPackages">
@@ -1603,47 +1603,74 @@
         </form>
       </nb-tab>
 
-      <!-- <nb-tab *ngIf="!userAdmin" #paymentTab tabTitle="Payments">
-        <form novalidate [formGroup]="paymentForm">
+      <nb-tab *ngIf="!userAdmin" #paymentTab tabTitle="Billing">
+        <div *ngIf="is_subscribed" class="subscription-wrap">
+          <div class="items">
+            You are subscribed to <a href="https://www.walletly.ai/pricing/" target="_blank">${{subscriptionData.amount}} for {{subscriptionData.brand_subscribers}} subscribers</a>.
+          </div>
+          <div class="head">
+            Subscription Details:
+          </div>
+          <div class="items">
+            <span class="label">Billing Email: </span> {{subscriptionData.billing_email}}
+          </div>
+          <div class="items">
+            <span class="label">Card:</span> 
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            {{subscriptionData.card_last4}}
+          </div>
+          <div class="items">
+            <span class="label">Status: </span><span [ngStyle]="{'color': subscriptionData.status == 'active' ? '#3dcc6d' : null}">{{subscriptionData.status}}</span>
+          </div>
+          <div *ngIf="subscriptionData.status == 'incomplete'" class="error-lable">
+            Subscription Expires In 23 hours if payment isn't completed
+          </div>
+          <div *ngIf="subscriptionData.latestInvoice_date" class="items">
+            <span class="label">Last Invoice Made On: </span> {{subscriptionData.latestInvoice_date}}
+          </div>
+          <div *ngIf="subscriptionData.latestInvoice_amountPaid" class="items">
+            <span class="label">Last Invoice Amount: </span> ${{subscriptionData.latestInvoice_amountPaid}}
+          </div>
+          <div *ngIf="subscriptionData.latestInvoice_status" class="items">
+            <span class="label">Last Invoice Status: </span> {{subscriptionData.latestInvoice_status}}
+          </div>
+          <div *ngIf="subscriptionData.nextInvoice_date" class="items">
+            <span class="label">Next Invoice On: </span> {{subscriptionData.nextInvoice_date}}
+          </div>
+          <div *ngIf="subscriptionData.status != 'cancelled'" class="items">
+            <button
+              (click)="deleteSubscription()"
+              class="cust-button"
+              nbButton
+              status="success"
+              [disabled]="inSubscriptionProcces"
+            >
+            <i *ngIf="inSubscriptionProcces" class="fas fa-spinner fa-pulse"></i>
+              Delete Subscription
+            </button>
+          </div>
+        </div>
+        <div *ngIf="!is_subscribed" class="m-t-40">
+          Subscribe to our billing to get more out of Walletly. <br/>
+          Check out our <a href="https://www.walletly.ai/pricing/" target="_blank">Pricing</a>.
+        </div>
+        <form novalidate [formGroup]="subscriptionForm" *ngIf="!is_subscribed">
           <div class="input-wrapper" style="max-width: 615px !important">
             <div class="row-input">
               <div class="lable">
-                Email
+                Billing Email
               </div>
               <div class="value" style="max-width: 350px !important">
                 <div class="pos-r full-width">
                   <input
                     type="text"
-                    [ngClass]="{ error: paymentForm.controls['email'].invalid && invalidPaymentForm}"
+                    [ngClass]="{ error: subscriptionForm.controls['email'].invalid && invalidSubscriptionForm}"
                     nbInput
                     formControlName="email"
                     fullWidth
                     fieldSize="medium"
                     placeholder="your email here"
-                    readonly
                   />
-                </div>
-              </div>
-            </div>
-            <div class="row-input">
-              <div class="lable">
-                Amount
-              </div>
-              <div class="value" style="max-width: 150px !important">
-                <div class="pos-r full-width">
-                  <input
-                    type="text"
-                    [ngClass]="{ error: paymentForm.controls['amount'].invalid && invalidPaymentForm}"
-                    nbInput
-                    formControlName="amount"
-                    fullWidth
-                    fieldSize="medium"
-                    placeholder="amount"
-                    readonly
-                  />
-                  <div class="error-lable" style="color: #2a2a2a !important">
-                    You have {{brand_subscribers}} subscribers
-                  </div>
                 </div>
               </div>
             </div>
@@ -1664,32 +1691,20 @@
               <div class="lable"></div>
               <div class="value">
                 <button
-                  (click)="confirmPayment()"
+                  (click)="confirmSubscription()"
                   class="cust-button"
                   nbButton
                   status="success"
-                  [disabled]="inProcces || !isPaymentDue"
+                  [disabled]="inSubscriptionProcces"
                 >
-                <i *ngIf="inPaymentProcces" class="fas fa-spinner fa-pulse"></i>
-                  Confirm Payment
+                <i *ngIf="inSubscriptionProcces" class="fas fa-spinner fa-pulse"></i>
+                  Subscribe
                 </button>
-                <div *ngIf="!isPaymentDue && !paymentSuccess" class="error-lable" style="color: #2a2a2a !important">
-                  Your Payment is not due yet.
-                </div>
-                <div *ngIf="isPaymentDue && !paymentSuccess" class="error-lable" style="color: #2a2a2a !important">
-                  Your Payment is due now.
-                </div>
-                <div *ngIf="lastPaymentDate != 'Thu Aug 01 2019' && !paymentSuccess" class="error-lable" style="color: #2a2a2a !important">
-                  Your last payment was made on {{lastPaymentDate}}.
-                </div>
-                <div *ngIf="paymentSuccess" class="error-lable" style="color: #2a2a2a !important">
-                  Payment Successfully Confirmed.
-                </div>
               </div>
             </div>
           </div>
         </form>
-      </nb-tab> -->
+      </nb-tab>
     </nb-tabset>
   </nb-card-body>
 </nb-card>

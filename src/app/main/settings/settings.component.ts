@@ -3,6 +3,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MainService } from 'src/app/shared/services/main.service';
 import { BrandService } from 'src/app/shared/services/brand.service';
+import { StripeSubscriptionService } from 'src/app/shared/services/stripe-subscription.service';
 import { UploadService } from 'src/app/shared/services/upload.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ManychatService } from '../../shared/services/manychat.service';
@@ -26,24 +27,22 @@ export class SettingsComponent implements OnInit {
   @ViewChild('integrationsTab') integrationTab;
   @ViewChild('location') searchElementRef;
   
-  // elements: Elements;
-  // card: StripeElement;
+  elements: Elements;
+  card: StripeElement;
  
   // optional parameters
-  // elementsOptions: ElementsOptions = {
-  //   locale: 'en'
-  // };
+  elementsOptions: ElementsOptions = {
+    locale: 'en'
+  };
+
+  is_subscribed = false;
+  subscriptionData = {};
  
-  // paymentForm: FormGroup;
-  // invalidPaymentForm = false;
-  // inPaymentProcces = false;
-  // cardError = false;
-  // cardErrorMessage = '';
-  // isPaymentDue = false;
-  // paymentAmount = 0;
-  // paymentSuccess = false;
-  // brand_subscribers = 0;
-  // lastPaymentDate = '';
+  subscriptionForm: FormGroup;
+  invalidSubscriptionForm = false;
+  inSubscriptionProcces = false;
+  cardError = false;
+  cardErrorMessage = '';
   
   dataCard = {
     brandLogo: '',
@@ -60,14 +59,8 @@ export class SettingsComponent implements OnInit {
 
   WrongApi = false;
 
-
   showPaymentDetails;
   toolTipStatus = 'Copy';
-
-  paymentTypeOptions = [
-    { value: 'oneTime', label: 'One Time ' },
-    { value: 'recurring ', label: 'Recurring ' },
-  ];
 
   partners = [];
 
@@ -159,6 +152,7 @@ export class SettingsComponent implements OnInit {
     private router: Router,
     private mainService: MainService,
     private brandService: BrandService,
+    private stripeSubscriptionService: StripeSubscriptionService,
     private uploadService: UploadService,
     private afs: AngularFirestore,
     private manychatService: ManychatService,
@@ -210,12 +204,10 @@ export class SettingsComponent implements OnInit {
       cvc: ["", [Validators.required, Validators.pattern('[0-9]{3}')]],
     });
 
-    // this.paymentForm = this.formBuilder.group({
-    //   email: ['', [Validators.required, Validators.email]],
-    //   amount: ['', [Validators.required]]
-    // });
+    this.subscriptionForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
 
-    // this.mainService.showLoader.emit(true);
     this.showLoader = true;
     // this.goPayment();
     if (JSON.parse(localStorage.getItem('user'))['user_type'] === 4){
@@ -227,98 +219,144 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.brandService.isBrandPaymentDue((JSON.parse(localStorage.getItem('currentBrand'))['brand_id'])).subscribe(result => {
-    //   console.log(result);
-    //   this.isPaymentDue = result['isPaymentDue'];
-    //   this.paymentAmount = result['priceBucket'].price;
-    //   this.paymentForm.controls['amount'].setValue('$' + this.paymentAmount);
-    //   this.brand_subscribers = result['brand_subscribers'];
-    //   this.lastPaymentDate = new Date(result['last_payment']).toDateString();
-    // }, err => {
-    //   console.log(err);
-    // })
     this.brandService.getBrandAdmins((JSON.parse(localStorage.getItem('currentBrand'))['brand_id'])).subscribe((result) => {
       this.brandAdmins = result['brand_admins'];
     });
+    this.stripeSubscriptionService.getSubscription((JSON.parse(localStorage.getItem('currentBrand'))['brand_id'])).subscribe(result => {
+      if(result['success']){
+        this.is_subscribed = result['data'].is_subscribed;
+        this.subscriptionData = result['data'];
+        if(!this.is_subscribed){
+          this.is_subscribed = !this.subscriptionData['is_delete'] && this.subscriptionData['status'] == 'incomplete'  ? true : false;
+        }
+        if(this.subscriptionData['latestInvoice_date']){
+          let d = new Date(this.subscriptionData['latestInvoice_date']._seconds * 1000);
+          this.subscriptionData['latestInvoice_date'] = d.toDateString();
+          this.subscriptionData['nextInvoice_date'] = new Date(d.setDate(d.getDate() + 30)).toDateString();
+        }
+      }
+    }, err => {
+      console.log('getSubscription err:', err);
+    });
   }
 
-  // onChangeTab(event) {
-  //   if (event.tabTitle === 'Payments') {
-  //     setTimeout(() => {
-  //       this.paymentForm.controls['email'].setValue(JSON.parse(localStorage.getItem('user'))['email']);
-  //       this.paymentForm.controls['amount'].setValue('$' + this.paymentAmount);
-  //       this.stripeService.elements(this.elementsOptions)
-  //       .subscribe(elements => {
-  //         this.elements = elements;
-  //         // Only mount the element the first time
-  //         if (!this.card) {
-  //           this.card = this.elements.create('card', {
-  //             style: {
-  //               base: {
-  //                 iconColor: '#666EE8',
-  //                 color: '#31325F',
-  //                 lineHeight: '40px',
-  //                 fontWeight: 300,
-  //                 fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-  //                 fontSize: '18px',
-  //                 '::placeholder': {
-  //                   color: '#CFD7E0'
-  //                 }
-  //               }
-  //             }
-  //           });
-  //           this.card.mount('#card-element');
-  //         }
-  //       });
-  //     }, 200);
-  //   }
+  onChangeTab(event) {
+    if (event.tabTitle === 'Billing' && this.is_subscribed == false) {
+      setTimeout(() => {
+        this.stripeService.elements(this.elementsOptions)
+        .subscribe(elements => {
+          this.elements = elements;
+          if (!this.card) {
+            this.card = this.elements.create('card', {
+              style: {
+                base: {
+                  iconColor: '#666EE8',
+                  color: '#31325F',
+                  lineHeight: '40px',
+                  fontWeight: 300,
+                  fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                  fontSize: '18px',
+                  '::placeholder': {
+                    color: '#CFD7E0'
+                  }
+                }
+              }
+            });
+            this.card.mount('#card-element');
+            this.subscriptionForm.controls['email'].setValue(JSON.parse(localStorage.getItem('user'))['email']);
+          }
+        });
+      }, 300);
+    }
 
-  // }
+  }
 
-  // confirmPayment() {
-  //   if(this.paymentForm.valid){
-  //     this.invalidPaymentForm = false;
-  //     this.inPaymentProcces = true;
-  //     this.cardError = false;
-  //     this.cardErrorMessage = '';
-  //     const name = this.paymentForm.get('email').value;
-  //     this.stripeService
-  //       .createToken(this.card, { name })
-  //       .subscribe(result => {
-  //         if (result.token) {
-  //           // Use the token to create a charge or a customer
-  //           // https://stripe.com/docs/charges
-  //           const body ={
-  //             amount: this.paymentAmount,
-  //             email: this.paymentForm.get('email').value,
-  //             token: result.token.id,
-  //             brand_id: JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
-  //             user_id: localStorage.getItem('userID'),
-  //             brand_subscribers: this.brand_subscribers
-  //           }
-  //           this.brandService.brandPayment(body).subscribe(result => {
-  //             console.log('payment result',result);
-  //             this.mainService.showToastrSuccess.emit({text: 'Payment Confirmed'});
-  //             this.isPaymentDue = false;
-  //             this.paymentSuccess = true;
-  //             this.inPaymentProcces = false;
-  //           }, err => {
-  //             console.log('payment error',err);
-  //             this.inPaymentProcces = false;
-  //           });
-  //         } else if (result.error) {
-  //           // Error creating the token
-  //           console.log(result.error.message);
-  //           this.invalidPaymentForm = true;
-  //           this.cardError = true;
-  //           this.cardErrorMessage = result.error.message;
-  //           this.inPaymentProcces = false;
-  //         }
-  //       });
-  //   }else{
-  //     this.invalidPaymentForm = true;
-  //   }
-  // }
+  confirmSubscription() {
+    if(this.subscriptionForm.valid){
+      this.invalidSubscriptionForm = false;
+      this.inSubscriptionProcces = true;
+      this.cardError = false;
+      this.cardErrorMessage = '';
+      const email = this.subscriptionForm.get('email').value;
+      this.stripeService.createPaymentMethod('card', this.card, {
+        billing_details: {
+          email: email
+        },
+        metadata: {}
+      }).subscribe(result => {
+        if (result.paymentMethod) {
+          const payment_method = result.paymentMethod.id;
+          const customerData = {
+            brand_id: JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
+            brand_name: JSON.parse(localStorage.getItem('currentBrand'))['brand_name'],
+            payment_method,
+            billing_email: email,
+            user_id: localStorage.getItem('userID')
+          }
+          this.stripeSubscriptionService.makeCustomerSubscription(customerData).subscribe(result => {
+            this.subscriptionData = result['brandSubscription'];
+            this.is_subscribed = this.subscriptionData['is_subscribed'];
+            if(!this.is_subscribed){
+              this.is_subscribed = !this.subscriptionData['is_delete'] && this.subscriptionData['status'] == 'incomplete'  ? true : false;
+            }
+            if(this.subscriptionData['latestInvoice_date']){
+              let d = new Date(this.subscriptionData['latestInvoice_date']._seconds * 1000);
+              this.subscriptionData['latestInvoice_date'] = d.toDateString();
+              this.subscriptionData['nextInvoice_date'] = new Date(d.setDate(d.getDate() + 30)).toDateString();
+            }
+            this.inSubscriptionProcces = false;
+            if(result['status'] == 'active'){
+              this.mainService.showToastrSuccess.emit({text: 'Subscription Confirmed'});
+            }
+            else{
+              const payment_intent = result['payment_intent'];
+              
+              if (payment_intent) {
+                const { status } = payment_intent;
+                
+                if (status === 'requires_action' || status === 'requires_payment_method') {
+                  this.mainService.showToastrSuccess.emit({text: 'Subscription Awaiting Authentication'});
+                  if(payment_intent['next_action']){
+                    if(payment_intent['next_action'].use_stripe_sdk){
+                      if(payment_intent['next_action'].use_stripe_sdk.stripe_js){
+                        window.open(payment_intent['next_action'].use_stripe_sdk.stripe_js);
+                      }
+                    }
+                  }
+                } else {
+                  // No additional information was needed
+                  // Show a success message to your customer
+                  this.mainService.showToastrSuccess.emit({text: 'Subscription Confirmed'});
+                }
+              }
+            }
+          }, err => {
+            console.log('makeCustomerSubscription err:',err);
+            this.inSubscriptionProcces = false;
+          });
+        }else if(result.error){
+          this.inSubscriptionProcces = false;
+          this.invalidSubscriptionForm = true;
+          this.cardError = true;
+          this.cardErrorMessage = result.error.message;
+        }
+      });
+    }else{
+      this.invalidSubscriptionForm = true;
+    }
+  }
+
+  deleteSubscription() {
+    this.inSubscriptionProcces = true;
+    this.stripeSubscriptionService.deleteSubscription(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+      this.inSubscriptionProcces = false;
+      this.mainService.showToastrSuccess.emit({text: 'Subscription Deleted'});
+      this.subscriptionData['status'] = 'cancelled';
+    }, err => {
+      console.log('deleteSubscription err:',err);
+      this.inSubscriptionProcces = false;
+    })
+  }
 
   showShared(row, event) {
     console.log(row);
@@ -555,9 +593,6 @@ export class SettingsComponent implements OnInit {
 
       const manyChatApi = this.manyChatApiForm.get('manyChatApi').value;
       const manyChatApiBrand = manyChatApi.split(':');
-      // console.log(manyChatApi);
-      // console.log('from API', manyChatApiBrand[0]);
-      // console.log(this.brand['facebook_page_id']);
 
       if (manyChatApiBrand[0] === this.brand['facebook_page_id']) {
         this.manychatService.getCustomFields(manyChatApi).subscribe( result => {
@@ -591,12 +626,6 @@ export class SettingsComponent implements OnInit {
       this.inProcces = false;
     }
   }
-  // selectedTab(evt) {
-  //   console.log(evt.tabTitle);
-  //   if (evt.tabTitle === 'Integrations') {
-  //     console.log('run');
-  //   }
-  // }
 
   // Get Current Location Coordinates
   // private setCurrentLocation() {

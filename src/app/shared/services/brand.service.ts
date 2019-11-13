@@ -141,21 +141,5 @@ export class BrandService {
     return this.http.get(SERVER_API_URL + 'brand/getBrandAdmins/' + brand_id, { headers: httpHeaders});
   }
 
-  brandPayment(body){
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.post(SERVER_API_URL + 'stripe/makeCharge/', body, { headers: httpHeaders});
-  }
-
-  isBrandPaymentDue(brand_id){
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.get(SERVER_API_URL + 'brand/payment/' + brand_id, { headers: httpHeaders});
-  }
-
 
 }
