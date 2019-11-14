@@ -141,5 +141,11 @@ export class BrandService {
     return this.http.get(SERVER_API_URL + 'brand/getBrandAdmins/' + brand_id, { headers: httpHeaders});
   }
 
-
+  getBrandSubscribers(brand_id) {
+    const httpHeaders = new HttpHeaders ({
+      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
+      'x-auth-user': localStorage.getItem('userID')
+    });
+    return this.http.get(SERVER_API_URL + 'brand/subscribers/' + brand_id, { headers: httpHeaders });
+  }
 }

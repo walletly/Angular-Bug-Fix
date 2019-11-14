@@ -1,0 +1,113 @@
+.input-icon {
+  right: 8px;
+  top: calc(50% - 9.5px);
+  display: flex;
+}
+.filtr-btn {
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 2px 4px rgba(195, 195, 195, 0.15);
+  border-radius: 5px;
+  border: 1px solid #eff2f4;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.box-container {
+  min-height: calc(100vh - 360px);
+  .create-btn-wrap {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      min-height: calc(100vh - 360px);
+      padding: 40px;
+  }
+}
+table {
+  // width: auto !important;
+  min-width: 100%;
+  border-left: 1px solid #ebeef2;
+  border-right: 1px solid #ebeef2;
+}
+th {
+  color: #afafb9;
+  font-family: Poppins;
+  padding: 10px !important;
+  font-size: 14px;
+  font-weight: 400;
+  border-right: none !important;
+  border-left: none !important;
+  overflow: visible;
+  &:first-child {
+    width: 50px;
+  }
+  &:nth-child(2){
+    width: 60px;
+  }
+  &:nth-child(3){
+    width: 120px;
+  }
+  &:nth-child(4){
+    width: 200px;
+  }
+  &:nth-child(5), &:nth-child(8){
+    text-align: right;
+  }
+  &:nth-child(6){
+    text-align: center;
+  }
+  &:nth-child(8){
+    padding-right: 20px !important;
+  }
+}
+
+td {
+  color: #323232;
+  font-family: Poppins;
+  padding: 10px !important;
+  font-size: 12px;
+  font-weight: 400;
+  border-right: none !important;
+  border-left: none !important;
+  overflow: visible;
+  &:first-child {
+    width: 50px;
+  }
+  &:nth-child(2){
+    width: 60px;
+  }
+  &:nth-child(3){
+    width: 120px;
+  }
+  &:nth-child(4){
+    width: 200px;
+  }
+  &:nth-child(5), &:nth-child(8){
+    text-align: right;
+  }
+  &:nth-child(6){
+    text-align: center;
+  }
+  &:nth-child(8){
+    padding-right: 20px !important;
+  }
+}
+.avatar-container{
+  width: 40px !important;
+  height: 40px !important;
+}
+.avatar-content{
+  font: 12px/40px Helvetica, Arial, sans-serif !important;
+}
+.check-row-bg {
+  background-color: #f4fdf8;
+}
+.download{
+  width: 160px;
+  background-color: #11ca6d;
+  padding: 8px;
+}

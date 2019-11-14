@@ -46,13 +46,18 @@ export class MainComponent implements OnInit, AfterViewInit {
         },
         {
           icon: "icon-menu business",
-          title: "Business",
+          title: "WalletScan",
           link: ["business/business-page"]
         },
         {
-          icon: "icon-menu audience",
-          title: "Audience",
+          icon: "",
+          title: "Insight",
           link: ["audience"]
+        },
+        {
+          icon: "icon-menu audience",
+          title: "Subscribers",
+          link: ["subscribers"]
         },
         {
           icon: "icon-menu pushnotification",

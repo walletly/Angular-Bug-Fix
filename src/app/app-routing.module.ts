@@ -39,6 +39,7 @@ import { DashboardInfoAdminComponent } from './main/dashboard-info-admin/dashboa
 import { PushNotificationComponent } from './main/push-notification/push-notification.component';
 import { HelpComponent } from './main/help/help.component';
 import { SharedCampaignComponent } from './main/campaign-main/shared-campaign/shared-campaign.component';
+import { SubscribersComponent } from "./main/subscribers/subscribers.component";
 
 const routes: Routes = [
   {
@@ -237,6 +238,11 @@ const routes: Routes = [
         component: AudienceComponent,
         canActivate: [AuthGuard],
         data: { breadcrumb: "audience" },
+      },
+      {
+        path: "subscribers",
+        component:  SubscribersComponent,
+        data: { breadcrumb: "subscriber" }
       },
       { path: "help", component: HelpComponent, canActivate: [AuthGuard], data: { breadcrumb: "help" } },
     ]

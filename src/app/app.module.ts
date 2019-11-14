@@ -67,7 +67,8 @@ import { AgmCoreModule } from '@agm/core';
 import { googleMapsApiKey } from '../environments/environment';
 import { NgxStripeModule } from 'ngx-stripe';
 import { stripePublicKey } from '../environments/environment';
-
+import { SubscribersComponent } from './main/subscribers/subscribers.component';
+import { AvatarModule } from 'ngx-avatar';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB_f_r3DPfN5tZ6x0olJaGCjSogT9rWapM",
@@ -128,6 +129,7 @@ export const firebaseConfig = {
     HelpComponent,
     CampaignIntegrationComponent,
     SharedCampaignComponent,
+    SubscribersComponent
   ],
   imports: [
     BrowserModule,
@@ -168,6 +170,7 @@ export const firebaseConfig = {
       libraries: ['places']
     }),
     NgxStripeModule.forRoot(stripePublicKey),
+    AvatarModule
   ],
   providers: [
     AuthService,
