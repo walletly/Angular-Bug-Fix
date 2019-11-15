@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MainService } from 'src/app/shared/services/main.service';
 import { CardService } from 'src/app/shared/services/card.service';
 import { Router } from '@angular/router';
+import * as localForage from 'localforage';
 
 @Component({
   selector: 'app-walletly-cards',
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./walletly-cards.component.scss']
 })
 export class WalletlyCardsComponent implements OnInit {
+  currentBrand;
   data;
   showLoader;
   noCouponCard = true;
@@ -18,11 +20,12 @@ export class WalletlyCardsComponent implements OnInit {
 
   constructor(private mainService: MainService, private cardService: CardService, private router: Router) { }
 
-  ngOnInit() {
-    if (JSON.parse(localStorage.getItem('currentBrand'))) {
+  async ngOnInit() {
+    this.currentBrand = await localForage.getItem('currentBrand');
+    if (this.currentBrand) {
       // this.mainService.showLoader.emit(true);
       this.showLoader = true;
-      this.cardService.getBrandsCards(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+      this.cardService.getBrandsCards(this.currentBrand.brand_id).subscribe(result => {
         console.log(result);
         this.data = result['data'];
         this.data.map( card => {

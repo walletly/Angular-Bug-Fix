@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CompaignService } from 'src/app/shared/services/compaign.service';
 import { Router } from '@angular/router';
 import { MainService } from 'src/app/shared/services/main.service';
+import * as localForage from 'localforage';
 
 @Component({
   selector: 'app-campaing',
@@ -33,18 +34,21 @@ export class CampaingComponent implements OnInit {
   limit = 20;
   timeInSecs;
   showLoader;
+  currentBrand;
+  currentUser;
 
   constructor(private campaignService: CompaignService, private router: Router, private mainService: MainService) {
-    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
+  }
+  
+  async ngOnInit() {
+    this.currentUser = await localForage.getItem('user');
+    if (this.currentUser.user_type !== 4) {
       this.showLoader = true;
       this.getCampaigns();
     }
   }
 
-  ngOnInit() {
-  }
-
-  getCampaigns() {
+  async getCampaigns() {
     // this.mainService.showLoader.emit(true);
 
     const body = {
@@ -52,7 +56,8 @@ export class CampaingComponent implements OnInit {
       // timeInSecs: this.timeInSecs
     }
 
-    this.campaignService.getСampaignsBrands(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'], body).subscribe(data => {
+    this.currentBrand = await localForage.getItem('currentBrand');
+    this.campaignService.getСampaignsBrands(this.currentBrand.brand_id, body).subscribe(data => {
 
       this.dataCoupon = [];
       this.dataCard = [];

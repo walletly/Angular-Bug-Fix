@@ -3,6 +3,7 @@ import { MainService } from 'src/app/shared/services/main.service';
 import { ReportService } from 'src/app/shared/services/report.service';
 import * as moment from 'moment';
 import {Chart} from 'chart.js';
+import * as localForage from 'localforage';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,6 +11,7 @@ import {Chart} from 'chart.js';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  currentBrand;
 
   showGraph = 1;
   showCouponGraph = 1;
@@ -71,11 +73,12 @@ export class DashboardComponent implements OnInit {
       window.location.reload();
     }
 
-    this.brandCurrency = JSON.parse(localStorage.currentBrand)['currency'] || '$';
     this.getData();
   }
-
-  ngOnInit() {
+  
+  async ngOnInit() {
+    this.currentBrand = await localForage.getItem('currentBrand');
+    this.brandCurrency = this.currentBrand.currency || '$';
   }
 
   generateGraphs() {
@@ -319,7 +322,7 @@ export class DashboardComponent implements OnInit {
    
   }
 
-  getData(){
+  async getData(){
     this.showGraph = 1;
 
     this.brandSubscribers = 0;
@@ -347,7 +350,8 @@ export class DashboardComponent implements OnInit {
     this.applePassesChart = { labels: ['Coupons', 'LoyatyCards', 'StampCards', 'MembershipCards', 'Tickets'], data: [], backgroundColor: this.colors };
     this.androidPassesChart = { labels: ['Coupons', 'LoyatyCards', 'StampCards', 'MembershipCards', 'Tickets'], data: [], backgroundColor: this.colors };
 
-    this.reportService.reportBrandSubscribers(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe(result => {
+    this.currentBrand = await localForage.getItem('currentBrand');
+    this.reportService.reportBrandSubscribers(this.currentBrand.brand_id).subscribe(result => {
       this.brandSubscribers = result['data'].brand_subscribers;
       this.applePassesChart.data.push(result['data'].appleCoupons);
       this.applePassesChart.data.push(result['data'].appleLoyaltyCards);
@@ -372,7 +376,7 @@ export class DashboardComponent implements OnInit {
       this.brandSubscribers = 0;
     })
 
-    this.reportService.reportBrand(JSON.parse(localStorage.currentBrand)['brand_id']).subscribe( result =>{
+    this.reportService.reportBrand(this.currentBrand.brand_id).subscribe( result =>{
       this.showDateCancel = false;
       this.coupon_created = result['data'].brandData.coupon_created || 0;
       this.coupon_redeemed = result['data'].brandData.coupon_redeemed || 0;
@@ -517,7 +521,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getDataWithDates(from, to){
+  async getDataWithDates(from, to){
     this.showGraph = 4;
     this.datesDataError = false;
 
@@ -543,7 +547,8 @@ export class DashboardComponent implements OnInit {
     this.couponsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors };
     this.cardsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors };
 
-    this.reportService.reportBrandSubscribersBetweenDates(JSON.parse(localStorage.currentBrand)['brand_id'], from, to).subscribe( result => {
+    this.currentBrand = await localForage.getItem('currentBrand');
+    this.reportService.reportBrandSubscribersBetweenDates(this.currentBrand.brand_id, from, to).subscribe( result => {
       this.brandSubscribers = result['data'].brand_subscribers ? result['data'].brand_subscribers : 0;
     }, err => {
       this.brandSubscribers = 0;
@@ -551,7 +556,7 @@ export class DashboardComponent implements OnInit {
 
     this.showCouponEarningGraph = 2;
     this.showCardsEarningGraph = 2;
-    this.reportService.reportBrandTransactionsBetweenDates(JSON.parse(localStorage.currentBrand)['brand_id'], from, to).subscribe( result => {
+    this.reportService.reportBrandTransactionsBetweenDates(this.currentBrand.brand_id, from, to).subscribe( result => {
       if(result['campaignData']){
         result['campaignData'].map(campaign => {
           if(campaign.campaign_type <= 2){
@@ -576,7 +581,7 @@ export class DashboardComponent implements OnInit {
       this.brandEarning = 0;
     });
 
-    this.reportService.reportBrandBetweenDates(JSON.parse(localStorage.currentBrand)['brand_id'], from, to).subscribe( result => {
+    this.reportService.reportBrandBetweenDates(this.currentBrand.brand_id, from, to).subscribe( result => {
       this.showDateCancel = true;
       if(result['data']){
         this.showGraph = 3;

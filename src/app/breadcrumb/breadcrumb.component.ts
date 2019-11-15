@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
+import * as localForage from 'localforage';
 import {
   Router,
   ActivatedRoute,
@@ -23,21 +24,26 @@ export class BreadcrumbComponent implements OnInit {
 
   public breadcrumbs: IBreadcrumb[];
 
-  brand = localStorage.getItem('currentBrand') ? JSON.parse(localStorage.getItem('currentBrand'))['brand_name'] : ''
+  currentBrand;
+  currentUser;
+  brand;
 
   show;
   userAdmin;
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {
     this.breadcrumbs = [];
-    if (JSON.parse(localStorage.getItem("user"))["user_type"] === 4) {
+  }
+
+  async ngOnInit() {
+    this.currentUser = await localForage.getItem("user");
+    if (this.currentUser.user_type === 4) {
       this.userAdmin = true;
     } else {
       this.userAdmin = false;
     }
-  }
-
-  ngOnInit() {
+    this.currentBrand = await localForage.getItem('currentBrand');
+    this.brand = this.currentBrand ? this.currentBrand.brand_name : '';
     const ROUTE_DATA_BREADCRUMB: string = "breadcrumb";
     let root: ActivatedRoute = this.activatedRoute.root;
     this.breadcrumbs = this.getBreadcrumbs(root);

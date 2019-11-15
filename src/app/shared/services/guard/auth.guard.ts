@@ -5,6 +5,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthService } from '../auth.service';
 import { MainService } from '../main.service';
 import { BrandService } from '../brand.service';
+import * as localForage from 'localforage';
 
 @Injectable({
   providedIn: 'root'
@@ -54,10 +55,10 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           console.log(result);
 
           if (result) {
-            localStorage.setItem('loggedIn', 'true');
-            localStorage.setItem('userID', result.uid);
-            await result.getIdToken().then(res => {
-              localStorage.setItem('usertoken', res);
+            await localForage.setItem('loggedIn', true);
+            await localForage.setItem('userID', result.uid);
+            await result.getIdToken().then(async res => {
+              await localForage.setItem('usertoken', res);
             });
             observer.next(true);
           } else {
@@ -66,18 +67,17 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           }
         });
       });
-
-      // return false;
   }
 
 
   canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<boolean> | Promise<boolean> | boolean {
-    return Observable.create(observer => {
-      if (JSON.parse(localStorage.getItem("user"))["user_type"] === 4){
+    return Observable.create(async observer => {
+      const user = await localForage.getItem("user");
+      if (user["user_type"] === 4){
         observer.next(true);
         return;
       }
-      this.brandService.getUsersBrands(localStorage.getItem("userID"))
+      this.brandService.getUsersBrands(await localForage.getItem("userID"))
         .subscribe(result => {
           observer.next(true);
         }, error => {

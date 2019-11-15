@@ -9,7 +9,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ManychatService } from '../../shared/services/manychat.service';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions } from "ngx-stripe";
-
+import * as localForage from 'localforage';
 
 
 @Component({
@@ -99,6 +99,9 @@ export class SettingsComponent implements OnInit {
   zoom: number;
   address: string;
   private geoCoder;
+
+  currentUser;
+  currentBrand;
 
 
   defaultColumns = ["Name", "Icon", "Number of Campaigns", "Number of Coupons", "Pricing", "Status", "Action"];
@@ -210,19 +213,21 @@ export class SettingsComponent implements OnInit {
 
     this.showLoader = true;
     // this.goPayment();
-    if (JSON.parse(localStorage.getItem('user'))['user_type'] === 4){
+  }
+  
+  async ngOnInit() {
+    this.currentUser = await localForage.getItem('user');
+    this.currentBrand = await localForage.getItem('currentBrand');
+    if (this.currentUser.user_type === 4){
       this.userAdmin = true;
     } else {
       this.userAdmin = false;
       this.getBrandSettings();
     }
-  }
-
-  ngOnInit() {
-    this.brandService.getBrandAdmins((JSON.parse(localStorage.getItem('currentBrand'))['brand_id'])).subscribe((result) => {
+    this.brandService.getBrandAdmins(this.currentBrand.brand_id).subscribe((result) => {
       this.brandAdmins = result['brand_admins'];
     });
-    this.stripeSubscriptionService.getSubscription((JSON.parse(localStorage.getItem('currentBrand'))['brand_id'])).subscribe(result => {
+    this.stripeSubscriptionService.getSubscription(this.currentBrand.brand_id).subscribe(result => {
       if(result['success']){
         this.is_subscribed = result['data'].is_subscribed;
         this.subscriptionData = result['data'];
@@ -240,7 +245,8 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  onChangeTab(event) {
+  async onChangeTab(event) {
+    this.currentUser = await localForage.getItem('user');
     if (event.tabTitle === 'Billing' && this.is_subscribed == false) {
       setTimeout(() => {
         this.stripeService.elements(this.elementsOptions)
@@ -263,7 +269,7 @@ export class SettingsComponent implements OnInit {
               }
             });
             this.card.mount('#card-element');
-            this.subscriptionForm.controls['email'].setValue(JSON.parse(localStorage.getItem('user'))['email']);
+            this.subscriptionForm.controls['email'].setValue(this.currentUser.email);
           }
         });
       }, 300);
@@ -271,7 +277,9 @@ export class SettingsComponent implements OnInit {
 
   }
 
-  confirmSubscription() {
+  async confirmSubscription() {
+    this.currentUser = await localForage.getItem('user');
+    this.currentBrand = await localForage.getItem('currentBrand');
     if(this.subscriptionForm.valid){
       this.invalidSubscriptionForm = false;
       this.inSubscriptionProcces = true;
@@ -283,15 +291,15 @@ export class SettingsComponent implements OnInit {
           email: email
         },
         metadata: {}
-      }).subscribe(result => {
+      }).subscribe(async result => {
         if (result.paymentMethod) {
           const payment_method = result.paymentMethod.id;
           const customerData = {
-            brand_id: JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
-            brand_name: JSON.parse(localStorage.getItem('currentBrand'))['brand_name'],
+            brand_id: this.currentBrand.brand_id,
+            brand_name: this.currentBrand.brand_name,
             payment_method,
             billing_email: email,
-            user_id: localStorage.getItem('userID')
+            user_id: await localForage.getItem('userID')
           }
           this.stripeSubscriptionService.makeCustomerSubscription(customerData).subscribe(result => {
             this.subscriptionData = result['brandSubscription'];
@@ -346,9 +354,10 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  deleteSubscription() {
+  async deleteSubscription() {
+    this.currentBrand = await localForage.getItem('currentBrand');
     this.inSubscriptionProcces = true;
-    this.stripeSubscriptionService.deleteSubscription(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+    this.stripeSubscriptionService.deleteSubscription(this.currentBrand.brand_id).subscribe(result => {
       this.inSubscriptionProcces = false;
       this.mainService.showToastrSuccess.emit({text: 'Subscription Deleted'});
       this.subscriptionData['status'] = 'cancelled';
@@ -376,8 +385,9 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  getBrandSettings() {
-    this.brandService.getBrandById(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
+  async getBrandSettings() {
+    this.currentBrand = await localForage.getItem('currentBrand');
+    this.brandService.getBrandById(this.currentBrand.brand_id).subscribe(data => {
       this.brand = data['brand'];
       this.api = this.brand.apikey;
       console.log(this.brand);
@@ -394,15 +404,16 @@ export class SettingsComponent implements OnInit {
   }
 
   async update() {
+    this.currentBrand = await localForage.getItem('currentBrand');
     if (this.myForm.valid) {
       this.customValidation = true;
       this.inProcces = true;
       await this.getBrand();
       console.log(this.brand);
-      this.brandService.updateBrand(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'], this.brand).subscribe(result => {
+      this.brandService.updateBrand(this.currentBrand.brand_id, this.brand).subscribe(result => {
         console.log(result);
-        this.brandService.getBrandById(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(data => {
-          localStorage.setItem('currentBrand', JSON.stringify(data['brand']));
+        this.brandService.getBrandById(this.currentBrand.brand_id).subscribe(async data => {
+          await localForage.setItem('currentBrand', data['brand']);
           this.mainService.showToastrSuccess.emit({text: 'Settings updated'});
           this.inProcces = false;
         }, err => {
@@ -588,6 +599,7 @@ export class SettingsComponent implements OnInit {
     return partnerData;
   }
   async manychatAPIReceived() {
+    this.currentBrand = await localForage.getItem('currentBrand');
     if (this.manyChatApiForm.valid) {
       this.inProcces = true;
 
@@ -595,10 +607,10 @@ export class SettingsComponent implements OnInit {
       const manyChatApiBrand = manyChatApi.split(':');
 
       if (manyChatApiBrand[0] === this.brand['facebook_page_id']) {
-        this.manychatService.getCustomFields(manyChatApi).subscribe( result => {
+        this.manychatService.getCustomFields(manyChatApi).subscribe(async result => {
           if (result) {
             console.log(result['data']);
-            this.brandService.updateBrand(JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
+            this.brandService.updateBrand(this.currentBrand.brand_id,
             {'manychatAPI': manyChatApi}).subscribe(check => {
               console.log(check);
               this.inProcces = false;

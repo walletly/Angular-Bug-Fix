@@ -7,6 +7,8 @@ import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { BrandService } from './brand.service';
+import * as localForage from 'localforage';
+import { from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,30 +30,39 @@ export class AuthService {
   }
 
   createFbUser(body) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.post(SERVER_API_URL + 'auth/fbUser', body, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.post(SERVER_API_URL + 'auth/fbUser', body, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   updateUser(id, body) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.put(SERVER_API_URL + 'auth/' + id, body, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.put(SERVER_API_URL + 'auth/' + id, body, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   getUser(id) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    console.log('x-auth-token:', `Bearer ${localStorage.getItem('usertoken')}`);
-    console.log('x-auth-user:', localStorage.getItem('userID'));
-    console.log(id);
-    return this.http.get(SERVER_API_URL + 'auth/' + id, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.get(SERVER_API_URL + 'auth/' + id, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   getUserByEmail(email) {
@@ -63,11 +74,15 @@ export class AuthService {
   }
 
   getFacebookInfo(fbId) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.get(SERVER_API_URL + 'utils/page/' + fbId, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.get(SERVER_API_URL + 'utils/page/' + fbId, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   signInWithFacebook() {

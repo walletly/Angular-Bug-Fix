@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { CompaignService } from 'src/app/shared/services/compaign.service';
 import { MainService } from 'src/app/shared/services/main.service';
+import * as localForage from 'localforage';
 
 @Component({
   selector: 'app-push-notification',
@@ -97,14 +98,15 @@ export class PushNotificationComponent implements OnInit {
 ];
 
   constructor(private mainService: MainService, private campaignService: CompaignService, private formBuilder: FormBuilder) {
-    this.getCampaigns(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']);
     this.myForm = formBuilder.group({
       campaign: ["", [Validators.required]],
       message: ["", [Validators.required]],
     });
   }
-
-  ngOnInit() {
+  
+  async ngOnInit() {
+    const currentBrand = await localForage.getItem('currentBrand');
+    this.getCampaigns(currentBrand['brand_id']);
   }
 
   getCampaigns(brand_id){

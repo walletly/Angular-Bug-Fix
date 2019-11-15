@@ -13,6 +13,7 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { forkJoin } from 'rxjs';
 import { NbDialogService } from '@nebular/theme';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
+import * as localForage from 'localforage';
 
 @Component({
   selector: 'app-fb-connect',
@@ -163,16 +164,16 @@ export class FbConnectComponent implements OnInit {
     });
 }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.showLoader = true;
     this.http.get('https://graph.facebook.com/v3.3/me/accounts?fields=cover,name,picture&access_token='
-      + localStorage.getItem('access') + '&limit=1000').subscribe((res) => {
+      + await localForage.getItem('access') + '&limit=1000').subscribe(async (res) => {
       console.log(res);
       if(res['data'].length < 1){
         this.FbPages = false;
       }
       this.fbBrands = res['data'];
-      this.brandService.getUsersBrands(localStorage.getItem('userID')).subscribe(result => {
+      this.brandService.getUsersBrands(await localForage.getItem('userID')).subscribe(result => {
         this.userBrands = result['data']['brands'];
         console.log(this.userBrands);
         this.brands = this.fbBrands;
@@ -215,7 +216,7 @@ export class FbConnectComponent implements OnInit {
 
     this.loader = true;
     this.fbId = id;
-    this.authService.getFacebookInfo(this.fbId).subscribe(data => {
+    this.authService.getFacebookInfo(this.fbId).subscribe(async data => {
       console.log(data);
       if (data['success']) {
         console.log(data);
@@ -233,7 +234,7 @@ export class FbConnectComponent implements OnInit {
       }
       const connectingBrand = {
         brand_id: this.fbResponse['brand_id'],
-        user_admin_id: localStorage.getItem('userID'),
+        user_admin_id: await localForage.getItem('userID'),
         brand_name: this.fbResponse['brand_name'],
         brand_logo: this.fbResponse['profile_logo'],
         facebook_page_id: this.fbResponse['brand_id'],
@@ -315,13 +316,13 @@ export class FbConnectComponent implements OnInit {
     }
   }
 
-  setActiveBrandAndUpdateUser(id) {
+  async setActiveBrandAndUpdateUser(id) {
     this.loader = true;
     forkJoin([this.brandService.getBrandById(id),
-    this.authService.updateUser(localStorage.getItem('userID'), { activeBrand: id })]).subscribe(results => {
+    this.authService.updateUser(await localForage.getItem('userID'), { activeBrand: id })]).subscribe(async results => {
       const brandResult = results[0];
       const userResult = results[1];
-      localStorage.setItem('currentBrand', JSON.stringify(brandResult['brand']));
+      await localForage.setItem('currentBrand', brandResult['brand']);
       // this.router.navigate(['/main/dashboard']);
       this.loader = false;
     }, err => {
@@ -333,7 +334,7 @@ export class FbConnectComponent implements OnInit {
     });
   }
 
-  redirectToDashboard(id?) {
+  async redirectToDashboard(id?) {
     if(this.inProcces){
       return;
     }
@@ -347,7 +348,8 @@ export class FbConnectComponent implements OnInit {
     } else {
       this.inProcces = true;
       let isBrand;
-      isBrand = JSON.parse(localStorage.getItem('user')).activeBrand;
+      const user = await localForage.getItem('user');
+      isBrand = user['activeBrand'];
       if (isBrand) {
         this.router.navigate(['/main/dashboard']);
         this.inProcces = false;
@@ -400,7 +402,7 @@ export class FbConnectComponent implements OnInit {
     this.myFormStep2.controls['location'].setValue(this.getLocation());
   }
 
-  createBrand() {
+  async createBrand() {
     this.inProcces = true;
 
     this.brand['brand_id'] = this.fbResponse['brand_id'];
@@ -419,17 +421,17 @@ export class FbConnectComponent implements OnInit {
     this.brand['location_coordinates'] = { 'lat': lat, 'lng': lng};
     this.brand.more_info = this.myFormStep2.get('moreInfo').value;
     this.brand.phone = this.myFormStep2.get('phone').value;
-    this.brand.user_admin_id = localStorage.getItem('userID');
+    this.brand.user_admin_id = await localForage.getItem('userID');
     this.brand.website = this.myFormStep2.get('website').value;
     console.log(this.brand);
 
     this.brandService.updateBrand(this.brand['brand_id'], this.brand).subscribe(async result => {
       console.log(result);
       if (result['success']) {
-        this.authService.updateUser(this.brand.user_admin_id, { activeBrand: this.brand['brand_id'] }).subscribe(res => {
+        this.authService.updateUser(this.brand.user_admin_id, { activeBrand: this.brand['brand_id'] }).subscribe(async res => {
           if (res['success']) {
-            this.brandService.getBrandById(this.brand['brand_id']).subscribe((brandData)=>{
-              localStorage.setItem('currentBrand', JSON.stringify(brandData['brand']));
+            this.brandService.getBrandById(this.brand['brand_id']).subscribe(async (brandData)=>{
+              await localForage.setItem('currentBrand', brandData['brand']);
             })
             this.inProcces = false;
             this.mainService.showToastrSuccess.emit({text: 'Brand created'});
@@ -532,10 +534,10 @@ export class FbConnectComponent implements OnInit {
     });
   }
 
-  logout() {
-    this.firebaseAuth.auth.signOut().then(() => {
-      localStorage.clear();
-      localStorage.setItem('loggedOut', 'true');
+  async logout() {
+    this.firebaseAuth.auth.signOut().then(async () => {
+      await localForage.clear();
+      await localForage.setItem('loggedOut', true);
       this.router.navigate(['/fb-login']);
     });
   }

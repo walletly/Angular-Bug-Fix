@@ -5,6 +5,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MainService } from 'src/app/shared/services/main.service';
+import * as localForage from 'localforage';
+
 
 @Component({
   selector: 'app-profile',
@@ -18,7 +20,7 @@ export class ProfileComponent implements OnInit {
   userDrb;
   fullname;
   newName;
-  user;
+  currentUser;
 
   showLogoUploader = false;
   fileImg;
@@ -45,18 +47,21 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private mainService: MainService
   ) {
+  }
+
+  async ngOnInit() {
     this.newPhoto = this.photo;
 
-    this.user = JSON.parse(localStorage.getItem('user'));
-    this.fullname = `${this.user['firstname']} ${this.user['lastname']}`;
+    this.currentUser = await localForage.getItem('user');
+    this.fullname = `${this.currentUser['firstname']} ${this.currentUser['lastname']}`;
     this.newName = this.fullname;
-    if (this.user['avatar']) {
-      this.photo = this.user['avatar'];
+    if (this.currentUser['avatar']) {
+      this.photo = this.currentUser['avatar'];
       this.newPhoto = this.photo;
     }
     this.showLoader = true;
     // this.mainService.showLoader.emit(true);
-    brandService.getUsersBrands(localStorage.getItem('userID')).subscribe(data => {
+    this.brandService.getUsersBrands(await localForage.getItem('userID')).subscribe(data => {
       if (data['success']) {
         this.data = [];
         console.log(data['data']['brands']);
@@ -79,9 +84,6 @@ export class ProfileComponent implements OnInit {
       // this.mainService.showLoader.emit(false);
       this.showLoader = false;
     });
-  }
-
-  ngOnInit() {
   }
 
   uploadCover(file: File) {
@@ -122,26 +124,26 @@ export class ProfileComponent implements OnInit {
       firstName = this.newName;
       lastName = '';
     }
-    this.authService.updateUser(this.user.user_id, { firstname: firstName, lastname: lastName }).subscribe(result => {
+    this.authService.updateUser(this.currentUser.user_id, { firstname: firstName, lastname: lastName }).subscribe(async result => {
       console.log(result);
       if (result['success']) {
-        this.user['firstname'] = firstName;
-        this.user['lastname'] = lastName;
+        this.currentUser['firstname'] = firstName;
+        this.currentUser['lastname'] = lastName;
         this.fullname = `${firstName} ${lastName}`;
         this.newName = this.fullname;
         if (this.newPhoto) {
           this.photo = this.newPhoto;
         }
-        localStorage.setItem('user', JSON.stringify(this.user));
+        await localForage.setItem('user', this.currentUser);
         this.userDrb = false;
       }
     });
   }
 
-  logout() {
-    this.firebaseAuth.auth.signOut().then(() => {
-      localStorage.clear();
-      localStorage.setItem('loggedOut', 'true');
+  async logout() {
+    this.firebaseAuth.auth.signOut().then(async () => {
+      await localForage.clear();
+      await localForage.setItem('loggedOut', 'true');
       this.router.navigate(['/fb-login']);
     });
   }

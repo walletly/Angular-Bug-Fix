@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { BrandService } from 'src/app/shared/services/brand.service';
+import * as localForage from 'localforage';
+
 
 @Component({
   selector: 'app-login',
@@ -31,19 +33,19 @@ export class LoginComponent implements OnInit {
     // });
   }
 
-  ngOnInit() {
-    setTimeout(() => {
-      if(localStorage.getItem('loggedOut') == 'true'){
-        localStorage.clear();
+  async ngOnInit() {
+    setTimeout(async () => {
+      if(await localForage.getItem('loggedOut') == true){
+        await localForage.clear();
         return;
-      }else if(localStorage.getItem('loggedIn') == 'true'){
+      }else if(await localForage.getItem('loggedIn') == true){
         this.router.navigate(['/main/dashboard']);
         return;
       }
     }, 1000);
   }
 
-  login() {
+  async login() {
     this.firebaseAuth.auth.signOut();
     this.isLogin = true;
 
@@ -55,20 +57,20 @@ export class LoginComponent implements OnInit {
       this.firebaseAuth
       .auth
       .signInWithEmailAndPassword(email, password)
-      .then(value => {
+      .then(async value => {
         console.log(value.user.uid);
         console.log(value.user['ra']);
-        localStorage.setItem('userID', value.user.uid);
-        localStorage.setItem('usertoken', value.user['ra']);
-        this.authService.getUser(value.user.uid).subscribe(result => {
+        await localForage.setItem('userID', value.user.uid);
+        await localForage.setItem('usertoken', value.user['ra']);
+        this.authService.getUser(value.user.uid).subscribe(async result => {
           if(result['data'].user_type != 4 ){
             this.logout();
           }
-          localStorage.setItem('user', JSON.stringify(result['data']));
+          await localForage.setItem('user', result['data']);
           this.router.navigate(['/main/dashboard-info-admin']);
           // if (result['data']['activeBrand']) {
           //   this.brandService.getBrandById(result['data']['activeBrand']).subscribe(brand => {
-          //     localStorage.setItem('currentBrand', JSON.stringify(brand['brand']));
+          //     await localForage.setItem('currentBrand', JSON.stringify(brand['brand']));
 
           //     this.router.navigate(['/main/dashboard']);
           //   });
@@ -100,9 +102,9 @@ export class LoginComponent implements OnInit {
   }
 
   logout() {
-    this.firebaseAuth.auth.signOut().then(() => {
-      localStorage.clear();
-      localStorage.setItem('loggedOut', 'true');
+    this.firebaseAuth.auth.signOut().then(async () => {
+      await localForage.clear();
+      await localForage.setItem('loggedOut', true);
       this.router.navigate(['/master-admin']);
     });
   }

@@ -4,6 +4,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
 import { BrandService } from 'src/app/shared/services/brand.service';
 import { MainService } from 'src/app/shared/services/main.service';
+import * as localForage from 'localforage';
 
 @Component({
   selector: 'app-fb-login',
@@ -33,14 +34,14 @@ export class FbLoginComponent implements OnInit {
       this.firebaseAuth.auth.getRedirectResult()
       .then(async res => {
         console.log(res);
-        if(localStorage.getItem('loggedOut') == 'true'){
+        if(await localForage.getItem('loggedOut') == true){
           console.log('loggedOut');
-          await this.ngZone.run(() => {
-            localStorage.clear();
+          await this.ngZone.run(async () => {
+            await localForage.clear();
             this.showLoader = false;
             return;
           });
-        }else if(localStorage.getItem('loggedIn') == 'true'){
+        }else if(await localForage.getItem('loggedIn') == true){
           console.log('loggedIn');
           this.router.navigate(['/main/dashboard']);
           this.showLoader = false;
@@ -55,9 +56,9 @@ export class FbLoginComponent implements OnInit {
           const photo = res.user.photoURL || 'https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png';
           const newUser = res.additionalUserInfo.isNewUser;
 
-          localStorage.setItem('userID', res.user.uid);
-          localStorage.setItem('usertoken', await res.user.getIdToken());
-          localStorage.setItem('access', res.credential['accessToken']);
+          await localForage.setItem('userID', res.user.uid);
+          await localForage.setItem('usertoken', await res.user.getIdToken());
+          await localForage.setItem('access', res.credential['accessToken']);
           console.log(newUser);
 
           if (newUser) {
@@ -74,65 +75,65 @@ export class FbLoginComponent implements OnInit {
               user_type: 1,
               avatar: photo
             }
-            this.authService.createFbUser(user).subscribe(result => {
+            this.authService.createFbUser(user).subscribe(async result => {
               console.log('newUser added in database', result);
-              console.log('localStorage:',localStorage);
+              console.log('await localForage:',await localForage);
               console.log('get user called for', user_id); 
               this.getUser(user_id);
             }, err => {
               console.log('Error in creating Fb user in Database', err);
-              this.ngZone.run(() => {
-                localStorage.clear();
+              this.ngZone.run(async () => {
+                await localForage.clear();
                 this.showLoader = false;
                 return;
               });
             })
           }else{
             console.log('oldUser');
-            this.authService.updateUser(user_id,{ avatar: photo}).subscribe(result => {
+            this.authService.updateUser(user_id,{ avatar: photo}).subscribe(async result => {
               console.log('oldUser updated', result);     
-              console.log('localStorage:',localStorage);
+              console.log('await localForage:',await localForage);
               console.log('get user called for', user_id); 
               this.getUser(user_id);
-            }, err => {
+            }, async err => {
               console.log('Error in updating Fb user in Database', err);
-              console.log('localStorage:',localStorage);
+              console.log('await localForage:',await localForage);
               console.log('get user called for', user_id); 
               this.getUser(user_id);
             })
           }
         } else {
           console.log('no res.user');
-          this.ngZone.run(() => {
-            localStorage.clear();
+          this.ngZone.run(async () => {
+            await localForage.clear();
             this.showLoader = false;
             return;
           });
         }
       }).catch( async err => {
         console.log('fb login error:',err);
-        if(localStorage.getItem('loggedOut') == 'true'){
-          this.ngZone.run(() => {
-            localStorage.clear();
+        if(await localForage.getItem('loggedOut') == true){
+          this.ngZone.run(async () => {
+            await localForage.clear();
             this.showLoader = false;
             return;
           });
         }
         if(err.code == 'auth/user-cancelled'){
-          this.ngZone.run(() => {
-            localStorage.clear();
+          this.ngZone.run(async () => {
+            await localForage.clear();
             this.showLoader = false;
             return;
           });
         }
 
-        this.firebaseAuth.auth.signOut().then(() => {
-          localStorage.clear();
-          localStorage.setItem('loggedOut', 'true');
+        this.firebaseAuth.auth.signOut().then(async () => {
+          await localForage.clear();
+          await localForage.setItem('loggedOut', true);
           this.router.navigate(['/fb-login']);
-        }).catch(()=>{
-          localStorage.clear();
-          localStorage.setItem('loggedOut', 'true');
+        }).catch(async ()=>{
+          await localForage.clear();
+          await localForage.setItem('loggedOut', true);
           this.router.navigate(['/fb-login']);
         });
         return;
@@ -153,7 +154,7 @@ export class FbLoginComponent implements OnInit {
         //     });
         //   }
         //   else if (user_type ==3 && err.code == "auth/account-exists-with-different-credential"){
-        //     localStorage.setItem('access', err.credential['accessToken']);
+        //     await localForage.setItem('access', err.credential['accessToken']);
         //     if(!tempPassword){
         //       tempPassword = 'asdf1234';
         //     }
@@ -162,8 +163,8 @@ export class FbLoginComponent implements OnInit {
         //         firebase.auth().signInWithEmailAndPassword(err.email, tempPassword)
         //         .then(async result=>{
         //           result.user.linkAndRetrieveDataWithCredential(err.credential);
-        //           localStorage.setItem('userID', result.user.uid);
-        //           localStorage.setItem('usertoken', await result.user.getIdToken());
+        //           await localForage.setItem('userID', result.user.uid);
+        //           await localForage.setItem('usertoken', await result.user.getIdToken());
         //           const uid = result.user.uid;
         //           const photo = result.user.providerData[0].photoURL || 'https://upload.wikimedia.org/wikipedia/commons/3/38/Wikipedia_User-ICON_byNightsight.png';
         //           const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${uid}`);
@@ -186,14 +187,14 @@ export class FbLoginComponent implements OnInit {
 
   getUser(uid){
     console.log('getting user with uid:', uid);
-    this.authService.getUser(uid).subscribe(data => {
+    this.authService.getUser(uid).subscribe(async data => {
       console.log('user data found',data);
-      localStorage.setItem('user', JSON.stringify(data['data']));
+      await localForage.setItem('user', data['data']);
       if (data['data']['activeBrand']) {
         console.log('yes activeBrand', data['data']['activeBrand']);
-        this.brandService.getBrandById(data['data']['activeBrand']).subscribe(res_brand => {
+        this.brandService.getBrandById(data['data']['activeBrand']).subscribe(async res_brand => {
           console.log('active brand found',res_brand);
-          localStorage.setItem('currentBrand', JSON.stringify(res_brand['brand']));
+          await localForage.setItem('currentBrand', res_brand['brand']);
           this.ngZone.run(() => this.router.navigate(['/main/dashboard']));
           this.showLoader = false;
         }, err => {
@@ -212,12 +213,12 @@ export class FbLoginComponent implements OnInit {
     });
   }
 
-  loginFB() {
+  async loginFB() {
     if (this.terms) {
-      if(localStorage.getItem('loggedIn') == 'true'){
+      if(await localForage.getItem('loggedIn') == true){
         this.ngZone.run(() => this.router.navigate(['/main/dashboard']));
       }else{
-        localStorage.clear();
+        await localForage.clear();
         this.firebaseAuth.auth.signOut();
         this.authService.doFacebookLogin();
       }
@@ -230,9 +231,9 @@ export class FbLoginComponent implements OnInit {
     (document.getElementById('myModal') as HTMLDivElement).style.display = 'block';
   }
 
-  closeDeleteBox(){
+  async closeDeleteBox(){
     (document.getElementById('myModal') as HTMLDivElement).style.display = 'none';
-    localStorage.clear();
+    await localForage.clear();
   }
 
   deleteUser(id){
@@ -244,9 +245,9 @@ export class FbLoginComponent implements OnInit {
     });
   }
 
-  continue(){
+  async continue(){
     (document.getElementById('myModal') as HTMLDivElement).style.display = 'none';
-    localStorage.clear();
+    await localForage.clear();
     this.firebaseAuth.auth.signOut();
     this.authService.doFacebookLogin();
   }

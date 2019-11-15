@@ -6,6 +6,8 @@ import { MainService } from "../shared/services/main.service";
 import { BrandService } from "../shared/services/brand.service";
 import { AuthService } from "../shared/services/auth.service";
 import { AngularFireAuth } from "angularfire2/auth";
+import * as localForage from 'localforage';
+
 
 @Component({
   selector: "app-main",
@@ -85,10 +87,12 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   brandName;
 
+  currentUser;
+  currentBrand;
+
   selectedItem;
   showSearchBox = false;
 
-  user;
   username;
   userAdmin;
 
@@ -106,7 +110,13 @@ export class MainComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private firebaseAuth: AngularFireAuth
   ) {
-    if (JSON.parse(localStorage.getItem("user"))["user_type"] === 4) {
+    this.startMain();
+  }
+
+  async startMain(){
+    this.currentUser = await localForage.getItem("user");
+    this.currentBrand = await localForage.getItem("currentBrand");
+    if (this.currentUser.user_type === 4) {
       this.items = [];
       this.items = [
         {
@@ -155,15 +165,14 @@ export class MainComponent implements OnInit, AfterViewInit {
         }
       ];
     }
-    if (JSON.parse(localStorage.getItem("user"))["user_type"] === 4) {
+    if (this.currentUser.user_type === 4) {
       this.userAdmin = true;
     } else {
       this.userAdmin = false;
     }
-    this.user = JSON.parse(localStorage.getItem("user"));
     this.username = {
-      firstName: this.user["firstname"],
-      lastName: this.user["lastname"]
+      firstName: this.currentUser.firstname,
+      lastName: this.currentUser.lastname
     };
     setTimeout(() => {
       this.mainService.showLoader.subscribe(event => {
@@ -171,23 +180,23 @@ export class MainComponent implements OnInit, AfterViewInit {
       });
     }, 200);
 
-    setTimeout(() => {
-      if (localStorage.getItem("currentBrand")) {
+    setTimeout(async () => {
+      if (this.currentBrand) {
         this.setBrand();
-        this.brandPlan = JSON.parse(localStorage.getItem("currentBrand"))['plan_details'].plan_name;
+        this.brandPlan = this.currentBrand.plan_details.plan_name;
       }
     }, 200);
 
-    this.avatar = JSON.parse(localStorage.getItem("user"))["avatar"];
+    this.avatar = this.currentUser.avatar;
     console.log(this.avatar);
 
     this.getSelectedItem();
     this.brandService
-      .getUsersBrands(localStorage.getItem("userID"))
+      .getUsersBrands(await localForage.getItem("userID"))
       .subscribe(result => {
         this.brands = [];
         result["data"]["brands"].forEach(brand => {
-          if(JSON.parse(localStorage.currentBrand)['brand_id'] != brand.brand_id){
+          if(this.currentBrand.brand_id != brand.brand_id){
             this.brands.push(brand);
           }
         });
@@ -254,14 +263,14 @@ export class MainComponent implements OnInit, AfterViewInit {
         }`;
       } else {
         if ((this.roter.url.split("/").length = 3)) {
-          const currentBrand = JSON.parse(localStorage.getItem("currentBrand"));
+          const currentBrand = this.currentBrand;
           if (currentBrand) {
             this.brandName = currentBrand["brand_name"] + " >" + " ";
           }
           this.headerTitle = crumpValue1;
         }
         if ((this.roter.url.split("/").length = 4)) {
-          const currentBrand = JSON.parse(localStorage.getItem("currentBrand"));
+          const currentBrand = this.currentBrand;
           if (currentBrand) {
             this.brandName = currentBrand["brand_name"] + " >" + " ";
           }
@@ -271,7 +280,13 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.currentUser = await localForage.getItem("user");
+    this.currentBrand = await localForage.getItem("currentBrand");
+    this.username = {
+      firstName: this.currentUser.firstname,
+      lastName: this.currentUser.lastname
+    };
     switch (this.roter.url) {
       case "/main":
         this.roter.navigate(["/main/dashboard"]);
@@ -466,17 +481,15 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
   }
 
-  setBrand() {
-    if (localStorage.getItem("currentBrand")) {
-      console.log(JSON.parse(localStorage.getItem("currentBrand")));
-      this.items[0].title = JSON.parse(localStorage.getItem("currentBrand"))[
-        "brand_name"
-      ];
+  async setBrand() {
+    this.currentBrand = await localForage.getItem("currentBrand");
+    if (this.currentBrand) {
+      this.items[0].title = this.currentBrand.brand_name;
       let myElement = document.getElementsByClassName(
         "icon-brand-menu"
       )[0] as HTMLElement;
       myElement.style.backgroundImage = `url(${
-        JSON.parse(localStorage.getItem("currentBrand"))["brand_logo"]
+        this.currentBrand.brand_logo
       })`;
     }
   }
@@ -493,19 +506,19 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
   }
 
-  changeBrand(brandId) {
+  async changeBrand(brandId) {
     console.log(brandId);
     this.mainService.showLoader.emit(true);
     this.authService
-      .updateUser(localStorage.getItem("userID"), { activeBrand: brandId })
+      .updateUser(await localForage.getItem("userID"), { activeBrand: brandId })
       .subscribe(
         result => {
           if (result["success"]) {
             this.brandService.getBrandById(brandId).subscribe(
-              brand => {
-                localStorage.setItem(
+              async brand => {
+                await localForage.setItem(
                   "currentBrand",
-                  JSON.stringify(brand["brand"])
+                  brand["brand"]
                 );
                 // this.setBrand();
                 this.mainService.changeBrandBool = true;
@@ -529,10 +542,11 @@ export class MainComponent implements OnInit, AfterViewInit {
       );
     // this.setBrand()
   }
-  logout() {
-    this.firebaseAuth.auth.signOut().then(() => {
-      localStorage.clear();
-      localStorage.setItem('loggedOut', 'true');
+  
+  async logout() {
+    this.firebaseAuth.auth.signOut().then(async () => {
+      await localForage.clear();
+      await localForage.setItem('loggedOut', true);
       this.roter.navigate(['/master-admin']);
     });
   }

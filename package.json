@@ -33,6 +33,7 @@
     "core-js": "^2.5.4",
     "firebase": "^5.11.1",
     "font-awesome": "^4.7.0",
+    "localforage": "^1.7.3",
     "moment": "^2.24.0",
     "nebular-icons": "^1.0.6",
     "ngx-avatar": "^3.7.0",

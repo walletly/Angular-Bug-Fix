@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BrandService } from 'src/app/shared/services/brand.service';
 import { ngxCsv } from 'ngx-csv/ngx-csv';
-
+import * as localForage from 'localforage';
 
 
 @Component({
@@ -11,7 +11,7 @@ import { ngxCsv } from 'ngx-csv/ngx-csv';
 })
 export class SubscribersComponent implements OnInit {
 
-
+  currentBrand;
   showLoader;
   searchText;
   checkAllSubscribers = true;
@@ -32,8 +32,9 @@ export class SubscribersComponent implements OnInit {
   ngOnInit() {
   }
 
-  getSubscribers() {
-    this.brandService.getBrandSubscribers(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(res => {
+  async getSubscribers() {
+    this.currentBrand = await localForage.getItem('currentBrand');
+    this.brandService.getBrandSubscribers(this.currentBrand.brand_id).subscribe(res => {
       console.log(res);
       if(res['data']){
         this.showLoader = false;

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SERVER_API_URL } from '../../../environments/environment';
+import * as localForage from 'localforage';
+import { from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,83 +12,132 @@ export class BusinessService {
   constructor(private http: HttpClient) { }
 
   createBusiness(body) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.post(SERVER_API_URL + 'business', body, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.post(SERVER_API_URL + 'business', body, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   addUser(body) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.post(SERVER_API_URL + 'business/addUser', body, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.post(SERVER_API_URL + 'business/addUser', body, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   getUsers(id) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.get(SERVER_API_URL + 'brand/getBrandUsers/' + id, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.get(SERVER_API_URL + 'brand/getBrandUsers/' + id, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   getBrandUsers(id) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.get(SERVER_API_URL + 'business/' + id, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.get(SERVER_API_URL + 'business/' + id, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   updateBusinessUser(id, body) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.put(SERVER_API_URL + 'business/updateUser/' + id, body, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.put(SERVER_API_URL + 'business/updateUser/' + id, body, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   changeUserAccess(user_id, brand_id, body) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.put(SERVER_API_URL + 'business/changeUserAccess/' + user_id + '/' + brand_id, body, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.put(SERVER_API_URL + 'business/changeUserAccess/' + user_id + '/' + brand_id, body, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   deleteBusinessUser(user_id, brand_id) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.delete(SERVER_API_URL + 'business/deleteUser/' + user_id + '/' + brand_id, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.delete(SERVER_API_URL + 'business/deleteUser/' + user_id + '/' + brand_id, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   getBusinessById(id) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.get(SERVER_API_URL + 'business/' + id, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.get(SERVER_API_URL + 'business/' + id, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   getBusinessByBrands(id) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.get(SERVER_API_URL + 'business/bybrand/' + id, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.get(SERVER_API_URL + 'business/bybrand/' + id, { headers: httpHeaders}).toPromise();
+    }));
   }
 
   sendEmail(arrayEmails) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID'),
-      'Content-Type': 'application/json'
-    });
-    return this.http.post(SERVER_API_URL + 'utils/sendEmail', arrayEmails, { headers: httpHeaders});
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.post(SERVER_API_URL + 'utils/sendEmail', arrayEmails, { headers: httpHeaders}).toPromise();
+    }));
   }
 }

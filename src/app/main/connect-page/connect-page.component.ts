@@ -6,6 +6,8 @@ import { BrandService } from 'src/app/shared/services/brand.service';
 import { CardService } from 'src/app/shared/services/card.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MainService } from 'src/app/shared/services/main.service';
+import * as localForage from 'localforage';
+
 
 @Component({
   selector: 'app-connect-page',
@@ -227,7 +229,7 @@ export class ConnectPageComponent implements OnInit {
     this.myFormStep2.controls['location'].setValue(this.getLocation());
   }
 
-  createBrand() {
+  async createBrand() {
     // this.brand['brand_id'] = Math.random() * (1000 - 1) + 1000;
     // this.brand.brand_cover = this.myFormStep2.get('coverImage').value;
     // this.brand.brand_logo = this.myFormStep2.get('profileLogo').value;
@@ -243,7 +245,7 @@ export class ConnectPageComponent implements OnInit {
     this.brand.location = this.myFormStep2.get('location').value.split(',');
     this.brand.more_info = this.myFormStep2.get('moreInfo').value;
     this.brand.phone = this.myFormStep2.get('phone').value;
-    this.brand.user_admin_id = localStorage.getItem('userID');
+    this.brand.user_admin_id = await localForage.getItem('userID');
     this.brand.website = this.myFormStep2.get('website').value;
     console.log(this.brand);
 
@@ -253,7 +255,7 @@ export class ConnectPageComponent implements OnInit {
     //     this.api = result['apiKey'];
     //     this.authService.updateUser(this.brand.user_admin_id, {activeBrand: this.brand['brand_id']}).subscribe(res => {
     //       if (result['success']) {
-    //         localStorage.setItem('currentBrand', JSON.stringify(this.brand));
+    //         await localForage.setItem('currentBrand', JSON.stringify(this.brand));
     //         this.stepper.next();
     //       }
     //     }, err => {

@@ -4,6 +4,8 @@ import { NbCalendarRange, NbDateService } from '@nebular/theme';
 import chart from 'tui-chart';
 import { Router } from '@angular/router';
 import { ReportService } from 'src/app/shared/services/masterAdmin/report.service';
+import * as localForage from 'localforage';
+
 
 @Component({
   selector: 'app-dashboard-info-admin',
@@ -18,8 +20,12 @@ export class DashboardInfoAdminComponent implements OnInit {
   total_audiences;
 
   constructor(private reportService: ReportService, protected dateService: NbDateService<Date>, private router: Router) {
-    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4){
-      router.navigate(['/main/dashboard']);
+  }
+  
+  async start(){
+    const user = await localForage.getItem('user');
+    if (user['user_type'] !== 4){
+      this.router.navigate(['/main/dashboard']);
     }
     this.reportService.getStats().subscribe(result => {
       this.total_coupons = result['data'].total_coupons;

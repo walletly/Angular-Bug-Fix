@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import * as localForage from 'localforage';
+
 
 @Component({
   selector: 'app-marketers',
@@ -12,9 +14,6 @@ export class MarketersComponent implements OnInit {
   constructor(
     private router: Router
   ) {
-    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4){
-      router.navigate(['/main/dashboard']);
-    } 
   }
 
   data = [
@@ -45,6 +44,10 @@ export class MarketersComponent implements OnInit {
    
   ];
 
-  ngOnInit() {
+  async ngOnInit() {
+    const user = await localForage.getItem('user');
+    if (user['user_type'] !== 4){
+      this.router.navigate(['/main/dashboard']);
+    } 
   }
 }

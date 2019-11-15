@@ -3,6 +3,8 @@ import { MainService } from 'src/app/shared/services/main.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { BusinessService } from 'src/app/shared/services/business.service';
+import * as localForage from 'localforage';
+
 
 @Component({
   selector: 'app-create-business',
@@ -17,6 +19,7 @@ export class CreateBusinessComponent implements OnInit {
   inProcces = false;
   invalidUser = false;
   invalidUserMessage = '';
+  currentBrand;
 
   options = [
     { value: true, label: 'YES' },
@@ -29,7 +32,7 @@ export class CreateBusinessComponent implements OnInit {
     permission: '',
     phone: '',
     email: '',
-    user_id: localStorage.getItem('userID')
+    user_id: ''
   };
 
   myForm: FormGroup;
@@ -67,14 +70,14 @@ export class CreateBusinessComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.data = {
       firstname: '',
       lastname: '',
       permission: '',
       phone: '',
       email: '',
-      user_id: localStorage.getItem('userID')
+      user_id: await localForage.getItem('userID')
     };
   }
 
@@ -82,12 +85,13 @@ export class CreateBusinessComponent implements OnInit {
     this.showAletr = false;
   }
 
-  save() {
+  async save() {
+    this.currentBrand = await localForage.getItem("currentBrand");
     this.inProcces = true;
     if (this.myForm.valid) {
       this.customValidation = true;
       // this.mainService.addBusiness(this.data);
-      this.data['brand_id'] = JSON.parse(localStorage.getItem('currentBrand'))['brand_id'];
+      this.data['brand_id'] = this.currentBrand.brand_id;
       console.log(this.data);
       this.business.createBusiness(this.data).subscribe(result => {
         console.log(result);
@@ -104,13 +108,14 @@ export class CreateBusinessComponent implements OnInit {
     }
   }
 
-  addUser() {
+  async addUser() {
+    this.currentBrand = await localForage.getItem("currentBrand");
     this.invalidUser = false;
     this.inProcces = true;
     if (this.myForm.valid) {
       this.customValidation = true;
       // this.mainService.addBusiness(this.data);
-      this.data['brandIdToLink'] = JSON.parse(localStorage.getItem('currentBrand'))['brand_id'];
+      this.data['brandIdToLink'] = this.currentBrand.brand_id;
       console.log(this.data);
       this.data['is_active'] = true;
       this.business.addUser(this.data).subscribe(result => {
@@ -135,12 +140,13 @@ export class CreateBusinessComponent implements OnInit {
     }
   }
 
-  update() {
+  async update() {
+    this.currentBrand = await localForage.getItem("currentBrand");
     this.inProcces = true;
     if (this.myForm.valid) {
       this.customValidation = true;
       // this.mainService.addBusiness(this.data);
-      this.data['brand_id'] = JSON.parse(localStorage.getItem('currentBrand'))['brand_id'];
+      this.data['brand_id'] = this.currentBrand.brand_id;
       console.log(this.data);
       this.business.updateBusinessUser(this.id, this.data).subscribe(result => {
         console.log(result);

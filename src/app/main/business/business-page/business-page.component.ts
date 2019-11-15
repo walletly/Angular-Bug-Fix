@@ -4,6 +4,8 @@ import { MainService } from 'src/app/shared/services/main.service';
 import { BusinessService } from 'src/app/shared/services/business.service';
 import { BrandService } from 'src/app/shared/services/brand.service';
 import { Router } from '@angular/router';
+import * as localForage from 'localforage';
+
 
 declare var addHyphens: any;
 
@@ -29,6 +31,7 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
 
   allColumns = this.defaultColumns;
   checkAll;
+  currentBrand;
 
   data = [];
   fullData = [];
@@ -40,25 +43,17 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
   ibeacon;
   customValidationiBeacon = true;
   myFormiBeacon: FormGroup;
-  currentbrand;
 
   constructor(private formBuilder: FormBuilder,private brandService: BrandService,private mainService: MainService, private business: BusinessService, private router: Router) {
     // this.mainService.showLoader.emit(true);
     this.showLoader = true;
     this.getBusiness();
-    this.currentbrand = JSON.parse(localStorage.getItem('currentBrand'));
     this.myFormiBeacon = formBuilder.group({
       ibeacon_uuid: [""],
       ibeacon_major: [""],
       ibeacon_minor: [""],
       ibeacon_notificationtext: ["", [Validators.required]]
     });
-    this.ibeacon = (this.currentbrand['ibeacon'].ibeacon == 1) ? 'no' : 'yes';
-    this.myFormiBeacon.controls['ibeacon_uuid'].setValue(this.currentbrand['ibeacon'].ibeacon_uuid);
-    this.myFormiBeacon.controls['ibeacon_minor'].setValue(this.currentbrand['ibeacon'].ibeacon_minor);
-    this.myFormiBeacon.controls['ibeacon_major'].setValue(this.currentbrand['ibeacon'].ibeacon_major);
-    this.myFormiBeacon.controls['ibeacon_notificationtext'].setValue(this.currentbrand['ibeacon'].ibeacon_notificationtext);
-    console.log(this.ibeacon, this.currentbrand);
   }
 
   ngAfterViewInit() {
@@ -137,7 +132,9 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     }
   }
 
-  updateiBeacon(){
+  async updateiBeacon(){
+    this.currentBrand = await localForage.getItem('currentBrand');
+
     if (this.myFormiBeacon.valid) {
       let data;
       this.inProcces = true;
@@ -152,18 +149,18 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
       }else{
         data={
           'ibeacon': 2,
-          'ibeacon_uuid': this.currentbrand['ibeacon'].ibeacon_uuid,
-          'ibeacon_major': this.currentbrand['ibeacon'].ibeacon_major,
-          'ibeacon_minor': this.currentbrand['ibeacon'].ibeacon_minor,
+          'ibeacon_uuid': this.currentBrand.ibeacon.ibeacon_uuid,
+          'ibeacon_major': this.currentBrand.ibeacon.ibeacon_major,
+          'ibeacon_minor': this.currentBrand.ibeacon.ibeacon_minor,
           'ibeacon_notificationtext': this.myFormiBeacon.get('ibeacon_notificationtext').value
         }
       }
-      let brand_id = JSON.parse(localStorage.getItem('currentBrand'))['brand_id'];
+      let brand_id = this.currentBrand.brand_id;
       this.customValidationiBeacon = true;
       this.brandService.updateIbeacon(brand_id, data).subscribe(result => {
         console.log(result);
-        this.brandService.getBrandById(brand_id).subscribe(data => {
-          localStorage.setItem('currentBrand', JSON.stringify(data['brand']));
+        this.brandService.getBrandById(brand_id).subscribe(async data => {
+          await localForage.setItem('currentBrand', data['brand']);
           this.inProcces = false;
           this.mainService.showToastrSuccess.emit({text: 'iBeacon settings updated'});
         });
@@ -173,11 +170,17 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnInit() {
-    const user = JSON.parse(localStorage.getItem('user'));
+  async ngOnInit() {
+    this.currentBrand = await localForage.getItem('currentBrand');
+    this.ibeacon = (this.currentBrand.ibeacon.ibeacon == 1) ? 'no' : 'yes';
+    this.myFormiBeacon.controls['ibeacon_uuid'].setValue(this.currentBrand.ibeacon.ibeacon_uuid);
+    this.myFormiBeacon.controls['ibeacon_minor'].setValue(this.currentBrand.ibeacon.ibeacon_minor);
+    this.myFormiBeacon.controls['ibeacon_major'].setValue(this.currentBrand.ibeacon.ibeacon_major);
+    this.myFormiBeacon.controls['ibeacon_notificationtext'].setValue(this.currentBrand.ibeacon.ibeacon_notificationtext);
+    const user = await localForage.getItem('user');
 
     this.topArea = `Hi,
-    ${user.firstname} ${user.lastname}
+    ${user['firstname']} ${user['lastname']}
     this a is dummy messsge to send busniesss for
     Secret code
       `;
@@ -191,8 +194,9 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     // }, 4000);
   }
 
-  getBusiness() {
-    this.business.getUsers(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+  async getBusiness() {
+    this.currentBrand = await localForage.getItem('currentBrand');
+    this.business.getUsers(this.currentBrand.brand_id).subscribe(result => {
       console.log(result);
       if (result['success']) {
         this.fullData = result['brand_users'];
@@ -222,14 +226,15 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     });
   }
 
-  invite(email) {
+  async invite(email) {
+    this.currentBrand = await localForage.getItem('currentBrand');
     console.log(email);
 
     const message = {
       recepient: email,
       subject: 'email subject',
       message: 'Email message body',
-      brand_id: JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
+      brand_id: this.currentBrand.brand_id,
     };
 
     this.business.sendEmail([message]).subscribe(result => {
@@ -239,13 +244,14 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     });
   }
 
-  inviteAll() {
+  async inviteAll() {
+    this.currentBrand = await localForage.getItem('currentBrand');
     const messages = this.fullData.map(element => {
       return {
         recepient: element.email,
         subject: 'email subject',
         message: 'Email message body',
-        brand_id: JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
+        brand_id: this.currentBrand.brand_id,
       };
     });
 
@@ -279,14 +285,15 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     (document.getElementById('myModal') as HTMLDivElement).style.display = 'none';
   }
 
-  delete() {
+  async delete() {
+    this.currentBrand = await localForage.getItem('currentBrand');
     (document.getElementById('myModal') as HTMLDivElement).style.display = 'none';
     // this.mainService.showLoader.emit(true);
     this.showLoader = true;
 
     this.showActions = null;
     console.log(this.deleteId);
-    this.business.deleteBusinessUser(this.deleteId, JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+    this.business.deleteBusinessUser(this.deleteId, this.currentBrand.brand_id).subscribe(result => {
       console.log(result);
       if (result['success']) {
         this.mainService.showToastrSuccess.emit({text: 'User deleted'});
@@ -305,7 +312,9 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     this.getBusiness();
   }
 
-  changePermission(id, permission){
+  async changePermission(id, permission){
+    this.currentBrand = await localForage.getItem('currentBrand');
+
     let data;
     if(permission == 'YES'){
       data = false;
@@ -313,7 +322,7 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
       data = true;
     }
 
-    this.business.changeUserAccess(id, JSON.parse(localStorage.getItem('currentBrand'))['brand_id'], { permission: data } ).subscribe(result => {
+    this.business.changeUserAccess(id, this.currentBrand.brand_id, { permission: data } ).subscribe(result => {
       console.log(result);
       if (result['success']) {
         this.mainService.showToastrSuccess.emit({text: 'User permission updated'});

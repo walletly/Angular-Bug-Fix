@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup, Validators, FormBuilder } from "@angular/forms";
 import { UploadService } from 'src/app/shared/services/upload.service';
 import { Router } from '@angular/router';
+import * as localForage from 'localforage';
+
 
 @Component({
   selector: 'app-campaign-type',
@@ -58,9 +60,6 @@ export class CampaignTypeComponent implements OnInit {
       name: ["", [Validators.required]],
       iconImage: ["", [Validators.required]]
     });
-    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4){
-      router.navigate(['/main/dashboard']);
-    } 
   }
   add(){
     if (this.myForm.invalid){
@@ -110,5 +109,10 @@ export class CampaignTypeComponent implements OnInit {
     // });
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    const user = await localForage.getItem('user');
+    if (user['user_type'] !== 4){
+      this.router.navigate(['/main/dashboard']);
+    } 
+  }
 }

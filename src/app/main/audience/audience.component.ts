@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BrandService } from 'src/app/shared/services/brand.service';
 import { MainService } from 'src/app/shared/services/main.service';
 import { ngxCsv } from 'ngx-csv/ngx-csv';
-import { error } from 'util';
+import * as localForage from 'localforage';
 
 @Component({
   selector: 'app-audience',
@@ -10,6 +10,8 @@ import { error } from 'util';
   styleUrls: ['./audience.component.scss']
 })
 export class AudienceComponent implements OnInit {
+  currentUser;
+  currentBrand;
   showActions;
   checkAllcoupons;
   checkAlltickets;
@@ -64,9 +66,11 @@ export class AudienceComponent implements OnInit {
   ngOnInit() {
   }
 
-  getCouponAudience() {
-    if (JSON.parse(localStorage.getItem("user"))["user_type"] !== 4) {
-      this.brandService.getBrandCouponAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+  async getCouponAudience() {
+    this.currentUser = await localForage.getItem('user');
+    this.currentBrand = await localForage.getItem('currentBrand');
+    if (this.currentUser.user_type !== 4) {
+      this.brandService.getBrandCouponAudience(this.currentBrand.brand_id).subscribe(result => {
         console.log(result);
         let audiences;
 
@@ -155,9 +159,9 @@ export class AudienceComponent implements OnInit {
   }
   }
 
-  getStampCardAudience() {
-    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
-      this.brandService.getBrandStampCardAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+  async getStampCardAudience() {
+    if (this.currentUser.user_type !== 4) {
+      this.brandService.getBrandStampCardAudience(this.currentBrand.brand_id).subscribe(result => {
         console.log(result);
         let audiences;
         if (result['success']) {
@@ -189,9 +193,9 @@ export class AudienceComponent implements OnInit {
     }
   }
 
-  getTicketAudience() {
-    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
-      this.brandService.getBrandTicketAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result =>{
+  async getTicketAudience() {
+    if (this.currentUser.user_type !== 4) {
+      this.brandService.getBrandTicketAudience(this.currentBrand.brand_id).subscribe(result =>{
         console.log(result);
         let audiences;
         if (result['success']) {
@@ -243,9 +247,9 @@ export class AudienceComponent implements OnInit {
     }
   }
 
-  getLoyaltyCardAudience() {
-    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
-      this.brandService.getBrandLoyaltyCardAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+  async getLoyaltyCardAudience() {
+    if (this.currentUser.user_type !== 4) {
+      this.brandService.getBrandLoyaltyCardAudience(this.currentBrand.brand_id).subscribe(result => {
         console.log(result);
         let audiences;
         if (result['success']) {
@@ -277,9 +281,9 @@ export class AudienceComponent implements OnInit {
     }
   }
 
-  getMembershipCardAudience() {
-    if (JSON.parse(localStorage.getItem('user'))['user_type'] !== 4) {
-      this.brandService.getBrandMembershipCardAudience(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+  async getMembershipCardAudience() {
+    if (this.currentUser.user_type !== 4) {
+      this.brandService.getBrandMembershipCardAudience(this.currentBrand.brand_id).subscribe(result => {
         this.membershipCardAudience = [];
         console.log(result);
         let audiences;

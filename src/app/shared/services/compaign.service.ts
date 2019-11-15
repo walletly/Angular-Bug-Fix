@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SERVER_API_URL } from '../../../environments/environment';
+import * as localForage from 'localforage';
+import { from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,41 +12,58 @@ export class CompaignService {
   constructor(private http: HttpClient) { }
 
   createСampaign(body) {
-    const httpHeadersWithCT = new HttpHeaders ({
-      'Content-Type': 'application/json',
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.post(SERVER_API_URL + 'campaign', body, { headers: httpHeadersWithCT });
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeadersWithCT = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.post(SERVER_API_URL + 'campaign', body, { headers: httpHeadersWithCT }).toPromise();
+    }));
   }
 
   updateСampaign(id, body) {
-    const httpHeadersWithCT = new HttpHeaders ({
-      'Content-Type': 'application/json',
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.put(SERVER_API_URL + 'campaign/' + id, body, { headers: httpHeadersWithCT });
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeadersWithCT = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.put(SERVER_API_URL + 'campaign/' + id, body, { headers: httpHeadersWithCT }).toPromise();
+    }));
   }
 
   deleteСampaign(body) {
-    const deleteOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-        'x-auth-user': localStorage.getItem('userID')
-      }),
-      body: body
-    };
-    return this.http.delete(SERVER_API_URL + 'campaign', deleteOptions);
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const deleteOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'x-auth-token': `Bearer ${token}`,
+          'x-auth-user': userID
+        }),
+        body: body
+      };
+      return this.http.delete(SERVER_API_URL + 'campaign', deleteOptions).toPromise();
+    }));
   }
 
   getСampaignById(id) {
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.get(SERVER_API_URL + 'campaign/' + id, { headers: httpHeaders });
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.get(SERVER_API_URL + 'campaign/' + id, { headers: httpHeaders }).toPromise();
+    }));
   }
 
   getСampaignByCode(code) {
@@ -60,19 +79,28 @@ export class CompaignService {
   }
 
   getСampaignsBrands(id, body) {
-    const httpHeadersWithCT = new HttpHeaders ({
-      'Content-Type': 'application/json',
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.post(SERVER_API_URL + 'campaign/all/' + id, body, { headers: httpHeadersWithCT });
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeadersWithCT = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.post(SERVER_API_URL + 'campaign/all/' + id, body, { headers: httpHeadersWithCT }).toPromise();
+    }));
   }
 
   sendCampaignNotification(campaign_id, body){
-    const httpHeaders = new HttpHeaders ({
-      'x-auth-token': `Bearer ${localStorage.getItem('usertoken')}`,
-      'x-auth-user': localStorage.getItem('userID')
-    });
-    return this.http.post(SERVER_API_URL + 'campaign/notification/' + campaign_id, body, { headers: httpHeaders });
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.post(SERVER_API_URL + 'campaign/notification/' + campaign_id, body, { headers: httpHeaders }).toPromise();
+    }));
   }
 }

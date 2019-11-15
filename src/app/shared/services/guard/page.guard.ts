@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AngularFireAuth } from 'angularfire2/auth';
+import * as localForage from 'localforage';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,9 @@ export class PageGuard implements CanActivate{
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
       
-      return Observable.create(observer => {
-        const user_type = JSON.parse(localStorage.getItem('user')).user_type;
+      return Observable.create(async observer => {
+        const user = await localForage.getItem('user');
+        const user_type = user['user_type'];
         const url = state.url;
         if (url == '/main/dashboard'){
           if(user_type == 1){

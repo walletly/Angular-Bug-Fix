@@ -5,6 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { CardService } from 'src/app/shared/services/card.service';
 import { UploadService } from 'src/app/shared/services/upload.service';
+import * as localForage from 'localforage';
 
 @Component({
   selector: 'app-create-coupons',
@@ -23,6 +24,8 @@ export class CreateCouponsComponent implements OnInit {
   photoCover;
   coverSizeValidation = true;
   brandSizeValidation = true;
+
+  currentBrand;
 
   myFormFront: FormGroup;
   myFormBack: FormGroup;
@@ -78,14 +81,15 @@ export class CreateCouponsComponent implements OnInit {
 
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     // this.mainService.showLoader.emit(true);
     this.showLoader = true;
+    this.currentBrand = await localForage.getItem('currentBrand');
 
     this.id = this.activeRout.snapshot.paramMap.get('id');
     console.log(this.id);
     if (this.id) {
-      this.cardService.getCardById(this.id).subscribe(result => {
+      this.cardService.getCardById(this.id).subscribe(async result => {
         console.log(result);
         if(result['data'].is_delete == true){
           this.showLoader = false;
@@ -139,7 +143,7 @@ export class CreateCouponsComponent implements OnInit {
         this.typeId = this.mainService.cardTypeId;
         if(this.typeId == 4 || this.typeId == 2){
           this.showLoader = true;
-          this.cardService.getBrandsCards(JSON.parse(localStorage.getItem('currentBrand'))['brand_id']).subscribe(result => {
+          this.cardService.getBrandsCards(this.currentBrand.brand_id).subscribe(result => {
             this.showLoader = true;
             for (let i in result['data']){
               this.showLoader = true;
@@ -177,8 +181,8 @@ export class CreateCouponsComponent implements OnInit {
         cardType: this.typeId,
         id: ''
       };
-      if (localStorage.getItem('currentBrand')) {
-        const currentBrand = JSON.parse(localStorage.getItem('currentBrand'));
+      if (this.currentBrand) {
+        const currentBrand = this.currentBrand;
         console.log(currentBrand);
 
         this.dataCard = {
@@ -256,7 +260,7 @@ export class CreateCouponsComponent implements OnInit {
     }
   }
 
-  create() {
+  async create() {
     console.log(this.dataCard);
     this.inProcces = true;
     if (this.dataCard.brandLogo) {
@@ -268,7 +272,7 @@ export class CreateCouponsComponent implements OnInit {
     if (this.myFormFront.valid && this.myFormBack.valid) {
       this.customValidationFront = true;
       this.customValidationBack = true;
-      this.createCard();
+      await this.createCard();
       this.cardService.createCard(this.card).subscribe(result => {
         console.log(result);
         if (result['success']) {
@@ -301,7 +305,7 @@ export class CreateCouponsComponent implements OnInit {
     }
   }
 
-  update() {
+  async update() {
     this.inProcces = true;
     this.inUpdate = true;
     console.log(this.id);
@@ -316,7 +320,7 @@ export class CreateCouponsComponent implements OnInit {
       this.customValidationFront = true;
       this.customValidationBack = true;
 
-      this.createCard();
+      await this.createCard();
       this.cardService.updateCard(this.id, this.card).subscribe(result => {
         console.log(result);
         if (result['success']) {
@@ -436,7 +440,8 @@ export class CreateCouponsComponent implements OnInit {
     }
   }
 
-  createCard() {
+  async createCard() {
+    this.currentBrand = await localForage.getItem('currentBrand');
     this.card = {
       template_name: this.dataCard.templateName,
       brand_name: this.dataCard.brandName,
@@ -450,8 +455,8 @@ export class CreateCouponsComponent implements OnInit {
       email: this.dataCard.email,
       website_url: this.dataCard.website,
       facebook_page_url: this.dataCard.facebook,
-      brand_id: JSON.parse(localStorage.getItem('currentBrand'))['brand_id'],
-      user_id: localStorage.getItem('userID')
+      brand_id: this.currentBrand.brand_id,
+      user_id: await localForage.getItem('userID')
     };
     console.log(this.card);
   }
