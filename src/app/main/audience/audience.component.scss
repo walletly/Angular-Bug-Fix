@@ -226,3 +226,26 @@ input:checked + .campaignSlider .off {
 .campaignSlider.campaignRound:before {
   border-radius: 50%;
 }
+
+.user-drb {
+  box-shadow: 0 0 16px rgba(87, 86, 90, 0.08) !important;
+  border-radius: 5px !important;
+  background: white;
+  position: absolute;
+  width: 500px;
+  top: 114px;;
+  left: 292px;
+  z-index: 11;
+  padding: 20px 20px;
+  &::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #ffffff transparent;
+    position: absolute;
+    top: -9px;
+    left: 256px;
+  }
+}

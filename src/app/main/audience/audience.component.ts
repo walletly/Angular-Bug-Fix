@@ -11,11 +11,17 @@ import * as localForage from 'localforage';
 })
 export class AudienceComponent implements OnInit {
   showActions;
+  // And;
+  // Or;
+  moreFilter = false;
   checkAllcoupons = true;
   checkAlltickets = true;
   checkAllStampCards = true;
   checkAllLoyaltyCards = true;
   checkAllMembershipCards = true;
+  typeFilter = true;
+  campaignFilter;
+  deviceFilter;
   showLoader;
   couponColumns = ['Check', 'Name', 'Email Address', 'Campaign Name', 'Type', 'Days Left', 'Status', 'Device'];
   eventColumns = ['Check', 'Name', 'Email Address', 'Campaign Name', 'Type', 'Days Left', 'Members', 'Check in', 'Device'];
@@ -44,6 +50,8 @@ export class AudienceComponent implements OnInit {
   filterMembershipCardAudience = [];
   filterstampCardAudience = [];
   selectedAudience = [];
+  campaignNames = [];
+  filterValue = { Campaign: '', Device: '' };
 
   currentUser;
   currentBrand;
@@ -58,7 +66,7 @@ export class AudienceComponent implements OnInit {
   }
 
   async getCouponAudience() {
-    this.currentUser = await localForage.getItem('user');
+    this.currentUser = await localForage.getItem("user");
     this.currentBrand = await localForage.getItem('currentBrand');
     if (this.currentUser.user_type !== 4) {
       this.brandService.getBrandCouponAudience(this.currentBrand.brand_id).subscribe(result => {
@@ -109,7 +117,7 @@ export class AudienceComponent implements OnInit {
               },
               'Days Left': { name: daysLeft },
               'Status': { name:  element.status },
-              'Device': { name: element.deviceType ? element.deviceType : 'Apple' },
+              'Device': { name: element.is_wallet ? element.deviceType ? element.deviceType : 'Apple' : '' },
             }
           });
 
@@ -129,7 +137,7 @@ export class AudienceComponent implements OnInit {
   }
 
   async getTicketAudience() {
-    this.currentUser = await localForage.getItem('user');
+    this.currentUser = await localForage.getItem("user");
     this.currentBrand = await localForage.getItem('currentBrand');
     if (this.currentUser.user_type !== 4) {
       this.brandService.getBrandTicketAudience(this.currentBrand.brand_id).subscribe(result =>{
@@ -172,7 +180,7 @@ export class AudienceComponent implements OnInit {
                 ''
               },
               'Check in': { name: element.is_redeemed },
-              'Device': { name: element.deviceType ? element.deviceType : 'Apple' }
+              'Device': { name: element.is_wallet ? element.deviceType ? element.deviceType : 'Apple' : '' }
               }
             });
           });
@@ -190,10 +198,10 @@ export class AudienceComponent implements OnInit {
   }
 
   async getStampCardAudience() {
-    this.currentUser = await localForage.getItem('user');
+    this.currentUser = await localForage.getItem("user");
     this.currentBrand = await localForage.getItem('currentBrand');
     if (this.currentUser.user_type !== 4) {
-      this.brandService.getBrandStampCardAudience(this.currentBrand.currentBrand.brand_id).subscribe(result => {
+      this.brandService.getBrandStampCardAudience(this.currentBrand.brand_id).subscribe(result => {
         this.stampCardAudience = []
         console.log(result);
         let audiences;
@@ -210,7 +218,7 @@ export class AudienceComponent implements OnInit {
               'Issue Date': { name: element.createDateFormatted },
               'Stamps': { name: element.stamps },
               'Redeem Count': { name: element.redeem_count },
-              'Device': {  name: element.deviceType ? element.deviceType : 'Apple' }
+              'Device': {  name: element.is_wallet ? element.deviceType ? element.deviceType : 'Apple' : '' }
               }
             });
           });
@@ -228,7 +236,7 @@ export class AudienceComponent implements OnInit {
   }
 
   async getLoyaltyCardAudience() {
-    this.currentUser = await localForage.getItem('user');
+    this.currentUser = await localForage.getItem("user");
     this.currentBrand = await localForage.getItem('currentBrand');
     if (this.currentUser.user_type !== 4) {
       this.brandService.getBrandLoyaltyCardAudience(this.currentBrand.brand_id).subscribe(result => {
@@ -248,7 +256,7 @@ export class AudienceComponent implements OnInit {
               'Issue Date': { name: element.createDateFormatted },
               'Points': { name: element.points },
               'Redeem Count': { name: element.redeem_count },
-              'Device': {  name: element.deviceType ? element.deviceType : 'Apple' }
+              'Device': {  name: element.is_wallet ? element.deviceType ? element.deviceType : 'Apple' : '' }
               }
             });
           });
@@ -266,7 +274,7 @@ export class AudienceComponent implements OnInit {
   }
 
   async getMembershipCardAudience() {
-    this.currentUser = await localForage.getItem('user');
+    this.currentUser = await localForage.getItem("user");
     this.currentBrand = await localForage.getItem('currentBrand');
     if (this.currentUser.user_type !== 4) {
       this.brandService.getBrandMembershipCardAudience(this.currentBrand.brand_id).subscribe(result => {
@@ -286,7 +294,7 @@ export class AudienceComponent implements OnInit {
               'Issue Date': { name: element.createDateFormatted },
               'Redeem Count': { name: element.redeem_count },
               'Status': {name: element.is_active},
-              'Device': { name: element.deviceType ? element.deviceType : 'Apple' },
+              'Device': { name: element.is_wallet ? element.deviceType ? element.deviceType : 'Apple' : '' },
               'Id': { name: element.id }
               }
             });
@@ -328,6 +336,9 @@ export class AudienceComponent implements OnInit {
   onChangeTab() {
     this.searchText = '';
     this.selectedAudience = [];
+    this.campaignNames = [];
+    this.campaignFilter = false;
+    this.deviceFilter = false;
     this.checkAllcoupons = true;
     this.checkAlltickets = true;
     this.checkAllStampCards = true;
@@ -690,6 +701,180 @@ export class AudienceComponent implements OnInit {
       })
       console.log(this.selectedAudience);
     }
+  }
+
+  getCampaign() {
+    if(this.campaignFilter){
+      this.campaignNames = [];
+        if(this.type === 'coupons'){
+          this.CouponAudience.forEach(element => {
+            if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
+              this.campaignNames.push(element['data']['Campaign Name'].name)
+            }
+          })
+      } else if (this.type === 'tickets'){
+        this.TicketAudience.forEach(element => {
+          if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
+            this.campaignNames.push(element['data']['Campaign Name'].name)
+          }
+        })
+      } else if (this.type === 'stamp_cards'){
+        this.stampCardAudience.forEach(element => {
+          if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
+            this.campaignNames.push(element['data']['Campaign Name'].name)
+          }
+        })
+      } else if (this.type === 'loyalty_cards'){
+        this.loyaltyCardAudience.forEach(element => {
+          if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
+            this.campaignNames.push(element['data']['Campaign Name'].name)
+          }
+        })
+      } else if (this.type === 'membership_cards') {
+        this.membershipCardAudience.forEach(element => {
+          if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
+            this.campaignNames.push(element['data']['Campaign Name'].name)
+          }
+        })
+      }
+    } else {
+      this.campaignNames = [];
+      this.filterValue.Campaign = '';
+      this.moreFilterFunc();
+    }
+  }
+
+  getDevice() {
+    if(this.deviceFilter){
+      console.log('device filter present');
+    } else {
+      this.filterValue.Device = '';
+      this.moreFilterFunc();
+    }
+  }
+
+  moreFilterFunc(){
+    if(this.type === 'coupons'){
+      this.filterCouponAudience = this.CouponAudience.filter(row => {
+        // tslint:disable-next-line: forin
+        for(var data in row){
+          if(this.filterValue.Campaign === '' && this.filterValue.Device === ''){
+            return true
+          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device === ''){
+            if(row.data['Campaign Name'].name === this.filterValue.Campaign){
+              return true;
+            }
+          }else if (this.filterValue.Campaign === '' && this.filterValue.Device !== ''){
+            if(row.data['Device'].name === this.filterValue.Device){
+              return true;
+            }
+          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device !== ''){
+            if(row.data['Campaign Name'].name === this.filterValue.Campaign && row.data['Device'].name === this.filterValue.Device){
+              return true;
+            }
+          }
+        }
+      })
+      this.selectedAudience = this.filterCouponAudience;
+    } else if(this.type === 'tickets'){
+      this.filterTicketAudience = this.TicketAudience.filter(row => {
+        // tslint:disable-next-line: forin
+        for(var data in row){
+          if(this.filterValue.Campaign === '' && this.filterValue.Device === ''){
+            return true
+          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device === ''){
+            if(row.data['Campaign Name'].name === this.filterValue.Campaign){
+              return true;
+            }
+          }else if (this.filterValue.Campaign === '' && this.filterValue.Device !== ''){
+            if(row.data['Device'].name === this.filterValue.Device){
+              return true;
+            }
+          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device !== ''){
+            if(row.data['Campaign Name'].name === this.filterValue.Campaign && row.data['Device'].name === this.filterValue.Device){
+              return true;
+            }
+          }
+        }
+      })
+      this.selectedAudience = this.filterTicketAudience;
+    } else if (this.type === 'stamp_cards'){
+      this.filterstampCardAudience = this.stampCardAudience.filter(row => {
+        // tslint:disable-next-line: forin
+        for(var data in row){
+          if(this.filterValue.Campaign === '' && this.filterValue.Device === ''){
+            return true
+          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device === ''){
+            if(row.data['Campaign Name'].name === this.filterValue.Campaign){
+              return true;
+            }
+          }else if (this.filterValue.Campaign === '' && this.filterValue.Device !== ''){
+            if(row.data['Device'].name === this.filterValue.Device){
+              return true;
+            }
+          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device !== ''){
+            if(row.data['Campaign Name'].name === this.filterValue.Campaign && row.data['Device'].name === this.filterValue.Device){
+              return true;
+            }
+          }
+        }
+      })
+      this.selectedAudience = this.filterstampCardAudience;
+    } else if (this.type === 'loyalty_cards'){
+      this.filterloyaltyCardAudience = this.loyaltyCardAudience.filter(row => {
+        // tslint:disable-next-line: forin
+        for(var data in row){
+          if(this.filterValue.Campaign === '' && this.filterValue.Device === ''){
+            return true
+          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device === ''){
+            if(row.data['Campaign Name'].name === this.filterValue.Campaign){
+              return true;
+            }
+          }else if (this.filterValue.Campaign === '' && this.filterValue.Device !== ''){
+            if(row.data['Device'].name === this.filterValue.Device){
+              return true;
+            }
+          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device !== ''){
+            if(row.data['Campaign Name'].name === this.filterValue.Campaign && row.data['Device'].name === this.filterValue.Device){
+              return true;
+            }
+          }
+        }
+      })
+      this.selectedAudience = this.filterloyaltyCardAudience;
+    } else if (this.type === 'membership_cards'){
+      this.filterMembershipCardAudience = this.membershipCardAudience.filter(row => {
+        // tslint:disable-next-line: forin
+        for(var data in row){
+          if(this.filterValue.Campaign === '' && this.filterValue.Device === ''){
+            return true
+          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device === ''){
+            if(row.data['Campaign Name'].name === this.filterValue.Campaign){
+              return true;
+            }
+          }else if (this.filterValue.Campaign === '' && this.filterValue.Device !== ''){
+            if(row.data['Device'].name === this.filterValue.Device){
+              return true;
+            }
+          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device !== ''){
+            if(row.data['Campaign Name'].name === this.filterValue.Campaign && row.data['Device'].name === this.filterValue.Device){
+              return true;
+            }
+          }
+        }
+      })
+      this.selectedAudience = this.filterMembershipCardAudience;
+    }
+  }
+
+  moreCampaignFilter(filterValue){
+    this.filterValue.Campaign = filterValue;
+    this.moreFilterFunc();
+  }
+
+  moreDeviceFilter(filterValue){
+    this.filterValue.Device = filterValue;
+    this.moreFilterFunc();
   }
 
 }

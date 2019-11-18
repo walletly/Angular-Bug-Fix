@@ -18,20 +18,18 @@
           <div class="text-center" style="padding: 70px;">
             <button (click)="loginFB()" class="m-b-40" nbButton status="facebook">Sign In With Facebook</button>
             <div>
-              <nb-checkbox [(ngModel)]="terms" status="success">
-                <span [ngStyle]="{'color': termsError && !terms ? 'red' : 'unset'}">
-                  I agree to Walletly
-                </span>
-              </nb-checkbox>
-              <span style="margin-left: -18px; position: relative; top: -2px;">
-                <a class="c-p m-r-5" target="_blank" href="https://www.walletly.ai/terms"> Terms of Service</a>
+              <span>
+                By signing in, you are agreeing to Walletly
+              </span>
+              <span style="position: relative;">
+                <a class="c-p" target="_blank" href="https://www.walletly.ai/terms"> Terms of Service</a>
               </span>
               <div>
-                <span [ngStyle]="{'color': termsError && !terms ? 'red' : 'unset'}">
+                <span>
                   and
                 </span>
                 <span>
-                  <a class="c-p m-l-5" target="_blank" href="https://www.walletly.ai/privacy"> Privacy Policy</a>
+                  <a class="c-p" target="_blank" href="https://www.walletly.ai/privacy"> Privacy Policy</a>
                 </span>
               </div>
             </div>

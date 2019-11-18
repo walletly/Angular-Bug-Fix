@@ -394,6 +394,7 @@ export class SettingsComponent implements OnInit {
       this.resubscribe = true;
       this.showNewCard = false;
     }else{
+      this.resubscribe = false;
       if(!this.cancelSubsciption){
         return
       }

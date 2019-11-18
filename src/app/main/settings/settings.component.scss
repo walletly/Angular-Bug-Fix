@@ -351,6 +351,12 @@ input.zip {
     padding-left: 40px;
     margin: 0px;
   }
+  .cardDetails:hover{
+    color: #3dcc6d;
+    .dot{
+      background-color: #3dcc6d;
+    }
+  }
 }
 table {
   border: 1px solid #dee3e5;

@@ -12,8 +12,6 @@ import * as localForage from 'localforage';
   styleUrls: ['./fb-login.component.scss']
 })
 export class FbLoginComponent implements OnInit {
-  terms;
-  termsError;
   showLoader = true;
   businessUser = false;
   businessEmail;
@@ -214,16 +212,12 @@ export class FbLoginComponent implements OnInit {
   }
 
   async loginFB() {
-    if (this.terms) {
-      if(await localForage.getItem('loggedIn') == true){
-        this.ngZone.run(() => this.router.navigate(['/main/dashboard']));
-      }else{
-        await localForage.clear();
-        this.firebaseAuth.auth.signOut();
-        this.authService.doFacebookLogin();
-      }
-    } else {
-      this.termsError = true;
+    if(await localForage.getItem('loggedIn') == true){
+      this.ngZone.run(() => this.router.navigate(['/main/dashboard']));
+    }else{
+      await localForage.clear();
+      this.firebaseAuth.auth.signOut();
+      this.authService.doFacebookLogin();
     }
   }
 
