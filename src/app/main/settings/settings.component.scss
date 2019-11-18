@@ -304,32 +304,39 @@ input.zip {
   border: 1px solid #dee3e5;
   background-color: #ffffff;
   width: max-content;
-  border-radius: 10px;
   margin-top: 40px;
   margin-bottom: 40px;
   margin-left: 20px;
-  padding-top: 20px;
-  padding-bottom: 40px;
+  padding-bottom: 20px;
   .head {
-    color: #afafb9;
     font-size: 16px;
     font-weight: 400;
     border-bottom: 1px solid #dee3e5;
-    display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-right: 40px;
-    padding-left: 40px;
+    padding-right: 20px;
+    padding-left: 20px;
     padding-top: 20px;
-    padding-bottom: 10px; 
+    padding-bottom: 20px; 
   }
   .items{
-    padding-right: 40px;
-    padding-left: 40px;
-    padding-top: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #dee3e5;
   }
   .label{
-    color: #afafb9;
+    margin-right: 30px;
+  }
+  .value{
+    float: right;
+    text-align: right;
+  }
+  .button{
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-top: 20px;
   }
   .dot {
     margin-left: 5px;

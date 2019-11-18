@@ -7,28 +7,22 @@ th {
     color: #afafb9;
     font-family: Poppins;
     // font-size: 16px;
+    padding: 10px !important;
     font-size: 14px;
     font-weight: 400;
     border-right: none !important;
     border-left: none !important;
     &:first-child {
-      padding: 0 !important;
       width: 40px;
     }
-    // &:nth-child(7) {
-    //     width: 100px;
-    //     padding-left: 0;
-    // }
-    // &:nth-child(6) {
-    //     width: 100px;
-    //     padding-left: 0;
-    // }
-    // &:nth-child(1) {
-    //     width: 110px;
-    //     padding-right: 0;
-    // }
     &:nth-child(2) {
         padding-left: 0;
+    }
+    &:nth-child(3){
+      width: 200px;
+    }
+    &:nth-child(4){
+      width: 200px;
     }
 }
 
@@ -36,37 +30,23 @@ td {
     color: #323232;
     font-family: Poppins;
     // font-size: 15px;
+    padding: 10px !important;
     font-size: 12px;
     font-weight: 400;
     border-right: none !important;
     border-left: none !important;
     overflow: visible;
     &:first-child {
-      padding: 0 !important;
       width: 40px;
     }
-    // &:last-child {
-    //     width: 100px;
-    //     padding-left: 0;
-    // }
-    // &:nth-child(7) {
-    //     width: 100px;
-    //     padding-left: 0;
-    // }
-    // &:nth-child(6) {
-    //     width: 100px;
-    //     padding-left: 0;
-    // }
-    // &:nth-child(1) {
-    //     width: 110px;
-    //     padding-right: 0;
-    // }
-    // &:nth-child(2) {
-    //     width: 110px;
-    //     padding-right: 0;
-    // }
     &:nth-child(2) {
       padding-left: 0;
+    }
+    &:nth-child(3){
+      width: 200px;
+    }
+    &:nth-child(4){
+      width: 200px;
     }
 }
 
@@ -99,12 +79,12 @@ nb-card {
         font-size: 12px;
         font-weight: 400;
     }
-    &.expired {
-        color: #f1737e;
-        // font-size: 15px;
-        font-size: 12px;
-        font-weight: 500;
-    }
+}
+.expired {
+  color: #f1737e;
+  // font-size: 15px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .filtr-btn {
@@ -221,7 +201,7 @@ input:checked + .campaignSlider:before {
   margin-left:22px;
 }
 
-.on, .off { 
+.on, .off {
   color: #323232;
   position: absolute;
   transform: translate(-50%,-50%);

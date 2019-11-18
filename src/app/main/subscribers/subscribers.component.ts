@@ -45,7 +45,7 @@ export class SubscribersComponent implements OnInit {
             data: {
               'Check': {name: true },
               'Avatar': { name: element.avatar },
-              'Name': { name: `${element.firstname} ${element.lastname}` },
+              'Name': { name:  element.firstname ? `${element.firstname} ${element.lastname}` : ''},
               'Email': { name: element.email },
               'Phone': { name: element.phone },
               'Gender': { name: element.gender },

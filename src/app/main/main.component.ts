@@ -52,7 +52,7 @@ export class MainComponent implements OnInit, AfterViewInit {
           link: ["business/business-page"]
         },
         {
-          icon: "",
+          icon: "icon-menu insight",
           title: "Insight",
           link: ["audience"]
         },

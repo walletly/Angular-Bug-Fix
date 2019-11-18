@@ -37,10 +37,15 @@ export class SettingsComponent implements OnInit {
 
   is_subscribed = false;
   subscriptionData = {};
+  showNewCard = false;
+  cancelSubsciption = false;
+  pendingCancellation = false;
+  resubscribe = false;
  
   subscriptionForm: FormGroup;
   invalidSubscriptionForm = false;
   inSubscriptionProcces = false;
+  inDeletionProcces = false;
   cardError = false;
   cardErrorMessage = '';
   
@@ -229,16 +234,28 @@ export class SettingsComponent implements OnInit {
     });
     this.stripeSubscriptionService.getSubscription(this.currentBrand.brand_id).subscribe(result => {
       if(result['success']){
-        this.is_subscribed = result['data'].is_subscribed;
+        this.is_subscribed = true;
         this.subscriptionData = result['data'];
         if(!this.is_subscribed){
           this.is_subscribed = !this.subscriptionData['is_delete'] && this.subscriptionData['status'] == 'incomplete'  ? true : false;
         }
+        if(!this.subscriptionData['status'].includes('cancel')){
+          this.cancelSubsciption = true;
+        }
         if(this.subscriptionData['latestInvoice_date']){
           let d = new Date(this.subscriptionData['latestInvoice_date']._seconds * 1000);
           this.subscriptionData['latestInvoice_date'] = d.toDateString();
-          this.subscriptionData['nextInvoice_date'] = new Date(d.setDate(d.getDate() + 30)).toDateString();
+          if(!this.cancelSubsciption){
+            this.subscriptionData['nextInvoice_date'] = null;
+            if(new Date < new Date(d.setDate(d.getDate() + 30))){
+              this.pendingCancellation = true;
+            }
+          }else{
+            this.subscriptionData['nextInvoice_date'] = new Date(d.setDate(d.getDate() + 30)).toDateString();
+          }
         }
+      }else{
+        this.is_subscribed = false;
       }
     }, err => {
       console.log('getSubscription err:', err);
@@ -293,12 +310,11 @@ export class SettingsComponent implements OnInit {
         metadata: {}
       }).subscribe(async result => {
         if (result.paymentMethod) {
-          const payment_method = result.paymentMethod.id;
+          const payment_method = result.paymentMethod;
           const customerData = {
             brand_id: this.currentBrand.brand_id,
             brand_name: this.currentBrand.brand_name,
             payment_method,
-            billing_email: email,
             user_id: await localForage.getItem('userID')
           }
           this.stripeSubscriptionService.makeCustomerSubscription(customerData).subscribe(result => {
@@ -307,6 +323,8 @@ export class SettingsComponent implements OnInit {
             if(!this.is_subscribed){
               this.is_subscribed = !this.subscriptionData['is_delete'] && this.subscriptionData['status'] == 'incomplete'  ? true : false;
             }
+            this.cancelSubsciption = true;
+            this.showNewCard = false;
             if(this.subscriptionData['latestInvoice_date']){
               let d = new Date(this.subscriptionData['latestInvoice_date']._seconds * 1000);
               this.subscriptionData['latestInvoice_date'] = d.toDateString();
@@ -355,16 +373,108 @@ export class SettingsComponent implements OnInit {
   }
 
   async deleteSubscription() {
+    this.showNewCard = false;
     this.currentBrand = await localForage.getItem('currentBrand');
-    this.inSubscriptionProcces = true;
+    this.inDeletionProcces = true;
     this.stripeSubscriptionService.deleteSubscription(this.currentBrand.brand_id).subscribe(result => {
-      this.inSubscriptionProcces = false;
+      this.inDeletionProcces = false;
       this.mainService.showToastrSuccess.emit({text: 'Subscription Deleted'});
       this.subscriptionData['status'] = 'cancelled';
+      this.cancelSubsciption = false;
+      this.pendingCancellation = true;
+      this.subscriptionData['nextInvoice_date'] = null;
     }, err => {
       console.log('deleteSubscription err:',err);
-      this.inSubscriptionProcces = false;
+      this.inDeletionProcces = false;
     })
+  }
+
+  async newCard(resubscribe){
+    if(resubscribe){
+      this.resubscribe = true;
+      this.showNewCard = false;
+    }else{
+      if(!this.cancelSubsciption){
+        return
+      }
+    }
+    if(this.showNewCard){
+      this.showNewCard = false;
+      return
+    }
+    this.showNewCard = true;
+    this.currentUser = await localForage.getItem('user');
+    setTimeout(() => {
+      this.stripeService.elements(this.elementsOptions)
+      .subscribe(elements => {
+        this.elements = elements;
+          this.card = this.elements.create('card', {
+          style: {
+            base: {
+              iconColor: '#666EE8',
+              color: '#31325F',
+              lineHeight: '40px',
+              fontWeight: 300,
+              fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+              fontSize: '18px',
+              '::placeholder': {
+                color: '#CFD7E0'
+              }
+            }
+          }
+        });
+        this.card.mount('#card-element');
+        this.subscriptionForm.controls['email'].setValue(this.currentUser.email);
+      });
+    }, 300);
+  }
+
+  async changeCustomerCard(){
+    this.currentUser = await localForage.getItem('user');
+    this.currentBrand = await localForage.getItem('currentBrand');
+    if(this.subscriptionForm.valid){
+      this.invalidSubscriptionForm = false;
+      this.inSubscriptionProcces = true;
+      this.cardError = false;
+      this.cardErrorMessage = '';
+      const email = this.subscriptionForm.get('email').value;
+      this.stripeService.createPaymentMethod('card', this.card, {
+        billing_details: {
+          email: email
+        },
+        metadata: {}
+      }).subscribe(async result => {
+        if (result.paymentMethod) {
+          const new_payment_method = result.paymentMethod;
+          const customerData = {
+            brand_id: this.currentBrand.brand_id,
+            new_payment_method,
+            paymentMethod_id: this.subscriptionData['paymentMethod_id'],
+            customer_id: this.subscriptionData['customer_id'],
+            user_id: await localForage.getItem('userID')
+          }
+          this.stripeSubscriptionService.changeCustomerCard(customerData).subscribe(result => {
+            this.inSubscriptionProcces = false;
+            if(result['success']){
+              this.subscriptionData['card'] = result['card'];
+              this.subscriptionData['billing_details'] = result['billing_details'];
+              this.mainService.showToastrSuccess.emit({text: 'Card Changed'});
+              this.showNewCard = false;
+            }
+          }, err => {
+            console.log('changeCustomerSubscription err:',err);
+            this.inSubscriptionProcces = false;
+          });
+        }else if(result.error){
+          this.inSubscriptionProcces = false;
+          this.invalidSubscriptionForm = true;
+          this.cardError = true;
+          this.cardErrorMessage = result.error.message;
+        }
+      })
+    }else{
+      this.invalidSubscriptionForm = true;
+    }
   }
 
   showShared(row, event) {

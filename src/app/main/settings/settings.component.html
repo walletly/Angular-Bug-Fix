@@ -1604,106 +1604,197 @@
       </nb-tab>
 
       <nb-tab *ngIf="!userAdmin" #paymentTab tabTitle="Billing">
-        <div *ngIf="is_subscribed" class="subscription-wrap">
-          <div class="items">
-            You are subscribed to <a href="https://www.walletly.ai/pricing/" target="_blank">${{subscriptionData.amount}} for {{subscriptionData.brand_subscribers}} subscribers</a>.
-          </div>
-          <div class="head">
-            Subscription Details:
-          </div>
-          <div class="items">
-            <span class="label">Billing Email: </span> {{subscriptionData.billing_email}}
-          </div>
-          <div class="items">
-            <span class="label">Card:</span> 
-            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
-            {{subscriptionData.card_last4}}
-          </div>
-          <div class="items">
-            <span class="label">Status: </span><span [ngStyle]="{'color': subscriptionData.status == 'active' ? '#3dcc6d' : null}">{{subscriptionData.status}}</span>
-          </div>
-          <div *ngIf="subscriptionData.status == 'incomplete'" class="error-lable">
-            Subscription Expires In 23 hours if payment isn't completed
-          </div>
-          <div *ngIf="subscriptionData.latestInvoice_date" class="items">
-            <span class="label">Last Invoice Made On: </span> {{subscriptionData.latestInvoice_date}}
-          </div>
-          <div *ngIf="subscriptionData.latestInvoice_amountPaid" class="items">
-            <span class="label">Last Invoice Amount: </span> ${{subscriptionData.latestInvoice_amountPaid}}
-          </div>
-          <div *ngIf="subscriptionData.latestInvoice_status" class="items">
-            <span class="label">Last Invoice Status: </span> {{subscriptionData.latestInvoice_status}}
-          </div>
-          <div *ngIf="subscriptionData.nextInvoice_date" class="items">
-            <span class="label">Next Invoice On: </span> {{subscriptionData.nextInvoice_date}}
-          </div>
-          <div *ngIf="subscriptionData.status != 'cancelled'" class="items">
-            <button
-              (click)="deleteSubscription()"
-              class="cust-button"
-              nbButton
-              status="success"
-              [disabled]="inSubscriptionProcces"
-            >
-            <i *ngIf="inSubscriptionProcces" class="fas fa-spinner fa-pulse"></i>
-              Delete Subscription
-            </button>
-          </div>
-        </div>
         <div *ngIf="!is_subscribed" class="m-t-40">
           Subscribe to our billing to get more out of Walletly. <br/>
-          Check out our <a href="https://www.walletly.ai/pricing/" target="_blank">Pricing</a>.
-        </div>
-        <form novalidate [formGroup]="subscriptionForm" *ngIf="!is_subscribed">
-          <div class="input-wrapper" style="max-width: 615px !important">
-            <div class="row-input">
-              <div class="lable">
-                Billing Email
-              </div>
-              <div class="value" style="max-width: 350px !important">
-                <div class="pos-r full-width">
-                  <input
-                    type="text"
-                    [ngClass]="{ error: subscriptionForm.controls['email'].invalid && invalidSubscriptionForm}"
-                    nbInput
-                    formControlName="email"
-                    fullWidth
-                    fieldSize="medium"
-                    placeholder="your email here"
-                  />
+          Learn more about <a href="https://www.walletly.ai/pricing/" target="_blank">pricing</a>
+          <form novalidate [formGroup]="subscriptionForm">
+            <div class="input-wrapper" style="max-width: 615px !important">
+              <div class="row-input">
+                <div class="lable">
+                  Billing Email
                 </div>
-              </div>
-            </div>
-            <div class="row-input">
-              <div class="lable">
-                Card Details
-              </div>
-              <div class="value">
-                <div class="pos-r full-width">
-                  <div id="card-element" class="field"></div>
-                  <div *ngIf="cardError" class="error-lable">
-                    {{cardErrorMessage}}
+                <div class="value" style="max-width: 350px !important">
+                  <div class="pos-r full-width">
+                    <input
+                      type="text"
+                      [ngClass]="{ error: subscriptionForm.controls['email'].invalid && invalidSubscriptionForm}"
+                      nbInput
+                      formControlName="email"
+                      fullWidth
+                      fieldSize="medium"
+                      placeholder="your email here"
+                    />
                   </div>
                 </div>
               </div>
+              <div class="row-input">
+                <div class="lable">
+                  Card Details
+                </div>
+                <div class="value">
+                  <div class="pos-r full-width">
+                    <div id="card-element" class="field"></div>
+                    <div *ngIf="cardError" class="error-lable">
+                      {{cardErrorMessage}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row-input">
+                <div class="lable"></div>
+                <div class="value">
+                  <button
+                    (click)="confirmSubscription()"
+                    class="cust-button"
+                    nbButton
+                    status="success"
+                    [disabled]="inSubscriptionProcces"
+                  >
+                  <i *ngIf="inSubscriptionProcces" class="fas fa-spinner fa-pulse"></i>
+                    Subscribe
+                  </button>
+                </div>
+              </div>
             </div>
-            <div class="row-input">
-              <div class="lable"></div>
-              <div class="value">
-                <button
-                  (click)="confirmSubscription()"
+          </form>
+        </div>
+        <div class="df" *ngIf="is_subscribed">
+          <div class="subscription-wrap">
+            <div class="head">
+              Billing Plan <br/>
+              Learn more about <a href="https://www.walletly.ai/pricing/" target="_blank">pricing</a>
+            </div>
+            <div class="items">
+              <span class="label">Up to {{subscriptionData.bucket_max}} Subscribers: </span>
+              <span class="value">${{subscriptionData.amount}}/month</span>
+            </div>
+            <div class="items">
+              <span class="label">Billing Email: </span>
+              <span class="value ellipsis" style="max-width: 230px;">{{subscriptionData.billing_details.email}}</span>
+            </div>
+            <div class="items">
+              <span class="label">Card:</span>
+              <span class="value c-p" (click)="newCard(false)">
+                {{subscriptionData.card.brand}}
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                {{subscriptionData.card.last4}} <br/>
+                <p style="margin: 0px; font-size: 12px;">till {{subscriptionData.card.exp_month}}/{{subscriptionData.card.exp_year}}</p>
+              </span>
+            </div>
+            <div class="items">
+              <span class="label">Status: </span>
+              <span class="value" [ngStyle]="{'color': subscriptionData.status == 'active' ? '#3dcc6d' : null}">
+                {{subscriptionData.status}} <br/>
+                <p style="margin: 0px; font-size: 12px; text-align: right;" *ngIf="subscriptionData.status == 'incomplete'">Expires In 23 hours if payment isn't completed</p>
+              </span>
+            </div>
+            <div *ngIf="subscriptionData.latestInvoice_date" class="items">
+              <span class="label">Last Invoice Made On: </span> 
+              <span class="value">{{subscriptionData.latestInvoice_date}}</span>
+            </div>
+            <div *ngIf="subscriptionData.nextInvoice_date" class="items">
+              <span class="label">Next Invoice On: </span>
+              <span class="value">{{subscriptionData.nextInvoice_date}}</span>
+            </div>
+            <div *ngIf="cancelSubsciption" class="button">
+              <button
+                (click)="deleteSubscription()"
+                class="cust-button"
+                nbButton
+                status="success"
+                [disabled]="inDeletionProcces"
+                style="width: 100%;"
+              >
+              <i *ngIf="inDeletionProcces" class="fas fa-spinner fa-pulse"></i>
+                Cancel Subscription
+              </button>
+            </div>
+            <div *ngIf="!cancelSubsciption" class="button">
+                <button *ngIf="!pendingCancellation"
+                  (click)="newCard(true)"
                   class="cust-button"
                   nbButton
                   status="success"
-                  [disabled]="inSubscriptionProcces"
+                  style="width: 100%;"
                 >
-                <i *ngIf="inSubscriptionProcces" class="fas fa-spinner fa-pulse"></i>
-                  Subscribe
+                  Return to Subscription
                 </button>
+                <div *ngIf="pendingCancellation" style="text-align: center; color: #a4abb3;">
+                  Pending Cancellation
+                </div>
               </div>
-            </div>
           </div>
-        </form>
+          <div *ngIf="showNewCard" class="m-t-140 m-l-20">
+            <div *ngIf="!resubscribe">
+              Change Card:
+            </div>
+            <div *ngIf="resubscribe">
+              Return to Subscription:
+            </div>
+            <form novalidate [formGroup]="subscriptionForm">
+              <div style="padding-top: 30px;">
+                <div class="row-input">
+                  <div class="lable">
+                    Billing Email
+                  </div>
+                  <div class="value" style="width: 320px;">
+                    <div class="pos-r full-width">
+                      <input
+                        type="text"
+                        [ngClass]="{ error: subscriptionForm.controls['email'].invalid && invalidSubscriptionForm}"
+                        nbInput
+                        formControlName="email"
+                        fullWidth
+                        fieldSize="medium"
+                        placeholder="your email here"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="row-input">
+                  <div class="lable">
+                    Card Details
+                  </div>
+                  <div class="value">
+                    <div class="pos-r full-width">
+                      <div id="card-element" class="field"></div>
+                      <div *ngIf="cardError" class="error-lable">
+                        {{cardErrorMessage}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row-input">
+                  <div class="lable"></div>
+                  <div class="value">
+                    <button
+                      *ngIf="resubscribe"
+                      (click)="confirmSubscription()"
+                      class="cust-button"
+                      nbButton
+                      status="success"
+                      [disabled]="inSubscriptionProcces"
+                    >
+                    <i *ngIf="inSubscriptionProcces" class="fas fa-spinner fa-pulse"></i>
+                      Subscribe
+                    </button>
+                    <button
+                      *ngIf="!resubscribe"
+                      (click)="changeCustomerCard()"
+                      class="cust-button"
+                      nbButton
+                      status="success"
+                      [disabled]="inSubscriptionProcces"
+                    >
+                    <i *ngIf="inSubscriptionProcces" class="fas fa-spinner fa-pulse"></i>
+                      Change
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </nb-tab>
     </nb-tabset>
   </nb-card-body>

@@ -660,6 +660,16 @@ nb-stepper.horinzotal {
       background-image: url("assets/svg-icon/menu-icon-SVG/menu-campaign-active.svg");
     }
   }
+  &.insight {
+    background-image: url("assets/svg-icon/menu-icon-SVG/menu-insight.svg");
+    background-size: 100% 100%;
+    margin-right: 10px;
+    min-width: 24px !important;
+    height: 24px;
+    &.active {
+      background-image: url("assets/svg-icon/menu-icon-SVG/menu-insight-active.svg");
+    }
+  }
   &.audience {
     background-image: url("assets/svg-icon/menu-icon-SVG/menu-audience.svg");
     background-size: 100% 100%;
@@ -711,13 +721,13 @@ nb-stepper.horinzotal {
     }
   }
   &.business {
-    background-image: url("assets/svg-icon/menu-icon-SVG/menu-business-icon.svg");
+    background-image: url("assets/svg-icon/menu-icon-SVG/menu-waletScan-.svg");
     background-size: 100% 100%;
     margin-right: 10px;
     min-width: 24px !important;
     height: 24px;
     &.active {
-      background-image: url("assets/svg-icon/menu-icon-SVG/menu-business-active.svg");
+      background-image: url("assets/svg-icon/menu-icon-SVG/menu-waletScan-active.svg");
     }
   }
 }
@@ -1134,6 +1144,9 @@ nb-card {
         &.campaign {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-campaign-active.svg");
         }
+        &.insight{
+          background-image: url("assets/svg-icon/menu-icon-SVG/menu-insight-active.svg");
+        }
         &.audience {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-audience-active.svg");
         }
@@ -1150,7 +1163,7 @@ nb-card {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-setting-active.svg");
         }
         &.business {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-business-active.svg") !important;
+          background-image: url("assets/svg-icon/menu-icon-SVG/menu-waletScan-active.svg") !important;
         }
       }
     }
@@ -1174,6 +1187,9 @@ nb-card {
         &.campaign {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-campaign-active.svg");
         }
+        &.insight {
+          background-image: url("assets/svg-icon/menu-icon-SVG/menu-insight-active.svg");
+        }
         &.audience {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-audience-active.svg");
         }
@@ -1190,7 +1206,7 @@ nb-card {
           background-image: url("assets/svg-icon/menu-icon-SVG/menu-setting-active.svg");
         }
         &.business {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-business-active.svg");
+          background-image: url("assets/svg-icon/menu-icon-SVG/menu-waletScan-active.svg");
         }
       }
     }
