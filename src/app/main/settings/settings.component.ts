@@ -384,6 +384,7 @@ export class SettingsComponent implements OnInit {
       this.mainService.showToastrSuccess.emit({text: 'Subscription Deleted'});
       this.subscriptionData['status'] = result['status'];
       this.cancelSubsciption = false;
+      this.pendingCancellation = true;
       this.subscriptionData['nextInvoice_date'] = null;
     }, err => {
       console.log('deleteSubscription err:',err);
