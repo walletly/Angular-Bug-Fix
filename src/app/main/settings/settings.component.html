@@ -1697,6 +1697,9 @@
               <span class="label">Next Invoice On: </span>
               <span class="value">{{subscriptionData.nextInvoice_date}}</span>
             </div>
+            <div *ngIf="authenticateUrl" style="padding: 20px 20px 0px 20px; text-align: center;">
+              <a [href]="authenticateUrl" target="_blank">click here to authenticate payment</a>
+            </div>
             <div *ngIf="cancelSubsciption" class="button">
               <button
                 (click)="deleteSubscription()"

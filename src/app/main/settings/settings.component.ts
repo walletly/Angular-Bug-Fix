@@ -40,6 +40,7 @@ export class SettingsComponent implements OnInit {
   showNewCard = false;
   cancelSubsciption = true;
   resubscribe = false;
+  authenticateUrl = '';
  
   subscriptionForm: FormGroup;
   invalidSubscriptionForm = false;
@@ -257,6 +258,15 @@ export class SettingsComponent implements OnInit {
             this.subscriptionData['nextInvoice_date'] = new Date(d.setDate(d.getDate() + 30)).toDateString();
           }
         }
+        if(this.subscriptionData['payment_intent'].status == 'requires_action' || this.subscriptionData['payment_intent'].status === 'requires_payment_method'){
+          if(this.subscriptionData['payment_intent'].next_action){
+            if(this.subscriptionData['payment_intent'].next_action.use_stripe_sdk){
+              if(this.subscriptionData['payment_intent'].next_action.use_stripe_sdk.stripe_js){
+                this.authenticateUrl = this.subscriptionData['payment_intent'].next_action.use_stripe_sdk.stripe_js;
+              }
+            }
+          }
+        }
       }else{
         this.is_subscribed = false;
       }
@@ -268,6 +278,9 @@ export class SettingsComponent implements OnInit {
   async onChangeTab(event) {
     this.currentUser = await localForage.getItem('user');
     if (event.tabTitle === 'Billing' && this.is_subscribed == false) {
+      this.invalidSubscriptionForm = false;
+      this.cardError = false;
+      this.cardErrorMessage = '';
       setTimeout(() => {
         this.stripeService.elements(this.elementsOptions)
         .subscribe(elements => {
@@ -348,7 +361,7 @@ export class SettingsComponent implements OnInit {
                   if(payment_intent['next_action']){
                     if(payment_intent['next_action'].use_stripe_sdk){
                       if(payment_intent['next_action'].use_stripe_sdk.stripe_js){
-                        window.open(payment_intent['next_action'].use_stripe_sdk.stripe_js);
+                        this.authenticateUrl = payment_intent['next_action'].use_stripe_sdk.stripe_js;
                       }
                     }
                   }
@@ -424,6 +437,9 @@ export class SettingsComponent implements OnInit {
     }
     this.showNewCard = true;
     this.currentUser = await localForage.getItem('user');
+    this.invalidSubscriptionForm = false;
+    this.cardError = false;
+    this.cardErrorMessage = '';
     setTimeout(() => {
       this.stripeService.elements(this.elementsOptions)
       .subscribe(elements => {
