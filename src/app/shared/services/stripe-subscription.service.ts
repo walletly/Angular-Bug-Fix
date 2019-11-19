@@ -63,4 +63,17 @@ export class StripeSubscriptionService {
     }));
   }
 
+  undeleteSubscription(brand_id){
+    return from(localForage.getItem('usertoken').then(async token => {
+      const userID: any = await localForage.getItem('userID');
+      
+      const httpHeaders = new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-auth-token': `Bearer ${token}`,
+        'x-auth-user': userID
+      });
+      return this.http.delete(SERVER_API_URL + 'stripe/undeleteSubscription/' + brand_id, { headers: httpHeaders}).toPromise();
+    }));
+  }
+
 }

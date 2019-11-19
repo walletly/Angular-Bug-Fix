@@ -1675,15 +1675,16 @@
             <div class="items">
               <span class="label">Card:</span>
               <span class="value c-p cardDetails" (click)="newCard(false)">
+                <i *ngIf="cancelSubsciption" class="fas fa-pencil-alt" style="display: none;"></i>
                 {{subscriptionData.card.brand}}
                 <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
-                {{subscriptionData.card.last4}} <br/>
+                {{subscriptionData.card.last4}}<br/>
                 <p style="margin: 0px; font-size: 12px;">till {{subscriptionData.card.exp_month}}/{{subscriptionData.card.exp_year}}</p>
               </span>
             </div>
             <div class="items">
               <span class="label">Status: </span>
-              <span class="value" [ngStyle]="{'color': subscriptionData.status == 'active' ? '#3dcc6d' : null}">
+              <span class="value" [ngStyle]="{'color': subscriptionData.status == 'active' ? '#3dcc6d' : subscriptionData.status == 'Pending Cancellation' ? '#a4abb3' : null}">
                 {{subscriptionData.status}} <br/>
                 <p style="margin: 0px; font-size: 12px; text-align: right;" *ngIf="subscriptionData.status == 'incomplete'">Expires In 23 hours if payment isn't completed</p>
               </span>
@@ -1710,18 +1711,17 @@
               </button>
             </div>
             <div *ngIf="!cancelSubsciption" class="button">
-                <button *ngIf="!pendingCancellation"
+                <button
                   (click)="newCard(true)"
                   class="cust-button"
                   nbButton
                   status="success"
+                  [disabled]="inUndeletionProcces"
                   style="width: 100%;"
                 >
+                <i *ngIf="inUndeletionProcces" class="fas fa-spinner fa-pulse"></i>
                   Return to Subscription
                 </button>
-                <div *ngIf="pendingCancellation" style="text-align: center; color: #a4abb3;">
-                  Pending Cancellation
-                </div>
               </div>
           </div>
           <div *ngIf="showNewCard" class="m-t-140 m-l-20">
@@ -1788,6 +1788,15 @@
                     >
                     <i *ngIf="inSubscriptionProcces" class="fas fa-spinner fa-pulse"></i>
                       Change
+                    </button>
+                    <button
+                      *ngIf="!inSubscriptionProcces"
+                      (click)="showNewCard = false"
+                      class="cust-button m-l-10"
+                      nbButton
+                      status="success"
+                    >
+                      Close
                     </button>
                   </div>
                 </div>

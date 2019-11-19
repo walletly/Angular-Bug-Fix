@@ -38,14 +38,15 @@ export class SettingsComponent implements OnInit {
   is_subscribed = false;
   subscriptionData = {};
   showNewCard = false;
-  cancelSubsciption = false;
-  pendingCancellation = false;
+  cancelSubsciption = true;
   resubscribe = false;
  
   subscriptionForm: FormGroup;
   invalidSubscriptionForm = false;
   inSubscriptionProcces = false;
   inDeletionProcces = false;
+  pendingCancellation = false;
+  inUndeletionProcces = false;
   cardError = false;
   cardErrorMessage = '';
   
@@ -239,17 +240,19 @@ export class SettingsComponent implements OnInit {
         if(!this.is_subscribed){
           this.is_subscribed = !this.subscriptionData['is_delete'] && this.subscriptionData['status'] == 'incomplete'  ? true : false;
         }
-        if(!this.subscriptionData['status'].includes('cancel')){
-          this.cancelSubsciption = true;
+        if(this.subscriptionData['status'] == ('canceled') || this.subscriptionData['status'] == ('incomplete_expired')){
+          this.cancelSubsciption = false;
+        }
+        if(this.subscriptionData['cancel_at_period_end'] && this.subscriptionData['status'] != ('canceled')){
+          this.cancelSubsciption = false;
+          this.subscriptionData['status'] = 'Pending Cancellation';
+          this.pendingCancellation = true;
         }
         if(this.subscriptionData['latestInvoice_date']){
           let d = new Date(this.subscriptionData['latestInvoice_date']._seconds * 1000);
           this.subscriptionData['latestInvoice_date'] = d.toDateString();
           if(!this.cancelSubsciption){
             this.subscriptionData['nextInvoice_date'] = null;
-            if(new Date < new Date(d.setDate(d.getDate() + 30))){
-              this.pendingCancellation = true;
-            }
           }else{
             this.subscriptionData['nextInvoice_date'] = new Date(d.setDate(d.getDate() + 30)).toDateString();
           }
@@ -379,9 +382,8 @@ export class SettingsComponent implements OnInit {
     this.stripeSubscriptionService.deleteSubscription(this.currentBrand.brand_id).subscribe(result => {
       this.inDeletionProcces = false;
       this.mainService.showToastrSuccess.emit({text: 'Subscription Deleted'});
-      this.subscriptionData['status'] = 'cancelled';
+      this.subscriptionData['status'] = result['status'];
       this.cancelSubsciption = false;
-      this.pendingCancellation = true;
       this.subscriptionData['nextInvoice_date'] = null;
     }, err => {
       console.log('deleteSubscription err:',err);
@@ -389,7 +391,27 @@ export class SettingsComponent implements OnInit {
     })
   }
 
+  async undeleteSubscription() {
+    this.showNewCard = false;
+    this.currentBrand = await localForage.getItem('currentBrand');
+    this.inUndeletionProcces = true;
+    this.stripeSubscriptionService.undeleteSubscription(this.currentBrand.brand_id).subscribe(result => {
+      this.inUndeletionProcces = false;
+      this.mainService.showToastrSuccess.emit({text: 'Subscription Activated'});
+      this.subscriptionData['status'] = result['status'];
+      this.cancelSubsciption = true;
+      this.subscriptionData['nextInvoice_date'] = null;
+    }, err => {
+      console.log('undeleteSubscription err:',err);
+      this.inUndeletionProcces = false;
+    })
+  }
+
   async newCard(resubscribe){
+    if(this.pendingCancellation && resubscribe){
+      this.undeleteSubscription();
+      return;
+    }
     if(resubscribe){
       this.resubscribe = true;
       this.showNewCard = false;
@@ -398,10 +420,6 @@ export class SettingsComponent implements OnInit {
       if(!this.cancelSubsciption){
         return
       }
-    }
-    if(this.showNewCard){
-      this.showNewCard = false;
-      return
     }
     this.showNewCard = true;
     this.currentUser = await localForage.getItem('user');
