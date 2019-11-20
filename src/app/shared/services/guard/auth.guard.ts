@@ -53,6 +53,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         this.firebaseAuth.authState.subscribe(async result => {
 
           console.log(this.router.url);
+          console.log('userID', await localForage.getItem('userID'))
+          console.log('user', await localForage.getItem('user'))
+          console.log('access',await localForage.getItem('access'))
+          console.log('usertoken',await localForage.getItem('usertoken'))
+          console.log('currentBrand',await localForage.getItem('currentBrand'))
           console.log('canActivate Auth Result', result);
 
           if (result) {
