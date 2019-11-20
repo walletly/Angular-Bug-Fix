@@ -194,7 +194,7 @@ export class FbLoginComponent implements OnInit {
           console.log('active brand found',res_brand);
           await localForage.setItem('currentBrand', res_brand['brand']);
           this.ngZone.run(() => this.router.navigate(['/main/dashboard']));
-          this.showLoader = false;
+          // this.showLoader = false;
         }, err => {
           console.log('active brand error',err);
           this.ngZone.run(() => this.router.navigate(['/fb-connect']));
