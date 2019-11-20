@@ -63,7 +63,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           if (result) {
             if (!await localForage.getItem('userID') || 
                 !await localForage.getItem('user') || 
-                !await localForage.getItem('access') || 
                 !await localForage.getItem('usertoken'))
             {
               this.firebaseAuth.auth.signOut().then(async () => {
