@@ -72,7 +72,7 @@ import { AvatarModule } from 'ngx-avatar';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB_f_r3DPfN5tZ6x0olJaGCjSogT9rWapM",
-  authDomain: "walletly-dev3.firebaseapp.com",
+  authDomain: "auth.dev3.walletly.ai",
   databaseURL: "https://walletly-dev3.firebaseio.com",
   projectId: "walletly-dev3",
   storageBucket: "walletly-dev3.appspot.com",

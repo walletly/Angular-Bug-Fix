@@ -55,13 +55,20 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           console.log(result);
 
           if (result) {
-            if(!await localForage.getItem('user')){
+            if (!await localForage.getItem('userID') || 
+                !await localForage.getItem('user') || 
+                !await localForage.getItem('access') || 
+                !await localForage.getItem('usertoken'))
+            {
               this.firebaseAuth.auth.signOut().then(async () => {
                 await localForage.clear();
                 await localForage.setItem('loggedOut', true);
                 this.router.navigate(['/fb-login']);
                 observer.next(false);
               });
+            } else if (!await localForage.getItem('currentBrand') && !this.router.url.includes('fb-connect')){
+              this.router.navigate(['/fb-connect']);
+              observer.next(false);
             }
             await localForage.setItem('loggedIn', true);
             await localForage.setItem('userID', result.uid);
@@ -70,8 +77,12 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             });
             observer.next(true);
           } else {
-            this.router.navigate(['/fb-login']);
-            observer.next(false);
+            this.firebaseAuth.auth.signOut().then(async () => {
+              await localForage.clear();
+              await localForage.setItem('loggedOut', true);
+              this.router.navigate(['/fb-login']);
+              observer.next(false);
+            });
           }
         });
       });
