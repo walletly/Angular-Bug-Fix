@@ -1,70 +1,9 @@
 <h1 class="m-t-0 m-b-20 fs-24 fw-600 m-r-22">
-  Audience
+  Insights
 </h1>
 
-<div *ngIf="moreFilter" class="user-drb">
-  <div class="m-b-20 df">
-    <div>Filter By</div>
-    <!-- <div class="ml-auto">
-      <div><nb-checkbox (change)=!And>And Operation</nb-checkbox></div>
-      <div> <nb-checkbox (change)=!Or>Or Operation</nb-checkbox></div>
-    </div> -->
-  </div>
-  <!-- Type -->
-  <div class="df">
-    <nb-checkbox [(ngModel)]="typeFilter" style="width: 200px; pointer-events: none;" class="m-b-10 c-p">Type</nb-checkbox>
-    <nb-select (selectedChange)="onChangeTab()" [(ngModel)]="type" style="width: 300px" size="small" placeholder="Select campaign type">
-      <nb-option [value]="'coupons'">Coupons</nb-option>
-      <nb-option [value]="'tickets'">Tickets</nb-option>
-      <nb-option [value]="'stamp_cards'">Stamp Cards</nb-option>
-      <nb-option [value]="'loyalty_cards'">Loyalty Cards</nb-option>
-      <nb-option [value]="'membership_cards'">Membership Cards</nb-option>
-    </nb-select>
-  </div>
-  <!-- Campaign -->
-  <div class="df">
-    <nb-checkbox [(ngModel)]="campaignFilter" (change)="getCampaign()" style="width: 200px;" class="m-b-10">Campaign</nb-checkbox>
-    <nb-select *ngIf="campaignFilter" (selectedChange)="moreCampaignFilter($event)" size="small" style="width: 300px" placeholder="Select campaign">
-      <nb-option *ngFor="let campaign of campaignNames" [value]=campaign>{{campaign}}</nb-option>
-    </nb-select>
-  </div>
-  <!-- Device -->
-  <div class="df">
-    <nb-checkbox [(ngModel)]="deviceFilter" (change)="getDevice()" style="width: 200px;" class="m-b-10">Device</nb-checkbox>
-    <nb-select *ngIf="deviceFilter" (selectedChange)="moreDeviceFilter($event)" size="small" style="width: 300px" placeholder="Select device">
-      <nb-option [value]="'Android'">Android</nb-option>
-      <nb-option [value]="'Apple'">Apple</nb-option>
-    </nb-select>
-  </div>
-  <!-- <div class="check-all-wrap">
-    <div class="invite download m-t-14 m-b-12 ml-auto">
-      Done
-    </div>
-  </div> -->
-</div>
 <div class="df jc-b m-b-15">
-  <div class="df">
-    <div class="pos-r m-r-9">
-      <input
-        [(ngModel)]="searchText"
-        (ngModelChange)="filterCampaigns()"
-        style="width: 235px;"
-        placeholder="Search By Campaign"
-        class="small"
-        type="text"
-        nbInput
-        fullWidth
-        fieldSize="small"
-      />
-      <div class="input-icon">
-        <img src="assets/svg-icon/search-outline.svg" alt="" />
-      </div>
-    </div>
-    <div (click)="moreFilter = !moreFilter"  class="filtr-btn pos-r">
-      <img src="assets/img/filtre.png" alt="" />
-    </div>
-  </div>
-  <div>
+  <div class=ml-auto>
     <div *ngIf="type === 'coupons'">
       {{selectedAudience.length}} selected of {{filterCouponAudience.length}} total
     </div>
@@ -84,10 +23,25 @@
 </div>
 <nb-card>
   <nb-card-body>
+
       <div *ngIf="showLoader" class="loader-table m-t-50">
         <img width="70px" src="assets/img/Loader2x.gif" alt="">
       </div>
-      <div *ngIf=!showLoader class="check-all-wrap">
+      <div *ngIf=!showLoader class="check-all-wrap ai-c">
+        <div style="width: 220px;">Type</div>
+        <div style="width: 220px; margin-left: 15px;">Name</div>
+      </div>
+      <div *ngIf=!showLoader class="check-all-wrap ai-c m-b-15">
+          <nb-select (selectedChange)="onChangeTab()" [(ngModel)]="type" style="width: 220px;" size="small" placeholder="Select campaign type">
+            <nb-option [value]="'coupons'">Coupons</nb-option>
+            <nb-option [value]="'tickets'">Tickets</nb-option>
+            <nb-option [value]="'stamp_cards'">Stamp Cards</nb-option>
+            <nb-option [value]="'loyalty_cards'">Loyalty Cards</nb-option>
+            <nb-option [value]="'membership_cards'">Membership Cards</nb-option>
+          </nb-select>
+          <nb-select (selectedChange)="filterCampaigns()" [(ngModel)]="campaignName" size="small" style="width: 220px; margin-left: 15px;" placeholder="Select campaign">
+            <nb-option *ngFor="let campaign of campaignNames" [value]=campaign>{{campaign}}</nb-option>
+          </nb-select>
           <div (click)=download() class="invite download m-t-14 m-b-12 ml-auto">
             <img src="assets/img/d-icon.png" width="14px" alt="">
             Download CSV
@@ -118,7 +72,7 @@
               </div>
             </th>
             <td
-              [ngClass]="{'check-row-bg': row.data['Check'].name}"
+              [ngClass]="{'check-row-bg': false}"
               nbTreeGridCell
               *nbTreeGridCellDef="let row; index as i"
             >
@@ -183,7 +137,7 @@
               </div>
             </th>
             <td
-              [ngClass]="{'check-row-bg': row.data['Check'].name}"
+              [ngClass]="{'check-row-bg': false}"
               nbTreeGridCell
               *nbTreeGridCellDef="let row; index as i"
             >
@@ -235,7 +189,7 @@
               </div>
             </th>
             <td
-              [ngClass]="{'check-row-bg': row.data['Check'].name}"
+              [ngClass]="{'check-row-bg': false}"
               nbTreeGridCell
               *nbTreeGridCellDef="let row; index as i"
             >
@@ -270,7 +224,7 @@
               </div>
             </th>
             <td
-              [ngClass]="{'check-row-bg': row.data['Check'].name}"
+              [ngClass]="{'check-row-bg': false}"
               nbTreeGridCell
               *nbTreeGridCellDef="let row; index as i"
             >
@@ -306,7 +260,7 @@
               </div>
             </th>
             <td
-              [ngClass]="{'check-row-bg': row.data['Check'].name}"
+              [ngClass]="{'check-row-bg': false}"
               nbTreeGridCell
               *nbTreeGridCellDef="let row; index as i"
             >

@@ -53,7 +53,7 @@ export class MainComponent implements OnInit, AfterViewInit {
         },
         {
           icon: "icon-menu insight",
-          title: "Insight",
+          title: "Insights",
           link: ["audience"]
         },
         {

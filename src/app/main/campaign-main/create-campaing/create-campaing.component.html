@@ -251,6 +251,30 @@
               </div>
             </div>
           </div>
+          <div class="row-input">
+            <div class="lable">
+              Finance Field
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select
+                formControlName="customFieldFinance" size="small" placeholder="Select Finance Field"
+                [ngClass]="{
+                  error:
+                  myForm.controls['customFieldFinance'].invalid &&
+                  !customValidation
+                }"
+                [(ngModel)]="dataCampaign.financeField"
+                #selectCustomField
+                >
+                <nb-option value="">--Select Custom Fields--</nb-option>
+                <nb-option *ngFor="let customField of customFieldsNumber" [value]="customField.name">
+                  {{customField.name}}
+                </nb-option>
+              </nb-select>
+              </div>
+            </div>
+          </div>
         </div>
       </form>
       <!-- <div *ngIf="myForm.invalid && !customValidation" class="row-input">
@@ -586,6 +610,30 @@
               </div>
             </div>
           </div>
+          <div class="row-input">
+            <div class="lable">
+              Finance Field
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select
+                formControlName="customFieldFinance" size="small" placeholder="Select Finance Field"
+                [ngClass]="{
+                  error:
+                  loyaltyForm.controls['customFieldFinance'].invalid &&
+                  !customValidation
+                }"
+                [(ngModel)]="dataCampaign.financeField"
+                #selectCustomField
+                >
+                <nb-option value="">--Select Custom Fields--</nb-option>
+                <nb-option *ngFor="let customField of customFieldsNumber" [value]="customField.name">
+                  {{customField.name}}
+                </nb-option>
+              </nb-select>
+              </div>
+            </div>
+          </div>
         </div>
       </form>
       <form *ngIf="dataCampaign.campaign_type == 6 && !stampCampaignId" [formGroup]="stampForm">
@@ -686,6 +734,30 @@
               </div>
             </div>
           </div>
+          <div class="row-input">
+              <div class="lable">
+                Finance Field
+              </div>
+              <div class="value">
+                <div class="pos-r full-width">
+                  <nb-select
+                  formControlName="customFieldFinance" size="small" placeholder="Select Finance Field"
+                  [ngClass]="{
+                    error:
+                    stampForm.controls['customFieldFinance'].invalid &&
+                    !customValidation
+                  }"
+                  [(ngModel)]="dataCampaign.financeField"
+                  #selectCustomField
+                  >
+                  <nb-option value="">--Select Custom Fields--</nb-option>
+                  <nb-option *ngFor="let customField of customFieldsNumber" [value]="customField.name">
+                    {{customField.name}}
+                  </nb-option>
+                </nb-select>
+                </div>
+              </div>
+            </div>
         </div>
       </form>
       <div class="row-input">
@@ -877,7 +949,7 @@
                 <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
                   (dragEnd)="markerDragEnd($event)"></agm-marker>
               </agm-map>
-              
+
               <!-- <h5>Address: {{address}}</h5>
               <div>Latitude: {{latitude}}</div>
               <div>Longitude: {{longitude}}</div> -->

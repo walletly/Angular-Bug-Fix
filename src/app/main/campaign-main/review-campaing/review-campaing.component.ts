@@ -47,6 +47,7 @@ export class ReviewCampaingComponent implements OnInit {
   discount;
 
   ngOnInit() {
+
     this.discount = (this.dataCampaign.campaign_type == 1) ? `${this.dataCampaign.discount} %` : `${this.dataCampaign.discount} ${this.dataCampaign.currency}`
 
     this.data = this.mainService.couponsData[0];
@@ -85,6 +86,7 @@ export class ReviewCampaingComponent implements OnInit {
             coupon_validity: '',
             currency: '',
             memCard_status_customField: '',
+            financeField: '',
             event_name: '',
             venue: '',
             venue_coordinates: null,
@@ -117,6 +119,7 @@ export class ReviewCampaingComponent implements OnInit {
             coupon_validity: '',
             currency: '',
             memCard_status_customField: '',
+            financeField: '',
             event_name: '',
             venue: '',
             venue_coordinates: null,
@@ -153,6 +156,7 @@ export class ReviewCampaingComponent implements OnInit {
     this.campaign['description'] = this.dataCampaign.description;
     this.campaign['manychat_customField'] = this.dataCampaign.selectedCustomField;
     this.campaign['manychat_CF_memCard_status'] = this.dataCampaign.memCard_status_customField;
+    this.campaign['manychat_CF_finance'] = this.dataCampaign.financeField;
     this.campaign['campaign_type'] = parseInt(this.dataCampaign.campaign_type);
     this.campaign['currency'] = this.dataCampaign.currency;
     this.campaign['coupon_validity'] = parseInt(this.dataCampaign.coupon_validity);

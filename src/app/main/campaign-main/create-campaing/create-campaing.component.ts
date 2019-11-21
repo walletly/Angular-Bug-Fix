@@ -111,6 +111,7 @@ export class CreateCampaingComponent implements OnInit {
       description: ["", [Validators.required]],
       template: ["", [Validators.required]],
       customFields: [""],
+      customFieldFinance: [""],
       discount: ["", []],
       // numberOfCoupon: ["", [Validators.required]],
       // setLimit: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -119,7 +120,7 @@ export class CreateCampaingComponent implements OnInit {
       startDate: ["", [Validators.required]],
       endDate: ["", [Validators.required]],
     });
-  
+
     this.ticketForm = formBuilder.group({
       campaignName: ["", [Validators.required]],
       description: ["", [Validators.required]],
@@ -130,23 +131,25 @@ export class CreateCampaingComponent implements OnInit {
       event_name: ["", [Validators.required]],
       venue: ["", [Validators.required]]
     });
-  
+
     this.loyaltyForm = formBuilder.group({
       campaignName: ["", [Validators.required]],
       description: ["", [Validators.required]],
       template: ["", [Validators.required]],
       customFields: [""],
+      customFieldFinance: [""],
       currency: ["", [Validators.required]],
       points: ["", [Validators.required, Validators.min(0)]],
     });
-  
+
     this.stampForm = formBuilder.group({
       campaignName: ["", [Validators.required]],
       description: ["", [Validators.required]],
       template: ["", [Validators.required]],
       customFields: [""],
+      customFieldFinance: [""],
     });
-  
+
     this.membershipForm = formBuilder.group({
       campaignName: ["", [Validators.required]],
       description: ["", [Validators.required]],
@@ -260,7 +263,9 @@ export class CreateCampaingComponent implements OnInit {
         this.mainService.dataCampaign.description = result['data'].description;
 
         this.mainService.dataCampaign.selectedCustomField = result['data'].manychat_customField || '';
-        this.mainService.dataCampaign.memCard_status_customField = result['data'].manychat_CF_memCard_status || '',
+        this.mainService.dataCampaign.memCard_status_customField = result['data'].manychat_CF_memCard_status || '';
+        this.mainService.dataCampaign.financeField = result['data'].manychat_CF_finance || '';
+
         this.mainService.dataCampaign.campaign_type = result['data'].campaign_type.toString();
         this.mainService.dataCampaign.discount = result['data'].campaign_value;
         this.mainService.dataCampaign.startDate = result['data'].startDateFormatted;
@@ -536,6 +541,7 @@ export class CreateCampaingComponent implements OnInit {
       description: '',
       selectedCustomField: '',
       memCard_status_customField: '',
+      financeField: '',
       template: '',
       discount: '',
       startDate: '',
@@ -571,7 +577,7 @@ export class CreateCampaingComponent implements OnInit {
         this.ngZone.run(() => {
           //get the place result
           let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-          
+
           this.ticketForm.controls['venue'].setValue((document.getElementById('location') as HTMLInputElement).value);
 
           //verify result

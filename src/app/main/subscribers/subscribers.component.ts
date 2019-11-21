@@ -14,6 +14,7 @@ export class SubscribersComponent implements OnInit {
   currentBrand;
   showLoader;
   searchText;
+  pageSize = 10;
   checkAllSubscribers = true;
   subscribers = [];
   filterSubscribers = [];
@@ -40,7 +41,10 @@ export class SubscribersComponent implements OnInit {
         this.showLoader = false;
         let i = 0;
         res['data'].forEach(element => {
-          let createdAt = new Date(element.created_at._seconds*1000).toJSON().slice(2,10).split('-').reverse().join('/')
+          let createdAt = new Date(element.created_at._seconds*1000).toDateString().slice(4).split(' ');
+          createdAt = [createdAt[1], createdAt[0], createdAt[2]]
+          const subscribe = createdAt.join('-');
+
           this.subscribers.push({
             data: {
               'Check': {name: true },
@@ -50,7 +54,7 @@ export class SubscribersComponent implements OnInit {
               'Phone': { name: element.phone },
               'Gender': { name: element.gender },
               'Status': { name: element.status },
-              'Subscribed': { name: createdAt }
+              'Subscribed': { name: subscribe }
             }
           })
           i ++;
@@ -69,8 +73,10 @@ export class SubscribersComponent implements OnInit {
       // tslint:disable-next-line: forin
       for (var i in element.data){
         console.log(i);
-        if(element.data[i].name.toLowerCase().includes(this.searchText.toLowerCase())){
-          return true
+        if(i !== 'Check' && element.data[i].name){
+          if(element.data[i].name.toLowerCase().includes(this.searchText.toLowerCase())){
+            return true
+          }
         }
       }
     })

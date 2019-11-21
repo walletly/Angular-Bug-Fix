@@ -69,6 +69,7 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { stripePublicKey } from '../environments/environment';
 import { SubscribersComponent } from './main/subscribers/subscribers.component';
 import { AvatarModule } from 'ngx-avatar';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB_f_r3DPfN5tZ6x0olJaGCjSogT9rWapM",
@@ -170,7 +171,8 @@ export const firebaseConfig = {
       libraries: ['places']
     }),
     NgxStripeModule.forRoot(stripePublicKey),
-    AvatarModule
+    AvatarModule,
+    NgxPaginationModule
   ],
   providers: [
     AuthService,

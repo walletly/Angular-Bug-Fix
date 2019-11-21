@@ -39,7 +39,7 @@ export class CampaingComponent implements OnInit {
 
   constructor(private campaignService: CompaignService, private router: Router, private mainService: MainService) {
   }
-  
+
   async ngOnInit() {
     this.currentUser = await localForage.getItem('user');
     if (this.currentUser.user_type !== 4) {
@@ -64,7 +64,7 @@ export class CampaingComponent implements OnInit {
       this.dataTicket = [];
       console.log(data);
       this.campaigns = data['data'];
-      
+
       this.campaigns.forEach(element => {
         this.noCampaigns = false;
         this.timeInSecs = element.created_at._seconds;
@@ -249,6 +249,7 @@ export class CampaingComponent implements OnInit {
       coupon_validity: '',
       currency: '',
       memCard_status_customField: '',
+      financeField: '',
       event_name: '',
       venue: '',
       venue_coordinates: null,

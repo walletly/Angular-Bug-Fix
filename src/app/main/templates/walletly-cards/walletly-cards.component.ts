@@ -63,6 +63,7 @@ export class WalletlyCardsComponent implements OnInit {
       coupon_validity: '',
       currency: '',
       memCard_status_customField: '',
+      financeField: '',
       event_name: '',
       venue: '',
       venue_coordinates: null,

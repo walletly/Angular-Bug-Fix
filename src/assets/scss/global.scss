@@ -1412,3 +1412,18 @@ div.top > nb-menu.admin-type{
 ::-webkit-scrollbar-thumb {
   background: #dee3e5 !important;
 }
+.ngx-pagination a:hover{
+  background: transparent !important;
+  color: #38c6ed !important;
+}
+.ngx-pagination a:focus {
+  color: #38c6ed !important;
+}
+.ngx-pagination .current {
+  padding: 0.09rem 0.425rem !important;
+  background: transparent !important;
+  cursor: default;
+  color: #4b4b4b !important;
+  border: 2px solid #38c6ed;
+  border-radius: 0.25rem;
+}

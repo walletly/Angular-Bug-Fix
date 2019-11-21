@@ -11,23 +11,17 @@ import * as localForage from 'localforage';
 })
 export class AudienceComponent implements OnInit {
   showActions;
-  // And;
-  // Or;
-  moreFilter = false;
   checkAllcoupons = true;
   checkAlltickets = true;
   checkAllStampCards = true;
   checkAllLoyaltyCards = true;
   checkAllMembershipCards = true;
-  typeFilter = true;
-  campaignFilter;
-  deviceFilter;
   showLoader;
-  couponColumns = ['Check', 'Name', 'Email Address', 'Campaign Name', 'Type', 'Days Left', 'Status', 'Device'];
-  eventColumns = ['Check', 'Name', 'Email Address', 'Campaign Name', 'Type', 'Days Left', 'Members', 'Check in', 'Device'];
-  stampCardColumns = ['Check', 'Name', 'Email Address', 'Campaign Name', 'Issue Date', 'Stamps', 'Redeem Count', 'Device'];
-  loyaltyCardColumns = ['Check', 'Name', 'Email Address', 'Campaign Name', 'Issue Date', 'Points','Redeem Count', 'Device'];
-  membershipCardColumns = ['Check', 'Name', 'Email Address', 'Campaign Name', 'Issue Date', 'Redeem Count', 'Status', 'Device'];
+  couponColumns = ['Check', 'Name', 'Email Address', 'Days Left', 'Status', 'Finance', 'Device'];
+  eventColumns = ['Check', 'Name', 'Email Address', 'Days Left', 'Members', 'Check in', 'Device'];
+  stampCardColumns = ['Check', 'Name', 'Email Address', 'Issue Date', 'Stamps', 'Redeem Count', 'Finance', 'Device'];
+  loyaltyCardColumns = ['Check', 'Name', 'Email Address', 'Issue Date', 'Points', 'Redeem Count', 'Finance', 'Device'];
+  membershipCardColumns = ['Check', 'Name', 'Email Address', 'Issue Date', 'Redeem Count', 'Status', 'Device'];
   // cardColumns = ['Check', 'Campaign Name', 'Type', 'Issue Date', 'Stamps/Points', 'Email Address', 'Redeem Count'];
   allCouponColumns = this.couponColumns;
   alleventColumns = this.eventColumns;
@@ -38,7 +32,6 @@ export class AudienceComponent implements OnInit {
 
   data = [];
   type = 'coupons';
-  searchText;
   CouponAudience = [];
   TicketAudience = [];
   loyaltyCardAudience = [];
@@ -51,7 +44,7 @@ export class AudienceComponent implements OnInit {
   filterstampCardAudience = [];
   selectedAudience = [];
   campaignNames = [];
-  filterValue = { Campaign: '', Device: '' };
+  campaignName;
 
   currentUser;
   currentBrand;
@@ -81,7 +74,7 @@ export class AudienceComponent implements OnInit {
             // tslint:disable-next-line: max-line-length
             let daysLeft
             if(new Date(element.endDateFormatted).getTime() > new Date().getTime()){
-              daysLeft = Math.floor(new Date(element.endDateFormatted).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
+              daysLeft = Math.floor((new Date(element.endDateFormatted).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
             } else {
               daysLeft = 'Expired';
             }
@@ -116,13 +109,15 @@ export class AudienceComponent implements OnInit {
                 ''
               },
               'Days Left': { name: daysLeft },
-              'Status': { name:  element.status },
+              'Status': { name:  element.is_redeemed ? 'Used' : 'Unused' },
+              'Finance': { name: element.amount_spent ? element.amount_spent : '' },
               'Device': { name: element.is_wallet ? element.deviceType ? element.deviceType : 'Apple' : '' },
             }
           });
 
         });
         this.filterCouponAudience = this.CouponAudience;
+        this.getCampaign();
         this.addSelect()
       }
       this.showLoader = false;
@@ -152,7 +147,7 @@ export class AudienceComponent implements OnInit {
             let daysLeft
 
             if(new Date(element.startDateFormatted).getTime() > new Date().getTime()){
-              daysLeft = Math.floor(new Date(element.startDateFormatted).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
+              daysLeft = Math.floor((new Date(element.startDateFormatted).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
             } else {
               daysLeft = 'Expired';
             }
@@ -185,6 +180,7 @@ export class AudienceComponent implements OnInit {
             });
           });
           this.filterTicketAudience = this.TicketAudience;
+          this.getCampaign();
           this.addSelect()
 
         }
@@ -218,11 +214,13 @@ export class AudienceComponent implements OnInit {
               'Issue Date': { name: element.createDateFormatted },
               'Stamps': { name: element.stamps },
               'Redeem Count': { name: element.redeem_count },
+              'Finance': { name: element.amount_spent ? element.amount_spent : '' },
               'Device': {  name: element.is_wallet ? element.deviceType ? element.deviceType : 'Apple' : '' }
               }
             });
           });
           this.filterstampCardAudience = this.stampCardAudience;
+          this.getCampaign();
           this.addSelect()
 
         }
@@ -256,11 +254,13 @@ export class AudienceComponent implements OnInit {
               'Issue Date': { name: element.createDateFormatted },
               'Points': { name: element.points },
               'Redeem Count': { name: element.redeem_count },
+              'Finance': { name: element.amount_spent ? element.amount_spent : '' },
               'Device': {  name: element.is_wallet ? element.deviceType ? element.deviceType : 'Apple' : '' }
               }
             });
           });
           this.filterloyaltyCardAudience = this.loyaltyCardAudience;
+          this.getCampaign();
           this.addSelect()
 
         }
@@ -300,6 +300,7 @@ export class AudienceComponent implements OnInit {
             });
           });
           this.filterMembershipCardAudience = this.membershipCardAudience;
+          this.getCampaign();
           this.addSelect()
 
         }
@@ -314,7 +315,6 @@ export class AudienceComponent implements OnInit {
 
   refresh() {
     this.showLoader = true;
-    this.searchText = '';
     if(this.type === 'coupons'){
       this.CouponAudience = [];
       this.getCouponAudience();
@@ -334,11 +334,8 @@ export class AudienceComponent implements OnInit {
   }
 
   onChangeTab() {
-    this.searchText = '';
     this.selectedAudience = [];
     this.campaignNames = [];
-    this.campaignFilter = false;
-    this.deviceFilter = false;
     this.checkAllcoupons = true;
     this.checkAlltickets = true;
     this.checkAllStampCards = true;
@@ -365,49 +362,53 @@ export class AudienceComponent implements OnInit {
   filterCampaigns() {
     if (this.type === 'coupons') {
       this.filterCouponAudience = this.CouponAudience.filter(element => {
-        console.log(element);
-        console.log(element.data['Campaign Name']);
-        if (element.data['Campaign Name'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+
+        if (element.data['Campaign Name'].name.includes(this.campaignName)) {
           return true;
         }
       });
       console.log(this.filterCouponAudience);
+      this.addSelect();
     } else if (this.type === 'tickets') {
       this.filterTicketAudience = this.TicketAudience.filter(element => {
         console.log(element);
         console.log(element.data['Campaign Name']);
-        if (element.data['Campaign Name'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+        if (element.data['Campaign Name'].name.includes(this.campaignName)) {
           return true;
         }
       });
       console.log(this.filterTicketAudience);
+      this.addSelect();
     } else if (this.type === 'loyalty_cards') {
       this.filterloyaltyCardAudience = this.loyaltyCardAudience.filter(element => {
         console.log(element);
         console.log(element.data['Campaign Name']);
-        if (element.data['Campaign Name'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+        if (element.data['Campaign Name'].name.includes(this.campaignName)) {
           return true;
         }
       });
       console.log(this.filterloyaltyCardAudience);
+      this.addSelect();
     } else if (this.type === 'stamp_cards') {
       this.filterstampCardAudience = this.stampCardAudience.filter(element => {
         console.log(element);
         console.log(element.data['Campaign Name']);
-        if (element.data['Campaign Name'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+        if (element.data['Campaign Name'].name.includes(this.campaignName)) {
           return true;
         }
       });
       console.log(this.filterstampCardAudience);
+      this.addSelect();
     } else if (this.type === 'membership_cards') {
       this.filterMembershipCardAudience = this.membershipCardAudience.filter(element => {
         console.log(element);
         console.log(element.data['Campaign Name']);
-        if (element.data['Campaign Name'].name.toLowerCase().includes(this.searchText.toLowerCase())) {
+        if (element.data['Campaign Name'].name.includes(this.campaignName)) {
           return true;
         }
       });
-      console.log(this.filterloyaltyCardAudience);
+      console.log(this.filterMembershipCardAudience);
+      this.addSelect();
     }
   }
 
@@ -704,177 +705,48 @@ export class AudienceComponent implements OnInit {
   }
 
   getCampaign() {
-    if(this.campaignFilter){
-      this.campaignNames = [];
-        if(this.type === 'coupons'){
-          this.CouponAudience.forEach(element => {
-            if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
-              this.campaignNames.push(element['data']['Campaign Name'].name)
-            }
-          })
-      } else if (this.type === 'tickets'){
-        this.TicketAudience.forEach(element => {
+    this.campaignNames = [];
+      if(this.type === 'coupons'){
+        this.CouponAudience.forEach(element => {
           if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
             this.campaignNames.push(element['data']['Campaign Name'].name)
           }
         })
-      } else if (this.type === 'stamp_cards'){
-        this.stampCardAudience.forEach(element => {
-          if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
-            this.campaignNames.push(element['data']['Campaign Name'].name)
-          }
-        })
-      } else if (this.type === 'loyalty_cards'){
-        this.loyaltyCardAudience.forEach(element => {
-          if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
-            this.campaignNames.push(element['data']['Campaign Name'].name)
-          }
-        })
-      } else if (this.type === 'membership_cards') {
-        this.membershipCardAudience.forEach(element => {
-          if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
-            this.campaignNames.push(element['data']['Campaign Name'].name)
-          }
-        })
-      }
-    } else {
-      this.campaignNames = [];
-      this.filterValue.Campaign = '';
-      this.moreFilterFunc();
-    }
-  }
-
-  getDevice() {
-    if(this.deviceFilter){
-      console.log('device filter present');
-    } else {
-      this.filterValue.Device = '';
-      this.moreFilterFunc();
-    }
-  }
-
-  moreFilterFunc(){
-    if(this.type === 'coupons'){
-      this.filterCouponAudience = this.CouponAudience.filter(row => {
-        // tslint:disable-next-line: forin
-        for(var data in row){
-          if(this.filterValue.Campaign === '' && this.filterValue.Device === ''){
-            return true
-          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device === ''){
-            if(row.data['Campaign Name'].name === this.filterValue.Campaign){
-              return true;
-            }
-          }else if (this.filterValue.Campaign === '' && this.filterValue.Device !== ''){
-            if(row.data['Device'].name === this.filterValue.Device){
-              return true;
-            }
-          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device !== ''){
-            if(row.data['Campaign Name'].name === this.filterValue.Campaign && row.data['Device'].name === this.filterValue.Device){
-              return true;
-            }
-          }
+        this.campaignName = this.campaignNames[0];
+        this.filterCampaigns();
+    } else if (this.type === 'tickets'){
+      this.TicketAudience.forEach(element => {
+        if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
+          this.campaignNames.push(element['data']['Campaign Name'].name)
         }
       })
-      this.selectedAudience = this.filterCouponAudience;
-    } else if(this.type === 'tickets'){
-      this.filterTicketAudience = this.TicketAudience.filter(row => {
-        // tslint:disable-next-line: forin
-        for(var data in row){
-          if(this.filterValue.Campaign === '' && this.filterValue.Device === ''){
-            return true
-          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device === ''){
-            if(row.data['Campaign Name'].name === this.filterValue.Campaign){
-              return true;
-            }
-          }else if (this.filterValue.Campaign === '' && this.filterValue.Device !== ''){
-            if(row.data['Device'].name === this.filterValue.Device){
-              return true;
-            }
-          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device !== ''){
-            if(row.data['Campaign Name'].name === this.filterValue.Campaign && row.data['Device'].name === this.filterValue.Device){
-              return true;
-            }
-          }
-        }
-      })
-      this.selectedAudience = this.filterTicketAudience;
+      this.campaignName = this.campaignNames[0];
+      this.filterCampaigns();
     } else if (this.type === 'stamp_cards'){
-      this.filterstampCardAudience = this.stampCardAudience.filter(row => {
-        // tslint:disable-next-line: forin
-        for(var data in row){
-          if(this.filterValue.Campaign === '' && this.filterValue.Device === ''){
-            return true
-          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device === ''){
-            if(row.data['Campaign Name'].name === this.filterValue.Campaign){
-              return true;
-            }
-          }else if (this.filterValue.Campaign === '' && this.filterValue.Device !== ''){
-            if(row.data['Device'].name === this.filterValue.Device){
-              return true;
-            }
-          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device !== ''){
-            if(row.data['Campaign Name'].name === this.filterValue.Campaign && row.data['Device'].name === this.filterValue.Device){
-              return true;
-            }
-          }
+      this.stampCardAudience.forEach(element => {
+        if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
+          this.campaignNames.push(element['data']['Campaign Name'].name)
         }
       })
-      this.selectedAudience = this.filterstampCardAudience;
+      this.campaignName = this.campaignNames[0];
+      this.filterCampaigns();
     } else if (this.type === 'loyalty_cards'){
-      this.filterloyaltyCardAudience = this.loyaltyCardAudience.filter(row => {
-        // tslint:disable-next-line: forin
-        for(var data in row){
-          if(this.filterValue.Campaign === '' && this.filterValue.Device === ''){
-            return true
-          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device === ''){
-            if(row.data['Campaign Name'].name === this.filterValue.Campaign){
-              return true;
-            }
-          }else if (this.filterValue.Campaign === '' && this.filterValue.Device !== ''){
-            if(row.data['Device'].name === this.filterValue.Device){
-              return true;
-            }
-          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device !== ''){
-            if(row.data['Campaign Name'].name === this.filterValue.Campaign && row.data['Device'].name === this.filterValue.Device){
-              return true;
-            }
-          }
+      this.loyaltyCardAudience.forEach(element => {
+        if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
+          this.campaignNames.push(element['data']['Campaign Name'].name)
         }
       })
-      this.selectedAudience = this.filterloyaltyCardAudience;
-    } else if (this.type === 'membership_cards'){
-      this.filterMembershipCardAudience = this.membershipCardAudience.filter(row => {
-        // tslint:disable-next-line: forin
-        for(var data in row){
-          if(this.filterValue.Campaign === '' && this.filterValue.Device === ''){
-            return true
-          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device === ''){
-            if(row.data['Campaign Name'].name === this.filterValue.Campaign){
-              return true;
-            }
-          }else if (this.filterValue.Campaign === '' && this.filterValue.Device !== ''){
-            if(row.data['Device'].name === this.filterValue.Device){
-              return true;
-            }
-          } else if (this.filterValue.Campaign !== '' && this.filterValue.Device !== ''){
-            if(row.data['Campaign Name'].name === this.filterValue.Campaign && row.data['Device'].name === this.filterValue.Device){
-              return true;
-            }
-          }
+      this.campaignName = this.campaignNames[0];
+      this.filterCampaigns();
+    } else if (this.type === 'membership_cards') {
+      this.membershipCardAudience.forEach(element => {
+        if(this.campaignNames.indexOf(element['data']['Campaign Name'].name) === -1){
+          this.campaignNames.push(element['data']['Campaign Name'].name)
         }
       })
-      this.selectedAudience = this.filterMembershipCardAudience;
+      this.campaignName = this.campaignNames[0];
+      this.filterCampaigns();
     }
-  }
-
-  moreCampaignFilter(filterValue){
-    this.filterValue.Campaign = filterValue;
-    this.moreFilterFunc();
-  }
-
-  moreDeviceFilter(filterValue){
-    this.filterValue.Device = filterValue;
-    this.moreFilterFunc();
   }
 
 }
