@@ -1128,44 +1128,44 @@ nb-card {
       a {
         color: #20beea !important;
       }
-      .icon-menu {
-        &.templates {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-templates-active.svg");
-        }
-        &.pages {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-pages-active.svg");
-        }
-        &.marketers {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-marketers-active.svg");
-        }
-        &.dashboard {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-dashboard-active.svg");
-        }
-        &.campaign {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-campaign-active.svg");
-        }
-        &.insight{
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-insight-active.svg");
-        }
-        &.audience {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-audience-active.svg");
-        }
-        &.bots-store {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-botstore-active.svg");
-        }
-        &.pushnotification {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-pushnotification-active.svg");
-        }
-        &.qr {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-chatbotQR-active.svg");
-        }
-        &.settings {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-setting-active.svg");
-        }
-        &.business {
-          background-image: url("assets/svg-icon/menu-icon-SVG/menu-waletScan-active.svg") !important;
-        }
-      }
+      // .icon-menu {
+      //   &.templates {
+      //     background-image: url("assets/svg-icon/menu-icon-SVG/menu-templates-active.svg");
+      //   }
+      //   &.pages {
+      //     background-image: url("assets/svg-icon/menu-icon-SVG/menu-pages-active.svg");
+      //   }
+      //   &.marketers {
+      //     background-image: url("assets/svg-icon/menu-icon-SVG/menu-marketers-active.svg");
+      //   }
+      //   &.dashboard {
+      //     background-image: url("assets/svg-icon/menu-icon-SVG/menu-dashboard-active.svg");
+      //   }
+      //   &.campaign {
+      //     background-image: url("assets/svg-icon/menu-icon-SVG/menu-campaign-active.svg");
+      //   }
+      //   &.insight{
+      //     background-image: url("assets/svg-icon/menu-icon-SVG/menu-insight-active.svg");
+      //   }
+      //   &.audience {
+      //     background-image: url("assets/svg-icon/menu-icon-SVG/menu-audience-active.svg");
+      //   }
+      //   &.bots-store {
+      //     background-image: url("assets/svg-icon/menu-icon-SVG/menu-botstore-active.svg");
+      //   }
+      //   &.pushnotification {
+      //     background-image: url("assets/svg-icon/menu-icon-SVG/menu-pushnotification-active.svg");
+      //   }
+      //   &.qr {
+      //     background-image: url("assets/svg-icon/menu-icon-SVG/menu-chatbotQR-active.svg");
+      //   }
+      //   &.settings {
+      //     background-image: url("assets/svg-icon/menu-icon-SVG/menu-setting-active.svg");
+      //   }
+      //   &.business {
+      //     background-image: url("assets/svg-icon/menu-icon-SVG/menu-waletScan-active.svg") !important;
+      //   }
+      // }
     }
     &.active {
       a {
