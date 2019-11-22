@@ -42,7 +42,6 @@ export class FbLoginComponent implements OnInit {
         }else if(await localForage.getItem('loggedIn') == true){
           console.log('loggedIn');
           this.router.navigate(['/main/dashboard']);
-          this.showLoader = false;
           return;
         }
         if (res.user) {
@@ -58,6 +57,9 @@ export class FbLoginComponent implements OnInit {
           await localForage.setItem('usertoken', await res.user.getIdToken());
           await localForage.setItem('access', res.credential['accessToken']);
           console.log(newUser);
+          console.log('userID',await localForage.getItem('userID'))
+          console.log('usertoken',await localForage.getItem('usertoken'))
+          console.log('access',await localForage.getItem('access'))
 
           if (newUser) {
             // create user in firestore
@@ -89,6 +91,9 @@ export class FbLoginComponent implements OnInit {
           }else{
             console.log('oldUser');
             this.authService.updateUser(user_id,{ avatar: photo}).subscribe(async result => {
+              console.log('userID',await localForage.getItem('userID'))
+              console.log('usertoken',await localForage.getItem('usertoken'))
+              console.log('access',await localForage.getItem('access'))
               console.log('oldUser updated', result);     
               console.log('await localForage:',await localForage);
               console.log('get user called for', user_id); 
@@ -183,14 +188,22 @@ export class FbLoginComponent implements OnInit {
     }, 1000);
   }
 
-  getUser(uid){
+  async getUser(uid){
+    console.log('userID',await localForage.getItem('userID'))
+    console.log('usertoken',await localForage.getItem('usertoken'))
+    console.log('access',await localForage.getItem('access'))
     console.log('getting user with uid:', uid);
     this.authService.getUser(uid).subscribe(async data => {
+      console.log('userID',await localForage.getItem('userID'))
+      console.log('usertoken',await localForage.getItem('usertoken'))
+      console.log('access',await localForage.getItem('access'))
       console.log('user data found',data);
       await localForage.setItem('user', data['data']);
+      console.log('user',await localForage.getItem('user'))
       if (data['data']['activeBrand']) {
         console.log('yes activeBrand', data['data']['activeBrand']);
         this.brandService.getBrandById(data['data']['activeBrand']).subscribe(async res_brand => {
+          console.log('user',await localForage.getItem('user'));
           console.log('active brand found',res_brand);
           await localForage.setItem('currentBrand', res_brand['brand']);
           this.ngZone.run(() => this.router.navigate(['/main/dashboard']));
@@ -205,8 +218,14 @@ export class FbLoginComponent implements OnInit {
         this.ngZone.run(() => this.router.navigate(['/fb-connect']));
         this.showLoader = false;
       }
-    }, err => {
+    }, async err => {
+      console.log('userID',await localForage.getItem('userID'))
+      console.log('usertoken',await localForage.getItem('usertoken'))
+      console.log('access',await localForage.getItem('access'))
       console.log('user data error',err);
+      console.log('userID',await localForage.getItem('userID'))
+      console.log('usertoken',await localForage.getItem('usertoken'))
+      console.log('access',await localForage.getItem('access'))
       this.showLoader = false;
     });
   }
