@@ -416,6 +416,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.getSVG();
     // if (!this.userAdmin) {
     //   let item = document.getElementsByClassName('menu-item')[8] as HTMLSpanElement;
     //   item.setAttribute("style", `pointer-events: none;`);
@@ -549,5 +550,31 @@ export class MainComponent implements OnInit, AfterViewInit {
       await localForage.setItem('loggedOut', true);
       this.roter.navigate(['/master-admin']);
     });
+  }
+
+  getSVG(){
+    console.log('works');
+    var iconsElement = document.getElementsByClassName('icon-menu');
+    for (let i = 0; i < iconsElement.length; i++) {
+      if(iconsElement[i].className.includes('dashboard')){
+        iconsElement[i].innerHTML = this.mainService.svgIcons.dashboard;
+      } else if (iconsElement[i].className.includes('template')){
+        iconsElement[i].innerHTML = this.mainService.svgIcons.template;
+      } else if(iconsElement[i].className.includes('campaign')){
+        iconsElement[i].innerHTML = this.mainService.svgIcons.campaign;
+      } else if (iconsElement[i].className.includes('business')){
+        iconsElement[i].innerHTML = this.mainService.svgIcons.walletscan;
+      } else if (iconsElement[i].className.includes('insight')){
+        iconsElement[i].innerHTML = this.mainService.svgIcons.insights;
+      } else if (iconsElement[i].className.includes('audience')){
+        iconsElement[i].innerHTML = this.mainService.svgIcons.subscribers;
+      } else if (iconsElement[i].className.includes('pushnotification')){
+        iconsElement[i].innerHTML = this.mainService.svgIcons.notification;
+      } else if (iconsElement[i].className.includes('bots-store')){
+        iconsElement[i].innerHTML = this.mainService.svgIcons.botstore;
+      } else if (iconsElement[i].className.includes('settings')){
+        iconsElement[i].innerHTML = this.mainService.svgIcons.settings;
+      }
+    }
   }
 }
