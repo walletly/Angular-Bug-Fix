@@ -258,7 +258,7 @@ export class CreateCouponsComponent implements OnInit {
         }
       }
     }
-    this.myFormFront.controls['brandName'].setValue(this.currentBrand.brand_name)
+    this.myFormFront.controls['brandName'].setValue(this.currentBrand.brand_name);
   }
 
   async create() {

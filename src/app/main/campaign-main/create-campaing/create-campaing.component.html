@@ -275,6 +275,30 @@
               </div>
             </div>
           </div>
+          <div class="row-input">
+            <div class="lable">
+              AddWallet Field
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select
+                formControlName="customFieldAddwallet" size="small" placeholder="Select Field"
+                [ngClass]="{
+                  error:
+                  myForm.controls['customFieldAddwallet'].invalid &&
+                  !customValidation
+                }"
+                [(ngModel)]="dataCampaign.addWalletField"
+                #selectCustomField
+                >
+                <nb-option value="">--Select Custom Fields--</nb-option>
+                <nb-option *ngFor="let customField of customFieldsBoolean" [value]="customField.name">
+                  {{customField.name}}
+                </nb-option>
+              </nb-select>
+              </div>
+            </div>
+          </div>
         </div>
       </form>
       <!-- <div *ngIf="myForm.invalid && !customValidation" class="row-input">
@@ -415,6 +439,30 @@
                   !customValidation
                 }"
                 [(ngModel)]="dataCampaign.memCard_status_customField"
+                #selectCustomField
+                >
+                <nb-option value="">--Select Custom Fields--</nb-option>
+                <nb-option *ngFor="let customField of customFieldsBoolean" [value]="customField.name">
+                  {{customField.name}}
+                </nb-option>
+              </nb-select>
+              </div>
+            </div>
+          </div>
+          <div class="row-input">
+            <div class="lable">
+              AddWallet Field
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select
+                formControlName="customFieldAddwallet" size="small" placeholder="Select Field"
+                [ngClass]="{
+                  error:
+                  membershipForm.controls['customFieldAddwallet'].invalid &&
+                  !customValidation
+                }"
+                [(ngModel)]="dataCampaign.addWalletField"
                 #selectCustomField
                 >
                 <nb-option value="">--Select Custom Fields--</nb-option>
@@ -634,6 +682,30 @@
               </div>
             </div>
           </div>
+          <div class="row-input">
+            <div class="lable">
+              AddWallet Field
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select
+                formControlName="customFieldAddwallet" size="small" placeholder="Select Field"
+                [ngClass]="{
+                  error:
+                  loyaltyForm.controls['customFieldAddwallet'].invalid &&
+                  !customValidation
+                }"
+                [(ngModel)]="dataCampaign.addWalletField"
+                #selectCustomField
+                >
+                <nb-option value="">--Select Custom Fields--</nb-option>
+                <nb-option *ngFor="let customField of customFieldsBoolean" [value]="customField.name">
+                  {{customField.name}}
+                </nb-option>
+              </nb-select>
+              </div>
+            </div>
+          </div>
         </div>
       </form>
       <form *ngIf="dataCampaign.campaign_type == 6 && !stampCampaignId" [formGroup]="stampForm">
@@ -752,6 +824,30 @@
                   >
                   <nb-option value="">--Select Custom Fields--</nb-option>
                   <nb-option *ngFor="let customField of customFieldsNumber" [value]="customField.name">
+                    {{customField.name}}
+                  </nb-option>
+                </nb-select>
+                </div>
+              </div>
+            </div>
+            <div class="row-input">
+              <div class="lable">
+                AddWallet Field
+              </div>
+              <div class="value">
+                <div class="pos-r full-width">
+                  <nb-select
+                  formControlName="customFieldAddwallet" size="small" placeholder="Select Field"
+                  [ngClass]="{
+                    error:
+                    stampForm.controls['customFieldAddwallet'].invalid &&
+                    !customValidation
+                  }"
+                  [(ngModel)]="dataCampaign.addWalletField"
+                  #selectCustomField
+                  >
+                  <nb-option value="">--Select Custom Fields--</nb-option>
+                  <nb-option *ngFor="let customField of customFieldsBoolean" [value]="customField.name">
                     {{customField.name}}
                   </nb-option>
                 </nb-select>
@@ -956,14 +1052,14 @@
             </div>
           </div>
         </div>
-        <div *ngIf="isApi && dataCampaign.campaign_type == 8" class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
+        <div *ngIf="isApi" class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
           Redemption
           <div style="font-size: small; padding-top: 5px;">
             (custom field triggers redemption flow)
           </div>
         </div>
-        <div *ngIf="isApi && dataCampaign.campaign_type == 8" class="p-l-60">
-          <div class="row-input">
+        <div *ngIf="isApi" class="p-l-60">
+          <div class="row-input" *ngIf="dataCampaign.campaign_type == 8">
             <div class="lable p-t-0">
               Manychat CustomField
             </div>
@@ -973,10 +1069,34 @@
                 formControlName="customFields" size="small" placeholder="Select Custom Fields"
                 [ngClass]="{
                   error:
-                  myForm.controls['customFields'].invalid &&
+                  ticketForm.controls['customFields'].invalid &&
                   !customValidation
                 }"
                 [(ngModel)]="dataCampaign.selectedCustomField"
+                #selectCustomField
+                >
+                <nb-option value="">--Select Custom Fields--</nb-option>
+                <nb-option *ngFor="let customField of customFieldsBoolean" [value]="customField.name">
+                  {{customField.name}}
+                </nb-option>
+              </nb-select>
+              </div>
+            </div>
+          </div>
+          <div class="row-input">
+            <div class="lable">
+              AddWallet Field
+            </div>
+            <div class="value">
+              <div class="pos-r full-width">
+                <nb-select
+                formControlName="customFieldAddwallet" size="small" placeholder="Select Field"
+                [ngClass]="{
+                  error:
+                  ticketForm.controls['customFieldAddwallet'].invalid &&
+                  !customValidation
+                }"
+                [(ngModel)]="dataCampaign.addWalletField"
                 #selectCustomField
                 >
                 <nb-option value="">--Select Custom Fields--</nb-option>

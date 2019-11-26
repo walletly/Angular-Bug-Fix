@@ -112,6 +112,7 @@ export class CreateCampaingComponent implements OnInit {
       template: ["", [Validators.required]],
       customFields: [""],
       customFieldFinance: [""],
+      customFieldAddwallet: [""],
       discount: ["", []],
       // numberOfCoupon: ["", [Validators.required]],
       // setLimit: ["", [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -126,6 +127,7 @@ export class CreateCampaingComponent implements OnInit {
       description: ["", [Validators.required]],
       template: ["", [Validators.required]],
       customFields: [""],
+      customFieldAddwallet: [""],
       startDate: ["", [Validators.required]],
       time: ["", [Validators.required, Validators.pattern("((1[0-2]|0?[1-9]):([0-5][0-9]) ?((AM)|(PM)|(am)|(pm)))")]],
       event_name: ["", [Validators.required]],
@@ -138,6 +140,7 @@ export class CreateCampaingComponent implements OnInit {
       template: ["", [Validators.required]],
       customFields: [""],
       customFieldFinance: [""],
+      customFieldAddwallet: [""],
       currency: ["", [Validators.required]],
       points: ["", [Validators.required, Validators.min(0)]],
     });
@@ -148,6 +151,7 @@ export class CreateCampaingComponent implements OnInit {
       template: ["", [Validators.required]],
       customFields: [""],
       customFieldFinance: [""],
+      customFieldAddwallet: [""]
     });
 
     this.membershipForm = formBuilder.group({
@@ -155,7 +159,8 @@ export class CreateCampaingComponent implements OnInit {
       description: ["", [Validators.required]],
       template: ["", [Validators.required]],
       customFields_redeem: [""],
-      customFields_status: [""]
+      customFields_status: [""],
+      customFieldAddwallet: [""]
     });
   }
 
@@ -265,6 +270,7 @@ export class CreateCampaingComponent implements OnInit {
         this.mainService.dataCampaign.selectedCustomField = result['data'].manychat_customField || '';
         this.mainService.dataCampaign.memCard_status_customField = result['data'].manychat_CF_memCard_status || '';
         this.mainService.dataCampaign.financeField = result['data'].manychat_CF_finance || '';
+        this.mainService.dataCampaign.addWalletField = result['data'].manychat_CF_addwallet || '';
 
         this.mainService.dataCampaign.campaign_type = result['data'].campaign_type.toString();
         this.mainService.dataCampaign.discount = result['data'].campaign_value;
@@ -542,6 +548,7 @@ export class CreateCampaingComponent implements OnInit {
       selectedCustomField: '',
       memCard_status_customField: '',
       financeField: '',
+      addWalletField: '',
       template: '',
       discount: '',
       startDate: '',

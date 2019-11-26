@@ -34,7 +34,8 @@ export class SharedCampaignComponent implements OnInit {
     private campaignService: CompaignService,
     private brandService: BrandService,
     private formBuilder: FormBuilder,
-  ) { 
+  ) {
+    console.log('in form');
 
     this.myForm = formBuilder.group({
       firstname: ["", [Validators.required]],
@@ -71,7 +72,7 @@ export class SharedCampaignComponent implements OnInit {
         this.campaign = null;
         this.showLoader = false;
         this.invalidCampaign = true;
-      }); 
+      });
       this.campaignType = this.campaign.campaign_type;
       this.selectCardType(this.campaignType);
     }, error=>{

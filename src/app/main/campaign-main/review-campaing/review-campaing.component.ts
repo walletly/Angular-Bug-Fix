@@ -87,6 +87,7 @@ export class ReviewCampaingComponent implements OnInit {
             currency: '',
             memCard_status_customField: '',
             financeField: '',
+            addWalletField: '',
             event_name: '',
             venue: '',
             venue_coordinates: null,
@@ -120,6 +121,7 @@ export class ReviewCampaingComponent implements OnInit {
             currency: '',
             memCard_status_customField: '',
             financeField: '',
+            addWalletField: '',
             event_name: '',
             venue: '',
             venue_coordinates: null,
@@ -157,6 +159,7 @@ export class ReviewCampaingComponent implements OnInit {
     this.campaign['manychat_customField'] = this.dataCampaign.selectedCustomField;
     this.campaign['manychat_CF_memCard_status'] = this.dataCampaign.memCard_status_customField;
     this.campaign['manychat_CF_finance'] = this.dataCampaign.financeField;
+    this.campaign['manychat_CF_addwallet'] = this.dataCampaign.addWalletField;
     this.campaign['campaign_type'] = parseInt(this.dataCampaign.campaign_type);
     this.campaign['currency'] = this.dataCampaign.currency;
     this.campaign['coupon_validity'] = parseInt(this.dataCampaign.coupon_validity);

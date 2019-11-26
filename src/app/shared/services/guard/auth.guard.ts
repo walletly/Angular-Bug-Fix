@@ -41,6 +41,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         currency: '',
         memCard_status_customField: '',
         financeField: '',
+        addWalletField: '',
         event_name: '',
         venue: '',
         venue_coordinates: null,

@@ -744,41 +744,38 @@ export class SettingsComponent implements OnInit {
     })
     return partnerData;
   }
+  
   async manychatAPIReceived() {
     this.currentBrand = await localForage.getItem('currentBrand');
     if (this.manyChatApiForm.valid) {
       this.inProcces = true;
 
       const manyChatApi = this.manyChatApiForm.get('manyChatApi').value;
-      const manyChatApiBrand = manyChatApi.split(':');
 
-      if (manyChatApiBrand[0] === this.brand['facebook_page_id']) {
-        this.manychatService.getCustomFields(manyChatApi).subscribe(async result => {
-          if (result) {
-            console.log(result['data']);
+      this.manychatService.getPageInfo(manyChatApi).subscribe(result => {
+        if(result){
+          console.log(result);
+          // if(result['data'].data.id === parseInt(this.brand['facebook_page_id'])) {
             this.brandService.updateBrand(this.currentBrand.brand_id,
-            {'manychatAPI': manyChatApi}).subscribe(check => {
-              console.log(check);
-              this.inProcces = false;
-              this.WrongApi = false;
-              this.mainService.showToastrSuccess.emit({text: 'Integration saved'});
-            }, err => {
-              console.log(err);
-            });
-          }
-        }, err => {
-          if (err) {
-            console.log(err.message);
-            this.inProcces = false;
-            this.WrongApi = true;
-          }
-        });
-      } else {
-        setTimeout(() => {
+              {'manychatAPI': manyChatApi}).subscribe(check => {
+                console.log(check);
+                this.inProcces = false;
+                this.WrongApi = false;
+                this.mainService.showToastrSuccess.emit({text: 'Integration saved'});
+              }, err => {
+                this.inProcces = false;
+                this.WrongApi = true;
+                console.log(err);
+              });
+        // } else {
+            // this.inProcces = false;
+            // this.WrongApi = true;
+        }
+      }, err => {
+          console.log(err.message);
           this.inProcces = false;
           this.WrongApi = true;
-        }, 800);
-      }
+      });
     } else {
       this.customValidation = false;
       this.inProcces = false;

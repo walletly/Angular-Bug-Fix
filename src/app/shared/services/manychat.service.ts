@@ -14,4 +14,8 @@ export class ManychatService {
   getCustomFields(apikey) {
     return this.http.get(SERVER_API_URL + 'utils/manychat/getcustomfields/' + apikey);
   }
+
+  getPageInfo(apikey) {
+    return this.http.get(SERVER_API_URL + 'utils/manychat/getPageInfo/' + apikey);
+  }
 }
