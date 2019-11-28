@@ -62,6 +62,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           console.log('usertoken',await localForage.getItem('usertoken'))
           console.log('currentBrand',await localForage.getItem('currentBrand'))
           console.log('canActivate Auth Result', result);
+          const user = await localForage.getItem('user');
 
           if (result) {
             if (!await localForage.getItem('userID') || 
@@ -74,9 +75,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
                 this.router.navigate(['/fb-login']);
                 observer.next(false);
               });
-            } else if (!await localForage.getItem('currentBrand') && !this.router.url.includes('fb-connect')){
-              this.router.navigate(['/fb-connect']);
-              observer.next(false);
+            } 
+            else if (!await localForage.getItem('currentBrand') && !this.router.url.includes('fb-connect')){
+              if(user['user_type'] === 4){
+                observer.next(true);
+              }else{
+                this.router.navigate(['/fb-connect']);
+                observer.next(false);
+              }
             }
             await localForage.setItem('loggedIn', true);
             await localForage.setItem('userID', result.uid);
