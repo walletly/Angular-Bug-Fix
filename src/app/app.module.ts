@@ -73,7 +73,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB_f_r3DPfN5tZ6x0olJaGCjSogT9rWapM",
-  authDomain: "auth.walletly.ai",
+  authDomain: "walletly-dev3.firebaseapp.com",
   databaseURL: "https://walletly-dev3.firebaseio.com",
   projectId: "walletly-dev3",
   storageBucket: "walletly-dev3.appspot.com",
