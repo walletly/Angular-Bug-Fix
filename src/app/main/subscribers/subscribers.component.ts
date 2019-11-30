@@ -48,7 +48,7 @@ export class SubscribersComponent implements OnInit {
           this.subscribers.push({
             data: {
               'Check': {name: true },
-              'Avatar': { name: element.avatar },
+              'Avatar': { name: !element.avatar ? '' : element.avatar.includes('many') ? element.avatar : ''},
               'Name': { name:  element.firstname ? `${element.firstname} ${element.lastname}` : ''},
               'Email': { name: element.email },
               'Phone': { name: element.phone },
