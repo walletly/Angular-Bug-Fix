@@ -122,24 +122,44 @@ export class FbLoginComponent implements OnInit {
             return;
           });
         }
-        if(err.code == 'auth/user-cancelled'){
-          this.ngZone.run(async () => {
-            await localForage.clear();
-            this.showLoader = false;
-            return;
+        if(err.code.includes('auth')){
+          console.log('auth err code:',err.code);
+          this.firebaseAuth.auth.signOut().then(async () => {
+            this.ngZone.run(async () => {
+              await localForage.clear();
+              this.showLoader = false;
+            });
+          }).catch(async ()=>{
+            this.ngZone.run(async () => {
+              await localForage.clear();
+              this.showLoader = false;
+            });
+          });
+        }else{
+          console.log('errCode:',err.code);
+          this.firebaseAuth.auth.signOut().then(async () => {
+            this.ngZone.run(async () => {
+              await localForage.clear();
+              this.showLoader = false;
+            });
+          }).catch(async ()=>{
+            this.ngZone.run(async () => {
+              await localForage.clear();
+              this.showLoader = false;
+            });
           });
         }
 
-        this.firebaseAuth.auth.signOut().then(async () => {
-          await localForage.clear();
-          await localForage.setItem('loggedOut', true);
-          this.router.navigate(['/fb-login']);
-        }).catch(async ()=>{
-          await localForage.clear();
-          await localForage.setItem('loggedOut', true);
-          this.router.navigate(['/fb-login']);
-        });
-        return;
+        // this.firebaseAuth.auth.signOut().then(async () => {
+        //   await localForage.clear();
+        //   await localForage.setItem('loggedOut', true);
+        //   this.router.navigate(['/fb-login']);
+        // }).catch(async ()=>{
+        //   await localForage.clear();
+        //   await localForage.setItem('loggedOut', true);
+        //   this.router.navigate(['/fb-login']);
+        // });
+        // return;
 
         // let user_type, user_id, tempPassword;
         // const userData = this.authService.getUserByEmail(err.email).subscribe(async data => {
