@@ -86,9 +86,9 @@
                   <div *ngIf="checkAll" class="check-row m-auto">
                     <img src="assets/img/success-white.png" alt="">
                   </div>
-                  <div *ngIf="!checkAll" style="background-color: transparent !important; border: none !important" class="check-row m-auto">
+                  <!-- <div *ngIf="!checkAll" style="background-color: transparent !important; border: none !important" class="check-row m-auto">
                     {{ i + 1 }}
-                  </div>
+                  </div> -->
                 </span>
                 <div *ngIf="column === 'Invite'">
                   <div *ngIf="row.data[column] === 0" (click)="invite(row.data['Email Address'])" class="chip-invite">
