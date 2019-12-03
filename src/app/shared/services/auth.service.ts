@@ -57,15 +57,11 @@ export class AuthService {
 
     return from(localForage.getItem('usertoken').then(async token => {
       const userID: any = await localForage.getItem('userID');
-      console.log('token',token);
-      console.log('userID', userID);
       
       const httpHeaders = new HttpHeaders ({
         'x-auth-token': `Bearer ${token}`,
         'x-auth-user': userID
       });
-
-      console.log('httpHeaders',httpHeaders);
       return this.http.get(SERVER_API_URL + 'auth/' + id, { headers: httpHeaders}).toPromise();
     }));
   }

@@ -54,19 +54,18 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       return Observable.create(observer => {
         this.firebaseAuth.authState.subscribe(async result => {
 
-          console.log('next url',next.url);
-          console.log('state url',state.url);
-          console.log('userID', await localForage.getItem('userID'))
-          console.log('user', await localForage.getItem('user'))
-          console.log('access',await localForage.getItem('access'))
-          console.log('usertoken',await localForage.getItem('usertoken'))
-          console.log('currentBrand',await localForage.getItem('currentBrand'))
+          // console.log('next url',next.url);
+          // console.log('state url',state.url);
+          // console.log('userID', await localForage.getItem('userID'))
+          // console.log('user', await localForage.getItem('user'))
+          // console.log('access',await localForage.getItem('access'))
+          // console.log('usertoken',await localForage.getItem('usertoken'))
+          // console.log('currentBrand',await localForage.getItem('currentBrand'))
           console.log('canActivate Auth Result', result);
-          const user = await localForage.getItem('user');
-
+          
           if (result) {
+            const user = await localForage.getItem('user');
             if (!await localForage.getItem('userID') || 
-                !await localForage.getItem('user') || 
                 !await localForage.getItem('usertoken'))
             {
               this.firebaseAuth.auth.signOut().then(async () => {
@@ -76,7 +75,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
                 observer.next(false);
               });
             } 
-            else if (!await localForage.getItem('currentBrand') && !this.router.url.includes('fb-connect')){
+            else if (user && !await localForage.getItem('currentBrand') && !this.router.url.includes('fb-connect')){
               if(user['user_type'] === 4){
                 observer.next(true);
               }else{
@@ -91,8 +90,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             });
             observer.next(true);
           } else {
+            await localForage.setItem('loggedOut', true);
             this.firebaseAuth.auth.signOut().then(async () => {
-              await localForage.clear();
               await localForage.setItem('loggedOut', true);
               this.router.navigate(['/fb-login']);
               observer.next(false);

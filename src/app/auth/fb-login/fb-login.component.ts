@@ -31,11 +31,12 @@ export class FbLoginComponent implements OnInit {
     setTimeout(() => {
       this.firebaseAuth.auth.getRedirectResult()
       .then(async res => {
-        console.log(res);
+        console.log('fb redirect result:',res);
         if(await localForage.getItem('loggedOut') == true){
           console.log('loggedOut');
-          await this.ngZone.run(async () => {
+          return await this.ngZone.run(async () => {
             await localForage.clear();
+            await localForage.setItem('loggedOut', true);
             this.showLoader = false;
             return;
           });
@@ -82,7 +83,7 @@ export class FbLoginComponent implements OnInit {
               this.getUser(user_id);
             }, err => {
               console.log('Error in creating Fb user in Database', err);
-              this.ngZone.run(async () => {
+              return this.ngZone.run(async () => {
                 await localForage.clear();
                 this.showLoader = false;
                 return;
@@ -107,7 +108,7 @@ export class FbLoginComponent implements OnInit {
           }
         } else {
           console.log('no res.user');
-          this.ngZone.run(async () => {
+          return this.ngZone.run(async () => {
             await localForage.clear();
             this.showLoader = false;
             return;
@@ -116,7 +117,7 @@ export class FbLoginComponent implements OnInit {
       }).catch( async err => {
         console.log('fb login error:',err);
         if(await localForage.getItem('loggedOut') == true){
-          this.ngZone.run(async () => {
+          return this.ngZone.run(async () => {
             await localForage.clear();
             this.showLoader = false;
             return;
