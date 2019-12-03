@@ -51,8 +51,28 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       };
     }
 
-      return Observable.create(observer => {
-        this.firebaseAuth.authState.subscribe(async result => {
+      return Observable.create(async observer => {
+
+        const currentUser = this.firebaseAuth.auth.currentUser;
+
+        if(currentUser){
+          if (!await localForage.getItem('userID') || 
+              !await localForage.getItem('usertoken'))
+          {
+            this.firebaseAuth.auth.signOut().then(async () => {
+              await localForage.clear();
+              this.router.navigate(['/fb-login']);
+              observer.next(false);
+            });
+          }else{
+            observer.next(true);
+          }
+        }else{
+          this.router.navigate(['/fb-login']);
+          observer.next(false);
+        }
+
+        // this.firebaseAuth.authState.subscribe(async result => {
 
           // console.log('next url',next.url);
           // console.log('state url',state.url);
@@ -61,43 +81,43 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           // console.log('access',await localForage.getItem('access'))
           // console.log('usertoken',await localForage.getItem('usertoken'))
           // console.log('currentBrand',await localForage.getItem('currentBrand'))
-          console.log('canActivate Auth Result', result);
+          // console.log('canActivate Auth Result', result);
           
-          if (result) {
-            const user = await localForage.getItem('user');
-            if (!await localForage.getItem('userID') || 
-                !await localForage.getItem('usertoken'))
-            {
-              this.firebaseAuth.auth.signOut().then(async () => {
-                await localForage.clear();
-                await localForage.setItem('loggedOut', true);
-                this.router.navigate(['/fb-login']);
-                observer.next(false);
-              });
-            } 
-            else if (user && !await localForage.getItem('currentBrand') && !this.router.url.includes('fb-connect')){
-              if(user['user_type'] === 4){
-                observer.next(true);
-              }else{
-                this.router.navigate(['/fb-connect']);
-                observer.next(false);
-              }
-            }
-            await localForage.setItem('loggedIn', true);
-            await localForage.setItem('userID', result.uid);
-            await result.getIdToken().then(async res => {
-              await localForage.setItem('usertoken', res);
-            });
-            observer.next(true);
-          } else {
-            await localForage.setItem('loggedOut', true);
-            this.firebaseAuth.auth.signOut().then(async () => {
-              await localForage.setItem('loggedOut', true);
-              this.router.navigate(['/fb-login']);
-              observer.next(false);
-            });
-          }
-        });
+          // if (result) {
+          //   const user = await localForage.getItem('user');
+          //   if (!await localForage.getItem('userID') || 
+          //       !await localForage.getItem('usertoken'))
+          //   {
+          //     this.firebaseAuth.auth.signOut().then(async () => {
+          //       await localForage.clear();
+                // await localForage.setItem('loggedOut', true);
+            //     this.router.navigate(['/fb-login']);
+            //     observer.next(false);
+            //   });
+            // } 
+            // else if (user && !await localForage.getItem('currentBrand') && !this.router.url.includes('fb-connect')){
+            //   if(user['user_type'] === 4){
+            //     observer.next(true);
+            //   }else{
+            //     this.router.navigate(['/fb-connect']);
+            //     observer.next(false);
+            //   }
+            // }
+            // await localForage.setItem('loggedIn', true);
+          //   await localForage.setItem('userID', result.uid);
+          //   await result.getIdToken().then(async res => {
+          //     await localForage.setItem('usertoken', res);
+          //   });
+          //   observer.next(true);
+          // } else {
+            // await localForage.setItem('loggedOut', true);
+            // this.firebaseAuth.auth.signOut().then(async () => {
+              // await localForage.setItem('loggedOut', true);
+            //   this.router.navigate(['/fb-login']);
+            //   observer.next(false);
+            // });
+          // }
+        // });
       });
   }
 
@@ -105,6 +125,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<boolean> | Promise<boolean> | boolean {
     return Observable.create(async observer => {
       const user = await localForage.getItem("user");
+      if(!user){
+        this.router.navigate(['/fb-login']);
+        observer.next(false);
+        return;
+      }
       if (user["user_type"] === 4){
         observer.next(true);
         return;

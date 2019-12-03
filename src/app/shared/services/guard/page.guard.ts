@@ -18,30 +18,35 @@ export class PageGuard implements CanActivate{
       
       return Observable.create(async observer => {
         const user = await localForage.getItem('user');
-        const user_type = user['user_type'];
-        const url = state.url;
-        if (url == '/main/dashboard'){
-          if(user_type == 1){
-            observer.next(true);
-          }else if(user_type == 4){
-            this.router.navigate(['/main/dashboard-info-admin']);
-            observer.next(false);
-          }
-        }else if(url == '/main/dashboard-info-admin'){
-          if(user_type == 4){
-            observer.next(true);
-          }else if(user_type == 1){
-            this.router.navigate(['/main/dashboard']);
-            observer.next(false);
-          }
-        }else if(url == '/fb-connect'){
-          if(user_type == 1){
-            observer.next(true);
-          }else if(user_type == 4){
-            this.router.navigate(['/main/dashboard-info-admin']);
-            observer.next(false);
+        if(!user){
+          this.router.navigate(['/fb-login']);
+          observer.next(false);
+        }else{
+          const user_type = user['user_type'];
+          const url = state.url;
+          if (url == '/main/dashboard'){
+            if(user_type == 1){
+              observer.next(true);
+            }else if(user_type == 4){
+              this.router.navigate(['/main/dashboard-info-admin']);
+              observer.next(false);
+            }
+          }else if(url == '/main/dashboard-info-admin'){
+            if(user_type == 4){
+              observer.next(true);
+            }else if(user_type == 1){
+              this.router.navigate(['/main/dashboard']);
+              observer.next(false);
+            }
+          }else if(url == '/fb-connect'){
+            if(user_type == 1){
+              observer.next(true);
+            }else if(user_type == 4){
+              this.router.navigate(['/main/dashboard-info-admin']);
+              observer.next(false);
+            }
           }
         }
-      });
+    });
   }
 }
