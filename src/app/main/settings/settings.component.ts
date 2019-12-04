@@ -557,7 +557,6 @@ export class SettingsComponent implements OnInit {
       await this.getBrand();
       console.log(this.brand);
       this.brandService.updateBrand(this.currentBrand.brand_id, this.brand).subscribe(result => {
-        console.log(result);
         this.brandService.getBrandById(this.currentBrand.brand_id).subscribe(async data => {
           await localForage.setItem('currentBrand', data['brand']);
           this.mainService.showToastrSuccess.emit({text: 'Settings updated'});
@@ -566,7 +565,7 @@ export class SettingsComponent implements OnInit {
           this.inProcces = false;
         });
       }, err2 => {
-        this.inProcces = true;
+        this.inProcces = false;
       });
     } else {
       this.customValidation = false;

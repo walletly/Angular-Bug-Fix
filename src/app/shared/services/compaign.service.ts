@@ -1,69 +1,102 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SERVER_API_URL } from '../../../environments/environment';
-import * as localForage from 'localforage';
 import { from } from 'rxjs';
+import { MainService } from './main.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompaignService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private mainService: MainService) { }
 
   createСampaign(body) {
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const httpHeadersWithCT = new HttpHeaders ({
-        'Content-Type': 'application/json',
-        'x-auth-token': `Bearer ${token}`,
-        'x-auth-user': userID
-      });
-      return this.http.post(SERVER_API_URL + 'campaign', body, { headers: httpHeadersWithCT }).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          result = await this.http.post(SERVER_API_URL + 'campaign', body, { headers: httpHeaders }).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            httpHeaders = await this.mainService.refreshHttpHeaders();
+            result = await this.http.post(SERVER_API_URL + 'campaign', body, { headers: httpHeaders }).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 
   updateСampaign(id, body) {
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const httpHeadersWithCT = new HttpHeaders ({
-        'Content-Type': 'application/json',
-        'x-auth-token': `Bearer ${token}`,
-        'x-auth-user': userID
-      });
-      return this.http.put(SERVER_API_URL + 'campaign/' + id, body, { headers: httpHeadersWithCT }).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          result = await this.http.put(SERVER_API_URL + 'campaign/' + id, body, { headers: httpHeaders }).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            httpHeaders = await this.mainService.refreshHttpHeaders();
+            result = await this.http.put(SERVER_API_URL + 'campaign/' + id, body, { headers: httpHeaders }).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 
   deleteСampaign(body) {
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const deleteOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'x-auth-token': `Bearer ${token}`,
-          'x-auth-user': userID
-        }),
-        body: body
-      };
-      return this.http.delete(SERVER_API_URL + 'campaign', deleteOptions).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          const deleteOptions = {
+            headers: httpHeaders,
+            body: body
+          };
+          result = await this.http.delete(SERVER_API_URL + 'campaign', deleteOptions).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            const deleteOptions = {
+              headers: await this.mainService.refreshHttpHeaders(),
+              body: body
+            };
+            result = await this.http.delete(SERVER_API_URL + 'campaign', deleteOptions).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 
   getСampaignById(id) {
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const httpHeaders = new HttpHeaders ({
-        'Content-Type': 'application/json',
-        'x-auth-token': `Bearer ${token}`,
-        'x-auth-user': userID
-      });
-      return this.http.get(SERVER_API_URL + 'campaign/' + id, { headers: httpHeaders }).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          result = await this.http.get(SERVER_API_URL + 'campaign/' + id, { headers: httpHeaders }).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            httpHeaders = await this.mainService.refreshHttpHeaders();
+            result = await this.http.get(SERVER_API_URL + 'campaign/' + id, { headers: httpHeaders }).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 
   getСampaignByCode(code) {
@@ -79,28 +112,42 @@ export class CompaignService {
   }
 
   getСampaignsBrands(id, body) {
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const httpHeadersWithCT = new HttpHeaders ({
-        'Content-Type': 'application/json',
-        'x-auth-token': `Bearer ${token}`,
-        'x-auth-user': userID
-      });
-      return this.http.post(SERVER_API_URL + 'campaign/all/' + id, body, { headers: httpHeadersWithCT }).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          result = await this.http.post(SERVER_API_URL + 'campaign/all/' + id, body, { headers: httpHeaders }).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            httpHeaders = await this.mainService.refreshHttpHeaders();
+            result = await this.http.post(SERVER_API_URL + 'campaign/all/' + id, body, { headers: httpHeaders }).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 
   sendCampaignNotification(campaign_id, body){
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const httpHeaders = new HttpHeaders ({
-        'Content-Type': 'application/json',
-        'x-auth-token': `Bearer ${token}`,
-        'x-auth-user': userID
-      });
-      return this.http.post(SERVER_API_URL + 'campaign/notification/' + campaign_id, body, { headers: httpHeaders }).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          result = await this.http.post(SERVER_API_URL + 'campaign/notification/' + campaign_id, body, { headers: httpHeaders }).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            httpHeaders = await this.mainService.refreshHttpHeaders();
+            result = await this.http.post(SERVER_API_URL + 'campaign/notification/' + campaign_id, body, { headers: httpHeaders }).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 }

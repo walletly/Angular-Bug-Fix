@@ -553,7 +553,6 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   getSVG(){
-    console.log('works');
     var iconsElement = document.getElementsByClassName('icon-menu');
     for (let i = 0; i < iconsElement.length; i++) {
       if(iconsElement[i].className.includes('dashboard')){

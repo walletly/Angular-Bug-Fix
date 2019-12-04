@@ -72,13 +72,12 @@ export class DashboardComponent implements OnInit {
     if (mainService.changeBrandBool) {
       window.location.reload();
     }
-
-    this.getData();
   }
   
   async ngOnInit() {
     this.currentBrand = await localForage.getItem('currentBrand');
     this.brandCurrency = this.currentBrand.currency || '$';
+    this.getData();
   }
 
   generateGraphs() {

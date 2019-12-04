@@ -1,90 +1,133 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { SERVER_API_URL } from '../../../environments/environment';
-import * as localForage from 'localforage';
 import { from } from 'rxjs';
+import { MainService } from './main.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CardService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private mainService: MainService) { }
 
   createCard(body) {
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const httpHeaders = new HttpHeaders ({
-        'Content-Type': 'application/json',
-        'x-auth-token': `Bearer ${token}`,
-        'x-auth-user': userID
-      });
-      return this.http.post(SERVER_API_URL + 'card', body, { headers: httpHeaders}).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          result = await this.http.post(SERVER_API_URL + 'card', body, { headers: httpHeaders}).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            httpHeaders = await this.mainService.refreshHttpHeaders();
+            result = await this.http.post(SERVER_API_URL + 'card', body, { headers: httpHeaders}).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 
   deleteCard(cardId) {
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const httpHeaders = new HttpHeaders ({
-        'Content-Type': 'application/json',
-        'x-auth-token': `Bearer ${token}`,
-        'x-auth-user': userID
-      });
-      return this.http.delete(SERVER_API_URL + 'card/' + cardId, { headers: httpHeaders}).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          result = await this.http.delete(SERVER_API_URL + 'card/' + cardId, { headers: httpHeaders}).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            httpHeaders = await this.mainService.refreshHttpHeaders();
+            result = await this.http.delete(SERVER_API_URL + 'card/' + cardId, { headers: httpHeaders}).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 
   getBrandsCards(brandId) {
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const httpHeaders = new HttpHeaders ({
-        'x-auth-token': `Bearer ${token}`,
-        'x-auth-user': userID
-      });
-      return this.http.get(SERVER_API_URL + 'card/all/' + brandId, { headers: httpHeaders}).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          result = await this.http.get(SERVER_API_URL + 'card/all/' + brandId, { headers: httpHeaders}).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            httpHeaders = await this.mainService.refreshHttpHeaders();
+            result = await this.http.get(SERVER_API_URL + 'card/all/' + brandId, { headers: httpHeaders}).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 
   getCardById(cardId) {
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const httpHeaders = new HttpHeaders ({
-        'Content-Type': 'application/json',
-        'x-auth-token': `Bearer ${token}`,
-        'x-auth-user': userID
-      });
-      return this.http.get(SERVER_API_URL + 'card/' + cardId, { headers: httpHeaders}).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          result = await this.http.get(SERVER_API_URL + 'card/' + cardId, { headers: httpHeaders}).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            httpHeaders = await this.mainService.refreshHttpHeaders();
+            result = await this.http.get(SERVER_API_URL + 'card/' + cardId, { headers: httpHeaders}).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 
   getCardByType(cardType: number, brandId: string) {
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const httpHeaders = new HttpHeaders ({
-        'Content-Type': 'application/json',
-        'x-auth-token': `Bearer ${token}`,
-        'x-auth-user': userID
-      });
-      return this.http.get(SERVER_API_URL + `card/type/${cardType}/${brandId}`, { headers: httpHeaders}).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          result = await this.http.get(SERVER_API_URL + `card/type/${cardType}/${brandId}`, { headers: httpHeaders}).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            httpHeaders = await this.mainService.refreshHttpHeaders();
+            result = await this.http.get(SERVER_API_URL + `card/type/${cardType}/${brandId}`, { headers: httpHeaders}).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 
   updateCard(cardId, body) {
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const httpHeaders = new HttpHeaders ({
-        'Content-Type': 'application/json',
-        'x-auth-token': `Bearer ${token}`,
-        'x-auth-user': userID
-      });
-      return this.http.put(SERVER_API_URL + 'card/' + cardId, body, { headers: httpHeaders}).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          result = await this.http.put(SERVER_API_URL + 'card/' + cardId, body, { headers: httpHeaders}).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            httpHeaders = await this.mainService.refreshHttpHeaders();
+            result = await this.http.put(SERVER_API_URL + 'card/' + cardId, body, { headers: httpHeaders}).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 }

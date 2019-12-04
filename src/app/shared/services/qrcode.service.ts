@@ -1,27 +1,34 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { SERVER_API_URL } from '../../../environments/environment';
-import * as localForage from 'localforage';
 import { from } from 'rxjs';
+import { MainService } from './main.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QrcodeService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private mainService: MainService) { }
 
   addChatbotQR(body) {
-    return from(localForage.getItem('usertoken').then(async token => {
-      const userID: any = await localForage.getItem('userID');
-      
-      const httpHeaders = new HttpHeaders ({
-        'Content-Type': 'application/json',
-        'x-auth-token': `Bearer ${token}`,
-        'x-auth-user': userID
-      });
-      return this.http.post(SERVER_API_URL + 'chatbotQR/addChatbotQR', body, { headers: httpHeaders}).toPromise();
-    }));
+    return from(
+      this.mainService.getHttpHeaders().then(async httpHeaders => {
+        let result;
+        try {
+          result = await this.http.post(SERVER_API_URL + 'chatbotQR/addChatbotQR', body, { headers: httpHeaders}).toPromise();
+        } catch (error) {
+          if(error['error'].error == 'token expired'){
+            httpHeaders = await this.mainService.refreshHttpHeaders();
+            result = await this.http.post(SERVER_API_URL + 'chatbotQR/addChatbotQR', body, { headers: httpHeaders}).toPromise();
+          }else{
+            throw error
+          }
+        } finally {
+          return result;
+        }
+      })
+    );
   }
 
 }
