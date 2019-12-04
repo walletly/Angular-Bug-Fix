@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
   cardsEarningCampaignsChart;
   applePassesChart;
   androidPassesChart;
-  
+
   dateStart = new Date();
   dateEnd = new Date();
   startDate = null;
@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit {
       window.location.reload();
     }
   }
-  
+
   async ngOnInit() {
     this.currentBrand = await localForage.getItem('currentBrand');
     this.brandCurrency = this.currentBrand.currency || '$';
@@ -293,7 +293,7 @@ export class DashboardComponent implements OnInit {
         }
       });
     }
-    
+
     // var redeemedChart = new Chart(ctx2, {
     //   type: 'doughnut',
     //   data: {
@@ -318,7 +318,7 @@ export class DashboardComponent implements OnInit {
     //     },
     //   }
     // });
-   
+
   }
 
   async getData(){
@@ -362,7 +362,7 @@ export class DashboardComponent implements OnInit {
       this.androidPassesChart.data.push(result['data'].androidStampCards);
       this.androidPassesChart.data.push(result['data'].androidMembershipCards);
       this.androidPassesChart.data.push(result['data'].androidTickets);
-      
+
       if(result['data'].appleCoupons > 0 || result['data'].appleLoyaltyCards > 0 || result['data'].appleStampCards > 0 || result['data'].appleMembershipCards > 0 || result['data'].appleTickets > 0 ||
         result['data'].androidCoupons > 0 || result['data'].androidLoyaltyCards > 0 || result['data'].androidStampCards > 0 || result['data'].androidMembershipCards > 0 || result['data'].androidTickets > 0){
         this.showPassesGraph = 3;
@@ -395,7 +395,7 @@ export class DashboardComponent implements OnInit {
 
       if (result['data'].campaignsStats.couponCampaignsSummary.length > 0){
         this.showCouponGraph = 3;
-        
+
       }else{
         this.showCouponGraph = 2;
       }
@@ -404,7 +404,7 @@ export class DashboardComponent implements OnInit {
       }else{
         this.showTicketsGraph = 2;
       }
-      if (result['data'].campaignsStats.loyaltyCardCampaignsSummary.length > 0 || 
+      if (result['data'].campaignsStats.loyaltyCardCampaignsSummary.length > 0 ||
           // result['data'].campaignsStats.membershipCardCampaignsSummary.length > 0 ||
           result['data'].campaignsStats.stampCardCampaignsSummary.length > 0){
         this.showCardsEarningGraph = 3;
@@ -415,7 +415,7 @@ export class DashboardComponent implements OnInit {
       if(this.showCouponGraph == 2 && this.showTicketsGraph == 2 && this.showCardsEarningGraph == 2){
         this.showGraph = 2;
       }
-      
+
       this.showCouponEarningGraph = 2;
       this.couponCampaings = result['data'].campaignsStats.couponCampaignsSummary;
       this.couponCampaings.forEach(campaign => {
@@ -482,7 +482,7 @@ export class DashboardComponent implements OnInit {
       if(this.cardsEarningCampaignsChart.labels.length < 1){
         this.showCardsEarningGraph = 2;
       }
-      
+
       const couponlen = this.couponsEarningCampaignsChart.backgroundColor.length;
       for (var i = couponlen; i < this.couponsEarningCampaignsChart.data.length; i++){
         const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
@@ -490,7 +490,7 @@ export class DashboardComponent implements OnInit {
         });
         const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
         this.couponsEarningCampaignsChart.backgroundColor[i] = randomColor1;
-        this.couponsByCampaignsChart.backgroundColor1[i] = randomColor1;        
+        this.couponsByCampaignsChart.backgroundColor1[i] = randomColor1;
         this.couponsByCampaignsChart.backgroundColor2[i] = randomColor2;
       }
       const ticketlen = this.ticketsByCampaignsChart.backgroundColor1.length;
@@ -499,7 +499,7 @@ export class DashboardComponent implements OnInit {
           return String(Math.floor(Math.random() * 255));
         });
         const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
-        this.ticketsByCampaignsChart.backgroundColor1[i] = randomColor1;        
+        this.ticketsByCampaignsChart.backgroundColor1[i] = randomColor1;
         this.ticketsByCampaignsChart.backgroundColor2[i] = randomColor2;
       }
       const cardslen = this.cardsEarningCampaignsChart.backgroundColor.length;
@@ -507,7 +507,7 @@ export class DashboardComponent implements OnInit {
         const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
           return String(Math.floor(Math.random() * 255));
         });
-        this.cardsEarningCampaignsChart.backgroundColor[i] = randomColor1;        
+        this.cardsEarningCampaignsChart.backgroundColor[i] = randomColor1;
       }
 
       this.brandEarning = parseFloat(this.brandEarning.toFixed(2));
@@ -520,7 +520,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  async getDataWithDates(from, to){
+  async getDataWithDates(startDate, endDate){
     this.showGraph = 4;
     this.datesDataError = false;
 
@@ -547,7 +547,7 @@ export class DashboardComponent implements OnInit {
     this.cardsEarningCampaignsChart = { labels: [], data: [], backgroundColor: this.colors };
 
     this.currentBrand = await localForage.getItem('currentBrand');
-    this.reportService.reportBrandSubscribersBetweenDates(this.currentBrand.brand_id, from, to).subscribe( result => {
+    this.reportService.reportBrandSubscribersBetweenDates(this.currentBrand.brand_id, startDate, endDate).subscribe( result => {
       this.brandSubscribers = result['data'].brand_subscribers ? result['data'].brand_subscribers : 0;
     }, err => {
       this.brandSubscribers = 0;
@@ -555,7 +555,7 @@ export class DashboardComponent implements OnInit {
 
     this.showCouponEarningGraph = 2;
     this.showCardsEarningGraph = 2;
-    this.reportService.reportBrandTransactionsBetweenDates(this.currentBrand.brand_id, from, to).subscribe( result => {
+    this.reportService.reportBrandTransactionsBetweenDates(this.currentBrand.brand_id, startDate, endDate).subscribe( result => {
       if(result['campaignData']){
         result['campaignData'].map(campaign => {
           if(campaign.campaign_type <= 2){
@@ -580,7 +580,7 @@ export class DashboardComponent implements OnInit {
       this.brandEarning = 0;
     });
 
-    this.reportService.reportBrandBetweenDates(this.currentBrand.brand_id, from, to).subscribe( result => {
+    this.reportService.reportBrandBetweenDates(this.currentBrand.brand_id, startDate, endDate).subscribe( result => {
       this.showDateCancel = true;
       if(result['data']){
         this.showGraph = 3;
@@ -598,7 +598,7 @@ export class DashboardComponent implements OnInit {
         this.loyaltyCard_created = result['data'].brandData.loyaltyCard_created || 0;
         this.stampCard_created = result['data'].brandData.stampCard_created || 0;
         this.membershipCard_created = result['data'].brandData.membershipCard_created || 0;
-  
+
         if (result['data'].campaignsStats.couponCampaignsSummary.length > 0){
           this.showCouponGraph = 3;
         }else{
@@ -609,7 +609,7 @@ export class DashboardComponent implements OnInit {
         }else{
           this.showTicketsGraph = 2;
         }
-  
+
         this.couponCampaings = result['data'].campaignsStats.couponCampaignsSummary;
         this.couponCampaings.forEach(campaign => {
           if(campaign.campaign_name && campaign.coupons_created > 0){
@@ -639,7 +639,7 @@ export class DashboardComponent implements OnInit {
         this.loyaltyCardCampaings = result['data'].campaignsStats.loyaltyCardCampaignsSummary;
         this.stampCardCampaings = result['data'].campaignsStats.stampCardCampaignsSummary;
         this.membershipCardCampaings = result['data'].campaignsStats.membershipCardCampaignsSummary;
-  
+
         this.cardsCampaigns = this.loyaltyCardCampaings.concat(this.stampCardCampaings);
         this.cardsCampaigns.forEach(campaign => {
           if(campaign.campaign_name && campaign.coupons_created > 0){
@@ -661,7 +661,7 @@ export class DashboardComponent implements OnInit {
             this.ticketsByCampaignsChart.labels.push('');
           }
         }
-        
+
         const couponlen = this.couponsEarningCampaignsChart.backgroundColor.length;
         for (var i = couponlen; i < this.couponsEarningCampaignsChart.data.length; i++){
           const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
@@ -669,7 +669,7 @@ export class DashboardComponent implements OnInit {
           });
           const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
           this.couponsEarningCampaignsChart.backgroundColor[i] = randomColor1;
-          this.couponsByCampaignsChart.backgroundColor1[i] = randomColor1;        
+          this.couponsByCampaignsChart.backgroundColor1[i] = randomColor1;
           this.couponsByCampaignsChart.backgroundColor2[i] = randomColor2;
         }
         const ticketlen = this.ticketsByCampaignsChart.backgroundColor1.length;
@@ -678,7 +678,7 @@ export class DashboardComponent implements OnInit {
             return String(Math.floor(Math.random() * 255));
           });
           const randomColor2 = randomColor1.replace( `)` , `, 0.5)` );
-          this.ticketsByCampaignsChart.backgroundColor1[i] = randomColor1;        
+          this.ticketsByCampaignsChart.backgroundColor1[i] = randomColor1;
           this.ticketsByCampaignsChart.backgroundColor2[i] = randomColor2;
         }
         const cardslen = this.cardsEarningCampaignsChart.backgroundColor.length;
@@ -686,11 +686,11 @@ export class DashboardComponent implements OnInit {
           const randomColor1 = "rgb(0, 0, 0)".replace(/0/g, function () {
             return String(Math.floor(Math.random() * 255));
           });
-          this.cardsEarningCampaignsChart.backgroundColor[i] = randomColor1;        
+          this.cardsEarningCampaignsChart.backgroundColor[i] = randomColor1;
         }
 
         this.brandEarning = parseFloat(this.brandEarning.toFixed(2));
-  
+
         setTimeout(() => {
           this.generateGraphs();
         }, 200);
@@ -741,5 +741,5 @@ export class DashboardComponent implements OnInit {
     this.endDate = null;
     this.getData();
   }
-  
+
 }

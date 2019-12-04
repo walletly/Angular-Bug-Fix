@@ -31,17 +31,17 @@ export class ReportService {
     );
   }
 
-  reportBrandBetweenDates(id, from, to) {
+  reportBrandBetweenDates(id, startDate, endDate) {
     return from(
       this.mainService.getHttpHeaders().then(async httpHeaders => {
         let result;
         try {
-          result = await this.http.get(SERVER_API_URL + 'report/brand/' + id + '/' + from + '/' + to, { headers: httpHeaders}).toPromise();
+          result = await this.http.get(SERVER_API_URL + 'report/brand/' + id + '/' + startDate + '/' + endDate, { headers: httpHeaders}).toPromise();
           return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
-            result = await this.http.get(SERVER_API_URL + 'report/brand/' + id + '/' + from + '/' + to, { headers: httpHeaders}).toPromise();
+            result = await this.http.get(SERVER_API_URL + 'report/brand/' + id + '/' + startDate + '/' + endDate, { headers: httpHeaders}).toPromise();
             return result;
           }else{
             throw error
@@ -71,17 +71,17 @@ export class ReportService {
     );
   }
 
-  reportBrandSubscribersBetweenDates(id, from, to) {
+  reportBrandSubscribersBetweenDates(id, startDate, endDate) {
     return from(
       this.mainService.getHttpHeaders().then(async httpHeaders => {
         let result;
         try {
-          result = await this.http.get(SERVER_API_URL + 'report/brand/subscribers/' + id + '/' + from + '/' + to, { headers: httpHeaders}).toPromise();
+          result = await this.http.get(SERVER_API_URL + 'report/brand/subscribers/' + id + '/' + startDate + '/' + endDate, { headers: httpHeaders}).toPromise();
           return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
-            result = await this.http.get(SERVER_API_URL + 'report/brand/subscribers/' + id + '/' + from + '/' + to, { headers: httpHeaders}).toPromise();
+            result = await this.http.get(SERVER_API_URL + 'report/brand/subscribers/' + id + '/' + startDate + '/' + endDate, { headers: httpHeaders}).toPromise();
             return result;
           }else{
             throw error
@@ -91,17 +91,17 @@ export class ReportService {
     );
   }
 
-  reportBrandTransactionsBetweenDates(id, from, to) {
+  reportBrandTransactionsBetweenDates(id, startDate, endDate) {
     return from(
       this.mainService.getHttpHeaders().then(async httpHeaders => {
         let result;
         try {
-          result = await this.http.get(SERVER_API_URL + 'report/transactions/' + id + '/' + from + '/' + to, { headers: httpHeaders}).toPromise();
+          result = await this.http.get(SERVER_API_URL + 'report/transactions/' + id + '/' + startDate + '/' + endDate, { headers: httpHeaders}).toPromise();
           return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
-            result = await this.http.get(SERVER_API_URL + 'report/transactions/' + id + '/' + from + '/' + to, { headers: httpHeaders}).toPromise();
+            result = await this.http.get(SERVER_API_URL + 'report/transactions/' + id + '/' + startDate + '/' + endDate, { headers: httpHeaders}).toPromise();
             return result;
           }else{
             throw error

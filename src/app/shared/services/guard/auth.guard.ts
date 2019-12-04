@@ -65,21 +65,13 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
   canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<boolean> | Promise<boolean> | boolean {
     return Observable.create(async observer => {
+
       const user = await localForage.getItem("user");
-      if(!user){
-        this.router.navigate(['/fb-login']);
-        observer.next(false);
-        return;
-      }
+      const userID = await localForage.getItem('userID');
+      const usertoken = await localForage.getItem('usertoken');
+      const brand = await localForage.getItem("currentBrand");
 
-      if (user["user_type"] === 4){
-        observer.next(true);
-        return;
-      }
-
-      if (!await localForage.getItem('userID') || 
-          !await localForage.getItem('usertoken'))
-      {
+      if (!userID || !usertoken || !user){
         this.firebaseAuth.auth.signOut().then(async () => {
           await localForage.clear();
           this.ngZone.run(async () => {
@@ -90,13 +82,17 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         return;
       }
 
-      const brand = await localForage.getItem("currentBrand");
+      if (user["user_type"] === 4){
+        observer.next(true);
+        return;
+      }
+
       if(brand){
         observer.next(true);
         return;
       }
 
-      this.brandService.getUsersBrands(await localForage.getItem("userID"))
+      this.brandService.getUsersBrands(userID)
         .subscribe(result => {
           observer.next(true);
         }, error => {

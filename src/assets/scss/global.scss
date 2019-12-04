@@ -333,14 +333,19 @@ button[status="primary"] {
 }
 .nb-theme-default nb-menu .menu-item a {
   border-bottom: 1px solid #ebeef2;
-  padding: 1.2rem 0.75rem !important;
+  padding: 0.8rem 0.75rem !important;
   position: relative;
   font-size: 16px !important;
   font-weight: 400 !important;
   color: #afafb9;
 }
+.nb-theme-default nb-menu > .menu-items > .menu-item > a > span{
+  font-size: 15px !important;
+  padding: 0 10px;
+}
+
 .nb-theme-default nb-menu .menu-item a span {
-  word-break: break-all;
+  word-break: break-word;
   width: calc(100% - 75px);
 }
 .nb-theme-default nb-menu ul.menu-items ul{

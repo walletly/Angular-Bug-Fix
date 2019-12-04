@@ -26,7 +26,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   items = [
     {
       icon: "icon-menu test-sunny icon-brand-menu",
-      title: "SunnyMeats",
+      title: "",
       expanded: true,
       pathMatch: "prefix",
       children: [
@@ -121,7 +121,7 @@ export class MainComponent implements OnInit, AfterViewInit {
       this.items = [
         {
           icon: "icon-menu test-sunny icon-brand-menu",
-          title: "SunnyMeats",
+          title: "",
           expanded: true,
           pathMatch: "prefix",
           children: [
@@ -543,7 +543,7 @@ export class MainComponent implements OnInit, AfterViewInit {
       );
     // this.setBrand()
   }
-  
+
   async logout() {
     this.firebaseAuth.auth.signOut().then(async () => {
       await localForage.clear();
