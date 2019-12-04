@@ -17,15 +17,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.post(SERVER_API_URL + 'brand/connect', body, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.post(SERVER_API_URL + 'brand/connect', body, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -37,15 +37,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.put(SERVER_API_URL + 'brand/' + id, body, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.put(SERVER_API_URL + 'brand/' + id, body, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -57,15 +57,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'brand/' + id, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'brand/' + id, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -81,15 +81,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'brand/user/' + id, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'brand/user/' + id, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -101,15 +101,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.post(SERVER_API_URL + 'brand/associate', body, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.post(SERVER_API_URL + 'brand/associate', body, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -121,15 +121,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'coupon/audience/' + brand_id, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'coupon/audience/' + brand_id, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -141,15 +141,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'stampCard/audience/' + brand_id, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'stampCard/audience/' + brand_id, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -161,15 +161,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'ticket/audience/' + brand_id, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'ticket/audience/' + brand_id, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -181,15 +181,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'loyaltyCard/audience/' + brand_id, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'loyaltyCard/audience/' + brand_id, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -201,15 +201,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'membershipCard/audience/' + brand_id, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'membershipCard/audience/' + brand_id, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -221,15 +221,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.post(SERVER_API_URL + 'membershipCard/changeStatus/' + membershipCard_id, {}, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.post(SERVER_API_URL + 'membershipCard/changeStatus/' + membershipCard_id, {}, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -241,15 +241,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.post(SERVER_API_URL + 'ibeacon/addIbeacon/' + brand_id, body, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.post(SERVER_API_URL + 'ibeacon/addIbeacon/' + brand_id, body, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -261,15 +261,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.put(SERVER_API_URL + 'ibeacon/updateIbeacon/' + brand_id, body, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.put(SERVER_API_URL + 'ibeacon/updateIbeacon/' + brand_id, body, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -281,15 +281,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'brand/getBrandAdmins/' + brand_id, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'brand/getBrandAdmins/' + brand_id, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -301,15 +301,15 @@ export class BrandService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'brand/subscribers/' + brand_id, { headers: httpHeaders }).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'brand/subscribers/' + brand_id, { headers: httpHeaders }).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );

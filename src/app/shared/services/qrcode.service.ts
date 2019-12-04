@@ -17,15 +17,15 @@ export class QrcodeService {
         let result;
         try {
           result = await this.http.post(SERVER_API_URL + 'chatbotQR/addChatbotQR', body, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.post(SERVER_API_URL + 'chatbotQR/addChatbotQR', body, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );

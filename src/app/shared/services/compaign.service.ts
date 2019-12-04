@@ -18,15 +18,15 @@ export class CompaignService {
         let result;
         try {
           result = await this.http.post(SERVER_API_URL + 'campaign', body, { headers: httpHeaders }).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.post(SERVER_API_URL + 'campaign', body, { headers: httpHeaders }).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -38,15 +38,15 @@ export class CompaignService {
         let result;
         try {
           result = await this.http.put(SERVER_API_URL + 'campaign/' + id, body, { headers: httpHeaders }).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.put(SERVER_API_URL + 'campaign/' + id, body, { headers: httpHeaders }).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -62,6 +62,7 @@ export class CompaignService {
             body: body
           };
           result = await this.http.delete(SERVER_API_URL + 'campaign', deleteOptions).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             const deleteOptions = {
@@ -69,11 +70,10 @@ export class CompaignService {
               body: body
             };
             result = await this.http.delete(SERVER_API_URL + 'campaign', deleteOptions).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -85,15 +85,15 @@ export class CompaignService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'campaign/' + id, { headers: httpHeaders }).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'campaign/' + id, { headers: httpHeaders }).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -117,15 +117,17 @@ export class CompaignService {
         let result;
         try {
           result = await this.http.post(SERVER_API_URL + 'campaign/all/' + id, body, { headers: httpHeaders }).toPromise();
+          return result;
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.post(SERVER_API_URL + 'campaign/all/' + id, body, { headers: httpHeaders }).toPromise();
+            return result;
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -137,15 +139,15 @@ export class CompaignService {
         let result;
         try {
           result = await this.http.post(SERVER_API_URL + 'campaign/notification/' + campaign_id, body, { headers: httpHeaders }).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.post(SERVER_API_URL + 'campaign/notification/' + campaign_id, body, { headers: httpHeaders }).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );

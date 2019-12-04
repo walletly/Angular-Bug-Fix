@@ -30,15 +30,15 @@ export class AuthService {
         let result;
         try {
           result = await this.http.post(SERVER_API_URL + 'auth/fbUser', body, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.post(SERVER_API_URL + 'auth/fbUser', body, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -50,15 +50,15 @@ export class AuthService {
         let result;
         try {
           result = await this.http.put(SERVER_API_URL + 'auth/' + id, body, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.put(SERVER_API_URL + 'auth/' + id, body, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -70,15 +70,15 @@ export class AuthService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'auth/' + id, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'auth/' + id, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -98,15 +98,15 @@ export class AuthService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'utils/page/' + fbId, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'utils/page/' + fbId, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );

@@ -17,15 +17,15 @@ export class CardService {
         let result;
         try {
           result = await this.http.post(SERVER_API_URL + 'card', body, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.post(SERVER_API_URL + 'card', body, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -37,15 +37,15 @@ export class CardService {
         let result;
         try {
           result = await this.http.delete(SERVER_API_URL + 'card/' + cardId, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.delete(SERVER_API_URL + 'card/' + cardId, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -57,15 +57,15 @@ export class CardService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'card/all/' + brandId, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'card/all/' + brandId, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -77,15 +77,15 @@ export class CardService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + 'card/' + cardId, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + 'card/' + cardId, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -97,15 +97,15 @@ export class CardService {
         let result;
         try {
           result = await this.http.get(SERVER_API_URL + `card/type/${cardType}/${brandId}`, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.get(SERVER_API_URL + `card/type/${cardType}/${brandId}`, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
@@ -117,15 +117,15 @@ export class CardService {
         let result;
         try {
           result = await this.http.put(SERVER_API_URL + 'card/' + cardId, body, { headers: httpHeaders}).toPromise();
+          return result;
         } catch (error) {
           if(error['error'].error == 'token expired'){
             httpHeaders = await this.mainService.refreshHttpHeaders();
             result = await this.http.put(SERVER_API_URL + 'card/' + cardId, body, { headers: httpHeaders}).toPromise();
+            return result;
           }else{
             throw error
           }
-        } finally {
-          return result;
         }
       })
     );
