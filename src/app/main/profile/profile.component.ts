@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { BrandService } from 'src/app/shared/services/brand.service';
 import * as moment from 'moment';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { MainService } from 'src/app/shared/services/main.service';
 import * as localForage from 'localforage';
 
 
@@ -45,7 +44,7 @@ export class ProfileComponent implements OnInit {
     private firebaseAuth: AngularFireAuth,
     private router: Router,
     private authService: AuthService,
-    private mainService: MainService
+    private ngZone: NgZone
   ) {
   }
 
@@ -146,5 +145,11 @@ export class ProfileComponent implements OnInit {
       await localForage.setItem('loggedOut', 'true');
       this.router.navigate(['/fb-login']);
     });
+  }
+
+  goToLink(link){
+    this.ngZone.run( () => {
+      this.router.navigate([link]);
+    })
   }
 }

@@ -342,8 +342,10 @@ export class FbConnectComponent implements OnInit {
       this.inProcces = true;
       this.setActiveBrandAndUpdateUser(id);
       setTimeout(() => {
-        this.router.navigate(['/main/dashboard']);
-        this.inProcces = false;
+        this.ngZone.run(() => {
+          this.router.navigate(['/main/dashboard']);
+          this.inProcces = false;
+        })
       }, 2000);
     } else {
       this.inProcces = true;
@@ -351,8 +353,10 @@ export class FbConnectComponent implements OnInit {
       const user = await localForage.getItem('user');
       isBrand = user['activeBrand'];
       if (isBrand) {
-        this.router.navigate(['/main/dashboard']);
-        this.inProcces = false;
+        this.ngZone.run(() => {
+          this.router.navigate(['/main/dashboard']);
+          this.inProcces = false;
+        })
       }
     }
   }

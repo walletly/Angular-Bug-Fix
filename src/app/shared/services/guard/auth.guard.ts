@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     private router: Router,
     private mainService: MainService,
     private brandService: BrandService,
-    private ngZone: NgZone,) {}
+    private ngZone: NgZone) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 

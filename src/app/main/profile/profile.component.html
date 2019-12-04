@@ -1,7 +1,7 @@
 <nb-layout>
   <nb-layout-column>
     <div class="header">
-      <div [routerLink]="[ '/main/dashboard' ]" class="logo c-p">
+      <div (click)="goToLink('/main/dashboard')" class="logo c-p">
         <img src="assets/svg-icon/logo-dark.svg" alt="">
       </div>
       <div (clickOutside)="userDrb = false" (click)="userDrb = true" class="user c-p">
@@ -70,7 +70,7 @@
         <h1 class="m-t-0 m-b-0 fs-24 fw-600">
           Pages
         </h1>
-        <button [routerLink]="[ '/fb-connect' ]" class="cust-button" nbButton status="success">
+        <button (click)="goToLink('/fb-connect')" class="cust-button" nbButton status="success">
           + Add New Page
         </button>
       </div>
