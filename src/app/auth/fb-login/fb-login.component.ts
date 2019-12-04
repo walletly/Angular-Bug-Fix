@@ -79,7 +79,9 @@ export class FbLoginComponent implements OnInit {
           }
         } else {
           if(this.firebaseAuth.auth.currentUser){
-            this.router.navigate(['/main/dashboard']);
+            this.ngZone.run(() => {
+              this.router.navigate(['/main/dashboard']);
+            })
             return;
           }else{
             return this.ngZone.run(async () => {
