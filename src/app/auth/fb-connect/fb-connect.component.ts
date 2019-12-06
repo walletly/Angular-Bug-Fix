@@ -172,6 +172,19 @@ export class FbConnectComponent implements OnInit {
       this.brandService.getUsersBrands(await localForage.getItem('userID')).subscribe(result => {
         this.userBrands = result['data']['brands'];
         this.brands = this.getBrands(this.userBrands, this.fbBrands);
+        this.brands.sort((a,b) => {
+          let name1 = a.name || a.brand_name;
+          let name2 = b.name || b.brand_name;
+          name1 = name1.toLowerCase();
+          name2 = name2.toLowerCase();
+          if ( name1 < name2 ){
+            return -1;
+          }
+          if ( name1 > name2 ){
+            return 1;
+          }
+          return 0;
+        });
         this.showLoader = false;
       }, err => {
         console.log(err);
@@ -201,10 +214,6 @@ export class FbConnectComponent implements OnInit {
     var res = []
     for (var k in obj) {
       res.push(obj[k]);
-    }
-    for (let i = res.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [res[i], res[j]] = [res[j], res[i]];
     }
     return res;
   }
