@@ -32,11 +32,18 @@
             <i class="nb-search input-icon"></i>
           </div>
           <div style="max-height: calc(100vh - 360px); overflow-y: auto;">
-            <div *ngFor="let item of filteredBrands">
+            <div class="brands" *ngFor="let item of filteredBrands">
               <div (click)="changeBrand(item.brand_id)">
                 <div class="menu-item">
                   <div class="icon">
-                    <img width="100%" [src]="item.brand_logo" alt="" />
+                    <span *ngIf="item.brand_logo && !item.brand_logo.includes('https://scontent.xx.fbcdn')">
+                      <img width="100%" [src]="item.brand_logo" alt="" />
+                    </span>
+                    <span class="custom-avatar" *ngIf="!item.brand_logo || item.brand_logo.includes('https://scontent.xx.fbcdn')">
+                      <span>
+                        {{item.brand_name.split(' ')[0][0]}}{{item.brand_name.split(' ')[1] ? item.brand_name.split(' ')[1][0] : ''}}
+                      </span>
+                    </span>
                   </div>
                   {{ item.brand_name }}
                 </div>
@@ -109,15 +116,15 @@
         <div *ngIf="brandPlan == 'starter'" class="badgeInfo">
           The Starter plan allows you to create up to 4 Campaigns with 100 Coupons for each campaign . Go Basic if you want to create more campaigns.
         </div>
-        
+
       </div>
     </div>
     <app-breadcrumb [name]="username.firstName"></app-breadcrumb>
-    <a href="assets/WalletlyRoadmapV2.pdf" target="_blank" 
-      style="margin-left: auto; 
-            margin-right: 0px; 
-            font-size: small; border: 1px solid #dee3e5; 
-            border-radius: 5px; 
+    <a href="assets/WalletlyRoadmapV2.pdf" target="_blank"
+      style="margin-left: auto;
+            margin-right: 0px;
+            font-size: small; border: 1px solid #dee3e5;
+            border-radius: 5px;
             padding: 5px 5px 5px 25px;
             background-image: url('assets/svg-icon/pdfIcon.svg');
             background-size: contain;

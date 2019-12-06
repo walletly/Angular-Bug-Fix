@@ -188,7 +188,6 @@ export class MainComponent implements OnInit, AfterViewInit {
     }, 200);
 
     this.avatar = this.currentUser.avatar;
-    console.log(this.avatar);
 
     this.getSelectedItem();
     this.brandService
@@ -484,14 +483,44 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   async setBrand() {
     this.currentBrand = await localForage.getItem("currentBrand");
+
     if (this.currentBrand) {
       this.items[0].title = this.currentBrand.brand_name;
+      let splitName = this.currentBrand.brand_name.split(' ');
       let myElement = document.getElementsByClassName(
         "icon-brand-menu"
       )[0] as HTMLElement;
-      myElement.style.backgroundImage = `url(${
-        this.currentBrand.brand_logo
-      })`;
+
+      if(this.currentBrand.brand_logo){
+
+        if(this.currentBrand.brand_logo.includes('https://scontent.xx.fbcdn')){
+          for (var name in splitName){
+            if(name > '1'){
+              break
+            }
+            myElement.innerText = myElement.innerText + splitName[name][0]
+            myElement.style.backgroundColor = '#2bbeea';
+
+          }
+        } else {
+          myElement.style.backgroundImage = `url(${
+            this.currentBrand.brand_logo
+          })`;
+          myElement.style.backgroundColor = 'transparent';
+        }
+
+      } else {
+
+          for (var name in splitName){
+            if(name > '1'){
+              break
+            }
+            myElement.innerText = myElement.innerText + splitName[name][0]
+          }
+
+      }
+
+
     }
   }
 

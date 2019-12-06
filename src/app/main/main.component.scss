@@ -130,3 +130,22 @@
   font-size: 12px;
   padding: 10px;
 }
+
+// Sidebar Brand Logo
+.custom-avatar{
+  display: block;
+  text-align: center;
+  padding: 11px 8px;
+  width: 40px;
+  height: 40px;
+}
+$colors: red, orange, yellow, green, blue, purple;
+$repeat: 20;
+
+@for $i from 1 through $repeat {
+  .brands:nth-child(#{length($colors)}n+#{$i}) {
+    .custom-avatar{
+      background: lighten(nth($colors, random(length($colors))), 30%);
+    }
+  }
+}

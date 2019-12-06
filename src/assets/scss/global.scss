@@ -327,6 +327,9 @@ button[status="primary"] {
   width: unset !important;
   overflow: hidden;
   border-radius: 100px;
+  &.icon-menu.test-sunny{
+    font-size: 15px !important;
+  }
 }
 .nb-theme-default nb-menu .menu-items > .menu-item {
   border-bottom: none !important;
@@ -601,6 +604,11 @@ nb-stepper.horinzotal {
     height: 34px;
     background-size: 100% 100%;
     margin-right: 9px;
+    color: #323232 !important;
+    font-size: 15px !important;
+    text-align: center;
+    padding: 8px 5px;
+    font-style: normal;
   }
   &.bit-map {
     background-image: url("assets/img/manyChat-logo.png");
@@ -1149,6 +1157,10 @@ nb-card {
         color: #20beea !important;
       }
       .icon-menu {
+        &.test-sunny {
+          font-size: 15px !important;
+          color: #323232 !important;
+        }
         fill: #20beea;
         &.templates {
           // background-image: url("assets/svg-icon/menu-icon-SVG/menu-templates-active.svg");
@@ -1201,6 +1213,10 @@ nb-card {
         color: #20beea !important;
       }
       .icon-menu {
+        &.test-sunny {
+          font-size: 15px !important;
+          color: #323232 !important;
+        }
         &.templates {
           fill: #20beea !important;
           // background-image: url("assets/svg-icon/menu-icon-SVG/menu-templates-active.svg");
