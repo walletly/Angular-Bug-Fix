@@ -207,7 +207,7 @@
           </div> -->
           <div class="row-input">
             <div class="lable">
-              Coupon Lifetime
+              Coupon Lifetime (Days)
             </div>
             <div class="value">
               <div class="pos-r">
@@ -617,7 +617,7 @@
               <div class="pos-r full-width">
                 <input [ngClass]="{'error': loyaltyForm.controls['points'].invalid && !customValidation}"
                   formControlName="points" [(ngModel)]="dataCampaign.points" placeholder="0.01"
-                  class="small m-r-5" type="number" nbInput fullWidth fieldSize="small"
+                  class="small m-r-5" type="number" nbInput fullWidth fieldSize="small" (input)="checkPoints($event.target.value)"
                   style="width: 120px !important; padding: 10px !important;">
                 Points
                 <div *ngIf="loyaltyForm.controls['points'].invalid && !customValidation" class="error-lable">

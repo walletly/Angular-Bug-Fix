@@ -346,6 +346,12 @@ export class CreateCampaingComponent implements OnInit {
     }
   }
 
+  checkPoints(e){
+    if(this.loyaltyForm.get('points').invalid){
+      this.loyaltyForm.get('points').setValue('');
+    }
+  }
+
   async create() {
     this.currentBrand = await localForage.getItem('currentBrand');
     if (!this.dataCampaign.brand_id) {

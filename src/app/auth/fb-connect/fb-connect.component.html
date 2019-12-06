@@ -38,16 +38,18 @@
                 <input type="hidden" formControlName="fakeData" nbInput>
               </form>
               <div class="page-list">
-                <div class="body" *ngIf="!FbPages">
+                <div class="body" *ngIf="showLoader" >
+                  <div class="loader-table">
+                    <img width="70px" src="assets/img/Loader2x.gif" alt="">
+                  </div>
+                </div>
+                <div class="body" *ngIf="!brands.length && !showLoader">
                   <div style="min-height: 200px; max-width: 70%; padding: calc(26% - 100px); margin: auto; text-align: center;">
                     Please give access rights to your facebook pages after login. If you don't have a page create one now !
                   </div>
                 </div>
-                <div class="body" *ngIf="FbPages">
+                <div class="body" *ngIf="brands.length && !showLoader">
                   <div class="body-scroll">
-                    <div *ngIf="showLoader" class="loader-table">
-                      <img width="70px" src="assets/img/Loader2x.gif" alt="">
-                    </div>
                     <div *ngFor="let item of brands" class="page-item">
                       <div class="df ai-c">
                         <div *ngIf="item?.picture?.data?.url" class="brand-icon m-r-40">
@@ -64,13 +66,13 @@
                         </div>
                       </div>
                       <div>
-                        <div *ngIf="checkUsersBrand(item.id)">
-                          <span (click)="redirectToDashboard(item.id)" class="status c-p">
+                        <div *ngIf="item?.brand_id">
+                          <span (click)="redirectToDashboard(item.brand_id)" class="status c-p">
                             <i class="icon nb-checkmark"></i>
                             Connected
                           </span>
                         </div>
-                        <div *ngIf="!checkUsersBrand(item.id)">
+                        <div *ngIf="item?.id">
                           <button [disabled]="inProcces" (click)="goStep2(item.id)" class="status connect c-p">
                             <i *ngIf="item.id == selectedPageId && inProcces" class="fas fa-spinner fa-pulse"></i>
                             Connect
@@ -506,7 +508,7 @@
                         <div class="pos-r full-width">
                           <input [ngClass]="{'error': myFormStep3.controls['noOfStaff'].invalid && !customValidationStep3}"
                             formControlName="noOfStaff" type="number" nbInput fullWidth fieldSize="medium"
-                            placeholder="">
+                            placeholder="" (input)="checknoOfStaff($event.target.value)">
                         </div>
                       </div>
                     </div>
@@ -532,7 +534,7 @@
                         <div class="pos-r full-width">
                           <input [ngClass]="{'error': myFormStep3.controls['noOfLocations'].invalid && !customValidationStep3}"
                             formControlName="noOfLocations" type="number" nbInput fullWidth fieldSize="medium"
-                            placeholder="">
+                            placeholder="" (input)="checknoOfLocations($event.target.value)">
                         </div>
                       </div>
                     </div>

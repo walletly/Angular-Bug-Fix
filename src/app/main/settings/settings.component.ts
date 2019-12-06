@@ -183,7 +183,7 @@ export class SettingsComponent implements OnInit {
       description: ["", [Validators.required]],
       moreInfo: ["", []],
       location: ["", [Validators.required]],
-      phone: ["", [Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
+      phone: ["", [Validators.required, Validators.pattern("^([+]{0,1}[0-9]{1,5}|[(]{1}[0-9]{1,5}[)]{1})[0-9 -]{5,20}$")]],
       email: ["", [Validators.required, Validators.email]],
       website: ["", [Validators.required]],
       brandPartner: ["", [Validators.required]],

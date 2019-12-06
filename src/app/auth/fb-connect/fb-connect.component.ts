@@ -32,7 +32,6 @@ export class FbConnectComponent implements OnInit {
   stepIndex;
   toolTipStatus;
   showLoader;
-  FbPages = true;
 
   photoLogo;
   photoCover;
@@ -137,7 +136,7 @@ export class FbConnectComponent implements OnInit {
       moreInfo: ["", []],
       location: ["", [Validators.required]],
       currency: ["", [Validators.required]],
-      phone: ["", [Validators.pattern("^[+]{0,1}[0-9]+[-\s\/0-9]*$")]],
+      phone: ["", [Validators.required, Validators.pattern("^([+]{0,1}[0-9]{1,5}|[(]{1}[0-9]{1,5}[)]{1})[0-9 -]{5,20}$")]],
       email: ["", [Validators.required, Validators.email]],
       website: ["", [Validators.required]],
     });
@@ -151,6 +150,7 @@ export class FbConnectComponent implements OnInit {
     //   description: ["", []],
     //   moreInfo: ["", []],
     //   location: ["", []],
+    //   currency: ["", []],
     //   phone: ["", []],
     //   email: ["", []],
     //   website: ["", []],
@@ -168,15 +168,10 @@ export class FbConnectComponent implements OnInit {
     this.showLoader = true;
     this.http.get('https://graph.facebook.com/v3.3/me/accounts?fields=cover,name,picture&access_token='
       + await localForage.getItem('access') + '&limit=1000').subscribe(async (res) => {
-      console.log(res);
-      if(res['data'].length < 1){
-        this.FbPages = false;
-      }
       this.fbBrands = res['data'];
       this.brandService.getUsersBrands(await localForage.getItem('userID')).subscribe(result => {
         this.userBrands = result['data']['brands'];
-        console.log(this.userBrands);
-        this.brands = this.fbBrands;
+        this.brands = this.getBrands(this.userBrands, this.fbBrands);
         this.showLoader = false;
       }, err => {
         console.log(err);
@@ -190,24 +185,44 @@ export class FbConnectComponent implements OnInit {
     }, error =>{
       console.log(error);
       this.showLoader = false;
-      this.FbPages = false;
     });
   }
 
-  checkUsersBrand(fbBrandId) {
-    let isMatch = false;
-
-    if (this.userBrands) {
-      this.userBrands.forEach(element => {
-        if (element.brand_id === fbBrandId) {
-          isMatch = true;
-        }
-      });
-      return isMatch;
-    } else {
-      return false;
+  getBrands (userBrands, fbBrands) {
+    var obj = {};
+    for (var i = userBrands.length-1; i >= 0; -- i){
+      obj[userBrands[i].brand_id] = userBrands[i];
     }
+    for (var i = fbBrands.length-1; i >= 0; -- i){
+      if (!obj.hasOwnProperty(fbBrands[i].id)){
+        obj[fbBrands[i].id] = fbBrands[i];
+      }
+    }
+    var res = []
+    for (var k in obj) {
+      res.push(obj[k]);
+    }
+    for (let i = res.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [res[i], res[j]] = [res[j], res[i]];
+    }
+    return res;
   }
+
+  // checkUsersBrand(fbBrandId) {
+  //   let isMatch = false;
+
+  //   if (this.userBrands) {
+  //     this.userBrands.forEach(element => {
+  //       if (element.brand_id === fbBrandId) {
+  //         isMatch = true;
+  //       }
+  //     });
+  //     return isMatch;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   goStep2(id) {
     this.selectedPageId = id;
@@ -313,6 +328,18 @@ export class FbConnectComponent implements OnInit {
     } else {
       this.customValidationStep2 = false;
       this.messError = 'Validation Error';
+    }
+  }
+
+  checknoOfStaff(e){
+    if(this.myFormStep3.get('noOfStaff').invalid){
+      this.myFormStep3.get('noOfStaff').setValue('');
+    }
+  }
+
+  checknoOfLocations(e){
+    if(this.myFormStep3.get('noOfLocations').invalid){
+      this.myFormStep3.get('noOfLocations').setValue('');
     }
   }
 
