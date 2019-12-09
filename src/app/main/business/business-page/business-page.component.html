@@ -75,8 +75,24 @@
 
                 <div class="df ai-c">
                   <span *ngIf="column === 'Permission'" (click)="changePermission(row.data.id, row.data[column], i)">
-                    <img class="m-r-8 c-p" *ngIf="row.data[column] === 'YES'" src="assets/svg-icon/permission-yes.svg" alt="">
-                    <img class="m-r-8 c-p" *ngIf="row.data[column] === 'NO'" src="assets/svg-icon/permission-no.svg" alt="">
+                      <svg width="21px" height="18px" viewBox="0 0 21 18" class="m-r-8 c-p">
+                          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                              <g id="permission-no" [ngStyle]="{'fill': row.data[column] === 'YES' ? '#b294db' : '#F4F3FA' }" fill-rule="nonzero">
+                                  <g id="Group" transform="translate(7.000000, 0.000000)">
+                                      <path d="M0.7,1.4 C0.7,0.62680135 1.32680135,0 2.1,0 L4.9,0 C5.67319865,0 6.3,0.62680135 6.3,1.4 L6.3,16.6 C6.3,17.3731986 5.67319865,18 4.9,18 L2.1,18 C1.32680135,18 0.7,17.3731986 0.7,16.6 L0.7,1.4 Z" id="Path"></path>
+                                  </g>
+                                  <g id="Group" transform="translate(15.000000, 3.000000)">
+                                      <path d="M0.4,1.86 C0.4,1.08680135 1.02680135,0.46 1.8,0.46 L4.6,0.46 C5.37319865,0.46 6,1.08680135 6,1.86 L6,13.598 C6,14.3711986 5.37319865,14.998 4.6,14.998 L1.8,14.998 C1.02680135,14.998 0.4,14.3711986 0.4,13.598 L0.4,1.86 Z" id="Path"></path>
+                                  </g>
+                                  <g id="Group" transform="translate(0.000000, 6.000000)">
+                                      <path d="M0,2.32 C0,1.54680135 0.62680135,0.92 1.4,0.92 L4.2,0.92 C4.57130309,0.92 4.92739856,1.06749958 5.18994949,1.33005051 C5.45250042,1.59260144 5.6,1.94869691 5.6,2.32 L5.6,10.597 C5.6,10.9683031 5.45250042,11.3243986 5.18994949,11.5869495 C4.92739856,11.8495004 4.57130309,11.997 4.2,11.997 L1.4,11.997 C0.62680135,11.997 0,11.3701986 0,10.597 L0,2.32 Z" id="Path"></path>
+                                  </g>
+                              </g>
+                          </g>
+                      </svg>
+
+                    <!-- <img class="m-r-8 c-p" *ngIf="row.data[column] === 'YES'" src="assets/svg-icon/permission-yes.svg" alt="">
+                    <img class="m-r-8 c-p" *ngIf="row.data[column] === 'NO'" src="assets/svg-icon/permission-no.svg" alt=""> -->
                   </span>
                   <div *ngIf="column !== 'Invite'" class="ellipsis c-p">
                     <span>{{row.data[column]}}</span>
