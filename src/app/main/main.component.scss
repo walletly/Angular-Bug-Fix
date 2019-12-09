@@ -135,11 +135,14 @@
 .custom-avatar{
   display: block;
   text-align: center;
-  padding: 11px 8px;
+  padding: 8px;
   width: 40px;
   height: 40px;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
 }
-$colors: red, orange, yellow, green, blue, purple;
+$colors: rgb(52, 152, 219), rgb(26, 188, 156), rgb(211, 84, 0), rgb(241, 196, 15), rgb(44, 62, 80), rgb(44, 62, 80);
 $repeat: 20;
 
 @for $i from 1 through $repeat {

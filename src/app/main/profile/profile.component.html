@@ -88,7 +88,8 @@
                   <span *ngIf="column === 'Date Created'">{{row.data[column].name}}</span>
                   <div *ngIf="column === 'Name'" class="user">
                     <div class="icon">
-                      <img [src]="row.data[column].icon" alt="">
+                      <ngx-avatar class="my-avatar" *ngIf="row.data[column].icon.includes('https://scontent.xx.fbcdn')" size="30" name="{{row.data[column].name.split(' ')[0]}}"></ngx-avatar>
+                      <ngx-avatar *ngIf="!row.data[column].icon.includes('https://scontent.xx.fbcdn')" size="30" src="{{row.data[column].icon}}"></ngx-avatar>
                     </div>
                     <div class="fs-16 fw-400 ellipsis" style="max-width: 180px;">
                       {{row.data[column].name}}

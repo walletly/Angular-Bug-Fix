@@ -328,7 +328,8 @@ button[status="primary"] {
   overflow: hidden;
   border-radius: 100px;
   &.icon-menu.test-sunny{
-    font-size: 15px !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
   }
 }
 .nb-theme-default nb-menu .menu-items > .menu-item {
@@ -607,7 +608,7 @@ nb-stepper.horinzotal {
     color: #323232 !important;
     font-size: 15px !important;
     text-align: center;
-    padding: 8px 5px;
+    padding: 5px;
     font-style: normal;
   }
   &.bit-map {

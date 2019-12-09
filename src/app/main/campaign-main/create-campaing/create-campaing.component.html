@@ -20,7 +20,7 @@
         <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>{{column}}</th>
         <td [id]="row.data[column].name" (click)="selectType(row.data[column].name)"
           [ngClass]="{'active-sell': (selectedSell === row.data[column].name && row.data[column].name), 'c-p': row.data[column].name, 'pe-n': !row.data[column].name,
-                       'disable': (disable && row.data[column].type != cardType) }"
+                       'disable': (disable && row.data[column].type != cardType), 'disableLoyalty': (disable && cardType == 'loyalty' && selectedSell != row.data[column].name) }"
           nbTreeGridCell *nbTreeGridCellDef="let row" [ngStyle]="{'pointer-events': row.data[column].locked ? 'none' : 'auto'}">
           <div class="df ai-c">
             <img *ngIf="selectedSell === row.data[column].name" class="m-r-15" width="30px"

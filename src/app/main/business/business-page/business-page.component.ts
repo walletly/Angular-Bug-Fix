@@ -226,7 +226,7 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     });
   }
 
-  async invite(email) {
+  async invite(email, i) {
     this.currentBrand = await localForage.getItem('currentBrand');
     console.log(email);
 
@@ -240,7 +240,8 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     this.business.sendEmail([message]).subscribe(result => {
       console.log(result);
       this.mainService.showToastrSuccess.emit({text: 'The invitation has been sent'});
-      this.getBusiness();
+      // this.getBusiness();
+      this.data[i]['data']['Invite'] += 1;
     });
   }
 
@@ -312,7 +313,7 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
     this.getBusiness();
   }
 
-  async changePermission(id, permission){
+  async changePermission(id, permission, i){
     this.currentBrand = await localForage.getItem('currentBrand');
 
     let data;
@@ -326,7 +327,8 @@ export class BusinessPageComponent implements OnInit, AfterViewInit {
       console.log(result);
       if (result['success']) {
         this.mainService.showToastrSuccess.emit({text: 'User permission updated'});
-        this.getBusiness();
+        // this.getBusiness();
+        this.data[i]['data']['Permission'] = data ? 'YES' : 'NO';
       }
     }, err => {
       console.log(err);

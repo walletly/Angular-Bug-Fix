@@ -229,3 +229,8 @@ agm-map {
   height: 280px;
   width: 430px; 
 }
+
+.my-avatar /deep/ .avatar-content {
+  font-size: 25px !important;
+  font-weight: bold !important;
+}

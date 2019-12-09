@@ -53,10 +53,11 @@
                     <div *ngFor="let item of brands" class="page-item">
                       <div class="df ai-c">
                         <div *ngIf="item?.picture?.data?.url" class="brand-icon m-r-40">
-                          <img src="{{item?.picture?.data?.url}}" alt="">
+                          <ngx-avatar size="50" src="{{item.picture.data.url}}"></ngx-avatar>
                         </div>
                         <div *ngIf="item?.brand_logo" class="brand-icon m-r-40">
-                          <img src="{{item?.brand_logo}}" alt="">
+                          <ngx-avatar class="my-avatar" *ngIf="item.brand_logo.includes('https://scontent.xx.fbcdn')" size="50" name="{{item.brand_name.split(' ')[0]}}"></ngx-avatar>
+                          <ngx-avatar *ngIf="!item.brand_logo.includes('https://scontent.xx.fbcdn')" size="50" src="{{item.brand_logo}}"></ngx-avatar>
                         </div>
                         <div *ngIf="item?.name" class="fs-18 fw-500">
                           {{item?.name}}

@@ -494,14 +494,9 @@ export class MainComponent implements OnInit, AfterViewInit {
       if(this.currentBrand.brand_logo){
 
         if(this.currentBrand.brand_logo.includes('https://scontent.xx.fbcdn')){
-          for (var name in splitName){
-            if(name > '1'){
-              break
-            }
-            myElement.innerText = myElement.innerText + splitName[name][0]
-            myElement.style.backgroundColor = '#2bbeea';
+          myElement.innerText = myElement.innerText + splitName[0][0]
+          myElement.style.backgroundColor = '#2bbeea';
 
-          }
         } else {
           myElement.style.backgroundImage = `url(${
             this.currentBrand.brand_logo
@@ -510,13 +505,7 @@ export class MainComponent implements OnInit, AfterViewInit {
         }
 
       } else {
-
-          for (var name in splitName){
-            if(name > '1'){
-              break
-            }
-            myElement.innerText = myElement.innerText + splitName[name][0]
-          }
+        myElement.innerText = myElement.innerText + splitName[0][0]
 
       }
 

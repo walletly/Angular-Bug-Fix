@@ -304,14 +304,14 @@ export class CreateCampaingComponent implements OnInit {
           this.selectType('Coupon in $');
         }else if(this.dataCampaign.campaign_type === '5'){
           this.selectType('Loyalty Card');
-          setTimeout(() => {
-            (document.getElementById('Stamp Card') as HTMLElement).classList.add('disable');
-          }, 200);
+          // setTimeout(() => {
+          //   (document.getElementById('Stamp Card') as HTMLElement).classList.add('disable');
+          // }, 200);
         }else if(this.dataCampaign.campaign_type === '6'){
           this.selectType('Stamp Card');
-          setTimeout(() => {
-            (document.getElementById('Loyalty Card') as HTMLElement).classList.add('disable');
-          }, 200);
+          // setTimeout(() => {
+          //   (document.getElementById('Loyalty Card') as HTMLElement).classList.add('disable');
+          // }, 200);
         }else if(this.dataCampaign.campaign_type === '7'){
           this.selectType('Membership Card');
         }else if(this.dataCampaign.campaign_type === '8'){
