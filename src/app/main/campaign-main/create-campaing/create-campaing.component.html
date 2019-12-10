@@ -23,7 +23,18 @@
                        'disable': (disable && row.data[column].type != cardType), 'disableLoyalty': (disable && cardType == 'loyalty' && selectedSell != row.data[column].name) }"
           nbTreeGridCell *nbTreeGridCellDef="let row" [ngStyle]="{'pointer-events': row.data[column].locked ? 'none' : 'auto'}">
           <div *ngIf="selectedSell === row.data[column].name" class="df ai-c" style="height: 30px !important;">
-            <img src="assets/svg-icon/success-circle.svg" width="30px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+              <g>
+                <g>
+                  <path fill="#20beea" d="M12.5 25C19.404 25 25 19.404 25 12.5S19.404 0 12.5 0 0 5.596 0 12.5 5.596 25 12.5 25z"/>
+                </g>
+                <g>
+                  <g>
+                    <path fill="#fff" d="M5.923 12.244a.833.833 0 0 0-1.179 1.179l4.167 4.166a.833.833 0 0 0 1.178 0l9.167-9.166a.833.833 0 0 0-1.179-1.179L9.5 15.822z"/>
+                  </g>
+                </g>
+              </g>
+            </svg>
             <span class="m-l-15">{{row.data[column].name}}</span>
           </div>
           <div *ngIf="selectedSell !== row.data[column].name" class="df ai-c" style="height: 30px !important;">

@@ -71,7 +71,8 @@ export class CampaingComponent implements OnInit {
         if (element.campaign_type <= 4) {
           this.dataCoupon.push({
             data: {
-              'Type': { name: this.getTypeImage(element.campaign_type) },
+              // 'Type': { name: this.getTypeImage(element.campaign_type) },
+              'Type': { name: element.campaign_type },
               'Campaign': { name: element.campaign_name },
               'Integrations': { name: element.integrations },
               // 'Template': { name: element.campaign_type_formatted },
@@ -88,7 +89,8 @@ export class CampaingComponent implements OnInit {
         } else if (element.campaign_type <= 7) {
           this.dataCard.push({
             data: {
-              'Type': { name: this.getTypeImage(element.campaign_type) },
+              // 'Type': { name: this.getTypeImage(element.campaign_type) },
+              'Type': { name: element.campaign_type },
               'Campaign': { name: element.campaign_name },
               'Integrations': { name: element.integrations },
               // 'Template': { name: element.campaign_type_formatted },
@@ -102,7 +104,8 @@ export class CampaingComponent implements OnInit {
         } else if (element.campaign_type <= 9) {
           this.dataTicket.push({
             data: {
-              'Type': { name: this.getTypeImage(element.campaign_type) },
+              // 'Type': { name: this.getTypeImage(element.campaign_type) },
+              'Type': { name: element.campaign_type },
               'Campaign': { name: element.campaign_name },
               'Integrations': { name: element.integrations },
               // 'Template': { name: element.campaign_type_formatted },

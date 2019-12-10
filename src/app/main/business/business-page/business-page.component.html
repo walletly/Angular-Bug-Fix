@@ -34,7 +34,11 @@
             <nb-checkbox [(ngModel)]="checkAll">All</nb-checkbox>
           </div>
           <div (click)="inviteAll()" class="invite">
-            <img src="assets/img/mail-icon.png" alt="">
+            <svg width="16px" height="12px" viewBox="0 0 16 12" class="m-r-5">
+              <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <image id="mail-icon" x="0" y="0" width="16" height="12" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAYAAABr5z2BAAAABGdBTUEAALGOfPtRkwAAAOJJREFUKBWdkj0KwkAUhLNi5w3SeYmgd7BMrmFhYesFjIWV9xBBT6BnEMTCysJOsLBYv4lvZZGg0QfDm52debv5SRLKe1+CK2ha8pbKOkiPvgUzsANNSpkR6Ov0wo490wff0vIAeVVFKwqs4UvEBehEekWlaU8eIO+zEKsbaAXPwQXsQWYW6Zlp2svNC/XF6xEic8rGBtzBxCAuLY18LGsG2HS93CG4GcRdCJsHyRftWAzcOefhcwwraawPYe+91w4Ipk/B4Im/QtB+6rrBSQmuO6YdxRtU1zxVVuF/fuWphjwAFx8n1GJc3f4AAAAASUVORK5CYII="></image>
+              </g>
+            </svg>
             Invite All
           </div>
           <a href="https://scan.walletly.ai/" target="_blank"
@@ -108,11 +112,19 @@
                 </span>
                 <div *ngIf="column === 'Invite'">
                   <div *ngIf="row.data[column] === 0" (click)="invite(row.data['Email Address'], i)" class="chip-invite">
-                    <img src="assets/img/mail-icon.png" alt="">
+                    <svg width="16px" height="12px" viewBox="0 0 16 12" class="m-r-5">
+                      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <image id="mail-icon" x="0" y="0" width="16" height="12" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAYAAABr5z2BAAAABGdBTUEAALGOfPtRkwAAAOJJREFUKBWdkj0KwkAUhLNi5w3SeYmgd7BMrmFhYesFjIWV9xBBT6BnEMTCysJOsLBYv4lvZZGg0QfDm52debv5SRLKe1+CK2ha8pbKOkiPvgUzsANNSpkR6Ov0wo490wff0vIAeVVFKwqs4UvEBehEekWlaU8eIO+zEKsbaAXPwQXsQWYW6Zlp2svNC/XF6xEic8rGBtzBxCAuLY18LGsG2HS93CG4GcRdCJsHyRftWAzcOefhcwwraawPYe+91w4Ipk/B4Im/QtB+6rrBSQmuO6YdxRtU1zxVVuF/fuWphjwAFx8n1GJc3f4AAAAASUVORK5CYII="></image>
+                      </g>
+                    </svg>
                     Invite
                   </div>
                   <div *ngIf="row.data[column] === -1" class="chip-invite active">
-                    <img width="14px" src="assets/img/success-white.png" alt="">
+                    <svg width="14px" height="10.5px" viewBox="0 0 14 10.5" class="m-r-5">
+                      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <image id="success-white" x="0" y="0" width="14" height="10.5" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAJCAYAAAAGuM1UAAAABGdBTUEAALGOfPtRkwAAAEZJREFUGBljYCAS/P//PwGI3xOlHKoYSP1PIKiBcsVAEz5gswqnydgksImhuB1ZATIbRRE6B0khkElEaIAMgGpKQDcMmQ8A6J55sI/3BSMAAAAASUVORK5CYII="></image>
+                      </g>
+                    </svg>
                     Active
                   </div>
                   <div *ngIf="row.data[column] > 0" (click)="invite(row.data['Email Address'], i)" class="chip-invite pending">
