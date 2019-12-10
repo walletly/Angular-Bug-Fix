@@ -121,7 +121,34 @@
                   </div>
                 </div>
                 <div *ngIf="column === 'Action'" class="pos-r text-right">
-                  <img (click)="showActions = row.data" class="c-p" src="assets/svg-icon/shared.svg" alt="">
+                  <span (click)="showActions = row.data" class="c-p" alt="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="6" height="26" viewBox="0 0 6 26">
+                      <g>
+                        <g>
+                          <g>
+                            <path fill="#090919" d="M3 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                          </g>
+                          <g>
+                            <path fill="#090919" d="M3 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                          </g>
+                          <g>
+                            <path fill="#090919" d="M3 26a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                          </g>
+                        </g>
+                        <g>
+                          <g>
+                            <path fill="#090919" d="M3 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                          </g>
+                          <g>
+                            <path fill="#090919" d="M3 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                          </g>
+                          <g>
+                            <path fill="#090919" d="M3 26a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                          </g>
+                        </g>
+                      </g>
+                    </svg>
+                  </span>
                   <div *ngIf="showActions === row.data" class="action-drb">
                     <!-- <div (click)="edit(row.data.id)" class="item">
                       <img src="assets/svg-icon/edit.svg" alt="">
