@@ -1,1 +1,116 @@
-<router-outlet></router-outlet> 
+        <nb-layout>
+            <nb-layout-header fixed>Test</nb-layout-header>
+        
+            <nb-layout-column>
+                <nb-card >
+                    <nb-card-body class="example-items-col">
+                           
+                            <div class="p-l-30 m-b-30 p-t-30" style="font-size: 25px; border-top: 2px solid #ebeff5;">
+                                    Dummy data
+                                  </div>
+                                  <div class="p-l-60">
+                                    <div class="row-input" >
+                                      <div class="lable">
+                                        Select Currency
+                                      </div>
+                                      <div class="value">
+                                        <div class="pos-r full-width">
+                                          <nb-select formControlName="currency" placeholder="" fullWidth fieldSize="small" style="width: 160px;">
+                                            <nb-option value="$">USD ($)</nb-option>
+                                            <nb-option value="€">EUR (€)</nb-option>
+                                            <nb-option value="£">GBP (£)</nb-option>
+                                            <nb-option value="$">AUD ($)</nb-option>
+                                            <nb-option value="$">CAD ($)</nb-option>
+                                            <nb-option value="R$">BRL (R$)</nb-option>
+                                            <nb-option value="HK$">HKD (HK$)</nb-option>
+                                            <nb-option value="лв">BGN (лв)</nb-option>
+                                            <nb-option value="₺">TRY (₺)</nb-option>
+                                            <nb-option value="د.إ">AED (د.إ)</nb-option>
+                                            <nb-option value="CHF">CHF (CHF)</nb-option>
+                                            <nb-option value="kr">SEK (kr)</nb-option>
+                                            <nb-option value="NT$">NT (NT$)</nb-option>
+                                            <nb-option value="R">ZAR (R)</nb-option>
+                                            <nb-option value="$">SGD ($)</nb-option>
+                                            <nb-option value="₩">KRW (₩)</nb-option>
+                                            <nb-option value="Rs">LKR (Rs)</nb-option>
+                                            <nb-option value="kr">DKK (kr)</nb-option>
+                                            <nb-option value="Rs">PKR (Rs)</nb-option>
+                                            <nb-option value="₾">GEL (₾)</nb-option>
+                                            <nb-option value="₽">RUB (₽)</nb-option>
+                                            <nb-option value="zł">PLN (zł)</nb-option>
+                                            <nb-option value="kr">SEK (kr)</nb-option>
+                                            <nb-option value="¥">CNY (¥)</nb-option>
+                                            <nb-option value="kr">NOK (kr)</nb-option>
+                                            <nb-option value="₹">INR (₹)</nb-option>
+                                            <nb-option value="$">NZD ($)</nb-option>
+                                            <nb-option value="RM">MYR (RM)</nb-option>
+                                            <nb-option value="฿">THB (฿)</nb-option>
+                                            <nb-option value="₫">VND (₫)</nb-option>
+                                          </nb-select>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row-input">
+                                      <div class="lable">
+                                        Discount
+                                      </div>
+                                      <div class="value">
+                                        <div class="pos-r full-width">
+                                          <input id="discountInput" 
+                                            formControlName="discount" 
+                                            class="small p-r-25" type="number" nbInput fullWidth fieldSize="small"
+                                            style="background-repeat: no-repeat; background-position: right;">
+                                          
+                                        </div>
+                                      </div>
+                                    </div>
+                                   
+                                    <div class="row-input">
+                                      <div class="lable">
+                                        Coupon Lifetime (Days)
+                                      </div>
+                                      <div class="value">
+                                        <div class="pos-r">
+                                          <input 
+                                          formControlName="validity" type="text" class="small" nbInput fullWidth fieldSize="small" placeholder="">
+                                         
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                      
+                      
+                <div class="pos-r full-width">
+                    <div class="p-l-60">
+                        <div class="row-input" >
+                            <div class="lable">
+                                Dummy data
+                            </div>
+                        <div class="value">
+                        <div class="pos-r full-width">                          
+                        <nb-select placeholder="Select Showcase" [(selected)]="selectedItem">
+                            <nb-option value="">Option empty</nb-option>
+                            <nb-option value="0">Option 0</nb-option>
+                            <nb-option value="1">Option 1</nb-option>
+                            <nb-option value="2">Option 2</nb-option>
+                            <nb-option value="3">Option 3</nb-option>
+                            <nb-option value="4">Option 4</nb-option>
+                        </nb-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                        <nb-select placeholder="Multiple Select">
+                            <nb-option value="1">Option 1</nb-option>
+                            <nb-option value="2">Option 2</nb-option>
+                            <nb-option value="3">Option 3</nb-option>
+                            <nb-option value="4">Option 4</nb-option>
+                          </nb-select>
+                      <input type="text" nbInput fullWidth fieldSize="medium" placeholder="Medium">
+                    
+                    </nb-card-body>
+                  </nb-card>
+                  
+              </nb-layout-column>
+        </nb-layout>
